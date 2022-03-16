@@ -1,0 +1,12 @@
+general:
+  data_ext: mp4
+  data_idf: _video
+  recon_model: tddfa
+
+recon_deca:
+  device: cuda
+  detailed: true
+  use_tex: true
+  crop: true
+  
+
