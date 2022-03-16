@@ -1,25 +1,28 @@
 import os
 import numpy as np
-import os.path as op
 import pandas as pd
 from glob import glob
 from tqdm import tqdm
+from pathlib import Path
 from trimesh.registration import icp, procrustes
 from trimesh.transformations import decompose_matrix, transform_points, compose_matrix
 from skimage.transform._geometric import _umeyama as _umeyama_skimage
 
-from ...viz.viz import images_to_mp4, plot_shape
+from ..render.utils import images_to_mp4, plot_shape
 from ..constants import EYES_NOSE, SCALP
+from ..io import Data
 
 
 def align(in_dir, participant_label, algorithm, ref_verts, save_all):
     """ Aligment of 3D meshes over time. """
     
-    recon_dir = op.join(in_dir, participant_label, 'recon')
-    align_dir = op.join(in_dir, participant_label, 'align')
-    os.makedirs(align_dir, exist_ok=True)
+    in_dir = Path(in_dir) / participant_label
+    recon_dir = in_dir / 'recon'
+    align_dir = in_dir / 'align'
+    align_dir.mkdir(exist_ok=True)
 
     # Load (un-aligned) vertices from recon stage
+    V = Data.load()    
     verts = np.load(op.join(recon_dir, participant_label + '_desc-recon_shape.npy'))
 
     # Pick reference vertices (to use for aligment)

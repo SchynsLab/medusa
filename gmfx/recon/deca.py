@@ -1,14 +1,15 @@
 import yaml
 import torch
+import numpy as np
 import torch.nn.functional as F
 from pathlib import Path
-from utils import copy_state_dict, vertex_normals
-from utils import tensor2image, tensor_vis_landmarks
-from renderer import SRenderY
 from skimage.io import imread
 
 from .models.encoders import ResnetEncoder
 from .models.decoders import FLAME, FLAMETex, Generator
+from .utils import copy_state_dict, vertex_normals
+from .utils import tensor2image, tensor_vis_landmarks
+from ..render.renderer import SRenderY
 
 # May have some speed benefits
 torch.backends.cudnn.benchmark = True
@@ -28,7 +29,7 @@ class DECA(torch.nn.Module):
         """
         super().__init__()
         self.device = device
-        self.here = Path(__file__).parent.resolve()
+        self.package_root = Path(__file__).parents[1].resolve()
         self._load_cfg(cfg)
         self.image_size = self.cfg['DECA']['image_size']
         self.uv_size = self.cfg['DECA']['uv_size']
@@ -38,7 +39,7 @@ class DECA(torch.nn.Module):
     def _load_cfg(self, cfg):
         
         if cfg is None:
-            cfg = self.here / 'config.yaml'
+            cfg = self.package_root / 'configs/deca.yaml'
 
         with open(cfg, 'r') as f_in:
             self.cfg = yaml.safe_load(f_in)
@@ -47,7 +48,7 @@ class DECA(torch.nn.Module):
         for section, options in self.cfg.items():
             for key, value in options.items():
                 if 'path' in key:
-                    self.cfg[section][key] = str(self.here / value)
+                    self.cfg[section][key] = str(self.package_root / 'recon' / value)
 
     def _setup_renderer(self):
         self.render = SRenderY(self.image_size, obj_filename=self.cfg['DECA']['topology_path'],
@@ -128,9 +129,8 @@ class DECA(torch.nn.Module):
         return enc_dict
 
     def _decompose_params(self, parameters, num_dict):
-        ''' Convert a flattened parameter vector to a dictionary of parameters
-        code_dict.keys() = ['shape', 'tex', 'exp', 'pose', 'cam', 'light']
-        '''
+        """ Convert a flattened parameter vector to a dictionary of parameters
+        code_dict.keys() = ['shape', 'tex', 'exp', 'pose', 'cam', 'light']. """
         enc_dict = {}
         start = 0
         for key in num_dict:
@@ -143,7 +143,20 @@ class DECA(torch.nn.Module):
         return enc_dict
 
     def decode(self, enc_dict, tform=None, orig_size=None):
-   
+        """ Decodes the face attributes (vertices, landmarks, texture, detail map)
+        from the encoded parameters.
+        
+        Parameters
+        ----------
+        tform : torch.Tensor
+            A Torch tensor containing the similarity transform parameters
+            that map points on the cropped image to the uncropped image;
+            if `None`, the vertices will not be transformed to the original
+            image space
+        orig_size : tuple
+            Tuple containing the original image size (height, width)
+            
+        """
         dec_dict = {}
         V, lm2d, lm3d = self.D_flame(shape_params=enc_dict['shape'],
                                      expression_params=enc_dict['exp'],
@@ -159,27 +172,25 @@ class DECA(torch.nn.Module):
         V_trans[:, :, 1:] = -V_trans[:, :, 1:]
 
         lm2d_trans = self.batch_orth_proj(lm2d, enc_dict['cam'])[:, :, :2]
-        lm2d_trans[:,:,1:] = -lm2d_trans[:, :, 1:]
+        lm2d_trans[:, :, 1:] = -lm2d_trans[:, :, 1:]
         lm3d_trans = self.batch_orth_proj(lm3d, enc_dict['cam'])
-        lm3d_trans[:,:,1:] = -lm3d_trans[:, :, 1:]
+        lm3d_trans[:, :, 1:] = -lm3d_trans[:, :, 1:]
 
         if tform is not None:
             # Transform to non-cropped image space
             points_scale = [self.image_size, self.image_size]
 
             if orig_size is None:
-                print("WARNING: assuming image is not cropped!")
-                h, w = points_scale
-            else:
-                h, w = orig_size
-
+                raise ValueError("If `tform` is not None, the `orig_size` argument "
+                                 "should also be set!")
+            
             # Transform to original image space
-            V_trans = transform_points(V_trans, tform, points_scale, [h, w])
-            lm2d_trans = transform_points(lm2d_trans, tform, points_scale, [h, w])
-            lm3d_trans = transform_points(lm3d_trans, tform, points_scale, [h, w])
+            V_trans = transform_points(V_trans, tform, points_scale, orig_size)
+            lm2d_trans = transform_points(lm2d_trans, tform, points_scale, orig_size)
+            lm3d_trans = transform_points(lm3d_trans, tform, points_scale, orig_size)
 
         # Decode detail
-        inp_D_detail = torch.cat([enc_dict['pose'][:,3:], enc_dict['exp'], enc_dict['detail']], dim=1)
+        inp_D_detail = torch.cat([enc_dict['pose'][:, 3:], enc_dict['exp'], enc_dict['detail']], dim=1)
         uv_z = self.D_detail(inp_D_detail)
 
         dec_dict['V'] = V
@@ -193,21 +204,37 @@ class DECA(torch.nn.Module):
 
         return dec_dict
 
-    def render_dec(self, enc_dict, dec_dict, img_orig=None):
+    def render_dec(self, enc_dict, dec_dict, render_world=False, img_orig=None, zoom=10):
+        """ Render images of 3D reconstruction.
+        
+        enc_dict : dict
+            Dictionary with encoding parameters
+        dec_dict : dict
+            Dictionary with decoding results
+        """
         
         V, V_trans, tex = dec_dict['V'], dec_dict['V_trans'], dec_dict['tex'] 
-               
+        if render_world:
+            V_trans = V.clone()
+            V_trans = V_trans * zoom
+            V_trans[:, :, 1:] = -V_trans[:, :, 1:]
+
         # images (shape+tex), albedo_images, alpha_images (visibility?)
         # pos_mask (visibility?), shading_images, grid (224, 224, 2)
         # normals (5023, 3), normal_images (3, 224, 224), 
         # transformed_normals (5023, 3)
         render_dict = self.render(V, V_trans, tex, enc_dict['light'])
 
-        # Render shape only
-        if img_orig is None:
-            h, w = self.image_size, self.image_size
+        if render_world:
+            # Render in world space
+            h, w = None, None
+            background = None
+        elif img_orig is None:
+            # Render on top of cropped image
+            h, w = enc_dict['img_crop'].shape[2:]
             background = enc_dict['img_crop']
         else:
+            # Render on top of original image
             h, w = img_orig.shape[2:]
             background = img_orig
 
@@ -215,8 +242,9 @@ class DECA(torch.nn.Module):
         render_dict['shape'] = shape_img
         render_dict['alpha'] = alpha_img
 
-        render_dict['lm2d'] = tensor_vis_landmarks(background, dec_dict['lm2d_trans'])
-        render_dict['lm3d'] = tensor_vis_landmarks(background, dec_dict['lm3d_trans'])
+        if not render_world:  # FIXME
+            render_dict['lm2d'] = tensor_vis_landmarks(background, dec_dict['lm2d_trans'])
+            render_dict['lm3d'] = tensor_vis_landmarks(background, dec_dict['lm3d_trans'])
 
         uv_detail_normals = self.displacement2normal(dec_dict['detail'], V, render_dict['normals'])
         uv_shading = self.render.add_SHlight(uv_detail_normals, enc_dict['light'])
@@ -227,7 +255,8 @@ class DECA(torch.nn.Module):
         render_dict['displacement_map'] = dec_dict['detail'] + self.fixed_uv_dis[None, None, :, :]
     
         dni = F.grid_sample(uv_detail_normals, grid, align_corners=False) * alpha_img
-        render_dict['shape_detail'] = self.render.render_shape(V, V_trans, detail_normal_images=dni, h=h, w=w, images=img_orig)
+        render_dict['detail_normals'] = dni
+        render_dict['shape_detail'] = self.render.render_shape(V, V_trans, detail_normal_images=dni, h=h, w=w, images=background)
         
         return render_dict
 
@@ -237,11 +266,13 @@ class DECA(torch.nn.Module):
             camera: scale and translation, [bz, 3], [scale, tx, ty]
         '''
         cam = cam.clone().view(-1, 1, 3)
+        
+        # Add x/y translation and add back z
         X_trans = X[:, :, :2] + cam[:, :, 1:]
         X_trans = torch.cat([X_trans, X[:, :, 2:]], 2)
-        shape = X_trans.shape
-        Xn = (cam[:, :, 0:1] * X_trans)
-        return Xn
+
+        # Scale X_trans by scale parameter
+        return cam[:, :, 0:1] * X_trans
         
     def displacement2normal(self, uv_z, coarse_verts, coarse_normals):
         ''' Convert displacement map into detail normal map
@@ -268,44 +299,22 @@ class DECA(torch.nn.Module):
 
 def transform_points(points, tform, points_scale=None, out_scale=None):
 
-    points_2d = points[:,:,:2]
+    points_2d = points[:, :, :2]
+    
     #'input points must use original range'
     if points_scale:
-        assert points_scale[0]==points_scale[1]
-        points_2d = (points_2d*0.5 + 0.5)*points_scale[0]
+        assert points_scale[0] == points_scale[1]
+        points_2d = (points_2d * 0.5 + 0.5) * points_scale[0]
 
     batch_size, n_points, _ = points.shape
     trans_points_2d = torch.bmm(
-                    torch.cat([points_2d, torch.ones([batch_size, n_points, 1], device=points.device, dtype=points.dtype)], dim=-1), 
-                    tform
-                    ) 
+        torch.cat([points_2d, torch.ones([batch_size, n_points, 1], device=points.device, dtype=points.dtype)], dim=-1),
+        tform
+    ) 
+
     if out_scale: # h,w of output image size
-        trans_points_2d[:,:,0] = trans_points_2d[:,:,0]/out_scale[1]*2 - 1
-        trans_points_2d[:,:,1] = trans_points_2d[:,:,1]/out_scale[0]*2 - 1
-    trans_points = torch.cat([trans_points_2d[:,:,:2], points[:,:,2:]], dim=-1)
+        trans_points_2d[:, :, 0] = trans_points_2d[:, :, 0] / out_scale[1] * 2 - 1
+        trans_points_2d[:, :, 1] = trans_points_2d[:, :, 1] / out_scale[0] * 2 - 1
+    
+    trans_points = torch.cat([trans_points_2d[:, :, :2], points[:, :, 2:]], dim=-1)
     return trans_points
-
-
-if __name__ == '__main__':
-    
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from detectors import FAN
-    from skimage.io import imread
-    import cv2
-
-    img_orig = np.array(imread('test.jpeg')) / 255.
-    img_orig = torch.tensor(img_orig.transpose(2,0,1)).float()
-    img_orig = img_orig[None, ...].to('cuda')
-    orig_size = img_orig.shape[2:]
-    
-    fan = FAN(device='cuda')
-    mod = DECA()
-
-    img_cropped = fan('test.jpeg')
-    enc_dict = mod.encode(img_cropped)
-    dec_dict = mod.decode(enc_dict, tform=fan.tform_params, orig_size=orig_size)
-    rend_dict = mod.render_dec(enc_dict, dec_dict, img_orig=img_orig)
-
-    im = tensor2image(rend_dict['lm3d'][0])
-    cv2.imwrite('testtest.png', im)    

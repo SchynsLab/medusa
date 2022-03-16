@@ -3,45 +3,33 @@ An Python implementation of a Generative Model of Facial eXpressions, leveraging
 single-image 3D reconstruction model ([DECA](https://deca.is.tue.mpg.de/)).
 
 ## Installation
-To use `pyface`, you need to both install DECA (the 3D mesh reconstruction model) and `pyface` itself.
+The installation of `gmfx` is not trivial because it needs a specific version of `pytorch` (used by DECA and the face detection model), which itself depends on the specific CUDA version installed on your platform.
 
-### Downloading data
-
-### Installing DECA
-This packages uses [DECA](https://github.com/YadiraF/DECA) to reconstruct face meshes. To use `pyface`, you need to install the fork I created [here](https://github.com/lukassnoek/DECA), which is an installable version of the original (and with some bugfixes). Before you do so, I'd recommend create a new conda environment:
+It's probably best to use a custom environment to install `gmfx`. To do so using Anaconda, run the following command:
 
 ```
-conda create -n deca python=3.8
+conda create -n gmfx python=3.9
 ```
 
-And then then clone and install [fork](https://github.com/lukassnoek/DECA) as follows (from the root of the cloned directory):
+The next step is to install `pytorch`. Its installation is specific to your platform, as it depends on the installed CUDA version. For users on the Glasgow "deepnet" servers, you should run the following command:
 
 ```
-bash install.sh
+bash install_pytorch.sh
 ```
 
-Note that this is only tested on Linux! YMMV on Mac or Windows. The script installs `pytorch` (1.9.0) and `pytorch3d` (0.5.0) as well as the `deca` package. To test the installation, you can try the following (from the root of the DECA directory)
+Then, we need to install the CUDA-based rasterizer shipped with DECA. To do so, run the following:
 
 ```
-python tests/test_installation.py
+cd gmfx/render/rasterizer && pip install . && cd ../../..
 ```
 
-### Installing `pyface`
-To install `pyface`, simply run the following (note the dot after `install`) from the root of the `pyface` directory:
+Finally, install the `gmfx` package itself (note the `.` at the end):
 
 ```
 pip install .
 ```
 
-To test the installation, try the following:
-
-```
-pyface_recon tests/test.jpg --save-plot --device cuda
-```
-
-This runs the DECA model on an example image (`test.jpg`) and outputs an image of the reconstructed face mesh (`recon_test.jpg`). Use `--device cpu` if you don't have access to an NVIDIA GPU.
-
-## Using the command line interface
+## Using the command line interface (CLI)
 The command line interface can be used to preprocess video data step by step. The first step, reconstruction of the video frames into 3D meshes, assumes the following directory structure:
 
 ```
@@ -56,15 +44,19 @@ where `data` is the toplevel directory, which contains one or more subject-level
 
 The following preprocessing CLI programs are available, which should be run in the order outlined below:
 
-* `pyface_recon` (for reconstruction from a 2D image to 3D mesh)
-* `pyface_align` (for spatially aligning all meshes across time)
-* `pyface_interpolate` (to make such as mesh is equidistant in time)
-* `pyface_filter` (to high- and lowpass each vertex across time)
+* `gmfx_recon` (for reconstruction from a 2D image to 3D mesh)
+* `gmfx_align` (for spatially aligning all meshes across time)
+* `gmfx_interpolate` (to make such as mesh is equidistant in time)
+* `gmfx_filter` (to high- and lowpass each vertex across time)
 
-To see the mandatory and optional arguments to these CLI programs, run the command with the `--help` flag, e.g.,:
+To see the mandatory and optional arguments to these CLI programs, run the command with the `--help` flag, e.g.:
 
 ```
-pyface_recon --help
+gmfx_recon --help
 ```
 
-The folder `pyface/data/test_data` contains some example data to try out the package.
+The folder `gmfx/test_data` contains some example data to try out the package.
+
+## Using the Python interface
+
+...

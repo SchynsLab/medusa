@@ -17,6 +17,7 @@ import torch
 import numpy as np
 import face_alignment
 import matplotlib.pyplot as plt
+from pathlib import Path
 from skimage.io import imread
 from matplotlib.patches import Rectangle
 from skimage.transform import estimate_transform, warp, resize
@@ -39,7 +40,11 @@ class FAN(object):
         return img
 
     def get_landmarks(self, image):
-        self.image = np.array(imread(image))
+        
+        if isinstance(image, (str, Path)):
+            image = np.array(imread(image))
+        
+        self.image = image
         lm2d = self.model.get_landmarks_from_image(self.image)
         
         if lm2d is None:

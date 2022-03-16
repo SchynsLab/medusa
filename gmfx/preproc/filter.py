@@ -5,7 +5,7 @@ from glob import glob
 from tqdm import tqdm
 from nilearn import signal
 
-from ...viz.viz import images_to_mp4, plot_shape
+from ..render.utils import images_to_mp4, plot_shape
 
 
 def filter(in_dir, participant_label, low_pass, high_pass, save_all):

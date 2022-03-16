@@ -6,7 +6,7 @@ from glob import glob
 from tqdm import tqdm
 from scipy.interpolate import interp1d
 
-from ...viz.viz import images_to_mp4, plot_shape
+from ..render.utils import images_to_mp4, plot_shape
 
 
 def interpolate(in_dir, participant_label, save_all):

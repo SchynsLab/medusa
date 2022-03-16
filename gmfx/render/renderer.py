@@ -20,9 +20,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 from skimage.io import imread
 
-from ..deca import utils
+from ..recon import utils
 from standard_rasterize_cuda import standard_rasterize
         
+
+# Note to self: `torch` always needs to be imported before
+# importing `standard_rasterize_cuda`, because importing `torch`
+# will make libc10.so available.
+
 
 class StandardRasterizer(nn.Module):
     """ Alg: https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation

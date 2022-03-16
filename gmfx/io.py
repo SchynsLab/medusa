@@ -1,25 +1,25 @@
 import os
+import torch
 import h5py
 import imageio
 import numpy as np
 import os.path as op
 import pandas as pd
 from tqdm import tqdm
-from .constants import FACES
+from pathlib import Path
 
-import matplotlib
-matplotlib.use('agg')
-import matplotlib.pyplot as plt
+from .recon.utils import tensor2image
+from .render.renderer import SRenderY
+from .constants import FACES
 
 
 class Data:
     """ Generic Data class to store, load, and save vertex/face data. """
-    def __init__(self, v=None, f=None, imgs=None, frame_t=None, events=None, fps=None,
+    def __init__(self, v=None, f=None, frame_t=None, events=None, fps=None,
                  dense=False, sub=None, run=None, task=None):
 
         self.v = v
         self.f = f
-        self.imgs = imgs
         self.frame_t = frame_t
         self.events = events
         self.fps = fps
@@ -28,6 +28,7 @@ class Data:
         self.run = run
         self.task = task
         self._check()
+        self._setup_renderer()
 
     def _check(self):
 
@@ -43,6 +44,10 @@ class Data:
             #    raise ValueError("Number of frame times does not equal "
             #                     "number of vertex time points!")
     
+    def _setup_renderer(self):
+        topo = Path(__file__).parent.resolve() / 'recon/data/head_template.obj'
+        self.render = SRenderY(image_size=224, obj_filename=topo, uv_size=256).to('cuda')
+
     @classmethod
     def load(cls, path):
         """ Loads a hdf5 file from disk and returns a Data object. """
@@ -86,16 +91,24 @@ class Data:
         if self.events is not None:
             self.events.to_hdf(path, key='/events', mode='a')
 
-    def visualize(self, path):
-        """ Plots each time points separately and creates a movie. """
+    def visualize(self, path, zoom=10):
+        """ Plots each time point separately and creates a movie. """
         
         writer = imageio.get_writer(path, mode='I', fps=self.fps)
         for i in tqdm(range(self.v.shape[0])):
             v = self.v[i, ...]
-            res = render(self.imgs[i, ...], [v.T], self.f.copy(order='C'), with_bg_flag=True)
-            writer.append_data(res)
+            v_trans = v * zoom
+            v_trans[:, 1:] = -v_trans[:, 1:]
+
+            res = self.render.render_shape(self._to_tensor(v), self._to_tensor(v_trans),
+                                           h=224, w=224, images=None)
+            writer.append_data(tensor2image(res[0], bgr=False))
 
         writer.close()
+        
+    def _to_tensor(self, v, device='cuda'):
+        v_new = torch.tensor(v).float()[None, ...].to(device)
+        return v_new
         
     def __len__(self):
         return self.v.shape[0]

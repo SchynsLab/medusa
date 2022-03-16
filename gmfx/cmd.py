@@ -7,7 +7,7 @@
 # `pyface_filter output_directory -p sub-01 -l 3 -h 0.01`
 
 import click
-from .recon.recon import recon
+from .preproc.recon import recon
 from .preproc.align import align
 from .preproc.interpolate import interpolate
 from .preproc.filter import filter
@@ -15,12 +15,11 @@ from .preproc.filter import filter
 
 @click.command()
 @click.argument('in_dir', type=click.Path(exists=True, file_okay=False))
-@click.argument('out_dir', type=click.Path())
+@click.option('-o', '--out-dir', default=None, type=click.Path(), help='Output directory')
 @click.option('-p', '--participant-label', default='sub-01', help='Participant identifier (e.g., sub-01)')
-@click.option('--model', default='deca', type=click.Choice(['deca', 'tddfa']), help='Recon model to use')
-@click.option('--device', default='cpu', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
+@click.option('--device', default='cuda', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
 @click.option('--visualize', is_flag=True, help='Visualize reconstructed meshes')
-def recon_cmd(in_dir, out_dir, participant_label, model, device, visualize):
+def recon_cmd(in_dir, out_dir, participant_label, device, visualize):
     recon(**locals())
 
 
