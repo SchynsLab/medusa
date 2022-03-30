@@ -22,7 +22,7 @@ def align(in_dir, participant_label, algorithm, ref_verts, save_all):
     align_dir.mkdir(exist_ok=True)
 
     # Load (un-aligned) vertices from recon stage
-    V = Data.load()    
+    #V = Data.load(recon_dir / f{''})    
     verts = np.load(op.join(recon_dir, participant_label + '_desc-recon_shape.npy'))
 
     # Pick reference vertices (to use for aligment)

@@ -86,9 +86,9 @@ def recon(in_dir, out_dir, participant_label, device, visualize):
             if i == 0:
                 # Initialize moving average
                 shape_ma = enc_dict['shape'].clone()
-            elif i < 10:
-                # First 10 frames, the moving average is updated
-                shape_ma = (shape_ma * (i + 1) + enc_dict['shape']) / (i + 2)
+            #elif i < 10:
+            #    # First 10 frames, the moving average is updated
+            #    shape_ma = (shape_ma * (i + 1) + enc_dict['shape']) / (i + 2)
             else:
                 # After 10 frames, we'll use the current shape_ma
                 pass            

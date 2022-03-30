@@ -161,7 +161,7 @@ class DECA(torch.nn.Module):
         V, lm2d, lm3d = self.D_flame(shape_params=enc_dict['shape'],
                                      expression_params=enc_dict['exp'],
                                      pose_params=enc_dict['pose'])
-        
+        print(V)
         if self.cfg['DECA']['use_tex']:
             tex = self.D_flame_tex(enc_dict['tex'])
         else:
@@ -188,6 +188,8 @@ class DECA(torch.nn.Module):
             V_trans = transform_points(V_trans, tform, points_scale, orig_size)
             lm2d_trans = transform_points(lm2d_trans, tform, points_scale, orig_size)
             lm3d_trans = transform_points(lm3d_trans, tform, points_scale, orig_size)
+
+        print(V_trans)
 
         # Decode detail
         inp_D_detail = torch.cat([enc_dict['pose'][:, 3:], enc_dict['exp'], enc_dict['detail']], dim=1)
