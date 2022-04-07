@@ -1,5 +1,5 @@
 # GMFX
-An Python implementation of a Generative Model of Facial eXpressions, leveraging a deep learning-based
+A Python implementation of a Generative Model of Facial eXpressions, leveraging a deep learning-based
 single-image 3D reconstruction model ([DECA](https://deca.is.tue.mpg.de/)).
 
 ## Installation
