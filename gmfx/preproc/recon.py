@@ -6,7 +6,6 @@ import imageio
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from glob import glob
 from pathlib import Path
 
 from ..detect import FAN
@@ -113,13 +112,14 @@ def recon(in_dir, out_dir, participant_label, device):
             # Set shape to moving average
             enc_dict['shape'] = shape_ma.clone()
 
-            # Decode and render
+            # Decode and render, for visualization purposes only
             dec_dict = deca.decode(enc_dict, tform=fan.tform_params, orig_size=orig_size)
             rend_dict = deca.render_dec(enc_dict, dec_dict, render_world=False,
                                         img_orig=frame_orig)
 
-            # Set first three pose params to 0
-            #enc_dict['pose'][0, :3] = 0
+            # Decode again, but set first three pose params to 0 to 
+            # get the reconstruction without any rotation
+            enc_dict['pose'][0, :3] = 0
             dec_dict = deca.decode(enc_dict, tform=None)
             v_4D[i, ...] = dec_dict['V'][0].cpu().detach().numpy()
             
