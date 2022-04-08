@@ -11,10 +11,12 @@ It's probably best to use a custom environment to install `gmfx`. To do so using
 conda create -n gmfx python=3.9
 ```
 
-The next step is to install `pytorch`. Its installation is specific to your platform, as it depends on the installed CUDA version. For users on the Glasgow "deepnet" servers, you should run the following command:
+Then, install `pytorch` and dependencies as follows:
 
 ```
-bash install_pytorch.sh
+conda create -n gmfx python=3.9
+conda activate gmfx
+conda install pytorch==1.9.0 cudatoolkit=10.2 -c pytorch
 ```
 
 Then, we need to install the CUDA-based rasterizer shipped with DECA. To do so, run the following:
@@ -28,6 +30,15 @@ Finally, install the `gmfx` package itself (note the `.` at the end):
 ```
 pip install .
 ```
+
+## Download DECA
+If you are on one of Glasgow's "deepnet" servers and have access to `Project0294` (if not, ask Oliver), you can simply copy the DECA model and associated files as follows (assuming you're currently in the root of the `gmfx` package):
+
+```
+cp /analyse/Project0294/gmfx_data/data gmfx/recon/deca/
+```
+
+If not, you should download DECA [here](https://deca.is.tue.mpg.de/) (you need to register and accept their license first) and unpack the ZIP file in `gmfx/recon/deca/data`.
 
 ## Using the command line interface (CLI)
 The command line interface can be used to preprocess video data step by step. The first step, reconstruction of the video frames into 3D meshes, assumes the following directory structure:
@@ -55,7 +66,19 @@ To see the mandatory and optional arguments to these CLI programs, run the comma
 gmfx_recon --help
 ```
 
-The folder `gmfx/test_data` contains some example data to try out the package.
+If you're on one of the "deepnet" servers, you can copy some test data from `Project0294`:
+
+```
+cp -r /analyse/Project0294/gmfx_data/test_data .
+```
+
+And then, to test the reconstruction, run:
+
+```
+gmfx_recon test_data/task-browraiser --participant-label sub-01 --device cuda
+```
+
+This will create a default output directory at `test_data/task-browraiser/derivatives/sub-01` with the reconstruction data in an HDF5 file (ending in `.h5`) and a video of the reconstruction in "world space" (in the space of the cropped image) another one in "image space" (projected back into the original image space).
 
 ## Using the Python interface
 
