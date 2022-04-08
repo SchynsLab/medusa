@@ -18,8 +18,7 @@ from .preproc.filter import filter
 @click.option('-o', '--out-dir', default=None, type=click.Path(), help='Output directory')
 @click.option('-p', '--participant-label', default='sub-01', help='Participant identifier (e.g., sub-01)')
 @click.option('--device', default='cuda', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
-@click.option('--visualize', is_flag=True, help='Visualize reconstructed meshes')
-def recon_cmd(in_dir, out_dir, participant_label, device, visualize):
+def recon_cmd(in_dir, out_dir, participant_label, device):
     recon(**locals())
 
 

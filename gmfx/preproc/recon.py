@@ -11,7 +11,7 @@ from pathlib import Path
 
 from ..detect import FAN
 from ..recon import DECA
-from ..recon.utils import tensor2image
+from ..recon.deca.utils import tensor2image
 from ..io import Data
 
 
@@ -26,8 +26,22 @@ warnings.filterwarnings(
 )
 
 
-def recon(in_dir, out_dir, participant_label, device, visualize):
-    """ Reconstruction of all frames of a video. """
+def recon(in_dir, out_dir, participant_label, device):
+    """ Reconstruction of all frames of a video. 
+    
+    Parameters
+    ----------
+    in_dir : str
+        Path to data directory, which should contain subdirectories for
+        different participants (e.g., 'sub-01', 'sub-02')
+    out_dir : str
+        Path to output directory; will be created if it doesn't exist yet
+    participant_label : str
+        Like in BIDS, this indicates which participant from the `in_dir` will
+        be processed
+    device : str
+        Either "cuda" (for GPU) or "cpu"
+    """
 
     data_dir = Path(in_dir) / participant_label
     
@@ -40,12 +54,15 @@ def recon(in_dir, out_dir, participant_label, device, visualize):
     out_dir.mkdir(exist_ok=True, parents=True)
 
     # Init here, otherwise it's done every frame -> slow
-    fan = FAN(device=device)
+    fan = FAN(device=device)  # for face detection / cropping
     deca = DECA(device=device)
 
-    # Find files and loop over them
-    for vid in data_dir.glob('*_video.mp4'):
+    vids = list(data_dir.glob('*_video.mp4'))
+    if not vids:
+        raise ValueError(f"Could not find any MP4 videos in {data_dir}!")
 
+    # Find files and loop over them
+    for vid in vids:
         base_f = vid.stem
         reader = imageio.get_reader(vid)
         fps = reader.get_meta_data()['fps']
@@ -76,7 +93,7 @@ def recon(in_dir, out_dir, participant_label, device, visualize):
 
             # Prepare frame to be used as background during rendering            
             orig_size = frame.shape[:2]
-            frame_orig = (frame / 255.).transpose(2, 0, 1)
+            frame_orig = (frame / 255.).transpose(2, 0, 1)  # channel, width, height
             frame_orig = torch.tensor(frame_orig).float()[None, ...].to('cuda')
     
             # Crop image and reconstruct
@@ -86,9 +103,9 @@ def recon(in_dir, out_dir, participant_label, device, visualize):
             if i == 0:
                 # Initialize moving average
                 shape_ma = enc_dict['shape'].clone()
-            #elif i < 10:
-            #    # First 10 frames, the moving average is updated
-            #    shape_ma = (shape_ma * (i + 1) + enc_dict['shape']) / (i + 2)
+            elif i < 10:
+                # First 10 frames, the moving average is updated
+                shape_ma = (shape_ma * (i + 1) + enc_dict['shape']) / (i + 2)
             else:
                 # After 10 frames, we'll use the current shape_ma
                 pass            
@@ -101,7 +118,8 @@ def recon(in_dir, out_dir, participant_label, device, visualize):
             rend_dict = deca.render_dec(enc_dict, dec_dict, render_world=False,
                                         img_orig=frame_orig)
 
-            enc_dict['pose'][0, :3] = 0
+            # Set first three pose params to 0
+            #enc_dict['pose'][0, :3] = 0
             dec_dict = deca.decode(enc_dict, tform=None)
             v_4D[i, ...] = dec_dict['V'][0].cpu().detach().numpy()
             

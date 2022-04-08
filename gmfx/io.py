@@ -8,7 +8,7 @@ import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
 
-from .recon.utils import tensor2image
+from .recon.deca.utils import tensor2image
 from .render.renderer import SRenderY
 from .constants import FACES
 
@@ -45,7 +45,7 @@ class Data:
             #                     "number of vertex time points!")
     
     def _setup_renderer(self):
-        topo = Path(__file__).parent.resolve() / 'recon/data/head_template.obj'
+        topo = Path(__file__).parent.resolve() / 'recon/deca/data/head_template.obj'
         self.render = SRenderY(image_size=224, obj_filename=topo, uv_size=256).to('cuda')
 
     @classmethod

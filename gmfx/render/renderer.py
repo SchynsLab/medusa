@@ -14,13 +14,11 @@
 # For commercial licensing contact, please contact ps-license@tuebingen.mpg.de
 
 import torch
-import imageio
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
-from skimage.io import imread
 
-from ..recon import utils
+from ..recon.deca import utils
 from standard_rasterize_cuda import standard_rasterize
         
 

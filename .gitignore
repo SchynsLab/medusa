@@ -134,5 +134,5 @@ test_data/task-*
 exp/*/data
 exp/*/*.py
 
-gmfx/recon/data
+gmfx/recon/deca/data
 test_data

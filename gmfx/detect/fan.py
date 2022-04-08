@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from skimage.io import imread
 from matplotlib.patches import Rectangle
-from face_alignment import LandmarksType._2D, face_alignment
+from face_alignment import LandmarksType, FaceAlignment
 from skimage.transform import estimate_transform, warp, resize
 
 

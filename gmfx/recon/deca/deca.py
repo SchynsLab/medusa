@@ -29,7 +29,7 @@ class DECA(torch.nn.Module):
         """
         super().__init__()
         self.device = device
-        self.package_root = Path(__file__).parents[1].resolve()
+        self.package_root = Path(__file__).parents[2].resolve()
         self._load_cfg(cfg)
         self.image_size = self.cfg['DECA']['image_size']
         self.uv_size = self.cfg['DECA']['uv_size']
@@ -48,7 +48,7 @@ class DECA(torch.nn.Module):
         for section, options in self.cfg.items():
             for key, value in options.items():
                 if 'path' in key:
-                    self.cfg[section][key] = str(self.package_root / 'recon' / value)
+                    self.cfg[section][key] = str(self.package_root / 'recon' / 'deca' / value)
 
     def _setup_renderer(self):
         self.render = SRenderY(self.image_size, obj_filename=self.cfg['DECA']['topology_path'],
@@ -161,7 +161,7 @@ class DECA(torch.nn.Module):
         V, lm2d, lm3d = self.D_flame(shape_params=enc_dict['shape'],
                                      expression_params=enc_dict['exp'],
                                      pose_params=enc_dict['pose'])
-        print(V)
+
         if self.cfg['DECA']['use_tex']:
             tex = self.D_flame_tex(enc_dict['tex'])
         else:
@@ -188,8 +188,6 @@ class DECA(torch.nn.Module):
             V_trans = transform_points(V_trans, tform, points_scale, orig_size)
             lm2d_trans = transform_points(lm2d_trans, tform, points_scale, orig_size)
             lm3d_trans = transform_points(lm3d_trans, tform, points_scale, orig_size)
-
-        print(V_trans)
 
         # Decode detail
         inp_D_detail = torch.cat([enc_dict['pose'][:, 3:], enc_dict['exp'], enc_dict['detail']], dim=1)
