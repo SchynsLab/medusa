@@ -35,10 +35,10 @@ pip install .
 If you are on one of Glasgow's "deepnet" servers and have access to `Project0294` (if not, ask Oliver), you can simply copy the DECA model and associated files as follows (assuming you're currently in the root of the `gmfx` package):
 
 ```
-cp /analyse/Project0294/gmfx_data/data gmfx/recon/deca/
+cp /analyse/Project0294/gmfx_data/data/* gmfx/recon/deca/data/
 ```
 
-If not, you should download DECA [here](https://deca.is.tue.mpg.de/) (you need to register and accept their license first) and unpack the ZIP file in `gmfx/recon/deca/data`.
+If not, you should follow the download instructions in the [DECA Github repository](https://github.com/YadiraF/DECA) under "Getting started / Usage / Prepare data". Instead of unzipping it in `./data` (as written in the instructions), place the files in `gmfx/recon/deca/data`.
 
 ## Using the command line interface (CLI)
 The command line interface can be used to preprocess video data step by step. The first step, reconstruction of the video frames into 3D meshes, assumes the following directory structure:
