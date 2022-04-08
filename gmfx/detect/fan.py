@@ -1,31 +1,32 @@
-# -*- coding: utf-8 -*-
-#
-# Max-Planck-Gesellschaft zur Förderung der Wissenschaften e.V. (MPG) is
-# holder of all proprietary rights on this computer program.
-# Using this computer program means that you agree to the terms 
-# in the LICENSE file included with this software distribution. 
-# Any use not explicitly granted by the LICENSE is prohibited.
-#
-# Copyright©2019 Max-Planck-Gesellschaft zur Förderung
-# der Wissenschaften e.V. (MPG). acting on behalf of its Max Planck Institute
-# for Intelligent Systems. All rights reserved.
-#
-# For comments or questions, please email us at deca@tue.mpg.de
-# For commercial licensing contact, please contact ps-license@tuebingen.mpg.de
-
 import torch
 import numpy as np
-import face_alignment
 import matplotlib.pyplot as plt
 from pathlib import Path
 from skimage.io import imread
 from matplotlib.patches import Rectangle
+from face_alignment import LandmarksType._2D, face_alignment
 from skimage.transform import estimate_transform, warp, resize
 
 
 class FAN(object):
-    def __init__(self, device='cpu', target_size=224):
-        self.model = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, flip_input=False, device=device, face_detector='sfd')
+    """ FAN face detection and landmark estimation, as implemented by
+    Bulat & Tzimiropoulos (2017, Arxiv), adapted for use with DECA
+    by Yao Feng (https://github.com/YadiraF), and further modified by
+    Lukas Snoek
+    
+    Parameters
+    ----------
+    device : str
+        Device to use, either 'cpu' or 'cuda' (for GPU)
+    target_size : int
+        Size to crop the image to, assuming a square crop; default (224)
+        corresponds to image size that DECA expects    
+    face_detector : str
+        Face detector algorithm to use (default: 'sfd', as used in DECA)
+    """
+    def __init__(self, device='cpu', target_size=224, face_detector='sfd'):
+        self.model = FaceAlignment(LandmarksType._2D, flip_input=False, device=device,
+                                   face_detector=face_detector)
         self.device = device
         self.target_size = target_size
         self.image = None
@@ -33,6 +34,8 @@ class FAN(object):
         self.tform = None
 
     def __call__(self, image):
+        """ Runs all steps of the cropping / preprocessing pipeline
+        necessary for use with DECA. """
         self.get_landmarks(image)
         self.create_bbox()
         self.crop()
@@ -40,17 +43,24 @@ class FAN(object):
         return img
 
     def get_landmarks(self, image):
+        """ Estimates (2D) landmarks on the face.
+        
+        Parameters
+        ----------
+        image : str, Path, or numpy array
+            Path (str or pathlib Path) pointing to image file or 3D numpy array
+            (with np.uint8 values) representing a RGB image
+        """
         
         if isinstance(image, (str, Path)):
             image = np.array(imread(image))
         
-        self.image = image
+        self.image = image  # store for later use
         lm2d = self.model.get_landmarks_from_image(self.image)
         
         if lm2d is None:
             raise ValueError("No face detected!")
         elif len(lm2d) > 1:
-            #lm2d = lm2d[0]
             raise ValueError(f"More than one face (i.e., {len(lm2d)}) detected!")
         else:
             lm2d = lm2d[0]
@@ -58,7 +68,14 @@ class FAN(object):
         self.lm2d = lm2d
         
     def create_bbox(self, scale=1.25):
+        """ Creates a bounding box (bbox) based on the landmarks by creating
+        a box around the outermost landmarks (+10%). 
         
+        Parameters
+        ----------
+        scale : float
+            Factor to scale the bounding box with
+        """        
         left = np.min(self.lm2d[:, 0])
         right = np.max(self.lm2d[:, 0]) 
         top = np.min(self.lm2d[:, 1])
@@ -75,7 +92,7 @@ class FAN(object):
     def crop(self):
         """ Using the bounding box (`self.bbox`), crops the image by warping the image
         based on a similarity transform of the bounding box to the corners of target size
-        image."""
+        image. """
         w, h = self.target_size, self.target_size
         dst = np.array([[0, 0], [0, w - 1], [h - 1, 0]])
         self.tform = estimate_transform('similarity', self.bbox[:3, :], dst)
@@ -89,7 +106,7 @@ class FAN(object):
 
     def preprocess(self):
         """ Resizes, tranposes (channels, width, height), rescales (/255) the data,
-        casts the data to torch, and add a batch dimension (`unsqueeze`)."""
+        casts the data to torch, and add a batch dimension (`unsqueeze`). """
         img = resize(self.cropped_image, (self.target_size, self.target_size), anti_aliasing=True)        
         img = img.transpose(2, 0, 1)
         img = img / 255.    
@@ -114,4 +131,3 @@ class FAN(object):
         axes[1].axis('off')
         fig.savefig(f_out)
         plt.close()
-    

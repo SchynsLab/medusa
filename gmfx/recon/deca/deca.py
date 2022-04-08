@@ -8,8 +8,8 @@ from skimage.io import imread
 from .models.encoders import ResnetEncoder
 from .models.decoders import FLAME, FLAMETex, Generator
 from .utils import copy_state_dict, vertex_normals
-from .utils import tensor2image, tensor_vis_landmarks
-from ..render.renderer import SRenderY
+from .utils import tensor_vis_landmarks
+from ...render.renderer import SRenderY
 
 # May have some speed benefits
 torch.backends.cudnn.benchmark = True
