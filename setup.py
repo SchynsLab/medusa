@@ -35,6 +35,7 @@ opts = dict(name=NAME,
         'click',
         'h5py',
         'tables',
+        'imageio-ffmpeg',
         'face-alignment',
         'chumpy',
         'pyyaml'
