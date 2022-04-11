@@ -129,10 +129,8 @@ dmypy.json
 .pyre/
 
 # Custom
-test_data/task-*
 **/.DS_Store
 exp/*/data
 exp/*/*.py
-
-gmfx/recon/deca/data
 test_data
+ext_data

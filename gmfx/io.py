@@ -45,7 +45,7 @@ class Data:
             #                     "number of vertex time points!")
     
     def _setup_renderer(self):
-        topo = Path(__file__).parent.resolve() / 'recon/deca/data/head_template.obj'
+        topo = Path(__file__).parents[1].resolve() / 'ext_data/FLAME/geometry/head_template.obj'
         self.render = SRenderY(image_size=224, obj_filename=topo, uv_size=256).to('cuda')
 
     @classmethod

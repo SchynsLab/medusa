@@ -38,7 +38,7 @@ class DECA(torch.nn.Module):
     def _load_cfg(self, cfg):
         
         if cfg is None:
-            cfg = self.package_root / 'configs/deca.yaml'
+            cfg = self.package_root / 'configs/emoca.yaml'
 
         with open(cfg, 'r') as f_in:
             self.cfg = yaml.safe_load(f_in)
@@ -47,9 +47,10 @@ class DECA(torch.nn.Module):
         for section, options in self.cfg.items():
             for key, value in options.items():
                 if 'path' in key:
-                    self.cfg[section][key] = str(self.package_root / 'recon' / 'deca' / value)
+                    self.cfg[section][key] = str(self.package_root.parent / value)
 
     def _setup_renderer(self):
+        
         self.render = SRenderY(self.image_size, obj_filename=self.cfg['DECA']['topology_path'],
                                uv_size=self.uv_size).to(self.device)
 
@@ -65,12 +66,7 @@ class DECA(torch.nn.Module):
         # displacement correction
         fixed_dis = np.load(self.cfg['DECA']['fixed_displacement_path'])
         self.fixed_uv_dis = torch.tensor(fixed_dis).float().to(self.device)
-        
-        # mean texture
-        mean_texture = imread(self.cfg['DECA']['mean_tex_path']).astype(np.float32) / 255.
-        mean_texture = torch.from_numpy(mean_texture.transpose(2, 0, 1))[None, :, :, :].contiguous()
-        self.mean_texture = F.interpolate(mean_texture, [self.uv_size, self.uv_size]).to(self.device)
-        
+
     def _create_submodels(self):
         # set up parameters
         self.param_list = ['shape', 'tex', 'exp', 'pose', 'cam', 'light']
@@ -80,6 +76,7 @@ class DECA(torch.nn.Module):
         
         # encoders
         self.E_flame = ResnetEncoder(outsize=self.n_param).to(self.device)
+        self.E_expression = ResnetEncoder(self.cfg['E_flame']['n_exp'])
         self.E_detail = ResnetEncoder(outsize=self.cfg['E_detail']['n_detail']).to(self.device)
 
         # decoders
@@ -95,24 +92,20 @@ class DECA(torch.nn.Module):
                                   out_scale=self.cfg['D_detail']['max_z'], sample_mode='bilinear').to(self.device)
 
         # Load weights
-        if self.cfg['DECA']['use_emoca']:
-            model_path = self.cfg['DECA']['emoca_path']
-        else:
-            model_path = self.cfg['DECA']['model_path']
+        model_path = self.cfg['DECA']['model_path']
 
         checkpoint = torch.load(model_path)
         self.E_flame.load_state_dict(checkpoint['E_flame'])
         self.E_detail.load_state_dict(checkpoint['E_detail'])
+        self.E_expression.load_state_dict(checkpoint['E_expression'])
         self.D_detail.load_state_dict(checkpoint['D_detail'])        
-        
-        if self.cfg['DECA']['use_emoca']:
-            self.E_expression = ResnetEncoder(self.cfg['E_flame']['n_exp'])
-            self.E_expression.load_state_dict(checkpoint['E_expression'])
-            self.E_expression.cuda().eval()
-        
+
+        self.E_expression.cuda()  # for some reason E_exp should be explicitly cast to cuda
+
         # eval mode
         self.E_flame.eval()
         self.E_detail.eval()
+        self.E_expression.eval()
         self.D_detail.eval()
         torch.set_grad_enabled(False)
 
@@ -133,9 +126,9 @@ class DECA(torch.nn.Module):
         # Get detail parameters
         detail_params = self.E_detail(images)
         enc_dict['detail'] = detail_params
-        
-        if self.cfg['DECA']['use_emoca']:
-            enc_dict['exp'] = self.E_expression(images)
+
+        # Replace DECA exp parameters with EMOCA        
+        enc_dict['exp'] = self.E_expression(images)
         
         return enc_dict
 

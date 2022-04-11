@@ -1,5 +1,6 @@
 import os
 from setuptools import setup, find_packages
+
 PACKAGES = find_packages()
 
 # Get version and release info, which is all stored in shablona/version.py
@@ -30,15 +31,22 @@ opts = dict(name=NAME,
     packages=PACKAGES,
     package_data=PACKAGE_DATA,
     install_requires=[
-        'pandas',
-        'matplotlib',
         'click',
+        'opencv-python',
+        'pandas',
+        'numpy',
+        'imageio',
+        'tqdm',
+        'matplotlib',
+        'scikit-image',
+        'face_alignment',
+        'pyyaml',
         'h5py',
-        'tables',
+        'tables',  # to use hdf5 with pandas
+        'trimesh',
+        'nilearn',
         'imageio-ffmpeg',
-        'face-alignment',
-        'chumpy',
-        'pyyaml'
+        'chumpy'  # for FLAME model .. really necessary?
     ],
     entry_points={
         'console_scripts': [
@@ -46,7 +54,8 @@ opts = dict(name=NAME,
             'gmfx_align = gmfx.cmd:align_cmd',
             'gmfx_interpolate = gmfx.cmd:interpolate_cmd',
             'gmfx_filter = gmfx.cmd:filter_cmd',
-            'gmfx_preproc = gmfx.cmd:preproc_cmd'
+            'gmfx_preproc = gmfx.cmd:preproc_cmd',
+            'gmfx_create_cfg = gmfx.cmd:create_cfg_cmd'
         ]
     }
 )

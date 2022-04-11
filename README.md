@@ -1,37 +1,43 @@
 # GMFX
-A Python implementation of a Generative Model of Facial eXpressions, leveraging a deep learning-based
-single-image 3D reconstruction model ([DECA](https://deca.is.tue.mpg.de/)).
+
+GMFX is a Python toolbox to analyze and build 3D Generative Models of Facial eXpressions. It uses a deep learning-based model ([EMOCA](https://emoca.is.tue.mpg.de/)) to reconstruct 3D faces from images or videos and provides tools to subsequently preprocess and analyze the 3D meshes.
 
 ## Installation
-The installation of `gmfx` is not trivial because it needs a specific version of `pytorch` (used by DECA and the face detection model), which itself depends on the specific CUDA version installed on your platform.
 
-It's probably best to use a custom environment to install `gmfx`. To do so using Anaconda, run the following command:
-
-```
-conda create -n gmfx python=3.9
-```
-
-Then, install `pytorch` and dependencies as follows:
+We strongly recommend to install the `gmfx` package in a separate [conda environment](https://anaconda.org/anaconda/conda). Assuming you have access to the `conda` (by installing [Anaconda](https://www.anaconda.com/products/distribution) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html)), run the following in your terminal to create a new environment named `gmfx` with Python version 3.9:
 
 ```
 conda create -n gmfx python=3.9
+```
+
+Then, activate the environment and install `pytorch` (used by the 3D reconstruction model) as follows:
+
+```
 conda activate gmfx
-conda install pytorch==1.9.0 cudatoolkit=10.2 -c pytorch
+conda install pytorch cudatoolkit=11.3 -c pytorch
 ```
 
-Then, we need to install the CUDA-based rasterizer shipped with DECA. To do so, run the following:
+The next step is to download the `gmfx` package from Github, either as [zip file](https://github.com/lukassnoek/gmfx/archive/refs/heads/master.zip) (which you need to extract afterwards) or using `git` (i.e., `git clone https://github.com/lukassnoek/gmfx.git`). The first thing to do, before installing `gmfx` intself, is to compile and install the C++ based rasterizer (to render 3D shapes as images) it contains. To install the rasterizer, you can run the following command (assuming that you're in the root of the downloaded repository):
 
 ```
 cd gmfx/render/rasterizer && pip install . && cd ../../..
 ```
 
-Finally, install the `gmfx` package itself (note the `.` at the end):
+Finally, again assuming you're in the root of the downloaded repository (and you have the `gmfx` conda environment activated), run the following command to install `gmfx` and its dependencies:
 
 ```
 pip install .
 ```
 
+At this point, the package's CLI tools (e.g., `gmfx_recon`) and Python API should be available. To verify, run the following commands in your terminal:
+
+```
+gmfx_recon --help  # to verify the CLI (should print out options)
+python -c 'import gmfx'  # to verify the Python API (shouldn't error)
+```
+
 ## Download DECA
+
 If you are on one of Glasgow's "deepnet" servers and have access to `Project0294` (if not, ask Oliver), you can simply copy the DECA model and associated files as follows (assuming you're currently in the root of the `gmfx` package):
 
 ```

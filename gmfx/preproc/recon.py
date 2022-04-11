@@ -25,7 +25,7 @@ warnings.filterwarnings(
 )
 
 
-def recon(in_dir, out_dir, participant_label, device):
+def recon(in_dir, out_dir, participant_label, cfg, device):
     """ Reconstruction of all frames of a video. 
     
     Parameters
@@ -38,6 +38,8 @@ def recon(in_dir, out_dir, participant_label, device):
     participant_label : str
         Like in BIDS, this indicates which participant from the `in_dir` will
         be processed
+    cfg : str
+        Path to config file for reconstruction
     device : str
         Either "cuda" (for GPU) or "cpu"
     """
@@ -54,7 +56,7 @@ def recon(in_dir, out_dir, participant_label, device):
 
     # Init here, otherwise it's done every frame -> slow
     fan = FAN(device=device)  # for face detection / cropping
-    deca = DECA(device=device)
+    deca = DECA(cfg=cfg, device=device)
 
     vids = list(data_dir.glob('*_video.mp4'))
     if not vids:
@@ -85,9 +87,10 @@ def recon(in_dir, out_dir, participant_label, device):
             events = None
 
         f_out = str(out_dir / base_f) + '_desc-recon'
-        v_4D = np.zeros((n_frames, 5023, 3))        
+        v_4D = np.zeros((n_frames, 5023, 3))  # pre-allocate, assuming FLAME mesh        
         writer = imageio.get_writer(f_out + '_viz-orig_shape.mp4', mode='I', fps=fps)
         
+        # Loop across frames of video
         for i, frame in tqdm(enumerate(reader), desc=f'Recon {base_f}', total=n_frames):
 
             # Prepare frame to be used as background during rendering            
