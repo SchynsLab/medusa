@@ -15,7 +15,6 @@
 # Contact: ps-license@tuebingen.mpg.de
 
 import torch
-import numpy as np
 import torch.nn.functional as F
 
 
@@ -26,72 +25,6 @@ def rot_mat_to_euler(rot_mats):
     sy = torch.sqrt(rot_mats[:, 0, 0] * rot_mats[:, 0, 0] +
                     rot_mats[:, 1, 0] * rot_mats[:, 1, 0])
     return torch.atan2(-rot_mats[:, 2, 0], sy)
-
-def find_dynamic_lmk_idx_and_bcoords(vertices, pose, dynamic_lmk_faces_idx,
-                                     dynamic_lmk_b_coords,
-                                     neck_kin_chain, dtype=torch.float32):
-    ''' Compute the faces, barycentric coordinates for the dynamic landmarks
-
-
-        To do so, we first compute the rotation of the neck around the y-axis
-        and then use a pre-computed look-up table to find the faces and the
-        barycentric coordinates that will be used.
-
-        Special thanks to Soubhik Sanyal (soubhik.sanyal@tuebingen.mpg.de)
-        for providing the original TensorFlow implementation and for the LUT.
-
-        Parameters
-        ----------
-        vertices: torch.tensor BxVx3, dtype = torch.float32
-            The tensor of input vertices
-        pose: torch.tensor Bx(Jx3), dtype = torch.float32
-            The current pose of the body model
-        dynamic_lmk_faces_idx: torch.tensor L, dtype = torch.long
-            The look-up table from neck rotation to faces
-        dynamic_lmk_b_coords: torch.tensor Lx3, dtype = torch.float32
-            The look-up table from neck rotation to barycentric coordinates
-        neck_kin_chain: list
-            A python list that contains the indices of the joints that form the
-            kinematic chain of the neck.
-        dtype: torch.dtype, optional
-
-        Returns
-        -------
-        dyn_lmk_faces_idx: torch.tensor, dtype = torch.long
-            A tensor of size BxL that contains the indices of the faces that
-            will be used to compute the current dynamic landmarks.
-        dyn_lmk_b_coords: torch.tensor, dtype = torch.float32
-            A tensor of size BxL that contains the indices of the faces that
-            will be used to compute the current dynamic landmarks.
-    '''
-
-    batch_size = vertices.shape[0]
-
-    aa_pose = torch.index_select(pose.view(batch_size, -1, 3), 1,
-                                 neck_kin_chain)
-    rot_mats = batch_rodrigues(
-        aa_pose.view(-1, 3), dtype=dtype).view(batch_size, -1, 3, 3)
-
-    rel_rot_mat = torch.eye(3, device=vertices.device,
-                            dtype=dtype).unsqueeze_(dim=0)
-    for idx in range(len(neck_kin_chain)):
-        rel_rot_mat = torch.bmm(rot_mats[:, idx], rel_rot_mat)
-
-    y_rot_angle = torch.round(
-        torch.clamp(-rot_mat_to_euler(rel_rot_mat) * 180.0 / np.pi,
-                    max=39)).to(dtype=torch.long)
-    neg_mask = y_rot_angle.lt(0).to(dtype=torch.long)
-    mask = y_rot_angle.lt(-39).to(dtype=torch.long)
-    neg_vals = mask * 78 + (1 - mask) * (39 - y_rot_angle)
-    y_rot_angle = (neg_mask * neg_vals +
-                   (1 - neg_mask) * y_rot_angle)
-
-    dyn_lmk_faces_idx = torch.index_select(dynamic_lmk_faces_idx,
-                                           0, y_rot_angle)
-    dyn_lmk_b_coords = torch.index_select(dynamic_lmk_b_coords,
-                                          0, y_rot_angle)
-
-    return dyn_lmk_faces_idx, dyn_lmk_b_coords
 
 
 def vertices2landmarks(vertices, faces, lmk_faces_idx, lmk_bary_coords):

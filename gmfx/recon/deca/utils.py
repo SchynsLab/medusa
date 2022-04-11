@@ -33,7 +33,6 @@ def upsample_mesh(vertices, normals, faces, displacement_map, texture_map, dense
         dense_colors: vertex color, [number of dense vertices, 3]
         dense_faces: [number of dense faces, 3]
     '''
-    img_size = dense_template['img_size']
     dense_faces = dense_template['f']
     x_coords = dense_template['x_coords']
     y_coords = dense_template['y_coords']
@@ -218,27 +217,6 @@ def vertex_normals(vertices, faces):
     normals = normals.reshape((bs, nv, 3))
     # pytorch only supports long and byte tensors for indexing
     return normals
-
-
-def copy_state_dict(cur_state_dict, pre_state_dict, prefix='', load_name=None):
-    def _get_params(key):
-        key = prefix + key
-        if key in pre_state_dict:
-            return pre_state_dict[key]
-        return None
-    for k in cur_state_dict.keys():
-        if load_name is not None:
-            if load_name not in k:
-                continue
-        v = _get_params(k)
-        try:
-            if v is None:
-                # print('parameter {} not found'.format(k))
-                continue
-            cur_state_dict[k].copy_(v)
-        except:
-            # print('copy param {} failed'.format(k))
-            continue
 
 
 def tensor2image(tensor, bgr=True):
