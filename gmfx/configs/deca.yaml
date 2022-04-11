@@ -5,6 +5,8 @@ FAN:
 
 DECA:
     model_path: data/deca_model.tar
+    emoca_path: data/emoca.ckpt
+    use_emoca: True
     topology_path: data/head_template.obj
     use_tex: True
     uv_size: 256

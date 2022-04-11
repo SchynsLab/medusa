@@ -7,8 +7,7 @@ from skimage.io import imread
 
 from .models.encoders import ResnetEncoder
 from .models.decoders import FLAME, FLAMETex, Generator
-from .utils import copy_state_dict, vertex_normals
-from .utils import tensor_vis_landmarks
+from .utils import vertex_normals, tensor_vis_landmarks
 from ...render.renderer import SRenderY
 
 # May have some speed benefits
@@ -96,12 +95,21 @@ class DECA(torch.nn.Module):
                                   out_scale=self.cfg['D_detail']['max_z'], sample_mode='bilinear').to(self.device)
 
         # Load weights
-        model_path = self.cfg['DECA']['model_path']
-        checkpoint = torch.load(model_path)
-        copy_state_dict(self.E_flame.state_dict(), checkpoint['E_flame'])
-        copy_state_dict(self.E_detail.state_dict(), checkpoint['E_detail'])
-        copy_state_dict(self.D_detail.state_dict(), checkpoint['D_detail'])
+        if self.cfg['DECA']['use_emoca']:
+            model_path = self.cfg['DECA']['emoca_path']
+        else:
+            model_path = self.cfg['DECA']['model_path']
 
+        checkpoint = torch.load(model_path)
+        self.E_flame.load_state_dict(checkpoint['E_flame'])
+        self.E_detail.load_state_dict(checkpoint['E_detail'])
+        self.D_detail.load_state_dict(checkpoint['D_detail'])        
+        
+        if self.cfg['DECA']['use_emoca']:
+            self.E_expression = ResnetEncoder(self.cfg['E_flame']['n_exp'])
+            self.E_expression.load_state_dict(checkpoint['E_expression'])
+            self.E_expression.cuda().eval()
+        
         # eval mode
         self.E_flame.eval()
         self.E_detail.eval()
@@ -125,6 +133,9 @@ class DECA(torch.nn.Module):
         # Get detail parameters
         detail_params = self.E_detail(images)
         enc_dict['detail'] = detail_params
+        
+        if self.cfg['DECA']['use_emoca']:
+            enc_dict['exp'] = self.E_expression(images)
         
         return enc_dict
 

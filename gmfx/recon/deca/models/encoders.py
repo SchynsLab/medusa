@@ -13,17 +13,13 @@
 # For comments or questions, please email us at deca@tue.mpg.de
 # For commercial licensing contact, please contact ps-license@tuebingen.mpg.de
 
-import torch
-import torchvision
 import numpy as np
 import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, layers, num_classes=1000):
+    def __init__(self, block, layers):
         self.inplanes = 64
         super(ResNet, self).__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
@@ -116,10 +112,12 @@ class Bottleneck(nn.Module):
 
         return out
 
+
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
                      padding=1, bias=False)
+
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -168,16 +166,12 @@ def copy_parameter_from_resnet(model, resnet_dict):
             continue
 
 
-def load_ResNet50Model():
-    return model
-
-
 class ResnetEncoder(nn.Module):
     def __init__(self, outsize, last_op=None):
         super(ResnetEncoder, self).__init__()
         feature_size = 2048
         self.encoder = ResNet(Bottleneck, [3, 4, 6, 3])
-        copy_parameter_from_resnet(self.encoder, torchvision.models.resnet50(pretrained = False).state_dict())
+        #copy_parameter_from_resnet(self.encoder, torchvision.models.resnet50(pretrained = False).state_dict())
         ### regressor
         self.layers = nn.Sequential(
             nn.Linear(feature_size, 1024),
