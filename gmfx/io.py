@@ -1,24 +1,33 @@
 import os
 import torch
 import h5py
-import imageio
 import numpy as np
 import os.path as op
 import pandas as pd
-from tqdm import tqdm
-from pathlib import Path
 
-from .recon.deca.utils import tensor2image
-from .render.renderer import SRenderY
 from .constants import FACES
 
 
 class Data:
-    """ Generic Data class to store, load, and save vertex/face data. """
-    def __init__(self, v=None, f=None, frame_t=None, events=None, fps=None,
-                 dense=False, sub=None, run=None, task=None):
+    """ Generic Data class to store, load, and save vertex/face data. 
+    
+    Parameters
+    ----------
+    v : ndarray
+        Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)
+    motion : ndarray
+        Numpy array of shape T (time points) x 6 (global rot x/y/z, trans x/y, scale z)
+    f : ndarray
+        Numpy array of shape nF (no. faces) x 3 (vertices per face)
+    frame_t : ndarray
+        Numpy array of length T (time points) with "frame times", i.e.,
+        onset of each frame (in seconds) from the video
+    """
+    def __init__(self, v=None, motion=None, f=None, frame_t=None, events=None,
+                 fps=None, dense=False, sub=None, run=None, task=None):
 
         self.v = v
+        self.motion = motion
         self.f = f
         self.frame_t = frame_t
         self.events = events
@@ -28,7 +37,6 @@ class Data:
         self.run = run
         self.task = task
         self._check()
-        self._setup_renderer()
 
     def _check(self):
 
@@ -43,10 +51,6 @@ class Data:
             #if self.frame_t.size != self.v.shape[0]:
             #    raise ValueError("Number of frame times does not equal "
             #                     "number of vertex time points!")
-    
-    def _setup_renderer(self):
-        topo = Path(__file__).parents[1].resolve() / 'ext_data/FLAME/geometry/head_template.obj'
-        self.render = SRenderY(image_size=224, obj_filename=topo, uv_size=256).to('cuda')
 
     @classmethod
     def load(cls, path):
@@ -54,6 +58,7 @@ class Data:
         
         with h5py.File(path, "r") as f_in:
             v = f_in['v'][:]
+            motion = f_in['motion'][:]
             f = f_in['f'][:]
             
             frame_t = None
@@ -67,7 +72,7 @@ class Data:
         if 'events' in f_in:
             events = pd.read_hdf(path, key='/events')
 
-        data = cls(v, f, frame_t, events, fps, dense)
+        data = cls(v, motion, f, frame_t, events, fps, dense)
         return data
         
     def save(self, path):
@@ -78,7 +83,7 @@ class Data:
             os.makedirs(out_dir, exist_ok=True)
 
         with h5py.File(path, 'w') as f_out:
-            for attr in ['v', 'f', 'frame_t']:
+            for attr in ['v', 'motion', 'f', 'frame_t']:
                 data = getattr(self, attr)
                 if data is not None:
                     f_out.create_dataset(attr, data=data)
@@ -91,25 +96,6 @@ class Data:
         if self.events is not None:
             self.events.to_hdf(path, key='/events', mode='a')
 
-    def visualize(self, path, zoom=10):
-        """ Plots each time point separately and creates a movie. """
-        
-        writer = imageio.get_writer(path, mode='I', fps=self.fps)
-        for i in tqdm(range(self.v.shape[0])):
-            v = self.v[i, ...]
-            v_trans = v * zoom
-            v_trans[:, 1:] = -v_trans[:, 1:]
-
-            res = self.render.render_shape(self._to_tensor(v), self._to_tensor(v_trans),
-                                           h=224, w=224, images=None)
-            writer.append_data(tensor2image(res[0], bgr=False))
-
-        writer.close()
-        
-    def _to_tensor(self, v, device='cuda'):
-        v_new = torch.tensor(v).float()[None, ...].to(device)
-        return v_new
-        
     def __len__(self):
         return self.v.shape[0]
     

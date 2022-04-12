@@ -18,7 +18,7 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
-from ..recon.deca import utils
+from ..recon.emoca import utils
 from standard_rasterize_cuda import standard_rasterize
         
 
