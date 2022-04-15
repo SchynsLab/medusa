@@ -1,91 +1,85 @@
-import os
 import numpy as np
 import pandas as pd
-from glob import glob
 from tqdm import tqdm
 from pathlib import Path
+from datetime import datetime
 from trimesh.registration import icp, procrustes
 from trimesh.transformations import decompose_matrix, transform_points, compose_matrix
 from skimage.transform._geometric import _umeyama as _umeyama_skimage
 
-from ..render.utils import images_to_mp4, plot_shape
-from ..constants import EYES_NOSE, SCALP
 from ..io import Data
+from ..utils import get_logger
+
+logger = get_logger()
 
 
-def align(in_dir, participant_label, algorithm, ref_verts, save_all):
-    """ Aligment of 3D meshes over time. """
+def align(data, algorithm, device='cuda'):
+    """ Aligment of 3D meshes over time. 
     
-    in_dir = Path(in_dir) / participant_label
-    recon_dir = in_dir / 'recon'
-    align_dir = in_dir / 'align'
-    align_dir.mkdir(exist_ok=True)
+    Parameters
+    ----------
+    data : str, Data
+        Either a path (str, pathlib.Path) to a `gmfx` hdf5 data file
+        or a gmfx.io.Data object (i.e., data loaded from the hdf5 file)
+    algorithm : str
+        Either 'icp' or 'umeyama'
+    device : str
+        Either 'cuda' (GPU) or 'cpu'; only used for rendering
+    """
 
-    # Load (un-aligned) vertices from recon stage
-    #V = Data.load(recon_dir / f{''})    
-    verts = np.load(op.join(recon_dir, participant_label + '_desc-recon_shape.npy'))
-
-    # Pick reference vertices (to use for aligment)
-    if ref_verts == 'all':
-        verts4align = np.ones(verts.shape[1], dtype=bool)
-    elif ref_verts == 'eyes+nose':
-        verts4align = EYES_NOSE
-    elif ref_verts == 'scalp':
-        verts4align = SCALP
-    else:
-        pass  # error will be raised earlier
-    
+    if isinstance(data, (str, Path)):
+        # if data is a path to a hdf5 file, load it
+        # (used by CLI)
+        logger.info(f"Loading data from {data} ...")
+        data = Data.load(data)
+        
     # Set target to be the first timepoint
-    # Idea: change to first n aligned timepoints?
-    target = verts[0, verts4align, :]
+    target = data.v[0, :, :]
+    T = data.v.shape[0]
 
     # Pre-allocate registration parameters (save for 
     # nuisance parameters in model fitting)
-    reg_params = np.zeros((verts.shape[0], 12))
+    reg_params = np.zeros((T, 12))
 
     # Loop over meshes
-    for i in tqdm(range(verts.shape[0]), desc='Align'):
+    desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
+    for i in tqdm(range(T), desc=f'{desc} Align frames'):
  
-        source = verts[i, verts4align, :]  # to be aligned
+        source = data.v[i, :, :]  # to be aligned
         if i == 0:
             # First mesh does not have to be aligned
             regmat = np.eye(4)
         else:
             if algorithm == 'icp':  # trimesh ICP implementation
-                _, regmat = _icp(source, target, do_scale=True, ignore_shear=True)
+                regmat = _icp(source, target, scale=True, ignore_shear=False)
             else:  # scikit-image 3D umeyama similarity transform
-                _, regmat = _umeyama(source, target, do_scale=True)
+                regmat = _umeyama_skimage(source, target, estimate_scale=True)
 
             # Apply estimated transformation            
-            verts[i, ...] = transform_points(verts[i, ...], regmat)
+            data.v[i, ...] = transform_points(data.v[i, ...], regmat)
 
         # Decompose matrix into reg parameters and store
         scale, shear, angles, translate, _ = decompose_matrix(regmat)
-        reg_params[i, :] = np.r_[scale, shear, angles, translate]
+        reg_params[i, :] = np.r_[angles, translate, scale, shear]
 
-        # Save rendered img to disk
-        f_out = op.join(align_dir, participant_label + f'_img-{str(i+1).zfill(5)}_align.png')
-        plot_shape(verts[i, ...], f_out=f_out)
+    data.v = data.v.astype(np.float32)
+    data.motion = reg_params
+    data.motion_cols = ['rot_x', 'rot_y', 'rot_z', 'trans_x', 'trans_y', 'trans_z',
+                        'scale_x', 'scale_y', 'scale_z', 'shear_x', 'shear_y', 'shear_z']
 
-    f_out = op.join(align_dir, participant_label + '_desc-align_shape.npy')
-    np.save(f_out, verts)
-
-    cols = [f'{p}_{c}' for p in ['scale', 'shear', 'rot', 'trans'] for c in ['x', 'y', 'z']]
-    reg_df = pd.DataFrame(reg_params, columns=cols)
-    reg_df.to_csv(op.join(align_dir, participant_label + '_desc-align_parameters.csv'), index=False)
-
-    images = sorted(glob(op.join(align_dir, '*_align.png')))
-    f_out = op.join(align_dir, participant_label + '_desc-align_shape.mp4')
-    images_to_mp4(images, f_out)
-    
-    if not save_all:
-        _ = [os.remove(f) for f in images]
+    # Save!
+    pth = data.path
+    desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+align'
+    f_out = pth.split('desc-')[0] + desc + '_' + pth.split('desc-')[1].split('_')[1].split('.h5')[0]
+    data.plot_data(f_out + '_qc.png', plot_motion=True, plot_pca=False, n_pca=3)
+    data.render_video(f_out + '_shape.gif', device=device)
+    data.save(f_out + '.h5')
 
 
-def _icp(source, target, do_scale=True, ignore_shear=True):
+def _icp(source, target, scale=True, ignore_shear=True):
     """ ICP implementation from trimesh. """    
     # First, do a rough procrustus reg, followed by icp (recommended by trimesh)
-    regmat, _, _ = procrustes(source, target, reflection=False, scale=do_scale)
+    regmat, _, _ = procrustes(source, target, reflection=False, scale=scale)
 
     # Stupic hack: set shear to None and recompose matrix
     if ignore_shear:
@@ -93,17 +87,11 @@ def _icp(source, target, do_scale=True, ignore_shear=True):
         regmat = compose_matrix(scale, None, angles, translate)
 
     # Run ICP with `regmat` as initial matrix
-    regmat, _, _ = icp(source, target, initial=regmat, reflection=False, scale=do_scale)
+    regmat, _, _ = icp(source, target, initial=regmat, reflection=False, scale=scale)
 
     # Remove shear again
     if ignore_shear:
         scale, _, angles, translate, _ = decompose_matrix(regmat)
         regmat = compose_matrix(scale, None, angles, translate)
 
-    return regmat
-
-
-def _umeyama(source, target, do_scale=True):
-    """ Wrapper around scikit-image umeyama sim transform. """
-    regmat = _umeyama_skimage(source, target, estimate_scale=do_scale)
     return regmat

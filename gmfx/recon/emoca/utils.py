@@ -91,7 +91,7 @@ def plot_kpts(image, kpts, color = 'r'):
 
 
 ## load obj,  similar to load_obj from pytorch3d
-def load_obj(obj_filename):
+def load_obj(obj_filename, device='cuda'):
     """ Ref: https://github.com/facebookresearch/pytorch3d/blob/25c065e9dafa90163e7cec873dbb324a637c68b7/pytorch3d/io/obj_io.py
     Load a mesh from a file-like object.
     """
@@ -137,10 +137,10 @@ def load_obj(obj_filename):
     faces = torch.tensor(faces, dtype=torch.long); faces = faces.reshape(-1, 3) - 1
     uv_faces = torch.tensor(uv_faces, dtype=torch.long); uv_faces = uv_faces.reshape(-1, 3) - 1
     return (
-        verts,
-        uvcoords,
-        faces,
-        uv_faces
+        verts.to(device=device),
+        uvcoords.to(device=device),
+        faces.to(device=device),
+        uv_faces.to(device=device)
     )
 
 # ---------------------------- process/generate vertices, normals, faces

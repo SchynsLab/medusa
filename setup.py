@@ -50,12 +50,12 @@ opts = dict(name=NAME,
     ],
     entry_points={
         'console_scripts': [
-            'gmfx_recon = gmfx.cmd:recon_cmd',
-            'gmfx_align = gmfx.cmd:align_cmd',
-            'gmfx_interpolate = gmfx.cmd:interpolate_cmd',
-            'gmfx_filter = gmfx.cmd:filter_cmd',
-            'gmfx_preproc = gmfx.cmd:preproc_cmd',
-            'gmfx_create_cfg = gmfx.cmd:create_cfg_cmd'
+            'gmfx_recon = gmfx.cli:recon_cmd',
+            'gmfx_align = gmfx.cli:align_cmd',
+            'gmfx_resample = gmfx.cli:resample_cmd',
+            'gmfx_filter = gmfx.cli:filter_cmd',
+            'gmfx_preproc = gmfx.cli:preproc_cmd',
+            'gmfx_create_cfg = gmfx.cli:create_cfg_cmd'
         ]
     }
 )

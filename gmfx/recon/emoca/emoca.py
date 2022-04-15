@@ -56,7 +56,8 @@ class EMOCA(torch.nn.Module):
         
         topo = self.cfg['DECA']['topology_path']
         self.render = SRenderY(self._image_size, obj_filename=topo,
-                               uv_size=self._uv_size).to(self.device)
+                               uv_size=self._uv_size, device=self.device)
+        self.render.to(self.device)
 
         # Load required data
         mask = imread(self.cfg['DECA']['face_eye_mask_path']).astype(np.float32) / 255.

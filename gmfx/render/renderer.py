@@ -18,84 +18,19 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
+from .rasterizer import StandardRasterizer
 from ..recon.emoca import utils
-from standard_rasterize_cuda import standard_rasterize
-        
-
-# Note to self: `torch` always needs to be imported before
-# importing `standard_rasterize_cuda`, because importing `torch`
-# will make libc10.so available.
-
-
-class StandardRasterizer(nn.Module):
-    """ Alg: https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation
-    Notice:
-        x,y,z are in image space, normalized to [-1, 1]
-        can render non-squared image
-        not differentiable
-    """
-    def __init__(self, height, width=None):
-        """
-        use fixed raster_settings for rendering faces
-        """
-        super().__init__()
-        if width is None:
-            width = height
-        self.h = h = height; self.w = w = width
-
-    def forward(self, vertices, faces, attributes=None, h=None, w=None):
-        device = vertices.device
-        if h is None:
-            h = self.h
-        if w is None:
-            w = self.h; 
-        bz = vertices.shape[0]
-        depth_buffer = torch.zeros([bz, h, w]).float().to(device) + 1e6
-        triangle_buffer = torch.zeros([bz, h, w]).int().to(device) - 1
-        baryw_buffer = torch.zeros([bz, h, w, 3]).float().to(device)
-        vert_vis = torch.zeros([bz, vertices.shape[1]]).float().to(device)
-        vertices = vertices.clone().float()
-        
-        vertices[...,:2] = -vertices[...,:2]
-        vertices[...,0] = vertices[..., 0]*w/2 + w/2
-        vertices[...,1] = vertices[..., 1]*h/2 + h/2
-        vertices[...,0] = w - 1 - vertices[..., 0]
-        vertices[...,1] = h - 1 - vertices[..., 1]
-        vertices[...,0] = -1 + (2*vertices[...,0] + 1)/w
-        vertices[...,1] = -1 + (2*vertices[...,1] + 1)/h
-        #
-        vertices = vertices.clone().float()
-        vertices[...,0] = vertices[..., 0]*w/2 + w/2 
-        vertices[...,1] = vertices[..., 1]*h/2 + h/2 
-        vertices[...,2] = vertices[..., 2]*w/2
-        f_vs = utils.face_vertices(vertices, faces)
-
-        standard_rasterize(f_vs, depth_buffer, triangle_buffer, baryw_buffer, h, w)
-        pix_to_face = triangle_buffer[:,:,:,None].long()
-        bary_coords = baryw_buffer[:,:,:,None,:]
-        vismask = (pix_to_face > -1).float()
-        D = attributes.shape[-1]
-        attributes = attributes.clone(); attributes = attributes.view(attributes.shape[0]*attributes.shape[1], 3, attributes.shape[-1])
-        N, H, W, K, _ = bary_coords.shape
-        mask = pix_to_face == -1
-        pix_to_face = pix_to_face.clone()
-        pix_to_face[mask] = 0
-        idx = pix_to_face.view(N * H * W * K, 1, 1).expand(N * H * W * K, 3, D)
-        pixel_face_vals = attributes.gather(0, idx).view(N, H, W, K, 3, D)
-        pixel_vals = (bary_coords[..., None] * pixel_face_vals).sum(dim=-2)
-        pixel_vals[mask] = 0  # Replace masked values in output.
-        pixel_vals = pixel_vals[:,:,:,0].permute(0,3,1,2)
-        pixel_vals = torch.cat([pixel_vals, vismask[:,:,:,0][:,None,:,:]], dim=1)
-        return pixel_vals
 
 
 class SRenderY(nn.Module):
-    def __init__(self, image_size, obj_filename, uv_size=256):
+    def __init__(self, image_size, obj_filename, uv_size=256, device='cuda'):
         super(SRenderY, self).__init__()
         self.image_size = image_size
         self.uv_size = uv_size
-        self.rasterizer = StandardRasterizer(image_size)
-        self.uv_rasterizer = StandardRasterizer(uv_size)
+        self.device = device
+        self.rasterizer = StandardRasterizer(image_size, device=device)
+        self.uv_rasterizer = StandardRasterizer(uv_size, device=device)
+        
         verts, uvcoords, faces, uvfaces = utils.load_obj(obj_filename)
         verts = verts[None, ...]
         uvcoords = uvcoords[None, ...]
@@ -118,6 +53,7 @@ class SRenderY(nn.Module):
 
         # shape colors, for rendering shape overlay
         colors = torch.tensor([180, 180, 180])[None, None, :].repeat(1, faces.max()+1, 1).float()/255.
+        colors = colors.to(device=device)
         face_colors = utils.face_vertices(colors, faces)
         self.register_buffer('face_colors', face_colors)
 

@@ -1,48 +1,36 @@
-import os
 import numpy as np
-import os.path as op
-from glob import glob
-from tqdm import tqdm
-from nilearn import signal
+from pathlib import Path
+from scipy.signal import butter, sosfilt
 
-from ..render.utils import images_to_mp4, plot_shape
+from ..io import Data
+from ..utils import get_logger
 
+logger = get_logger()
 
-def filter(in_dir, participant_label, low_pass, high_pass, save_all):
+def filter(data, low_pass, high_pass, device='cuda'):
+    # https://stackoverflow.com/questions/12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter
+    if isinstance(data, (str, Path)):
+        # if data is a path to a hdf5 file, load it
+        # (used by CLI)
+        logger.info(f"Loading data from {data} ...")
+        data = Data.load(data)
 
-    interp_dir = op.join(in_dir, participant_label, 'interpolate')
-    filter_dir = op.join(in_dir, participant_label, 'filter')
-    os.makedirs(filter_dir, exist_ok=True)
+    v = data.v.reshape((data.v.shape[0], -1))
 
-    verts = np.load(op.join(interp_dir, participant_label + '_desc-interp_shape.npy'))
+    nyq = 0.5 * data.fps  # sampling freq
     
-    # Flatten vertices to work with signal.clean (which assumes 2D)
-    verts = verts.reshape((verts.shape[0], 5023 * 3))
-
-    # Normalize beforehand, but save parameters
-    mu, std = verts.mean(axis=0), verts.std(axis=0)
-    verts = (verts - mu) / std
-    verts = signal.clean(verts, detrend=True, standardize=False, t_r=0.089, high_pass=high_pass, low_pass=low_pass)
+    low = high_pass / nyq
+    high = low_pass / nyq
+    sos = butter(5, [low, high], analog=False, btype='band', output='sos')
+    v = sosfilt(sos, v, axis=0)
 
     # Undo normalization to get data back on original scale
-    verts = (verts * std + mu).reshape((verts.shape[0], 5023, 3))
-
-    f_out = op.join(filter_dir, participant_label + '_desc-filter_shape.npy')
-    np.save(f_out, verts)
-
-    for i in tqdm(range(verts.shape[0]), desc='Plot filter'):
-        # Save rendered img to disk
-        f_out = op.join(filter_dir, participant_label + f'_img-{str(i+1).zfill(5)}_filter.png')
-        plot_shape(verts[i, ...], f_out=f_out)
+    data.v = v.reshape(data.v.shape).astype(np.float32)
     
-    images = sorted(glob(op.join(filter_dir, '*_filter.png')))
-    f_out = op.join(filter_dir, participant_label + '_desc-filter_shape.mp4')
-    images_to_mp4(images, f_out)
-    
-    if not save_all:
-        _ = [os.remove(f) for f in images]
-
-
-if __name__ == '__main__':
-
-    main()
+    # Save!
+    pth = data.path
+    desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+filt'
+    f_out = pth.split('desc-')[0] + desc + '_' + pth.split('desc-')[1].split('_')[1].split('.h5')[0]
+    data.plot_data(f_out + '_qc.png', plot_motion=False, plot_pca=True, n_pca=3)
+    data.render_video(f_out + '_shape.gif', device=device)
+    data.save(f_out + '.h5')

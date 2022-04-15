@@ -7,6 +7,8 @@ def plot_shape(v, f, f_out=None, color='lightgray', overlay=None,
                f_type='flame', figsize=(10, 8)):
     """ Plot a shape given vertices and faces.
     
+    OLD (and slow), DO NOT USE
+    
     Parameters
     ----------
     v : ndarray
@@ -57,15 +59,3 @@ def images_to_mp4(images, f_out):
     cv2.destroyAllWindows()
     video.release()
 
-def mp4_to_images(video, ext='mp4'):
-    vidcap = cv2.VideoCapture(video)
-    success, image = vidcap.read()
-    count, images = 0, []
-    while success:
-        image_p = video.split(f'.{ext}')[0] + f'_frame-{str(count).zfill(5)}.jpg'
-        cv2.imwrite(image_p, image)     # save frame as JPEG file
-        success, image = vidcap.read()
-        count += 1
-        images.append(image_p)
-
-    return images
