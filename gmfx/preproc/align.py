@@ -70,10 +70,10 @@ def align(data, algorithm, device='cuda'):
     # Save!
     pth = data.path
     desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+align'
-    f_out = pth.split('desc-')[0] + desc + '_' + pth.split('desc-')[1].split('_')[1].split('.h5')[0]
-    data.plot_data(f_out + '_qc.png', plot_motion=True, plot_pca=False, n_pca=3)
+    f_out = pth.split('desc-')[0] + desc
+    data.plot_data(f_out + '_qc.png', plot_motion=True, plot_pca=True, n_pca=3)
     data.render_video(f_out + '_shape.gif', device=device)
-    data.save(f_out + '.h5')
+    data.save(f_out + '_shape.h5')
 
 
 def _icp(source, target, scale=True, ignore_shear=True):

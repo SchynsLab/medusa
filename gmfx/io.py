@@ -277,7 +277,7 @@ class Data:
                     max_t = t.max()
                     ev = self.events.query("trial_type == @tt & onset < @max_t")
                     for _, ev_i in ev.iterrows():
-                        ax.axvline(ev_i['onset'], ls='--', c=plt.cm.viridis(i))
+                        ax.axvline(ev_i['onset'], ls='--', c=plt.cm.tab20(i))
 
         axes[-1].set_xlabel('Time (frames)', fontsize=10)
         fig.savefig(f_out)
