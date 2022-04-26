@@ -2,13 +2,13 @@ import numpy as np
 from pathlib import Path
 from scipy.interpolate import interp1d, PchipInterpolator
 
-from ..io import Data
+from ..io import load_h5
 from ..utils import get_logger
 
 logger = get_logger()
 
 
-def resample(data, sampling_freq=None, kind='pchip', device='cuda'):
+def resample(data, sampling_freq=None, kind='pchip', video=None):
     """ Resamples the data to a given sampling rate.
     This function can be used to resample the time points
     to a higher temporal resolution and/or a constant
@@ -26,15 +26,13 @@ def resample(data, sampling_freq=None, kind='pchip', device='cuda'):
     kind : str
         Kind of interpolation to use, either 'pchip' (default), 'linear', 'quadratic',
         or 'cubic'
-    device : str
-        Either 'cuda' (GPU) or 'cpu'; only used for rendering
     """
 
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
         # (used by CLI)
         logger.info(f"Loading data from {data} ...")
-        data = Data.load(data)
+        data = load_h5(data)
     
     ft = data.frame_t
     
@@ -47,7 +45,7 @@ def resample(data, sampling_freq=None, kind='pchip', device='cuda'):
         sampling_period = 1 / sampling_freq
 
     # Update
-    data.fps = sampling_freq
+    data.sf = sampling_freq
 
     # Create interpolator with current ft and data
     if kind == 'pchip':
@@ -83,6 +81,6 @@ def resample(data, sampling_freq=None, kind='pchip', device='cuda'):
     desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+interp'
     f_out = pth.split('desc-')[0] + desc
     data.plot_data(f_out + '_qc.png', plot_motion=True, plot_pca=True, n_pca=3)
-    data.render_video(f_out + '_shape.gif', device=device)
+    data.render_video(f_out + '_shape.gif', video=video)
     data.save(f_out + '_shape.h5')
     

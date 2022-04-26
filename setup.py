@@ -50,7 +50,7 @@ opts = dict(name=NAME,
     ],
     entry_points={
         'console_scripts': [
-            'gmfx_recon = gmfx.cli:recon_cmd',
+            'gmfx_videorecon = gmfx.cli:videorecon_cmd',
             'gmfx_align = gmfx.cli:align_cmd',
             'gmfx_resample = gmfx.cli:resample_cmd',
             'gmfx_filter = gmfx.cli:filter_cmd',

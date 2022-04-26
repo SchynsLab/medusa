@@ -9,7 +9,7 @@
 import click
 import shutil
 from pathlib import Path
-from .preproc.recon import recon
+from .preproc.recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
 from .preproc.filter import filter
@@ -18,28 +18,28 @@ from .preproc.filter import filter
 @click.command()
 @click.argument('video_path', type=click.Path(exists=True, dir_okay=False))
 @click.option('-e', '--events-path', default=None, type=click.Path(exists=True, dir_okay=False))
+@click.option('-r', '--recon-model-name', default='emoca', type=click.Choice(['emoca', 'emoca-dense', 'FAN-2D', 'FAN-3D']))
 @click.option('-c', '--cfg', default=None, type=click.STRING, help='Path to recon config file')
 @click.option('--device', default='cuda', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
 @click.option('-o', '--out-dir', type=click.Path(), help='Output directory')
-@click.option('--allow-pose', is_flag=True, help='Allow pose to influence mesh')
-def recon_cmd(video_path, events_path, cfg, device, out_dir, allow_pose):
-    recon(**locals())
+@click.option('--recon-world', is_flag=True, help='Only for EMOCA: get rid of pose/translation')
+def videorecon_cmd(video_path, events_path, recon_model_name, cfg, device, out_dir, recon_world):
+    videorecon(**locals())
 
 
 @click.command()
 @click.argument('data', type=click.Path(exists=True, dir_okay=False))
 @click.option('--algorithm', default='icp', type=click.Choice(['icp', 'umeyama']))
-@click.option('--device', default='cuda', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
-def align_cmd(data, algorithm, device):
+@click.option('--video', default=None, type=click.Path(exists=True, dir_okay=False), help='Video for rendering')
+def align_cmd(data, algorithm, video):
     align(**locals())
 
 
 @click.command()
 @click.argument('data', type=click.Path(exists=True, dir_okay=False))
-@click.option('--sampling-rate', default=None, type=click.INT)
+@click.option('--sampling-freq', default=None, type=click.INT)
 @click.option('--kind', type=click.Choice(['pchip', 'linear', 'quadratic', 'cubic']), default='pchip')
-@click.option('--device', default='cuda', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
-def resample_cmd(data, sampling_rate, kind, device):
+def resample_cmd(data, sampling_freq, kind):
     resample(**locals())
 
 

@@ -305,3 +305,49 @@ def batch_rigid_transform(rot_mats, joints, parents, dtype=torch.float32):
         torch.matmul(transforms, joints_homogen), [3, 0, 0, 0, 0, 0, 0, 0])
 
     return posed_joints, rel_transforms
+
+# Two functions below from:
+# https://github.com/mjvanderboon/headnerf/blob/66c0d1e6868fce7dfa2f48c861e2f875a8f4d33a/im2scene/common.py
+def batch_rot_matrix_to_ht(rot_mats):
+    '''
+    Transform a 3x3 rotation matrix to a homogeneous transformation matrix without adding any translation component.
+    Args:
+        rot_mats: rotation matrices - N x 3 x 3
+    Returns:
+        rot_mats_homo: homogeneous transformation matrices - N x 4 x 4
+    '''
+    device = rot_mats.device
+    batch_size = rot_mats.shape[0]
+
+    zero_vec = torch.tensor([0, 0, 0], device=device).repeat(batch_size, 1, 1)
+    zero_trans_vec = torch.tensor([0, 0, 0, 1], device=device).repeat(batch_size, 1, 1)
+    intermediate = torch.cat((rot_mats, zero_vec), dim=1)
+    rot_mats_homo = torch.cat((intermediate, zero_trans_vec.permute(0, 2, 1)), dim=2)
+
+    return rot_mats_homo
+
+
+def batch_orth_proj_matrix(camera):
+    '''
+    Args:
+        camera: scale and translation, [N, 3], [scale, tx, ty]
+    Returns:
+        homo_transforms: N x 4 x 4
+    '''
+
+    translation_vec = camera[:, 1:]
+    t_x = camera[:, 1]
+    t_y = camera[:, 2]
+    scale = camera[:, 0]
+
+    batch_size = camera.shape[0]
+    device = camera.device
+
+    homo_transforms = torch.zeros((batch_size, 4, 4), device=device)
+    homo_transforms[:, 3, 3].fill_(1.)
+    homo_transforms[:, 0, 0] = 1/scale
+    homo_transforms[:, 1, 1] = 1/scale
+    homo_transforms[:, 0, 3] = -t_x
+    homo_transforms[:, 1, 3] = -t_y
+
+    return homo_transforms

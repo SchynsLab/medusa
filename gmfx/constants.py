@@ -1,5 +1,4 @@
 import numpy as np
-import os.path as op
 from pathlib import Path
 
 here = Path(__file__).parent.resolve()
