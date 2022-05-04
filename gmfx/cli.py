@@ -18,12 +18,12 @@ from .preproc.filter import filter
 @click.command()
 @click.argument('video_path', type=click.Path(exists=True, dir_okay=False))
 @click.option('-e', '--events-path', default=None, type=click.Path(exists=True, dir_okay=False))
-@click.option('-r', '--recon-model-name', default='emoca', type=click.Choice(['emoca', 'emoca-dense', 'FAN-2D', 'FAN-3D']))
+@click.option('-r', '--recon-model-name', default='emoca', type=click.Choice(['emoca', 'mediapipe', 'FAN-3D']))
 @click.option('-c', '--cfg', default=None, type=click.STRING, help='Path to recon config file')
 @click.option('--device', default='cuda', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
 @click.option('-o', '--out-dir', type=click.Path(), help='Output directory')
-@click.option('--recon-world', is_flag=True, help='Only for EMOCA: get rid of pose/translation')
-def videorecon_cmd(video_path, events_path, recon_model_name, cfg, device, out_dir, recon_world):
+@click.option('--render-on-video', is_flag=True, help='Plot recon on video background')
+def videorecon_cmd(video_path, events_path, recon_model_name, cfg, device, out_dir, render_on_video):
     videorecon(**locals())
 
 

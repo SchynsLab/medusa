@@ -7,15 +7,15 @@ from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
 
-from ..recon import EMOCA, FAN
+from ..recon import EMOCA, FAN, Mediapipe
 from ..io import MODEL2CLS
 from ..utils import get_logger
 
 logger = get_logger()
 
 
-def videorecon(video_path, events_path=None, recon_model_name='emoca', cfg=None, device='cuda',
-               out_dir=None, recon_world=False):
+def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=None, device='cuda',
+               out_dir=None, render_on_video=False):
     """ Reconstruction of all frames of a video. 
     
     Parameters
@@ -28,18 +28,15 @@ def videorecon(video_path, events_path=None, recon_model_name='emoca', cfg=None,
         columns 'onset' (in seconds) and 'trial_type'; optional
         columns are 'duration' and 'modulation'
     recon_model_name : str
-        Name of reconstruction model, options are: 'emoca', 'emoca-dense', 'mediapipe',
+        Name of reconstruction model, options are: 'emoca', 'emoca', 'mediapipe',
         'FAN-2D', and 'FAN-3D'
     cfg : str
         Path to config file for reconstruction
     device : str
-        Either "cuda" (for GPU) or "cpu"
+        Either "cuda" (for GPU) or "cpu" (ignored when using mediapipe)
     out_dir : str, Path
         Path to directory where recon data (and associated
-        files) are saved
-    allow_pose : bool
-        If True, pose parameters are *not* set to 0 (so pose
-        affects the vertex values)
+        files) are saved; if `None`, same directory as video is used
     """
 
     if isinstance(video_path, str):
@@ -58,15 +55,18 @@ def videorecon(video_path, events_path=None, recon_model_name='emoca', cfg=None,
     logger.info(f"Initializing {recon_model_name} recon model")
     if recon_model_name in ['emoca', 'emoca-dense']:
         fan = FAN(device=device)  # for face detection / cropping
-        recon_model = EMOCA(cfg=cfg, device=device, recon_world=recon_world)
+        recon_model = EMOCA(cfg=cfg, device=device)
     elif recon_model_name == 'FAN-3D':
         recon_model = FAN(device=device, lm_type='3D')
+    elif recon_model_name == 'mediapipe':
+        recon_model = Mediapipe()
     else:
         raise NotImplementedError
 
     base_f = video_path.stem.replace('_video', '')
     reader = imageio.get_reader(video_path)
     sf = reader.get_meta_data()['fps']  # sf = sampling frequency
+    frame_size = reader.get_meta_data()['size']
 
     # Use cv2 to get n_frames (not possible with imageio ...)
     cap = cv2.VideoCapture(str(video_path))
@@ -112,9 +112,8 @@ def videorecon(video_path, events_path=None, recon_model_name='emoca', cfg=None,
 
     # Loop across frames of video
     desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
-    i = 0
     for frame in tqdm(reader, desc=f"{desc} Recon frames", total=n_frames):
-        
+     
         if recon_model_name in ['emoca', 'emoca-dense']:
 
             # Crop image
@@ -126,12 +125,10 @@ def videorecon(video_path, events_path=None, recon_model_name='emoca', cfg=None,
 
         recon_model(to_recon)
         recon_data['v'].append(recon_model.get_v())
-        
-        i += 1
 
     reader.close()
     
-    if recon_model_name in ['emoca', 'emoca-dense']:
+    if recon_model_name in ['emoca']:
         writer_crop.close()
 
     for key in recon_data:
@@ -146,8 +143,9 @@ def videorecon(video_path, events_path=None, recon_model_name='emoca', cfg=None,
     # Create Data object and save to disk as hdf5 file
     DataClass = MODEL2CLS[recon_model_name]
     data = DataClass(frame_t=frame_t, events=events, sf=sf, recon_model_name=recon_model_name,
-                     **recon_data)
+                     image_size=frame_size, **recon_data)
 
     data.save(f_out + '_shape.h5')
-    data.render_video(f_out + '_shape.gif')
+    background = video_path if render_on_video else None
+    data.render_video(f_out + '_shape.gif', video=background)
     data.plot_data(f_out + '_qc.png', n_pca=3)

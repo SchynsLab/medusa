@@ -12,7 +12,7 @@ torch.backends.cudnn.benchmark = True
 
 
 class EMOCA(torch.nn.Module):
-    def __init__(self, cfg=None, recon_world=False, device='cuda'):
+    def __init__(self, cfg=None, device='cuda'):
         """ Initializes an EMOCA model object.
         
         Parameters
@@ -25,7 +25,6 @@ class EMOCA(torch.nn.Module):
         """
         super().__init__()
         self.device = device
-        self.recon_world = recon_world
         self.package_root = Path(__file__).parents[2].resolve()
         self._load_cfg(cfg)  # sets self.cfg
         self._image_size = self.cfg['DECA']['image_size']
@@ -128,8 +127,8 @@ class EMOCA(torch.nn.Module):
         # rot_z_jaw = not really possible?
         
         # Encode image into detail parameters
-        detail_params = self.E_detail(image)
-        enc_dict['detail'] = detail_params
+        #detail_params = self.E_detail(image)
+        #enc_dict['detail'] = detail_params
 
         # Replace "DECA" expression parameters with EMOCA-specific
         # expression parameters       
@@ -206,10 +205,10 @@ class EMOCA(torch.nn.Module):
         v[:, :, 1] = v[:, :, 1] + enc_dict['cam'][:, 2].squeeze()
         v = v * enc_dict['cam'][:, 0]        
 
-        tex = self.D_flame_tex(enc_dict['tex'])
+        #tex = self.D_flame_tex(enc_dict['tex'])
 
-        motion = torch.cat((enc_dict['cam'].squeeze(), enc_dict['pose'].squeeze()[:3]))
-        self.results =  {'v': v, 'tex': tex, 'motion': motion}#, 'mat': world_mat}
+        #motion = torch.cat((enc_dict['cam'].squeeze(), enc_dict['pose'].squeeze()[:3]))
+        self.results =  {'v': v}#, 'tex': tex, 'motion': motion}#, 'mat': world_mat}
         
         # Apply translation and scale parameters from "cam" parameters
         # to vertices (V) and landmarks ("orthographic projection"?)        

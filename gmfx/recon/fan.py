@@ -13,7 +13,7 @@ from ..utils import get_logger
 logger = get_logger()
 
 
-class FAN(object):
+class FAN:
     """ FAN face detection and landmark estimation, as implemented by
     Bulat & Tzimiropoulos (2017, Arxiv), adapted for use with DECA
     by Yao Feng (https://github.com/YadiraF), and further modified by

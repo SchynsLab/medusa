@@ -55,7 +55,7 @@ class BaseData:
         loading one from disk), this should be `None`
     """
     def __init__(self, v, motion=None, f=None, frame_t=None, events=None,
-                 sf=None, recon_model_name=None, path=None, **kwargs):
+                 sf=None, image_size=None, recon_model_name=None, path=None, **kwargs):
 
         self.v = v
         self.motion = motion
@@ -63,10 +63,12 @@ class BaseData:
         self.frame_t = frame_t
         self.events = events
         self.sf = sf
+        self.image_size = image_size
         self.recon_model_name = recon_model_name
         self.path = path
         for k, v in kwargs.items():
             setattr(self, k, v)
+
         self._check()
     
     def _check(self):
@@ -93,11 +95,6 @@ class BaseData:
         with h5py.File(path, "r") as f_in:
             v = f_in['v'][:]
 
-            if 'motion' in f_in:
-                motion = f_in['motion'][:]
-            else:
-                motion = None
-
             if 'f' in f_in:
                 f = f_in['f'][:]            
             else:
@@ -105,16 +102,23 @@ class BaseData:
 
             frame_t = f_in['frame_t'][:]
             recon_model_name = f_in.attrs['recon_model_name']
+            image_size = f_in.attrs['image_size']
             sf = f_in['frame_t'].attrs['sf']
             load_events = 'events' in f_in
+            load_motion = 'motion' in f_in
 
         if load_events:
             events = pd.read_hdf(path, key='events')
         else:
             events = None
 
+        if load_motion:
+            motion = pd.read_hdf(path, key='motion')
+        else:
+            motion = None
+
         return {'v': v, 'motion': motion, 'f': f, 'frame_t': frame_t,
-                'events': events, 'sf': sf,
+                'events': events, 'sf': sf, 'image_size': image_size,
                 'recon_model_name': recon_model_name, 'path': path}
     
     def events_to_mne(self):
@@ -168,19 +172,23 @@ class BaseData:
             os.makedirs(out_dir, exist_ok=True)
 
         with h5py.File(path, 'w') as f_out:
-            for attr in ['v', 'motion', 'f', 'frame_t']:
+            for attr in ['v', 'f', 'frame_t']:
                 data = getattr(self, attr)
                 if data is not None:
                     f_out.create_dataset(attr, data=data)
 
             f_out.attrs['data_class'] = self.__class__.__name__
             f_out.attrs['recon_model_name'] = self.recon_model_name
+            f_out.attrs['image_size'] = self.image_size
             f_out['frame_t'].attrs['sf'] = self.sf
 
         # Note to self: need to do this outside h5py.File context,
         # because Pandas assumes a buffer or path
         if self.events is not None:
             self.events.to_hdf(path, key='events', mode='a')
+
+        if self.motion is not None:
+            self.motion.to_hdf(path, key='motion', mode='a')
 
     def render_video(self, *args, **kwargs):
         """ Should be implemented in subclass! """
@@ -223,13 +231,13 @@ class BaseData:
         if nrows == 1:
             axes = [axes]
 
-        t = self.frame_t  # time in sec.
+        t = self.frame_t - self.frame_t[0]  # time in sec.
         
         if plot_motion:
-            motion_cols = ['scale', 'x_trans', 'y_trans', 'rot x', 'rot y', 'rot z']
-            for i, name in enumerate(motion_cols):
-                axes[i].plot(t, self.motion[:, i] - self.motion[0, i])
-                axes[i].set_ylabel(name, fontsize=10)
+            
+            for i, col in enumerate(self.motion.columns):
+                axes[i].plot(t, self.motion[col] - self.motion.loc[0, col])
+                axes[i].set_ylabel(col, fontsize=10)
         
         if plot_pca:
             # Perform PCA on flattened vertex array (T x (nV x 3))
@@ -253,7 +261,7 @@ class BaseData:
                     for _, ev_i in ev.iterrows():
                         ax.axvline(ev_i['onset'], ls='--', c=plt.cm.tab20(i))
 
-        axes[-1].set_xlabel('Time (frames)', fontsize=10)
+        axes[-1].set_xlabel('Time (sec.)', fontsize=10)
         fig.savefig(f_out)
         plt.close()
 
@@ -328,7 +336,90 @@ class FlameData(BaseData):
 class MediapipeData(BaseData):
     
     def __init__(self, *args, **kwargs):
+
+        import mediapipe as mp
+        kwargs['f'] = np.array(list(mp.solutions.face_mesh.FACEMESH_TESSELATION))
         super().__init__(*args, **kwargs)
+
+    @classmethod
+    def load(cls, path):
+        
+        init_kwargs = super().load(path)
+        return cls(**init_kwargs)
+
+    def render_video(self, f_out, video=None, margin=25):
+        
+        import mediapipe as mp
+        mp_drawing = mp.solutions.drawing_utils
+        mp_drawing_styles = mp.solutions.drawing_styles
+        mp_face_mesh = mp.solutions.face_mesh
+
+        from mediapipe.framework.formats.landmark_pb2 import NormalizedLandmark
+        from mediapipe.framework.formats.landmark_pb2 import NormalizedLandmarkList
+
+        if video is not None:
+            # Plot face on top of video, so need to load in video
+            reader = imageio.get_reader(video)
+            v = self.v.copy()
+        else:
+            # Mediapipe vertices are in NDC (0, 1) space, so first
+            # map to raster space
+            v = self.v.copy()
+            v[:, :, :2] = v[:, :, :2] * np.array(self.image_size)
+            
+            # Compute the height and width from the range (+ margin, in pix.)
+            h = int(v[:, :, 0].max()) - int(v[:, :, 0].min()) + margin * 2
+            w = int(v[:, :, 1].max()) - int(v[:, :, 1].min()) + margin * 2
+
+            # "Crop" and map back to NDC space
+            v[:, :, :2] = v[:, :, :2] - v[:, :, :2].min(axis=(0, 1)) + margin
+            v[:, :, :2] = v[:, :, :2] / np.array([h, w])
+
+        writer = imageio.get_writer(f_out, mode='I', fps=self.sf)
+        desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
+
+        for i in tqdm(range(len(self)), desc=f'{desc} Render shape'):
+            
+            if video is not None:
+                background = reader.get_data(i)
+            else:
+                background = np.zeros((w, h, 3)).astype(np.uint8)
+
+            # We need to convert the landmarks back to the NormalizedLandmarkList format,
+            # otherwise the `draw_landmarks` function doesn't work
+            nlml = [NormalizedLandmark(x=v[i, ii, 0], y=v[i, ii, 1], z=v[i, ii, 2])
+                    for ii in range(v.shape[1])]
+            nlml = NormalizedLandmarkList(landmark=nlml)
+
+            mp_drawing.draw_landmarks(
+                image=background,
+                landmark_list=nlml,
+                connections=mp_face_mesh.FACEMESH_TESSELATION,
+                landmark_drawing_spec=None,
+                connection_drawing_spec=mp_drawing_styles
+                .get_default_face_mesh_tesselation_style())
+
+            mp_drawing.draw_landmarks(
+                image=background,
+                landmark_list=nlml,
+                connections=mp_face_mesh.FACEMESH_CONTOURS,
+                landmark_drawing_spec=None,
+                connection_drawing_spec=mp_drawing_styles
+                .get_default_face_mesh_contours_style())
+
+            # mp_drawing.draw_landmarks(
+            #     image=background,
+            #     landmark_list=nlml,
+            #     connections=mp_face_mesh.FACEMESH_IRISES,
+            #     landmark_drawing_spec=None,
+            #     connection_drawing_spec=mp_drawing_styles
+            #     .get_default_face_mesh_iris_connections_style())       
+            
+            writer.append_data(background)
+        
+        writer.close()
+        if video is not None:
+            reader.close()            
 
 
 class FANData(BaseData):
@@ -339,7 +430,6 @@ class FANData(BaseData):
         init_kwargs = super().load(path)
         return cls(**init_kwargs)
 
-        
     def render_video(self, f_out, video=None, margin=25):
         
         if video is not None:
