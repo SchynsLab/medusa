@@ -51,7 +51,21 @@ def align(data, algorithm, video):
     # Loop over meshes
     desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
     v = np.zeros_like(data.v)
+    
+    mat = np.zeros((data.v.shape[0], 4, 4))
     for i in tqdm(range(T), desc=f'{desc} Align frames'):
+        
+        if data.mat is not None:
+            # If there is already a world-to-local matrix,
+            # use its inverse to remove any global motion
+            vh = np.c_[data.v[i, ...], np.ones(data.v.shape[1])]
+            v[i, ...] = (vh @ np.linalg.inv(data.mat[i, :, :]).T)[:, :3]
+
+            # We want to keep the original z-coordinate from the first frame,
+            # otherwise we need to move the camara
+            v[i, :, 2] = data.v[0, :, 2]
+            mat[i, ...] = data.mat[i, :, :]
+            continue
         
         # regmat = np.eye(4)
         # source = data.v[i, :, :].copy()
@@ -66,24 +80,19 @@ def align(data, algorithm, video):
         source = data.v[i, vidx, :]  # to be aligned
         if i == 0:
             # First mesh does not have to be aligned
-            regmat = np.eye(4)
+            mat_ = np.eye(4)
         else:
             if algorithm == 'icp':  # trimesh ICP implementation
-                regmat = _icp(source, target, scale=True, ignore_shear=False)
+                mat_ = _icp(source, target, scale=True, ignore_shear=False)
             else:  # scikit-image 3D umeyama similarity transform
-                regmat = _umeyama(source, target, estimate_scale=True)
+                mat_ = _umeyama(source, target, estimate_scale=True)
 
         # Apply estimated transformation            
-        v[i, ...] = transform_points(data.v[i, ...], regmat)
-
-        # Decompose matrix into reg parameters and store
-        scale, shear, angles, translate, _ = decompose_matrix(regmat)
-        reg_params[i, :] = np.r_[angles, translate, scale, shear]
-
+        v[i, ...] = transform_points(data.v[i, ...], mat_)
+        mat[i, ...] = np.linalg.inv(mat_)
+        
     data.v = v.astype(np.float32)
-    data.motion = pd.DataFrame(reg_params, columns=[
-        'rot_x', 'rot_y', 'rot_z', 'trans_x', 'trans_y', 'trans_z',
-        'scale_x', 'scale_y', 'scale_z', 'shear_x', 'shear_y', 'shear_z'])
+    data.mat = mat
 
     # Save!
     pth = data.path

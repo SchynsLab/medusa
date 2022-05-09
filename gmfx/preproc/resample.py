@@ -63,13 +63,13 @@ def resample(data, sampling_freq=None, kind='pchip', video=None):
     # Note: need to cast to float32 otherwise renderer crashes
     data.v = interpolator(new_ft).astype(np.float32)
     
-    # Also interpolate motion   
-    if kind == 'pchip':
-        interpolator = PchipInterpolator(ft, data.motion)
-    else:
-        interpolator = interp1d(ft, data.motion, axis=0, kind=kind)
+    # # Also interpolate motion   
+    # if kind == 'pchip':
+    #     interpolator = PchipInterpolator(ft, data.motion)
+    # else:
+    #     interpolator = interp1d(ft, data.motion, axis=0, kind=kind)
     
-    data.motion = interpolator(new_ft).astype(np.float32)
+    # data.motion = interpolator(new_ft).astype(np.float32)
     data.frame_t = new_ft
 
     if data.path is None:

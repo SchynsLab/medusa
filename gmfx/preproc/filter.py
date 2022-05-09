@@ -34,7 +34,7 @@ def filter(data, low_pass, high_pass, video=None):
         logger.info(f"Loading data from {data} ...")
         data = load_h5(data)
 
-    for attr in ['v', 'motion']:
+    for attr in ['v']:#, 'motion']:
         d = getattr(data, attr)
         if d is None:
             continue

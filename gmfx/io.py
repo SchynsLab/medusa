@@ -10,7 +10,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from pathlib import Path
-from trimesh import Trimesh
 from datetime import datetime
 from skimage.transform import warp
 from sklearn.decomposition import PCA
@@ -81,10 +80,10 @@ class BaseData:
                 raise ValueError("Number of frame times does not equal "
                                  "number of vertex time points!")
                 
-        if self.mat is not None:
-            if self.frame_t.size != self.mat.shape[0]:
-                raise ValueError("Number of frame times does not equal " 
-                                 "number of world matrices!")
+        # if self.mat is not None:
+        #     if self.frame_t.size != self.mat.shape[0]:
+        #         raise ValueError("Number of frame times does not equal " 
+        #                          "number of world matrices!")
     
     def save(self, path):
         """ Saves data to disk as a hdf5 file. """
@@ -94,10 +93,13 @@ class BaseData:
             os.makedirs(out_dir, exist_ok=True)
 
         with h5py.File(path, 'w') as f_out:
-            for attr in ['v', 'f', 'frame_t']:
+            for attr in ['v', 'frame_t']:
                 data = getattr(self, attr)
                 f_out.create_dataset(attr, data=data)
 
+            if self.f is not None:
+                f_out.create_dataset('f', data=self.f)
+                
             if self.mat is not None:
                 f_out.create_dataset('mat', data=self.mat)
 
@@ -117,7 +119,11 @@ class BaseData:
         
         with h5py.File(path, "r") as f_in:
             v = f_in['v'][:]
-            f = f_in['f'][:]            
+            
+            if 'f' in f_in:
+                f = f_in['f'][:]            
+            else:
+                f = None
 
             if 'mat' in f_in:
                 mat = f_in['mat'][:]

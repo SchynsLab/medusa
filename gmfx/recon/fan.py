@@ -120,7 +120,7 @@ class FAN:
         
         self.lm = lm  # used by _create_bbox
         self.prev_fan_bbox = fan_bbox
-        return lm        
+        return {'v': lm}       
 
     def _create_bbox(self, scale=1.25):
         """ Creates a bounding box (bbox) based on the landmarks by creating
@@ -152,11 +152,7 @@ class FAN:
         w, h = self.target_size, self.target_size
         dst = np.array([[0, 0], [0, w - 1], [h - 1, 0]])
         self.tform = estimate_transform('similarity', self.bbox[:3, :], dst)
-        
-        # Cast tform_params to torch to be used in DECA
-        #self.tform_params = torch.tensor(self.tform.params).float()[None, ...]
-        #self.tform_params = torch.inverse(self.tform_params).transpose(1, 2).to(self.device)
-        
+                
         # Note to self: preserve_range needs to be True, because otherwise `warp` will scale the data!
         self.img_crop = warp(self.img_orig, self.tform.inverse, output_shape=(w, h), preserve_range=True)
 
@@ -208,6 +204,3 @@ class FAN:
             io_buf.close()
             plt.close()
             return img
-        
-    def get_v(self):
-        return self.lm
