@@ -153,7 +153,7 @@ def lbs(betas, pose, v_template, shapedirs, posedirs, J_regressor, parents,
 
     verts = v_homo[:, :, :3, 0]
 
-    return verts, J_transformed
+    return verts, T, J_transformed
 
 
 def vertices2joints(J_regressor, vertices):

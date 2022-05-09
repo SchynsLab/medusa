@@ -25,10 +25,12 @@ class Mediapipe:
             max_num_faces=1, refine_landmarks=True, **kwargs
         )
         self.model.__enter__()  # enter context manually
-        self.pcf = None
-        self._load_reference()
+        self.pcf = None  # initialized later
+        self._load_reference()  # sets self.{v,f}_world_ref
         
     def _load_reference(self):
+        """ Loads the vertices and faces of the references template
+        in world space. """
         path = Path(__file__).parents[2] / 'data/mediapipe_template.obj'
         with open(path, 'r') as f_in:
             obj = load_obj(f_in)
@@ -51,11 +53,12 @@ class Mediapipe:
             raise ValueError("Found more than 1 face!")
         else:
             lm = results.multi_face_landmarks[0].landmark
-            
+        
+        # Extract coordinates of all landmarks
         x = np.array([lm_.x for lm_ in lm])
         y = np.array([lm_.y for lm_ in lm])
         z = np.array([lm_.z for lm_ in lm])
-        v = np.c_[x, y, z]
+        v = np.c_[x, y, z]  # 478 (landmarks x 3 (x, y, z)
         
         if self.pcf is None:
             # Because we need the image dimensions, we need to initialize the
@@ -69,21 +72,19 @@ class Mediapipe:
         
         # Project vertices back into world space using a Python implementation by
         # Rasmus Jones (https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py)
-        v_world, world_mat = image2world(v.T.copy(), self.pcf, self.v_world_ref.T)
+        v, mat = image2world(v.T.copy(), self.pcf, self.v_world_ref.T)
         
         # Add back translation and rotation to the vertices
-        v_world = np.c_[v_world.T, np.ones(468)] @ world_mat.T
-        v_world = v_world[:, :3]
+        v = np.c_[v.T, np.ones(468)] @ mat.T
+        v = v[:, :3]
 
-        self.v = v_world
+        return {'v': v, 'mat': mat}
                 
         # For posterity, if you want to render v_world into pixel space using `pyrender`,
         # use the IntrinsicsCamera object with parameters:
-        # fx=img.shape[1], fy=img.shape[0], cx=img.shape[1] / 2, cy=img.shape[0] / 2
+        # fx=img.shape[1], fy=img.shape[1], cx=img.shape[1] / 2, cy=img.shape[0] / 2
         # Mediapipe assumes that the camera is located at the origin (and pointing in -z),
         # so no need to set the camera pose matrix (extrinsic camera matrix)
-        
-        #np.savez('mp.npz', v=v_world, mat=world_mat, img=image, f=self.f_world_ref)
 
     def get_v(self):
         return self.v

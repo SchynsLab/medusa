@@ -31,7 +31,7 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
         Name of reconstruction model, options are: 'emoca', 'emoca', 'mediapipe',
         'FAN-2D', and 'FAN-3D'
     cfg : str
-        Path to config file for reconstruction
+        Path to config file for EMOCA reconstruction; ignored if not using emoca
     device : str
         Either "cuda" (for GPU) or "cpu" (ignored when using mediapipe)
     out_dir : str, Path
@@ -63,11 +63,10 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
     else:
         raise NotImplementedError
 
-    base_f = video_path.stem.replace('_video', '')
+    # Initialize video reader and extract some metadata
     reader = imageio.get_reader(video_path)
     sf = reader.get_meta_data()['fps']  # sf = sampling frequency
     frame_size = reader.get_meta_data()['size']
-
     # Use cv2 to get n_frames (not possible with imageio ...)
     cap = cv2.VideoCapture(str(video_path))
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -105,6 +104,7 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
 
     # For QC, we will write out the rendered shape on top of the original frame
     # (writer_recon) and the cropped image/landmarks/bounding box (writer_crop)
+    base_f = video_path.stem.replace('_video', '')
     f_out = str(out_dir / base_f) + '_desc-recon'
 
     if recon_model_name in ['emoca', 'emoca-dense']:
@@ -112,6 +112,7 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
 
     # Loop across frames of video
     desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
+    i = 0
     for frame in tqdm(reader, desc=f"{desc} Recon frames", total=n_frames):
      
         if recon_model_name in ['emoca', 'emoca-dense']:
@@ -119,20 +120,30 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
             # Crop image
             to_recon = fan.prepare_for_emoca(frame.copy())
             recon_data['tform'].append(fan.tform.params)
+            # Save for visualization
             writer_crop.append_data(fan.viz_qc(return_rgba=True))
         else:
             to_recon = frame
 
-        recon_model(to_recon)
-        recon_data['v'].append(recon_model.get_v())
+        # Reconstruct and save whatever `recon_model`` returns in
+        # `recon_data`
+        out = recon_model(to_recon)
+        for attr, data in out.items():
+            recon_data[attr].append(data)
+                
+        #if i > 50:
+        #    break
+        i+=1
 
     reader.close()
     
     if recon_model_name in ['emoca']:
         writer_crop.close()
 
-    for key in recon_data:
-        recon_data[key] = np.stack(recon_data[key])
+    # Concatenate all reconstuctions across time
+    # such that the first dim represents time
+    for attr, data in recon_data.items():
+        recon_data[attr] = np.stack(data)
 
     T = recon_data['v'].shape[0]  # timepoints 
     if T < frame_t.size:
@@ -140,12 +151,14 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
         # fewer reconstructed frames than frame times
         frame_t = frame_t[:T]
 
-    # Create Data object and save to disk as hdf5 file
+    # Create Data object using the class corresponding to
+    # the model (e.g., FlameData for `emoca`, MediapipeData for `mediapipe`)
     DataClass = MODEL2CLS[recon_model_name]
     data = DataClass(frame_t=frame_t, events=events, sf=sf, recon_model_name=recon_model_name,
                      image_size=frame_size, **recon_data)
 
+    # Save data as hdf5 and visualize reconstruction 
     data.save(f_out + '_shape.h5')
     background = video_path if render_on_video else None
+    data.plot_data(f_out + '_qc.png', plot_motion=True, n_pca=3)
     data.render_video(f_out + '_shape.gif', video=background)
-    data.plot_data(f_out + '_qc.png', n_pca=3)

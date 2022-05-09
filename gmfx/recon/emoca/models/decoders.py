@@ -219,7 +219,7 @@ class FLAME(nn.Module):
         full_pose = torch.cat([pose_params[:, :3], self.neck_pose.expand(batch_size, -1), pose_params[:, 3:], eye_pose_params], dim=1)
         template_vertices = self.v_template.unsqueeze(0).expand(batch_size, -1, -1)
 
-        vertices, _ = lbs(betas, full_pose, template_vertices,
+        vertices, T, _ = lbs(betas, full_pose, template_vertices,
                           self.shapedirs, self.posedirs,
                           self.J_regressor, self.parents,
                           self.lbs_weights, dtype=self.dtype)
@@ -241,7 +241,8 @@ class FLAME(nn.Module):
         landmarks3d = vertices2landmarks(vertices, self.faces_tensor,
                                        self.full_lmk_faces_idx.repeat(bz, 1),
                                        self.full_lmk_bary_coords.repeat(bz, 1, 1))
-        return vertices, landmarks2d, landmarks3d
+        return vertices, T, landmarks2d, landmarks3d
+
 
 class FLAMETex(nn.Module):
     """

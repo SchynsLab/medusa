@@ -184,60 +184,41 @@ class EMOCA(torch.nn.Module):
         # "Decode" vertices (V), 2D landmarks (lm2d), and 3D landmarks (lm3d)
         # given shape, expression (exp), and pose FLAME parameters
         # Note that V is in world space (i.e., no translation/scale applied yet)
-        #pose = enc_dict['pose'].clone()
-        #pose[:3] = 0
-        v, _, _ = self.D_flame(shape_params=enc_dict['shape'],
-                               expression_params=enc_dict['exp'],
-                               pose_params=enc_dict['pose'])
+        v, R, _, _ = self.D_flame(shape_params=enc_dict['shape'],
+                                  expression_params=enc_dict['exp'],
+                                  pose_params=enc_dict['pose'])
 
-        # rotation_matrices = batch_rodrigues(enc_dict['pose'][:, 0:3])
-        # ht_canonical2world = batch_rot_matrix_to_ht(rotation_matrices)
-        # ht_world2camera = batch_orth_proj_matrix(enc_dict['cam'])
-        # world_mat = torch.matmul(ht_world2camera, ht_canonical2world)
-        # #world_mat = world_mat.cpu().numpy().squeeze()
-        
-        # v = torch.cat((v[0, :, :], torch.ones(5023, 1).to('cuda')), axis=1)
-        # v = torch.matmul(v, ht_canonical2world.squeeze().to('cuda'))
-        # v = v[:, :3].unsqueeze(0)
+        cam = enc_dict['cam'].squeeze()
 
         # # Add translation and scale
-        v[:, :, 0] = v[:, :, 0] + enc_dict['cam'][:, 1].squeeze()
-        v[:, :, 1] = v[:, :, 1] + enc_dict['cam'][:, 2].squeeze()
-        v = v * enc_dict['cam'][:, 0]        
+        v[:, :, 0] = v[:, :, 0] + cam[1]
+        v[:, :, 1] = v[:, :, 1] + cam[2]
+        v = v * cam[0]
+
+        R = torch.mean(R[0, :, :, :], dim=0)
+        T = torch.eye(4).to(R.device)
+        T[0, 3] = cam[1]
+        T[1, 3] = cam[2]
+        S = torch.eye(4).to(R.device) * cam[0]
+        S[3, 3] = 1
+
+        mat = (S @ T) @ R
+    
+        # v = torch.squeeze(v)
+        # v = torch.column_stack((v, torch.ones(v.shape[0]).to('cuda')))
+        # v = torch.matmul(v, torch.transpose(torch.linalg.inv(mat), 0, 1))
+        # v = v[:, :3].unsqueeze(0)
+
+        # v = v * 10
 
         #tex = self.D_flame_tex(enc_dict['tex'])
-
-        #motion = torch.cat((enc_dict['cam'].squeeze(), enc_dict['pose'].squeeze()[:3]))
-        self.results =  {'v': v}#, 'tex': tex, 'motion': motion}#, 'mat': world_mat}
+        return {'v': v.cpu().numpy().squeeze(), 'mat': mat.cpu().numpy()}
         
-        # Apply translation and scale parameters from "cam" parameters
-        # to vertices (V) and landmarks ("orthographic projection"?)        
-        # v = self.batch_orth_proj(v, enc_dict['cam'])
-        # v[:, :, 1:] = -v[:, :, 1:]
-
         # # Decode detail map (uses jaw rotations, i.e., pose[3:] as well as exp and of course detail parameters)
         # #inp_D_detail = torch.cat([enc_dict['pose'][:, 3:], enc_dict['exp'], enc_dict['detail']], dim=1)
         # #uv_z = self.D_detail(inp_D_detail)
-
-        # dec_dict = {}
-        # dec_dict['v'] = v
-        #dec_dict['v_trans'] = V_trans
-        #dec_dict['lm2d'] = lm2d
-        #dec_dict['lm2d_trans'] = lm2d_trans
-        #dec_dict['lm3d'] = lm3d        
-        #dec_dict['lm3d_trans'] = lm3d_trans        
-        #dec_dict['tex'] = tex
-        #dec_dict['detail'] = uv_z
-
-        #return dec_dict
             
     def forward(self, img):
         enc_dict = self.encode(img)
-        self.decode(enc_dict)
-    
-    def get_v(self):
-        v = self.results['v'].cpu().numpy().squeeze()
-        return v
-    
-    def get_motion(self):
-        return self.results['motion'].cpu().numpy().squeeze()
+        dec_dict = self.decode(enc_dict)
+        return dec_dict

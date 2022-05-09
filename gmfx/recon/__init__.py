@@ -1,3 +1,3 @@
-from .emoca import EMOCA
+from .emoca.emoca import EMOCA
 from .fan import FAN
-from .mediapipe import Mediapipe
+from .mpipe.mpipe import Mediapipe
