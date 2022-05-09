@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from scipy.signal import butter, sosfilt, savgol_filter
-from torch import triplet_margin_loss
+from scipy.signal import butter, sosfilt
 
 from ..io import load_h5
 from ..utils import get_logger
