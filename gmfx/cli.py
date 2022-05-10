@@ -58,5 +58,9 @@ def filter_cmd(data, low_pass, high_pass):
 @click.command()
 @click.argument('h5_path')
 @click.option('-v', '--video', type=click.Path(exists=True, dir_okay=False))
-def videorender_cmd(h5_path, video):
-    videorender(**locals())
+@click.option('--no-smooth', is_flag=True, help='Do not render smooth surface')
+@click.option('--wireframe', is_flag=True, help='Render wireframe instead of mesh')
+@click.option('--scaling', default=None, type=click.FLOAT, help='Scale factor')
+@click.option('--format', default='gif', help='Output video format')
+def videorender_cmd(h5_path, video, no_smooth, wireframe, scaling, format):
+    videorender(h5_path, video, not no_smooth, wireframe, scaling, format)

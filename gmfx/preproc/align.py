@@ -23,6 +23,9 @@ def align(data, algorithm, video):
         or a gmfx.io.Data object (i.e., data loaded from the hdf5 file)
     algorithm : str
         Either 'icp' or 'umeyama'
+    video : str
+        Path to video to render reconstruction on top of
+        (optional)
     """
 
     if isinstance(data, (str, Path)):

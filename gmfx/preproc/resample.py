@@ -26,6 +26,9 @@ def resample(data, sampling_freq=None, kind='pchip', video=None):
     kind : str
         Kind of interpolation to use, either 'pchip' (default), 'linear', 'quadratic',
         or 'cubic'
+    video : str
+        Path to video to render reconstruction on top of
+        (optional)
     """
 
     if isinstance(data, (str, Path)):

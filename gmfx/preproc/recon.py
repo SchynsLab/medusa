@@ -23,8 +23,8 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
         columns 'onset' (in seconds) and 'trial_type'; optional
         columns are 'duration' and 'modulation'
     recon_model_name : str
-        Name of reconstruction model, options are: 'emoca', 'emoca', 'mediapipe',
-        'FAN-2D', and 'FAN-3D'
+        Name of reconstruction model, options are: 'emoca', 'mediapipe',
+        and 'FAN-3D'
     cfg : str
         Path to config file for EMOCA reconstruction; ignored if not using emoca
     device : str
@@ -40,7 +40,9 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
         ignored otherwise)
     n_frames : int
         If not `None` (default), only reconstruct and render the first `n_frames`
-        frames of the video; nice for debuggin
+        frames of the video; nice for debugging
+    scaling : float
+        How much to scale the resulting image/background
     """
 
     logger.info(f'Starting recon using for {video_path}')

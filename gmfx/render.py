@@ -27,7 +27,7 @@ class Renderer:
     """
     
     def __init__(self, camera_type='orthographic', smooth=True, wireframe=False,
-                 zoom_out=3, viewport=(224, 224)):
+                 zoom_out=4, viewport=(224, 224)):
     
         self.camera_type = camera_type
         self.smooth = smooth
@@ -118,6 +118,8 @@ class Renderer:
         alpha = img[:, :, 3, None] / 255.
         alpha[alpha >= threshold] = 1
         img = img[:, :, :3] * alpha + (1 - alpha) * background
+        
+        # TODO: add global alpha level for face        
         return img.astype(np.uint8)
 
     def close(self):

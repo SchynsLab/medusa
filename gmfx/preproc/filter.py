@@ -23,8 +23,9 @@ def filter(data, low_pass, high_pass, video=None):
         Low-pass cutoff (in Hz)
     high_pass : float
         High-pass cutoff (in Hz)
-    device : str
-        Either 'cuda' (GPU) or 'cpu'; only used for rendering        
+    video : str
+        Path to video to render reconstruction on top of
+        (optional)
     """
 
     if isinstance(data, (str, Path)):

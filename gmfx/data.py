@@ -517,7 +517,7 @@ def load_h5(path):
     return data
 
 
-def videorender(path, video=None, smooth=False, wireframe=False, scaling=None,
+def videorender(path, video=None, smooth=True, wireframe=False, scaling=None,
                 format='gif'):
     """ Renders the reconstructed vertices as a video.
     
@@ -543,6 +543,6 @@ def videorender(path, video=None, smooth=False, wireframe=False, scaling=None,
 
     path = Path(path)
     data = load_h5(path)
-    f_out = path.parent / path.stem + f'_shape.{format}'
+    f_out = path.parent / (str(path.stem) + f'_shape.{format}')
     data.render_video(f_out, video=video, smooth=smooth,
                       wireframe=wireframe, scaling=scaling)
