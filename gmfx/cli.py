@@ -7,12 +7,12 @@
 # `gmfx_filter some_h5_file.h5 -l 3 -h 0.01`
 
 import click
-import shutil
-from pathlib import Path
+
 from .preproc.recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
 from .preproc.filter import filter
+from .data import videorender
 
 
 @click.command()
@@ -23,7 +23,11 @@ from .preproc.filter import filter
 @click.option('--device', default='cuda', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
 @click.option('-o', '--out-dir', type=click.Path(), help='Output directory')
 @click.option('--render-on-video', is_flag=True, help='Plot recon on video background')
-def videorecon_cmd(video_path, events_path, recon_model_name, cfg, device, out_dir, render_on_video):
+@click.option('--render-crop', is_flag=True, help='Render cropping results')
+@click.option('-n', '--n-frames', default=None, type=click.INT, help="Number of frames to reconstruct")
+@click.option('-s', '--scaling', default=None, type=click.FLOAT, help="Scaling factor")
+def videorecon_cmd(video_path, events_path, recon_model_name, cfg, device, out_dir, render_on_video,
+                   render_crop, n_frames, scaling):
     videorecon(**locals())
 
 
@@ -50,9 +54,9 @@ def resample_cmd(data, sampling_freq, kind):
 def filter_cmd(data, low_pass, high_pass):
     filter(**locals())
 
-
+    
 @click.command()
-def create_cfg_cmd():
-    src = Path(__file__).parent / 'configs/deca.yaml'
-    dst = Path('.') / 'deca.yaml'
-    shutil.copyfile(src, dst)
+@click.argument('h5_path')
+@click.option('-v', '--video', type=click.Path(exists=True, dir_okay=False))
+def videorender_cmd(h5_path, video):
+    videorender(**locals())

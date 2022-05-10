@@ -1,21 +1,16 @@
-import cv2
-import imageio
 import numpy as np
-import pandas as pd
-from tqdm import tqdm
-from pathlib import Path
-from datetime import datetime
 from collections import defaultdict
 
 from ..recon import EMOCA, FAN, Mediapipe
-from ..io import MODEL2CLS
+from ..io import VideoData
+from ..data import MODEL2CLS
 from ..utils import get_logger
 
 logger = get_logger()
 
 
 def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=None, device='cuda',
-               out_dir=None, render_on_video=False):
+               out_dir=None, render_on_video=False, render_crop=False, n_frames=None, scaling=None):
     """ Reconstruction of all frames of a video. 
     
     Parameters
@@ -37,128 +32,83 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
     out_dir : str, Path
         Path to directory where recon data (and associated
         files) are saved; if `None`, same directory as video is used
+    render_on_video : bool
+        Whether to render the reconstruction on top of the video;
+        this may substantially increase rendering time!
+    render_crop : bool
+        Whether to render the cropping results (only relevant when using EMOCA,
+        ignored otherwise)
+    n_frames : int
+        If not `None` (default), only reconstruct and render the first `n_frames`
+        frames of the video; nice for debuggin
     """
 
-    if isinstance(video_path, str):
-        video_path = Path(video_path)
-
-    if not video_path.is_file():
-        raise ValueError(f"File {video_path} does not exist!")
-
     logger.info(f'Starting recon using for {video_path}')
-    
-    if out_dir is None:
-        out_dir = video_path.parent
-
-    out_dir.mkdir(exist_ok=True, parents=True)
-
     logger.info(f"Initializing {recon_model_name} recon model")
+    
+    # Initialize VideoData object here to use metadata
+    # in recon_model (like img_size)
+    video = VideoData(video_path, events=events_path)      
+
+    # Initialize reconstruction model    
     if recon_model_name in ['emoca', 'emoca-dense']:
         fan = FAN(device=device)  # for face detection / cropping
-        recon_model = EMOCA(cfg=cfg, device=device)
+        recon_model = EMOCA(cfg=cfg, device=device, img_size=video.img_size)
     elif recon_model_name == 'FAN-3D':
         recon_model = FAN(device=device, lm_type='3D')
     elif recon_model_name == 'mediapipe':
         recon_model = Mediapipe()
     else:
         raise NotImplementedError
+    
+    if out_dir is None:
+        out_dir = video.path.parent
+    
+    out_dir.mkdir(exist_ok=True, parents=True)
+    f_out = str(out_dir / str(video.path.name).replace('.mp4', '_desc-recon'))
 
-    # Initialize video reader and extract some metadata
-    reader = imageio.get_reader(video_path)
-    sf = reader.get_meta_data()['fps']  # sf = sampling frequency
-    frame_size = reader.get_meta_data()['size']
-    # Use cv2 to get n_frames (not possible with imageio ...)
-    cap = cv2.VideoCapture(str(video_path))
-    n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    if recon_model_name in ['emoca'] and render_crop:
+        video.create_writer(f_out, idf='crop', ext='gif')
 
-    # Check if frame times (ft) and events (ev) files exist    
-    ft_path = Path(str(video_path).replace('_video.mp4', '_frametimes.tsv'))
-    if ft_path.is_file():
-        # We're going to use the average number of frames
-        # per second as FPS (and equivalently `sf`, sampling freq)
-        frame_t = pd.read_csv(ft_path, sep='\t')['t'].to_numpy()
-        sampling_period = np.diff(frame_t)
-        sf, sf_std = 1 / sampling_period.mean(), 1 / sampling_period.std()
-        logger.info(f"Average FPS/sampling frequency: {sf:.2f} (SD: {sf_std:.2f})")
-    else:
-       logger.warning(f"Did not find frame times file for {video_path} "
-                      f"assuming constant FPS/sampling frequency ({sf})!")
-       frame_t = np.linspace(0, n_frames * (1 / sf), endpoint=False, num=n_frames)
-
-    # If `events_path` is not given, check if we can find it
-    # in a file with the same name as the video, but different
-    # identifier (_events.tsv)
-    if events_path is None:
-        # check for associated TSV path
-        events_path = Path(str(video_path).replace('_video.mp4', '_events.tsv'))
-  
-    if events_path.is_file():
-        events = pd.read_csv(events_path, sep='\t')
-    else:
-        logger.warning(f"Did not find events file for video {video_path}!")
-        events = None
-
-    # Init lists for reconstruced vertices across time (V) and
-    # the framewise motion estimates (motion; global rot x/y/z, trans x/y, scale (z))
-    recon_data = defaultdict(list)
-
-    # For QC, we will write out the rendered shape on top of the original frame
-    # (writer_recon) and the cropped image/landmarks/bounding box (writer_crop)
-    base_f = video_path.stem.replace('_video', '')
-    f_out = str(out_dir / base_f) + '_desc-recon'
-
-    if recon_model_name in ['emoca', 'emoca-dense']:
-        writer_crop = imageio.get_writer(f_out + '_crop.gif', mode='I', fps=sf)
-
-    # Loop across frames of video
-    desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
-    i = 0
-    for frame in tqdm(reader, desc=f"{desc} Recon frames", total=n_frames):
+    # Loop across frames of video, store results in `recon_data`
+    recon_data = defaultdict(list)    
+    for i, frame in video.loop(scaling=scaling):
      
-        if recon_model_name in ['emoca', 'emoca-dense']:
+        if recon_model_name in ['emoca']:
 
-            # Crop image
-            to_recon = fan.prepare_for_emoca(frame.copy())
-            recon_data['tform'].append(fan.tform.params)
-            # Save for visualization
-            writer_crop.append_data(fan.viz_qc(return_rgba=True))
-        else:
-            to_recon = frame
+            # Crop image, add tform to emoca (for adding rigid motion
+            # due to cropping), and add crop plot to writer
+            frame = fan.prepare_for_emoca(frame)
+            recon_model.tform = fan.tform.params
+            
+            if render_crop:
+                video.write(fan.viz_qc(return_rgba=True))
 
-        # Reconstruct and save whatever `recon_model`` returns in
-        # `recon_data`
-        out = recon_model(to_recon)
+        # Reconstruct and store whatever `recon_model`` returns
+        # in `recon_data`
+        out = recon_model(frame)
         for attr, data in out.items():
             recon_data[attr].append(data)
-                
-        #if i > 50:
-        #    break
-        i+=1
-
-    reader.close()
-    
-    if recon_model_name in ['emoca']:
-        writer_crop.close()
+        
+        if n_frames is not None:
+            # If we only want to reconstruct a couple of
+            # frames, stop if reached
+            if i == n_frames:
+                video.stop_loop()
 
     # Concatenate all reconstuctions across time
     # such that the first dim represents time
     for attr, data in recon_data.items():
         recon_data[attr] = np.stack(data)
 
-    T = recon_data['v'].shape[0]  # timepoints 
-    if T < frame_t.size:
-        # During debugging, sometimes there might be
-        # fewer reconstructed frames than frame times
-        frame_t = frame_t[:T]
-
     # Create Data object using the class corresponding to
     # the model (e.g., FlameData for `emoca`, MediapipeData for `mediapipe`)
     DataClass = MODEL2CLS[recon_model_name]
-    data = DataClass(frame_t=frame_t, events=events, sf=sf, recon_model_name=recon_model_name,
-                     image_size=frame_size, **recon_data)
+    kwargs = {**recon_data, **video.get_metadata()}
+    data = DataClass(recon_model_name=recon_model_name, **kwargs)
 
     # Save data as hdf5 and visualize reconstruction 
     data.save(f_out + '_shape.h5')
-    background = video_path if render_on_video else None
     data.plot_data(f_out + '_qc.png', plot_motion=True, n_pca=3)
-    data.render_video(f_out + '_shape.gif', video=background)
+    background = video_path if render_on_video else None
+    data.render_video(f_out + '_shape.gif', video=background, scaling=scaling)

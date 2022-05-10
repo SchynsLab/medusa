@@ -1,4 +1,5 @@
 import numpy as np
+from pathlib import Path
 from trimesh import Trimesh
 from pyrender.constants import RenderFlags
 from pyrender import Scene, Mesh, Node, OffscreenRenderer
@@ -21,11 +22,12 @@ class Renderer:
         How much to translate the camera into the positive z direction
         (necessary for Flame-based reconstructions)
     viewport : tuple[int]
-        Desired output image size (width, height), in pixels
+        Desired output image size (width, height), in pixels; should match
+        the original image (before cropping) that was reconstructed
     """
     
     def __init__(self, camera_type='orthographic', smooth=True, wireframe=False,
-                 zoom_out=4, viewport=(224, 224)):
+                 zoom_out=3, viewport=(224, 224)):
     
         self.camera_type = camera_type
         self.smooth = smooth
@@ -36,26 +38,51 @@ class Renderer:
         self._renderer = self._create_renderer()
 
     def _create_scene(self):
+        """ Creates a simple scene with a camera and a 
+        directional light. The object (reconstructed face) is
+        added when calling __call__. """
         w, h = self.viewport
         scene = Scene(bg_color=[0, 0, 0, 0], ambient_light=(255, 255, 255))
+        
         if self.camera_type == 'orthographic':
             camera = OrthographicCamera(xmag=1, ymag=1)
         elif self.camera_type == 'intrinsic':
+            # Note to self: zfar might have to be increased if the face is
+            # very small; will increase rendering time though
             camera = IntrinsicsCamera(fx=w, fy=w, cx=w/2, cy=h/2, zfar=300)
+            # For mediapipe renderings, we don't need to zoom out
             self.zoom_out = 0
         
-        scene.add_node(Node(camera=camera))
+        scene.add_node(Node(camera=camera, translation=(0, 0, self.zoom_out)))
         light = DirectionalLight(intensity=5)
-        scene.add_node(Node(light=light))
+        scene.add_node(Node(light=light, translation=(0, 0, self.zoom_out)))
+
         return scene
 
     def _create_renderer(self):
+        """ Creates the renderer with specified viewport dimensions. """
         return OffscreenRenderer(
             viewport_width=self.viewport[0], viewport_height=self.viewport[1]
         )
    
     def __call__(self, v, f):
+        """ Performs the actual rendering. 
         
+        Parameters
+        ----------
+        v : np.ndarray
+            A 2D array with vertices of shape V (nr of vertices) x 3
+            (X, Y, Z)
+        f : np.ndarray
+            A 2D array with 'faces' (triangles) of shape F (nr of faces) x 3
+            (nr of vertices); should be integers
+            
+        Returns
+        -------
+        img : np.ndarray
+            A 3D array (with np.uint8 integers) of shape `viewport[0]` x 
+            `viewport[1]` x 3 (RGB) 
+        """
         mesh = Mesh.from_trimesh(Trimesh(v, f), smooth=self.smooth, wireframe=self.wireframe)
         
         if self.wireframe:
@@ -71,11 +98,28 @@ class Renderer:
         return img.copy()
     
     def alpha_blend(self, img, background, threshold=1):
+        """ Simple alpha blend of a rendered image and
+        a background. The image (`img`) is assumed to be 
+        an RGBA image and the background (`background`) is
+        assumed to be a RGB image. The alpha channel of the image
+        is used to blend them together. The optional `threshold`
+        parameter can be used to impose a sharp cutoff.
         
+        Parameters
+        ----------
+        img : np.ndarray
+            A 3D numpy array of shape height x width x 4 (RGBA)
+        background : np.ndarray
+            A 3D numpy array of shape height x width x 3 (RGB)
+        threshold: int, float
+            Threshold to impose on the alpha channel. Everything above
+            this value is set to 1.
+        """
         alpha = img[:, :, 3, None] / 255.
         alpha[alpha >= threshold] = 1
         img = img[:, :, :3] * alpha + (1 - alpha) * background
         return img.astype(np.uint8)
 
     def close(self):
+        """ Closes the OffScreenRenderer object. """
         self._renderer.delete()

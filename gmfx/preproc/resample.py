@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 from scipy.interpolate import interp1d, PchipInterpolator
 
-from ..io import load_h5
+from ..data import load_h5
 from ..utils import get_logger
 
 logger = get_logger()
@@ -63,19 +63,19 @@ def resample(data, sampling_freq=None, kind='pchip', video=None):
     # Note: need to cast to float32 otherwise renderer crashes
     data.v = interpolator(new_ft).astype(np.float32)
     
-    # # Also interpolate motion   
-    # if kind == 'pchip':
-    #     interpolator = PchipInterpolator(ft, data.motion)
-    # else:
-    #     interpolator = interp1d(ft, data.motion, axis=0, kind=kind)
+    # Also interpolate motion   
+    motion = data.mats2params()
     
-    # data.motion = interpolator(new_ft).astype(np.float32)
-    data.frame_t = new_ft
+    if kind == 'pchip':
+        interpolator = PchipInterpolator(ft, motion)
+    else:
+        interpolator = interp1d(ft, motion, axis=0, kind=kind)
+    
+    motion = interpolator(new_ft).astype(np.float32)
+    data.params2mats(motion)  # updates .mat
 
-    if data.path is None:
-        logger.warning("Input `data` has no known save path (`path` attribute); "
-                       "saving to current directory!")
-    
+    data.frame_t = new_ft  # save new frame times!
+
     # Save!
     pth = data.path
     desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+interp'

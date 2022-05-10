@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 from scipy.signal import butter, sosfilt
 
-from ..io import load_h5
+from ..data import load_h5
 from ..utils import get_logger
 
 logger = get_logger()
@@ -33,32 +33,26 @@ def filter(data, low_pass, high_pass, video=None):
         logger.info(f"Loading data from {data} ...")
         data = load_h5(data)
 
-    for attr in ['v']:#, 'motion']:
-        d = getattr(data, attr)
-        if d is None:
-            continue
-        
-        if isinstance(d, pd.DataFrame):
-            d = d.to_numpy()
-        
-        d = d.reshape((d.shape[0], -1))
-        mu = d.mean(axis=0)
-        d = d - mu
+    nyq = 0.5 * data.sf # sampling freq
+    low = high_pass / nyq
+    high = low_pass / nyq
+    sos = butter(5, [low, high], analog=False, btype='band', output='sos')
 
-        nyq = 0.5 * data.sf # sampling freq
-        low = high_pass / nyq
-        high = low_pass / nyq
-        sos = butter(5, [low, high], analog=False, btype='band', output='sos')
-        d = sosfilt(sos, d, axis=0)
+    to_filter = [data.v, data.mats2params().to_numpy()]
+    for i in range(len(to_filter)):
+        d = to_filter[i]
+        d_ = d.reshape((d.shape[0], -1))
+        mu = d_.mean(axis=0)
+        d_ = d_ - mu
+
+        d_ = sosfilt(sos, d_, axis=0)
         
         # Undo normalization to get data back on original scale
-        d_filt = (d + mu).reshape(getattr(data, attr).shape).astype(np.float32)
+        to_filter[i] = (d_ + mu).reshape(d.shape).astype(np.float32)
         
-        if isinstance(getattr(data, attr), pd.DataFrame):
-            d_filt = pd.DataFrame(d_filt, columns=getattr(data, attr).columns)
-        
-        setattr(data, attr, d_filt)
-
+    data.v = to_filter[0]
+    data.params2mats(to_filter[1])
+    
     # Save!
     pth = data.path
     desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+filt'

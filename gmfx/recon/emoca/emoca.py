@@ -1,29 +1,40 @@
-from trimesh import transform_points
 import yaml
 import torch
+import numpy as np
 from pathlib import Path
+from pyrender.camera import OrthographicCamera
 
 from .models.encoders import ResnetEncoder
 from .models.decoders import FLAME, FLAMETex, Generator
-from .lbs import batch_rodrigues, batch_rot_matrix_to_ht, batch_orth_proj_matrix
 
 # May have some speed benefits
 torch.backends.cudnn.benchmark = True
 
 
 class EMOCA(torch.nn.Module):
-    def __init__(self, cfg=None, device='cuda'):
+    def __init__(self, img_size, cfg=None, device='cuda'):
         """ Initializes an EMOCA model object.
         
         Parameters
         ----------
+        img_size : tuple
+            Original (before cropping!) image dimensions of
+            video frame (width, height); needed for baking in
+            translation due to cropping
         cfg : str
             Path to YAML config file. If `None` (default), it
             will use the package's default config file.
         device : str
             Either 'cuda' (uses GPU) or 'cpu'
+            
+        Attributes
+        ----------
+        tform : np.ndarray
+            A 3x3 numpy array with the cropping transformation matrix;
+            needs to be set before running the actual reconstruction!
         """
         super().__init__()
+        self.img_size = img_size
         self.device = device
         self.package_root = Path(__file__).parents[2].resolve()
         self._load_cfg(cfg)  # sets self.cfg
@@ -188,31 +199,62 @@ class EMOCA(torch.nn.Module):
                                   expression_params=enc_dict['exp'],
                                   pose_params=enc_dict['pose'])
 
-        cam = enc_dict['cam'].squeeze()
+        v = v.cpu().numpy().squeeze()
+        R = R.cpu().numpy().squeeze()
+        cam = enc_dict['cam'].cpu().numpy().squeeze()
 
-        # # Add translation and scale
-        v[:, :, 0] = v[:, :, 0] + cam[1]
-        v[:, :, 1] = v[:, :, 1] + cam[2]
+        # Here, we're going to do something weird ... (but bear with me)
+        # EMOCA/DECA models estimate translation and scale parameters
+        # *of the camera*, not of the model. In other words, they assume
+        # the camera is moving, not the model. We, of course, assume a
+        # fixed camera, so we'll translate and scale the model instead
+        v[:, 0] = v[:, 0] + cam[1]
+        v[:, 1] = v[:, 1] + cam[2]
         v = v * cam[0]
 
-        R = torch.mean(R[0, :, :, :], dim=0)
-        T = torch.eye(4).to(R.device)
+        # To add the translation due to cropping, first project to the cropped iamge space
+        P = OrthographicCamera(1, 1).get_projection_matrix(224, 224)
+        v = np.c_[v, np.ones(5023)] @ P.T
+        z = v[:, 2].copy()  # save for later
+        v = v[:, :2]
+        
+        # Invert y-axis (because image space)
+        v[:, 1] = -v[:, 1]
+        
+        # Normalize from [-1 , 1] to [0, 1]
+        v = (v + 1) / 2
+        
+        # NDC to raster
+        v *= 224  # fixed size of cropped image
+
+        # Apply cropping transform        
+        v = np.c_[v, np.ones(5023)]
+        v = (v @ np.linalg.inv(self.tform).T)[:, :2]
+
+        # Now map back to [0, 1] NDC space
+        v[:, 0] = v[:, 0] / self.img_size[0]
+        v[:, 1] = v[:, 1] / self.img_size[1]
+
+        # NDC -> image
+        v = -(1 - 2 * v)
+        v[:, 1] = -v[:, 1]
+
+        # inverted ortho transform (2D -> 3D)
+        P = OrthographicCamera(1, 1).get_projection_matrix(self.img_size[0], self.img_size[1])
+        v = np.c_[v, z, np.ones(5023)] @ np.linalg.inv(P.T)
+        v = v[:, :3]
+
+        R = R.mean(axis=0)
+        T = np.eye(4)
         T[0, 3] = cam[1]
         T[1, 3] = cam[2]
-        S = torch.eye(4).to(R.device) * cam[0]
+        S = np.eye(4) * cam[0]
         S[3, 3] = 1
 
-        mat = (S @ T) @ R
+        mat = S @ T @ R
     
-        # v = torch.squeeze(v)
-        # v = torch.column_stack((v, torch.ones(v.shape[0]).to('cuda')))
-        # v = torch.matmul(v, torch.transpose(torch.linalg.inv(mat), 0, 1))
-        # v = v[:, :3].unsqueeze(0)
-
-        # v = v * 10
-
         #tex = self.D_flame_tex(enc_dict['tex'])
-        return {'v': v.cpu().numpy().squeeze(), 'mat': mat.cpu().numpy()}
+        return {'v': v, 'mat': mat, 'cropmat': self.tform}
         
         # # Decode detail map (uses jaw rotations, i.e., pose[3:] as well as exp and of course detail parameters)
         # #inp_D_detail = torch.cat([enc_dict['pose'][:, 3:], enc_dict['exp'], enc_dict['detail']], dim=1)
