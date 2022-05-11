@@ -1,5 +1,4 @@
 import numpy as np
-from pathlib import Path
 from trimesh import Trimesh
 from pyrender.constants import RenderFlags
 from pyrender import Scene, Mesh, Node, OffscreenRenderer

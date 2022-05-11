@@ -52,9 +52,9 @@ def align(data, algorithm, video):
     T = data.v.shape[0]
 
     # Loop over meshes
-    desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')    
+    desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ]  Align frames')
     reference_z = data.v[0, :, 2].copy()  # used later
-    for i in tqdm(range(T), desc=f'{desc} Align frames'):
+    for i in tqdm(range(T), desc=desc):
         
         # Is there a cropping matrix (like for EMOCA)?
         if getattr(data, 'cropmat', None) is not None:

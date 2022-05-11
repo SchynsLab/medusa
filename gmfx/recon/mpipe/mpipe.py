@@ -1,5 +1,4 @@
 import numpy as np
-import mediapipe as mp
 from pathlib import Path
 from trimesh.exchange.obj import load_obj
 
@@ -7,6 +6,7 @@ from .transforms import PCF, image2world
 
 
 class Mediapipe:
+
     
     def __init__(self, static_image_mode=True, **kwargs):
         """ Initializes a Mediapipe recon model.
@@ -20,6 +20,10 @@ class Mediapipe:
             Extra keyword arguments to be passed to 
             the initialization of FaceMesh
         """
+
+        # Importing here speeds up CLI
+        import mediapipe as mp
+        
         self.model = mp.solutions.face_mesh.FaceMesh(
             static_image_mode=static_image_mode,
             max_num_faces=1, refine_landmarks=True, **kwargs

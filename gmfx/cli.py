@@ -12,6 +12,7 @@ from .preproc.recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
 from .preproc.filter import filter
+from .preproc.epoch import epoch
 from .data import videorender
 
 
@@ -53,6 +54,15 @@ def resample_cmd(data, sampling_freq, kind):
 @click.option('-h', '--high-pass', default=0.005, help="High-pass filter in Hz")
 def filter_cmd(data, low_pass, high_pass):
     filter(**locals())
+
+
+@click.command()
+@click.argument('data', type=click.Path(exists=True, dir_okay=False))
+@click.option('-s', '--start', default=-0.5, help="Start of epoch")
+@click.option('-e', '--end', default=3., help="End of epoch")
+@click.option('-p', '--period', default=0.1, help="Period of epoch")
+def epoch_cmd(data, start, end, period):
+    epoch(**locals())
 
     
 @click.command()
