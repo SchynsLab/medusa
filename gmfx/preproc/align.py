@@ -55,16 +55,6 @@ def align(data, algorithm, video):
     desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ]  Align frames')
     reference_z = data.v[0, :, 2].copy()  # used later
     for i in tqdm(range(T), desc=desc):
-        
-        # Is there a cropping matrix (like for EMOCA)?
-        if getattr(data, 'cropmat', None) is not None:
-            # Undo the cropping transformation by mapping the vertices to
-            # raster space, applying the transform, and mapping it back to world space
-            # (Also, a new image size can be give; here: (256, 256))
-            data.v[i, ...] = _undo_cropmat(
-                data.v[i, ...], data.cropmat[i, ...],
-                data.img_size, (256, 256)
-            )
 
         if data.mat is not None:
             # If there is already a world-to-local matrix (like EMOCA and Mediapipe)
@@ -145,64 +135,3 @@ def _icp(source, target, scale=True, ignore_shear=True):
         regmat = compose_matrix(scale_, None, angles, translate)
 
     return regmat
-
-
-def _undo_cropmat(v, mat, img_size, new_img_size):
-    """ 'Undoes' the cropping transformation by mapping
-    the vertices to raster space, applying the transformation (`mat`,
-    the one estimated by FaceAlignment), and reprojecting the vertices
-    to world space. Note that we can also choose a new image size
-    to render our motion-correction face in.
-    
-    Parameters
-    ----------
-    v : np.ndarray
-        A 2D array of shape nV (number of verts) x 3 (XYZ)
-    mat : np.ndarray
-        A 3x3 affine matrix representing the cropping operation
-        (from the similarity transform estimated in FAN)
-    img_size : tuple[int]
-        Original image size (width, height)
-    new_img_size : tuple[int]
-        New image size (width, height)
-
-    Returns
-    -------
-    v : np.ndarray
-        A 2D array of shape nV (number of verts) x 3 (XYZ),
-        but with the cropping operation 'projected out'
-    """
-    nV = v.shape[0]
-    v = v.copy()
-    P = OrthographicCamera(1, 1).get_projection_matrix(*img_size)
-    v = np.c_[v, np.ones(nV)] @ P.T
-    z = v[:, 2].copy()  # save for later
-    v = v[:, :2]
-    
-    # Invert y-axis (because image space)
-    v[:, 1] = -v[:, 1]
-    
-    # Normalize from [-1 , 1] to [0, 1]
-    v = (v + 1) / 2
-    
-    # NDC to raster
-    v[:, 0] *= img_size[0]
-    v[:, 1] *= img_size[1]
-
-    # Undo cropping transform 
-    v = np.c_[v, np.ones(nV)]
-    v = (v @ mat.T)[:, :2]
-
-    # Now map back to [0, 1] NDC space
-    v[:, 0] = v[:, 0] / 224
-    v[:, 1] = v[:, 1] / 224
-
-    # NDC -> image
-    v = -(1 - 2 * v)
-    v[:, 1] = -v[:, 1]
-
-    # inverted ortho transform (2D -> 3D)
-    P = OrthographicCamera(1, 1).get_projection_matrix(new_img_size)
-    v = np.c_[v, z, np.ones(nV)] @ np.linalg.inv(P.T)
-    v = v[:, :3]
-    return v

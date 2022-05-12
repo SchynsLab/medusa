@@ -6,6 +6,7 @@ from pyrender.camera import OrthographicCamera
 
 from .models.encoders import ResnetEncoder
 from .models.decoders import FLAME, FLAMETex, Generator
+from ...transforms import create_viewport_matrix, create_ortho_matrix, crop_matrix_to_3d
 
 # May have some speed benefits
 torch.backends.cudnn.benchmark = True
@@ -192,69 +193,86 @@ class EMOCA(torch.nn.Module):
             
         """
         
-        # "Decode" vertices (V), 2D landmarks (lm2d), and 3D landmarks (lm3d)
-        # given shape, expression (exp), and pose FLAME parameters
-        # Note that V is in world space (i.e., no translation/scale applied yet)
+        # "Decode" vertices (V); we'll ignore the 2d and 3d landmarks
         v, R, _, _ = self.D_flame(shape_params=enc_dict['shape'],
                                   expression_params=enc_dict['exp'],
                                   pose_params=enc_dict['pose'])
 
+        # Note that `v` is in world space, but pose (global rotation only)
+        # is already applied
         v = v.cpu().numpy().squeeze()
-        R = R.cpu().numpy().squeeze()
-        cam = enc_dict['cam'].cpu().numpy().squeeze()
+        cam = enc_dict['cam'].cpu().numpy().squeeze()  # 'camera' params
 
-        # Here, we're going to do something weird ... (but bear with me)
-        # EMOCA/DECA models estimate translation and scale parameters
-        # *of the camera*, not of the model. In other words, they assume
-        # the camera is moving, not the model. We, of course, assume a
-        # fixed camera, so we'll translate and scale the model instead
-        v[:, 0] = v[:, 0] + cam[1]
-        v[:, 1] = v[:, 1] + cam[2]
-        v = v * cam[0]
-
-        # To add the translation due to cropping, first project to the cropped iamge space
-        P = OrthographicCamera(1, 1).get_projection_matrix(224, 224)
-        v = np.c_[v, np.ones(5023)] @ P.T
-        z = v[:, 2].copy()  # save for later
-        v = v[:, :2]
+        # Now, let's define all the transformations of `v`
+        # First, rotation has already been applied, which is stored in `R`
+        R = R.cpu().numpy().squeeze()  # global rotation matrix
         
-        # Invert y-axis (because image space)
-        v[:, 1] = -v[:, 1]
-        
-        # Normalize from [-1 , 1] to [0, 1]
-        v = (v + 1) / 2
-        
-        # NDC to raster
-        v *= 224  # fixed size of cropped image
-
-        # Apply cropping transform        
-        v = np.c_[v, np.ones(5023)]
-        v = (v @ np.linalg.inv(self.tform).T)[:, :2]
-
-        # Now map back to [0, 1] NDC space
-        v[:, 0] = v[:, 0] / self.img_size[0]
-        v[:, 1] = v[:, 1] / self.img_size[1]
-
-        # NDC -> image
-        v = -(1 - 2 * v)
-        v[:, 1] = -v[:, 1]
-
-        # inverted ortho transform (2D -> 3D)
-        P = OrthographicCamera(1, 1).get_projection_matrix(self.img_size[0], self.img_size[1])
-        v = np.c_[v, z, np.ones(5023)] @ np.linalg.inv(P.T)
-        v = v[:, :3]
-
+        # Actually, R is per vertex (not sure why) but doesn't really differ
+        # across vertices, so let's average
         R = R.mean(axis=0)
-        T = np.eye(4)
-        T[0, 3] = cam[1]
-        T[1, 3] = cam[2]
-        S = np.eye(4) * cam[0]
-        S[3, 3] = 1
+        
+        # Now, translation. We are going to do something weird. EMOCA (and
+        # DECA) estimate translation (and scale) parameters *of the camera*,
+        # not of the face. In other words, they assume the camera is is translated
+        # w.r.t. the model, not the other way around (but it is technically equivalent).
+        # Because we have a fixed camera and a (possibly) moving face, we actually
+        # apply translation (and scale) to the model, not the camera.
+        tx, ty = cam[1:]
+        T = np.array([
+            [1, 0, 0, tx],
+            [0, 1, 0, ty],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1]
+        ])
 
-        mat = S @ T @ R
+        # The same issue applies to the 'scale' parameter
+        # which we'll apply to the model, too
+        sc = cam[0]
+        S = np.array([
+            [sc, 0, 0, 0],
+            [0, sc, 0, 0],
+            [0, 0, sc, 0],
+            [0, 0, 0, 1]
+        ])        
+
+        # Now we have to do something funky. EMOCA/DECA works on cropped images. This is a problem when
+        # we want to quantify motion across frames of a video because a face might move a lot (e.g.,
+        # sideways) between frames, but this motion is kind of 'negated' by the crop (which will
+        # just yield a cropped image with a face in the middle). Fortunately, the smart people
+        # at the MPI encoded the cropping operation as a matrix operation (using a 3x3 similarity
+        # transform matrix). So what we'll do (and I can't believe this actually works) is to
+        # map the vertices all the way from world space to raster space (in which the crop transform
+        # was estimated), then apply the inverse of the crop matrix, and then map it back to world
+        # space. To do this, we also need a orthographic projection matrix (OP), which maps from
+        # world to NDC space, and a viewport matrix (VP), which maps from NDC to raster space.
+        # Note that we need this twice: one for the 'forward' transform (world -> crop raster space)
+        # and one for the 'backward' transform (full image raster space -> world)
+
+        OP = create_ortho_matrix(224, 224)  # forward
+        VP = create_viewport_matrix(224, 224)  # forward
+        CP = crop_matrix_to_3d(self.tform)  # crop matrix
+        VP_ = create_viewport_matrix(*self.img_size)  # backward
+        OP_ = create_ortho_matrix(*self.img_size)  # backward
+
+        # Let's define the *full* transformation chain into a single 4x4 matrix
+        # (Order of transformations is from right to left)
+        # Again, I can't believe this actually works
+        pose = S @ T
+        forward = np.linalg.inv(CP) @ VP @ OP
+        backward = np.linalg.inv((VP_ @ OP_))
+        mat = backward @ forward @ pose
+
+        # Change to homogenous coordinates and apply transformation
+        v = np.c_[v, np.ones(v.shape[0])] @ mat.T
+        v = v[:, :3]  # trim off 4th dim
+
+        # To complete the full transformation matrix, we need to also
+        # add the rotation (which was already applied to the data by the
+        # FLAME model)    
+        mat = mat @ R
     
         #tex = self.D_flame_tex(enc_dict['tex'])
-        return {'v': v, 'mat': mat, 'cropmat': self.tform}
+        return {'v': v, 'mat': mat}
         
         # # Decode detail map (uses jaw rotations, i.e., pose[3:] as well as exp and of course detail parameters)
         # #inp_D_detail = torch.cat([enc_dict['pose'][:, 3:], enc_dict['exp'], enc_dict['detail']], dim=1)

@@ -55,6 +55,7 @@ opts = dict(name=NAME,
             'gmfx_resample = gmfx.cli:resample_cmd',
             'gmfx_filter = gmfx.cli:filter_cmd',
             'gmfx_preproc = gmfx.cli:preproc_cmd',
+            'gmfx_epoch = gmfx.cli:epoch_cmd',
             'gmfx_videorender = gmfx.cli:videorender_cmd'
         ]
     }

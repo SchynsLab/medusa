@@ -340,10 +340,8 @@ class FlameData(BaseData):
 
     def __init__(self, *args, **kwargs):
         
-        cropmat = kwargs.pop('cropmat')
         kwargs['f'] = np.load(here / 'data/faces_flame.npy')
         super().__init__(*args, **kwargs)
-        self.cropmat = cropmat
 
     @classmethod
     def load(cls, path):

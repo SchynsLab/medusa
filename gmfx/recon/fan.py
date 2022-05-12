@@ -152,7 +152,7 @@ class FAN:
         w, h = self.target_size, self.target_size
         dst = np.array([[0, 0], [0, w - 1], [h - 1, 0]])
         self.tform = estimate_transform('similarity', self.bbox[:3, :], dst)
-                
+
         # Note to self: preserve_range needs to be True, because otherwise `warp` will scale the data!
         self.img_crop = warp(self.img_orig, self.tform.inverse, output_shape=(w, h), preserve_range=True)
 

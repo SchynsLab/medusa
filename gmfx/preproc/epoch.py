@@ -123,19 +123,19 @@ def epoch(data, start=-0.5, end=3., period=0.01, align_peaks=False,
         else:
             raise NotImplementedError
     
-    # av = epochs.mean(axis=0)
-    # data.v = av[:, :-12].reshape((av.shape[0], -1, 3))
+    av = epochs.mean(axis=0)
+    data.v = av[:, :-12].reshape((av.shape[0], -1, 3))
     
-    # motion = av[:, -12:]
-    # data.params2mats(motion)
+    motion = av[:, -12:]
+    #data.params2mats(motion)
     
     # for i in range(data.v.shape[0]):
     #     v_ = data.v[i, ...]
     #     v_ = np.c_[v_, np.ones(v_.shape[0])]
     #     data.v[i, ...] = (v_ @ data.mat[i, ...].T)[:, :3]
 
-    # data.sf = 1 / period
-    # data.render_video('test.gif', video=None)
+    data.sf = 1 / period
+    data.render_video('test.gif', video=None)
 
     # Create (custom) EpochsArray and save
     epochs_array = EpochsArray.from_gmfx(epochs, sf=1/period, tmin=start)    
