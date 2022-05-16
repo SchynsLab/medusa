@@ -27,7 +27,7 @@ CLASSIFIERS = ["Development Status :: 3 - Alpha",
 # Description should be a one-liner:
 description = "medusa: 4D face reconstruction and analysis"
 
-NAME = "gmfx"
+NAME = "medusa"
 MAINTAINER = "Lukas Snoek"
 MAINTAINER_EMAIL = "lukassnoek@gmail.com"
 DESCRIPTION = description
