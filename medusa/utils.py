@@ -11,5 +11,5 @@ def get_logger(verbose='INFO'):
            logging.StreamHandler(),
         ],
     )
-    logger = logging.getLogger('gmfx')
+    logger = logging.getLogger('medusa')
     return logger

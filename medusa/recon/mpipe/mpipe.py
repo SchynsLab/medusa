@@ -6,7 +6,6 @@ from .transforms import PCF, image2world
 
 
 class Mediapipe:
-
     
     def __init__(self, static_image_mode=True, **kwargs):
         """ Initializes a Mediapipe recon model.
@@ -89,9 +88,6 @@ class Mediapipe:
         # fx=img.shape[1], fy=img.shape[1], cx=img.shape[1] / 2, cy=img.shape[0] / 2
         # Mediapipe assumes that the camera is located at the origin (and pointing in -z),
         # so no need to set the camera pose matrix (extrinsic camera matrix)
-
-    def get_v(self):
-        return self.v
     
     def close(self):
         """ Closes context manager. """

@@ -25,13 +25,13 @@ CLASSIFIERS = ["Development Status :: 3 - Alpha",
                "Topic :: Scientific/Engineering"]
 
 # Description should be a one-liner:
-description = "gmfx: a Generative Model of Facial eXpressions"
+description = "medusa: 4D face reconstruction and analysis"
 
 NAME = "gmfx"
 MAINTAINER = "Lukas Snoek"
 MAINTAINER_EMAIL = "lukassnoek@gmail.com"
 DESCRIPTION = description
-URL = "https://github.com/lukassnoek/gmfx"
+URL = "https://github.com/lukassnoek/medusa"
 DOWNLOAD_URL = ""
 LICENSE = "3-clause BSD"
 AUTHOR = "Lukas Snoek"
@@ -41,4 +41,4 @@ MAJOR = _version_major
 MINOR = _version_minor
 MICRO = _version_micro
 VERSION = __version__
-PACKAGE_DATA = {'gmfx': [op.join('data', '*'), op.join('configs', '*')]}
+PACKAGE_DATA = {'medusa': [op.join('data', '*'), op.join('configs', '*')]}

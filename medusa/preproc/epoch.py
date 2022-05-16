@@ -8,8 +8,6 @@ from ..utils import get_logger
 from ..data import load_h5
 from ..epochs import EpochsArray
 
-logger = get_logger()
-
 
 def epoch(data, start=-0.5, end=3., period=0.01, align_peaks=False,
           max_shift=0.5, baseline_correct=False, baseline_window=(None, None),
@@ -40,6 +38,8 @@ def epoch(data, start=-0.5, end=3., period=0.01, align_peaks=False,
     baseline_mode : str
         How to perform baseline correction (options: 'mean', 'ratio')
     """
+
+    logger = get_logger()
 
     # TODO: rename .mat to .affine (cf. nifti)
 

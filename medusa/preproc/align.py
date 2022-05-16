@@ -9,8 +9,6 @@ from trimesh.transformations import decompose_matrix, transform_points, compose_
 from ..data import load_h5
 from ..utils import get_logger
 
-logger = get_logger()
-
 
 def align(data, algorithm, qc=False, additive_alignment=False, ignore_existing=False):
     """ Aligment of 3D meshes over time. 
@@ -30,6 +28,8 @@ def align(data, algorithm, qc=False, additive_alignment=False, ignore_existing=F
     ignore_existing : bool
         Whether to ignore the existing alignment parameters
     """
+
+    logger = get_logger()
 
     if isinstance(data, (str, Path)):
         logger.info(f"Loading data from {data} ...")

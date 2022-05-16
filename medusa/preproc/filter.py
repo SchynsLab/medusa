@@ -6,8 +6,6 @@ from scipy.signal import butter, sosfilt
 from ..data import load_h5
 from ..utils import get_logger
 
-logger = get_logger()
-
 
 def filter(data, low_pass, high_pass):
     """ Applies a bandpass filter the vertex coordinate time series.
@@ -27,6 +25,8 @@ def filter(data, low_pass, high_pass):
         Path to video to render reconstruction on top of
         (optional)
     """
+
+    logger = get_logger()
 
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
