@@ -1,0 +1,20 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: index
+parts:
+- caption: Getting started
+  chapters:
+  - file: getting_started/installation
+- caption: Tutorials
+  chapters:
+  - file: tutorials/example_tutorial
+- caption: API documentation
+  chapters:
+  - file: api/cli
+  - file: api/python
+    sections:
+    - glob: api/python/*/*
+  
+

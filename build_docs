@@ -1,0 +1,13 @@
+rm -r docs/_build
+rm -r docs/autoapi/_build
+rm -r docs/api/python/*
+
+mkdir -p docs/_build/
+sphinx-build -b html docs/autoapi docs/autoapi/_build
+cp -r docs/autoapi/_build/_sources/autoapi/gmfx/* docs/api/python/
+rm -r docs/api/python/index.rst.txt docs/api/python/cli docs/api/python/version
+for f in $(find docs/api/python -name \*.rst.txt); do
+    mv $f ${f/.rst.txt/.rst}
+done
+
+jupyter-book build docs/

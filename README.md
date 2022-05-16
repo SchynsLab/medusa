@@ -1,5 +1,7 @@
 # GMFX
 
+[![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://lukas-snoek.com/gmfx)
+
 GMFX is a Python toolbox to analyze and build 3D Generative Models of Facial eXpressions. It uses a deep learning-based model ([EMOCA](https://emoca.is.tue.mpg.de/)) to reconstruct 3D faces from images or videos and provides tools to subsequently preprocess and analyze the 3D meshes.
 
 ## Installation

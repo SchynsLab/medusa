@@ -134,3 +134,8 @@ exp/*/data
 exp/*/*.py
 test_data
 ext_data
+
+# Docs
+docs/_build
+docs/autoapi/_build
+
