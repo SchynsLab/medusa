@@ -8,7 +8,7 @@ from ..utils import get_logger
 logger = get_logger()
 
 
-def resample(data, sampling_freq=None, kind='pchip', video=None):
+def resample(data, sampling_freq=None, kind='pchip'):
     """ Resamples the data to a given sampling rate.
     This function can be used to resample the time points
     to a higher temporal resolution and/or a constant
@@ -26,9 +26,6 @@ def resample(data, sampling_freq=None, kind='pchip', video=None):
     kind : str
         Kind of interpolation to use, either 'pchip' (default), 'linear', 'quadratic',
         or 'cubic'
-    video : str
-        Path to video to render reconstruction on top of
-        (optional)
     """
 
     if isinstance(data, (str, Path)):
@@ -83,7 +80,5 @@ def resample(data, sampling_freq=None, kind='pchip', video=None):
     pth = data.path
     desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+interp'
     f_out = pth.split('desc-')[0] + desc
-    data.plot_data(f_out + '_qc.png', plot_motion=True, plot_pca=True, n_pca=3)
-    data.render_video(f_out + '_shape.gif', video=video)
     data.save(f_out + '_shape.h5')
     

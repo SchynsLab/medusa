@@ -10,7 +10,7 @@ logger = get_logger()
 
 
 def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=None, device='cuda',
-               out_dir=None, render_on_video=False, render_crop=False, n_frames=None, scaling=None):
+               out_dir=None, render_recon=True, render_on_video=False, render_crop=False, n_frames=None):
     """ Reconstruction of all frames of a video. 
     
     Parameters
@@ -41,8 +41,6 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
     n_frames : int
         If not `None` (default), only reconstruct and render the first `n_frames`
         frames of the video; nice for debugging
-    scaling : float
-        How much to scale the resulting image/background
     """
 
     logger.info(f'Starting recon using for {video_path}')
@@ -74,7 +72,7 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
 
     # Loop across frames of video, store results in `recon_data`
     recon_data = defaultdict(list)    
-    for i, frame in video.loop(scaling=scaling):
+    for i, frame in video.loop(scaling=None):
      
         if recon_model_name in ['emoca']:
 
@@ -111,6 +109,7 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
 
     # Save data as hdf5 and visualize reconstruction 
     data.save(f_out + '_shape.h5')
-    data.plot_data(f_out + '_qc.png', plot_motion=True, n_pca=3)
-    background = video_path if render_on_video else None
-    data.render_video(f_out + '_shape.gif', video=background, scaling=scaling)
+
+    if render_recon:
+        background = video_path if render_on_video else None
+        data.render_video(f_out + '_shape.gif', video=background)

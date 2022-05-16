@@ -9,7 +9,7 @@ from ..utils import get_logger
 logger = get_logger()
 
 
-def filter(data, low_pass, high_pass, video=None):
+def filter(data, low_pass, high_pass):
     """ Applies a bandpass filter the vertex coordinate time series.
     Implementation based on https://stackoverflow.com/questions/
     12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter
@@ -58,6 +58,4 @@ def filter(data, low_pass, high_pass, video=None):
     pth = data.path
     desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+filt'
     f_out = pth.split('desc-')[0] + desc
-    data.plot_data(f_out + '_qc.png', plot_motion=True, plot_pca=True, n_pca=3)
-    data.render_video(f_out + '_shape.gif', video=video)
     data.save(f_out + '_shape.h5')

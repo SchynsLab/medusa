@@ -137,8 +137,8 @@ def epoch(data, start=-0.5, end=3., period=0.01, align_peaks=False,
     data.sf = 1 / period
     data.render_video('test.gif', video=None)
 
-    # Create (custom) EpochsArray and save
-    epochs_array = EpochsArray.from_gmfx(epochs, sf=1/period, tmin=start)    
-    epochs_array.save(data.path.replace('_shape.h5', '_epo.fif'),
-                      split_size='2GB', fmt='single', overwrite=True,
-                      split_naming='bids', verbose='WARNING')
+    # # Create (custom) EpochsArray and save
+    # epochs_array = EpochsArray.from_gmfx(epochs, sf=1/period, tmin=start)    
+    # epochs_array.save(data.path.replace('_shape.h5', '_epo.fif'),
+    #                   split_size='2GB', fmt='single', overwrite=True,
+    #                   split_naming='bids', verbose='WARNING')
