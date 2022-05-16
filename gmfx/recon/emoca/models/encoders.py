@@ -150,29 +150,13 @@ class BasicBlock(nn.Module):
 
         return out
 
-def copy_parameter_from_resnet(model, resnet_dict):
-    cur_state_dict = model.state_dict()
-
-    for name, param in list(resnet_dict.items())[0:None]:
-        if name not in cur_state_dict:
-            continue
-
-        if isinstance(param, Parameter):
-            param = param.data
-
-        try:
-            cur_state_dict[name].copy_(param)
-        except:
-            continue
-
 
 class ResnetEncoder(nn.Module):
     def __init__(self, outsize, last_op=None):
         super(ResnetEncoder, self).__init__()
         feature_size = 2048
         self.encoder = ResNet(Bottleneck, [3, 4, 6, 3])
-        #copy_parameter_from_resnet(self.encoder, torchvision.models.resnet50(pretrained = False).state_dict())
-        ### regressor
+        
         self.layers = nn.Sequential(
             nn.Linear(feature_size, 1024),
             nn.ReLU(),

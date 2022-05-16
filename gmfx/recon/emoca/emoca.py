@@ -1,5 +1,4 @@
 import yaml
-import torch
 import numpy as np
 from pathlib import Path
 from pyrender.camera import OrthographicCamera
@@ -8,6 +7,7 @@ from .models.encoders import ResnetEncoder
 from .models.decoders import FLAME, FLAMETex, Generator
 from ...transforms import create_viewport_matrix, create_ortho_matrix, crop_matrix_to_3d
 
+import torch
 # May have some speed benefits
 torch.backends.cudnn.benchmark = True
 
@@ -66,6 +66,7 @@ class EMOCA(torch.nn.Module):
             - `D_flame_tex`: outputs a texture map given (tex) FLAME parameters
             - `D_detail`: outputs detail map (in uv space) given (detail) FLAME parameters
         """
+        
         # set up parameter list and dict
         self.param_list = ['shape', 'tex', 'exp', 'pose', 'cam', 'light']
         self.num_list = [self.cfg['E_flame'][f'n_{param}'] for param in self.param_list]
@@ -194,9 +195,9 @@ class EMOCA(torch.nn.Module):
         """
         
         # "Decode" vertices (V); we'll ignore the 2d and 3d landmarks
-        v, R, _, _ = self.D_flame(shape_params=enc_dict['shape'],
-                                  expression_params=enc_dict['exp'],
-                                  pose_params=enc_dict['pose'])
+        v, R = self.D_flame(shape_params=enc_dict['shape'],
+                            expression_params=enc_dict['exp'],
+                            pose_params=enc_dict['pose'])
 
         # Note that `v` is in world space, but pose (global rotation only)
         # is already applied
