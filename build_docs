@@ -8,7 +8,7 @@ mkdir -p docs/_build/
 sphinx-build -b html docs/autoapi docs/autoapi/_build
 
 # Move the generated rst files to somewhere Jupyter book can find them
-cp -r docs/autoapi/_build/_sources/autoapi/gmfx/* docs/api/python/
+cp -r docs/autoapi/_build/_sources/autoapi/medusa/* docs/api/python/
 rm -r docs/api/python/index.rst.txt docs/api/python/cli docs/api/python/version
 
 # Fix the weird rst.txt extension
@@ -18,3 +18,4 @@ done
 
 # Finally build the entire docs
 jupyter-book build docs/
+rm -rf docs/api/python/*
