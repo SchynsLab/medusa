@@ -26,12 +26,12 @@ class Renderer:
     """
     
     def __init__(self, camera_type='orthographic', smooth=True, wireframe=False,
-                 zoom_out=4, viewport=(224, 224)):
+                 cam_mat=None, viewport=(224, 224)):
     
         self.camera_type = camera_type
         self.smooth = smooth
         self.wireframe = wireframe
-        self.zoom_out = zoom_out
+        self.cam_mat = cam_mat
         self.viewport = viewport
         self.scene = self._create_scene()
         self._renderer = self._create_renderer()
@@ -42,7 +42,7 @@ class Renderer:
         added when calling __call__. """
         w, h = self.viewport
         scene = Scene(bg_color=[0, 0, 0, 0], ambient_light=(255, 255, 255))
-        
+
         if self.camera_type == 'orthographic':
             camera = OrthographicCamera(xmag=1, ymag=1)
         elif self.camera_type == 'intrinsic':
@@ -52,9 +52,10 @@ class Renderer:
             # For mediapipe renderings, we don't need to zoom out
             self.zoom_out = 0
         
-        scene.add_node(Node(camera=camera, translation=(0, 0, self.zoom_out)))
+        camera_node = Node(camera=camera, matrix=self.cam_mat)
+        scene.add_node(camera_node)
         light = DirectionalLight(intensity=5)
-        scene.add_node(Node(light=light, translation=(0, 0, self.zoom_out)))
+        scene.add_node(Node(light=light, matrix=self.cam_mat))
 
         return scene
 
@@ -96,7 +97,7 @@ class Renderer:
         
         return img.copy()
     
-    def alpha_blend(self, img, background, threshold=1):
+    def alpha_blend(self, img, background, face_alpha=None):
         """ Simple alpha blend of a rendered image and
         a background. The image (`img`) is assumed to be 
         an RGBA image and the background (`background`) is
@@ -110,12 +111,12 @@ class Renderer:
             A 3D numpy array of shape height x width x 4 (RGBA)
         background : np.ndarray
             A 3D numpy array of shape height x width x 3 (RGB)
-        threshold: int, float
-            Threshold to impose on the alpha channel. Everything above
-            this value is set to 1.
         """
         alpha = img[:, :, 3, None] / 255.
-        alpha[alpha >= threshold] = 1
+        
+        if face_alpha is not None:
+            alpha[alpha > face_alpha] = face_alpha
+        
         img = img[:, :, :3] * alpha + (1 - alpha) * background
         
         # TODO: add global alpha level for face        

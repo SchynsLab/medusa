@@ -16,6 +16,8 @@ from trimesh.transformations import decompose_matrix, compose_matrix
 
 from .utils import get_logger
 from .render import Renderer
+from .io import VideoData
+
 
 logger = get_logger()
 here = Path(__file__).parent.resolve()
@@ -36,7 +38,10 @@ class BaseData:
         Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
         `None` if working with landmarks/vertices only
     mat : ndarray
-        Numpy array of shape T (time points) x 4 x 4 (affine matrix)
+        Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
+        the 'world' (or 'model') matrix for each time point
+    cam_mat : ndarray
+        Numpy array of shape 4x4 (affine matrix) representing the camera matrix
     frame_t : ndarray
         Numpy array of length T (time points) with "frame times", i.e.,
         onset of each frame (in seconds) from the video
@@ -47,21 +52,26 @@ class BaseData:
         Sampling frequency of video
     recon_model_name : str
         Name of reconstruction model
+    space : str 
+        The space the vertices are currently in; can be either 'local' or 'world'
     path : str
         Path where the data is saved; if initializing a new object (rather than
         loading one from disk), this should be `None`
     """
-    def __init__(self, v, f=None, mat=None, frame_t=None, events=None,
-                 sf=None, img_size=None, recon_model_name=None, path=None):
+    def __init__(self, v, f=None, mat=None, cam_mat=None, frame_t=None, events=None,
+                 sf=None, img_size=None, recon_model_name=None, space='world',
+                 path=None):
 
         self.v = v
         self.f = f
         self.mat = mat
+        self.cam_mat = cam_mat
         self.frame_t = frame_t
         self.events = events
         self.sf = sf
         self.img_size = img_size
         self.recon_model_name = recon_model_name
+        self.space = space
         self.path = path
         self._check()
     
@@ -88,7 +98,14 @@ class BaseData:
             max_t = self.frame_t[-1]
             self.events = self.events.query("onset < @max_t")
 
-    def mats2params(self):
+        if self.space not in ['local', 'world']:
+            raise ValueError("`space` should be either 'local' or 'world'!")            
+
+        #if self.cam_mat is None:
+        #    logger.info("Setting camera matrix to identity")
+        #    self.cam_mat = np.eye(4)
+
+    def mats2params(self, to_df=True):
         """ Transforms a time series (of length T) 4x4 affine matrices to a
         pandas DataFrame with a time series of T x 12 affine parameters
         (translation XYZ, rotation XYZ, scale XYZ, shear XYZ).
@@ -107,12 +124,14 @@ class BaseData:
             params[i, 6:9] = scale
             params[i, 9:12] = shear
 
-        cols = ['Trans. X', 'Trans. Y', 'Trans Z.',
-                'Rot. X (deg)', 'Rot. Y (deg)', 'Rot. Z (deg)',
-                'Scale X (A.U.)', 'Scale Y (A.U.)', 'Scale Z. (A.U.)',
-                'Shear X (A.U.)', 'Shear Y (A.U.)', 'Shear Z (A.U.)']
-        
-        return pd.DataFrame(params, columns=cols)
+        if to_df:
+            cols = ['Trans. X', 'Trans. Y', 'Trans Z.',
+                    'Rot. X (deg)', 'Rot. Y (deg)', 'Rot. Z (deg)',
+                    'Scale X (A.U.)', 'Scale Y (A.U.)', 'Scale Z. (A.U.)',
+                    'Shear X (A.U.)', 'Shear Y (A.U.)', 'Shear Z (A.U.)']
+            params = pd.DataFrame(params, columns=cols)
+
+        return params
     
     def params2mats(self, params):
         """ Does the oppose as the above function. """
@@ -139,12 +158,12 @@ class BaseData:
         out_dir.mkdir(parents=True, exist_ok=True)
 
         with h5py.File(path, 'w') as f_out:
-            for attr in ['v', 'f', 'frame_t', 'mat', 'cropmat']:
+            for attr in ['v', 'f', 'frame_t', 'mat', 'cam_mat']:
                 data = getattr(self, attr, None)
                 if data is not None:
                     f_out.create_dataset(attr, data=data)
             
-            for attr in ['recon_model_name', 'img_size']:            
+            for attr in ['recon_model_name', 'img_size', 'space']:            
                 f_out.attrs[attr] = getattr(self, attr)
 
             f_out['frame_t'].attrs['sf'] = self.sf
@@ -163,18 +182,13 @@ class BaseData:
         init_kwargs = dict()
         with h5py.File(path, "r") as f_in:
 
-            for attr in ['v', 'f', 'frame_t', 'mat']:
+            for attr in ['v', 'f', 'frame_t', 'mat', 'cam_mat']:
                 if attr in f_in:
                     init_kwargs[attr] = f_in[attr][:]
                 else:
                     init_kwargs[attr] = None
-            
-            if 'cropmat' in f_in:
-                # Cannot add to above loop, because only FlameData
-                # accepts cropmat as a kwarg
-                init_kwargs['cropmat'] = f_in['cropmat'][:]
-            
-            for attr in ['img_size', 'recon_model_name', 'path']:
+                        
+            for attr in ['img_size', 'recon_model_name', 'path', 'space']:
                 init_kwargs[attr] = f_in.attrs[attr]
 
             init_kwargs['sf'] = f_in['frame_t'].attrs['sf']
@@ -224,40 +238,56 @@ class BaseData:
             sfreq=self.sf
         )
         return mne.io.RawArray(self.v.reshape(T, -1), info)
-     
-    def to_mne_epochs(self):
-        import mne
 
-        # TODO: create epochs and init mne.Epochs        
+    def _rescale(self, img, scaling):
+        """ Rescales an image with a scaling factor `scaling`. """ 
+        img = rescale(img, scaling, preserve_range=True, anti_aliasing=True,
+                      channel_axis=2)
+        img = img.round().astype(np.uint8)
+        return img 
 
-    def render_video(self, *args, **kwargs):
+    def render_video(self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None):
         """ Should be implemented in subclass! """
-        raise NotImplementedError
 
-    def _crop(self, v, ndc=False, margin=25):
-        """ 'Crops' the vertices. """
+        w, h = self.img_size
+        if scaling is not None:
+            w, h = int(round(w * scaling)), int(round(h * scaling))
         
-        raise NotImplementedError
-        
-        if ndc:      
-            print(v.max())
-            v[:, :, :2] *= np.array(self.img_size)
-            
-        # Compute the height and width from the range (+ margin, in pix.)
-        h = int(v[:, :, 0].max()) - int(v[:, :, 0].min()) + margin * 2
-        w = int(v[:, :, 1].max()) - int(v[:, :, 1].min()) + margin * 2
+        if video is not None:
+            reader = imageio.get_reader(video)
 
-        # "Crop" and map back to NDC space
-        v[:, :, :2] = v[:, :, :2] - v[:, :, :2].min(axis=(0, 1)) + margin
+        writer = imageio.get_writer(f_out, mode='I', fps=self.sf)
+        desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
         
-        if ndc:
-            v[:, :, :2] /= np.array([h, w])
+        for i in tqdm(range(len(self)), desc=f'{desc} Render shape'):
+
+            if n_frames is not None:
+                if i == n_frames:
+                    break
+
+            if video is not None:
+                background = reader.get_data(i)
+                if scaling is not None:
+                    background = self._rescale(background, scaling)
+            else:
+                background = np.zeros((h, w, 3)).astype(np.uint8)
+
+            img = renderer(self.v[i, :, :], self.f)
+            if scaling is not None:
+                img = self._rescale(img, scaling)
+
+            img = renderer.alpha_blend(img, background, face_alpha=alpha)
+            writer.append_data(img)
+
+        renderer.close()
+        writer.close()
         
-        return v, w, h
+        if video is not None:
+            reader.close()   
 
     def plot_data(self, f_out, plot_motion=True, plot_pca=True, n_pca=3):        
         """ Creates a plot of the motion (rotation & translation) parameters
-        over time and, optionally, the first `n_pca` PCA components of the 
+        over time and the first `n_pca` PCA components of the 
         reconstructed vertices. For FLAME estimates, these parameters are
         relative to the canonical model, so the estimates are plotted relative
         to the value of the first frame.
@@ -341,6 +371,11 @@ class FlameData(BaseData):
     def __init__(self, *args, **kwargs):
         
         kwargs['f'] = np.load(here / 'data/faces_flame.npy')
+        if kwargs.get('cam_mat') is None:
+            cam_mat = np.eye(4)
+            cam_mat[2, 3] = 4  # zoom out 4 units in z direction
+            kwargs['cam_mat'] = cam_mat
+        
         super().__init__(*args, **kwargs)
 
     @classmethod
@@ -350,44 +385,12 @@ class FlameData(BaseData):
         init_kwargs['f'] = np.load(here / 'data/faces_flame.npy')
         return cls(**init_kwargs)
 
-    def render_video(self, f_out, video=None, smooth=True, wireframe=False, zoom_out=4, scaling=None):
+    def render_video(self, f_out, smooth=False, wireframe=False, **kwargs):
 
-        w, h = self.img_size
-        if scaling is not None:
-            w, h = int(round(w * scaling)), int(round(h * scaling))
+        renderer = Renderer(camera_type='orthographic', viewport=self.img_size,
+                            smooth=smooth, wireframe=wireframe, cam_mat=self.cam_mat)
 
-        renderer = Renderer(camera_type='orthographic', zoom_out=zoom_out,
-                            viewport=self.img_size, smooth=smooth, wireframe=wireframe)
-        
-        if video is not None:
-            reader = imageio.get_reader(video)
-
-        writer = imageio.get_writer(f_out, mode='I', fps=self.sf)
-        desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
-        
-        for i in tqdm(range(len(self)), desc=f'{desc} Render shape'):
-
-            if video is not None:
-                background = reader.get_data(i)
-                if scaling is not None:
-                    background = rescale(background, scaling, channel_axis=2,
-                                         anti_aliasing=True, preserve_range=True).round().astype(np.uint8)
-            else:
-                background = np.zeros((h, w, 3)).astype(np.uint8)
-
-            img = renderer(self.v[i, :, :], self.f)
-            if scaling is not None:
-                img = rescale(img, scaling, channel_axis=2,
-                              anti_aliasing=True, preserve_range=True).round().astype(np.uint8)
-
-            img = renderer.alpha_blend(img, background)
-            writer.append_data(img)
-
-        renderer.close()
-        writer.close()
-        
-        if video is not None:
-            reader.close()   
+        super().render_video(f_out, renderer, **kwargs)
 
 
 class MediapipeData(BaseData):
@@ -395,6 +398,9 @@ class MediapipeData(BaseData):
     def __init__(self, *args, **kwargs):
         
         kwargs['f'] = np.load(here / 'data/faces_mediapipe.npy')
+        if kwargs.get('cam_mat') is None:
+            kwargs['cam_mat'] = np.eye(4)
+
         super().__init__(*args, **kwargs)
 
     @classmethod
@@ -403,42 +409,11 @@ class MediapipeData(BaseData):
         init_kwargs = super().load(path)
         return cls(**init_kwargs)
 
-    def render_video(self, f_out, video=None, smooth=False, wireframe=False, scaling=None):
-                
-        if video is not None:
-            # Plot face on top of video, so need to load in video
-            reader = imageio.get_reader(video)
-        
-        w, h = self.img_size
-        if scaling is not None:
-            w, h = int(round(w * scaling)), int(round(h * scaling))
+    def render_video(self, f_out, smooth=False, wireframe=False, **kwargs):
 
-        renderer = Renderer(camera_type='intrinsic',viewport=(w, h),
-                            smooth=smooth, wireframe=wireframe)
-
-        writer = imageio.get_writer(f_out, mode='I', fps=self.sf)
-        desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
-
-        for i in tqdm(range(len(self)), desc=f'{desc} Render shape'):
-            
-            if video is not None:
-                background = reader.get_data(i)
-                
-                if scaling is not None:
-                    background = rescale(background, scaling, channel_axis=2,
-                                         anti_aliasing=True, preserve_range=True).round().astype(np.uint8)
-            else:
-                background = np.zeros((h, w, 3)).astype(np.uint8)
-
-            img = renderer(self.v[i, :, :], self.f)
-            img = renderer.alpha_blend(img, background, threshold=0.5)    
-            writer.append_data(img)
-
-        writer.close()
-        renderer.close()
-        
-        if video is not None:
-            reader.close()            
+        renderer = Renderer(camera_type='intrinsic', viewport=self.img_size,
+                            smooth=smooth, wireframe=wireframe, cam_mat=self.cam_mat)
+        super().render_video(f_out, renderer, **kwargs)
 
 
 class FANData(BaseData):
@@ -513,34 +488,3 @@ def load_h5(path):
     
     data = MODEL2CLS[rmn].load(path)
     return data
-
-
-def videorender(path, video=None, smooth=True, wireframe=False, scaling=None,
-                format='gif'):
-    """ Renders the reconstructed vertices as a video.
-    
-    Parameters
-    ----------
-    path : str
-        Path to hdf5 file
-    video : str
-        Path to video corresponding to the reconstruction; if `None` (default),
-        the reconstructed is rendered on a black background
-    smooth : bool
-        Whether to render a smooth mesh or not
-    wireframe : bool
-        Whether to render a wireframe instead of a full mesh; if True,
-        the `smooth` parameter is ignored of course
-    scaling : float
-        A scaling factor applied to the image (and background); e.g., 
-        0.25 means that the rendering is 25% of the size of the original
-        frame size
-    format : str
-        Either 'gif' or 'mp4' (or whatever imagio accepts, really)
-    """
-
-    path = Path(path)
-    data = load_h5(path)
-    f_out = path.parent / (str(path.stem) + f'_shape.{format}')
-    data.render_video(f_out, video=video, smooth=smooth,
-                      wireframe=wireframe, scaling=scaling)

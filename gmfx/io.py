@@ -36,13 +36,15 @@ class VideoData:
         An array of length `self.n_img` with the onset of each
         frame of the video
     """   
-    def __init__(self, path, events=None):
+    def __init__(self, path, events=None, find_files=True):
         self.path = Path(path)
         self.events = events
         self._validate()
         self._extract_metadata()
-        self._find_events()
-        self._find_frame_t()
+        
+        if find_files:
+            self._find_events()
+            self._find_frame_t()
 
     def _validate(self):
         if not self.path.is_file():
@@ -109,6 +111,13 @@ class VideoData:
 
         self.frame_t = frame_t
     
+    def _rescale(self, img, scaling):
+        """ Rescales an image with a scaling factor `scaling`. """ 
+        img = rescale(img, scaling, preserve_range=True, anti_aliasing=True,
+                      channel_axis=2)
+        img = img.round().astype(np.uint8)
+        return img 
+   
     def loop(self, scaling=None, return_index=True):
         """ Loops across frames of a video.
         
@@ -137,8 +146,7 @@ class VideoData:
                 break
             
             if scaling is not None:
-                img = rescale(img, scaling, preserve_range=True, anti_aliasing=True,
-                              channel_axis=2).round().astype(np.uint8)
+                img = self._rescale(img, scaling=scaling)
     
             i += 1
             if return_index:                

@@ -7,13 +7,14 @@
 # `gmfx_filter some_h5_file.h5 -l 3 -h 0.01`
 
 import click
+from pathlib import Path
 
 from .preproc.recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
 from .preproc.filter import filter
 from .preproc.epoch import epoch
-from .data import videorender
+from .data import load_h5
 
 
 @click.command()
@@ -23,20 +24,20 @@ from .data import videorender
 @click.option('-c', '--cfg', default=None, type=click.STRING, help='Path to recon config file')
 @click.option('--device', default='cuda', type=click.Choice(['cpu', 'cuda']), help='Device to run recon on')
 @click.option('-o', '--out-dir', type=click.Path(), help='Output directory')
+@click.option('--render-recon', is_flag=True, help='Plot recon on video background')
 @click.option('--render-on-video', is_flag=True, help='Plot recon on video background')
 @click.option('--render-crop', is_flag=True, help='Render cropping results')
 @click.option('-n', '--n-frames', default=None, type=click.INT, help="Number of frames to reconstruct")
-@click.option('-s', '--scaling', default=None, type=click.FLOAT, help="Scaling factor")
-def videorecon_cmd(video_path, events_path, recon_model_name, cfg, device, out_dir, render_on_video,
-                   render_crop, n_frames, scaling):
+def videorecon_cmd(video_path, events_path, recon_model_name, cfg, device, out_dir, render_recon,
+                   render_on_video, render_crop, n_frames):
     videorecon(**locals())
 
 
 @click.command()
 @click.argument('data', type=click.Path(exists=True, dir_okay=False))
 @click.option('--algorithm', default='icp', type=click.Choice(['icp', 'umeyama']))
-@click.option('--video', default=None, type=click.Path(exists=True, dir_okay=False), help='Video for rendering')
-def align_cmd(data, algorithm, video):
+@click.option('--qc', is_flag=True, help='Generate QC plot')
+def align_cmd(data, algorithm, qc):
     align(**locals())
 
 
@@ -68,9 +69,18 @@ def epoch_cmd(data, start, end, period):
 @click.command()
 @click.argument('h5_path')
 @click.option('-v', '--video', type=click.Path(exists=True, dir_okay=False))
+@click.option('-n', '--n-frames', default=None, type=click.INT, help='Number of frames to render (default is all)')
 @click.option('--no-smooth', is_flag=True, help='Do not render smooth surface')
 @click.option('--wireframe', is_flag=True, help='Render wireframe instead of mesh')
+@click.option('--alpha', default=None, type=click.FLOAT, help='Alpha (transparency) of face')
 @click.option('--scaling', default=None, type=click.FLOAT, help='Scale factor')
-@click.option('--format', default='gif', help='Output video format')
-def videorender_cmd(h5_path, video, no_smooth, wireframe, scaling, format):
-    videorender(h5_path, video, not no_smooth, wireframe, scaling, format)
+@click.option('--fmt', default='gif', help='Output video format')
+def videorender_cmd(h5_path, video, n_frames, no_smooth, wireframe, alpha, scaling, fmt):
+    """ Renders the reconstructed vertices as a video. """
+
+    h5_path = Path(h5_path)
+    data = load_h5(h5_path)
+    f_out = h5_path.parent / (str(h5_path.stem) + f'.{fmt}')
+    smooth = not no_smooth
+    data.render_video(f_out, video=video, smooth=smooth, wireframe=wireframe,
+                      scaling=scaling, n_frames=n_frames, alpha=alpha)
