@@ -13,6 +13,7 @@ def test_videorecon_cmd(model, n_frames, render):
     """ Tests the videorecon command line interface. """
     
     if model == 'emoca' and 'GITHUB_ACTIONS' in os.environ:
+        # emoca is licensed, so cannot run on GH actions
         return 
 
     vid = get_example_video(as_path=False)
@@ -20,6 +21,7 @@ def test_videorecon_cmd(model, n_frames, render):
     
     args = [vid, '-r', model, '-n', n_frames]
     if render and not 'GITHUB_ACTIONS' in os.environ:
+        # Only test rendering locally, because doesn't work on GH actions
         args.extend(['--render-recon'])
 
     result = runner.invoke(videorecon_cmd, args)
@@ -28,7 +30,7 @@ def test_videorecon_cmd(model, n_frames, render):
     assert(expected_h5.is_file())
     expected_h5.unlink()
     
-    if render:
+    if render and not 'GITHUB_ACTIONS' in os.environ:
         expected_gif = Path(vid.replace('.mp4', '_desc-recon_shape.gif'))
         assert(expected_gif.is_file())
         expected_gif.unlink()
