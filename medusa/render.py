@@ -1,3 +1,7 @@
+"""
+
+"""
+
 import numpy as np
 from trimesh import Trimesh
 from pyrender.constants import RenderFlags

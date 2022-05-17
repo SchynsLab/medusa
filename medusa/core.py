@@ -1,5 +1,23 @@
-import os
+""" Module with core functionality of the ``medusa`` package,
+most importantly the ``Data`` classes. The ``BaseData`` class
+stores reconstructed data from videos and other (meta)data needed
+to further process, analyze, and visualize it. The reconstructed data
+from each model supported by ``medusa`` is stored in an object from
+a specific class which inherits from ``BaseData``. For example, 
+reconstructed data from
+`mediapipe <https://google.github.io/mediapipe/solutions/face_mesh.html>`_ is stored
+in using the ``MediapipeData`` class. Other classes include the ``FANData`` for
+reconstructions from `FAN <https://github.com/1adrianb/face-alignment>`_ and
+``FlameData`` for reconstructions from models using the 
+`FLAME topology <https://flame.is.tue.mpg.de/>`_ (such as 
+`EMOCA <https://emoca.is.tue.mpg.de/>`_).
 
+The data can be saved to disk as a `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_
+file (using `h5py <http://www.h5py.org/>`_) with the ``save`` method and loaded from
+disk using the ``load`` (static)method.   
+"""
+
+import os
 os.environ["DISPLAY"] = ":0.0"
 
 import cv2

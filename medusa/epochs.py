@@ -1,3 +1,7 @@
+""" Module with functionality to store epoched data and easy interaction with
+and transfer to `MNE <https://mne.tools/stable/index.html>`_. 
+"""
+
 import mne
 import numpy as np
 

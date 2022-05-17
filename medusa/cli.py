@@ -28,18 +28,8 @@ from .preproc.epoch import epoch
 @click.option("--render-on-video", is_flag=True, help="Plot recon on video background")
 @click.option("--render-crop", is_flag=True, help="Render cropping results")
 @click.option("-n", "--n-frames", default=None, type=click.INT, help="Number of frames to reconstruct")
-def videorecon_cmd(
-    video_path,
-    events_path,
-    recon_model_name,
-    cfg,
-    device,
-    out_dir,
-    render_recon,
-    render_on_video,
-    render_crop,
-    n_frames,
-):
+def videorecon_cmd(video_path, events_path, recon_model_name, cfg, device, out_dir,
+                   render_recon, render_on_video, render_crop, n_frames):
     videorecon(**locals())
 
 
@@ -48,7 +38,7 @@ def videorecon_cmd(
 @click.option("--algorithm", default="icp", type=click.Choice(["icp", "umeyama"]))
 @click.option("--qc", is_flag=True, help="Generate QC plot")
 def align_cmd(data, algorithm, qc):
-    align(**locals())
+    align(data, algorithm, qc)
 
 
 @click.command()
@@ -60,7 +50,7 @@ def align_cmd(data, algorithm, qc):
     default="pchip",
 )
 def resample_cmd(data, sampling_freq, kind):
-    resample(**locals())
+    resample(data, sampling_freq, kind)
 
 
 @click.command()
@@ -68,7 +58,7 @@ def resample_cmd(data, sampling_freq, kind):
 @click.option("-l", "--low-pass", default=4, help="Low-pass filter in Hz")
 @click.option("-h", "--high-pass", default=0.005, help="High-pass filter in Hz")
 def filter_cmd(data, low_pass, high_pass):
-    filter(**locals())
+    filter(data, low_pass, high_pass)
 
 
 @click.command()
@@ -77,7 +67,7 @@ def filter_cmd(data, low_pass, high_pass):
 @click.option("-e", "--end", default=3.0, help="End of epoch")
 @click.option("-p", "--period", default=0.1, help="Period of epoch")
 def epoch_cmd(data, start, end, period):
-    epoch(**locals())
+    epoch(data, start, end, period)
 
 
 @click.command()
@@ -89,9 +79,7 @@ def epoch_cmd(data, start, end, period):
 @click.option("--alpha", default=None, type=click.FLOAT, help="Alpha (transparency) of face")
 @click.option("--scaling", default=None, type=click.FLOAT, help="Scale factor")
 @click.option("--fmt", default="gif", help="Output video format")
-def videorender_cmd(
-    h5_path, video, n_frames, no_smooth, wireframe, alpha, scaling, fmt
-):
+def videorender_cmd(h5_path, video, n_frames, no_smooth, wireframe, alpha, scaling, fmt):
     """Renders the reconstructed vertices as a video."""
 
     h5_path = Path(h5_path)
