@@ -5,56 +5,56 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Python interfaces &#8212; Medusa: 3D face reconstruction and analysis</title>
+    <title>medusa.preproc.resample &#8212; Medusa: 3D face reconstruction and analysis</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <link href="../../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     
       
 
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <link rel="preload" as="script" href="../../../../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../_static/copybutton.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../../../../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../../../../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="medusa.data" href="python/data/index.html" />
-    <link rel="prev" title="Command-line interface" href="cli.html" />
+    <script async="async" src="../../../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="medusa.recon" href="../../recon/index.html" />
+    <link rel="prev" title="medusa.preproc.recon" href="../recon/index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -74,26 +74,26 @@ const thebe_selector_output = ".output, .cell_output"
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+    <a class="navbar-brand text-wrap" href="../../../../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
         
       
       
-      <img src="../_static/logo.png" class="logo" alt="logo">
+      <img src="../../../../_static/logo.png" class="logo" alt="logo">
       
       
       <h1 class="site-logo" id="site-title">Medusa: 3D face reconstruction and analysis</h1>
       
     </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+</div><form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../index.html">
+  <a class="reference internal" href="../../../../index.html">
    Welcome to Medusa!
   </a>
  </li>
@@ -105,7 +105,7 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../getting_started/installation.html">
+  <a class="reference internal" href="../../../../getting_started/installation.html">
    Installation
   </a>
  </li>
@@ -117,7 +117,7 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../tutorials/example_tutorial.html">
+  <a class="reference internal" href="../../../../tutorials/example_tutorial.html">
    Example tutorial
   </a>
  </li>
@@ -129,12 +129,12 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="cli.html">
+  <a class="reference internal" href="../../../cli.html">
    Command-line interface
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
-  <a class="current reference internal" href="#">
+  <a class="reference internal" href="../../../python.html">
    Python interfaces
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -142,9 +142,9 @@ const thebe_selector_output = ".output, .cell_output"
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="python/data/index.html">
+    <a class="reference internal" href="../../data/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.data
@@ -153,7 +153,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/epochs/index.html">
+    <a class="reference internal" href="../../epochs/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.epochs
@@ -162,7 +162,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/io/index.html">
+    <a class="reference internal" href="../../io/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.io
@@ -170,22 +170,22 @@ const thebe_selector_output = ".output, .cell_output"
      </code>
     </a>
    </li>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="python/preproc/index.html">
+   <li class="toctree-l2 current active has-children">
+    <a class="reference internal" href="../index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.preproc
       </span>
      </code>
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
     <label for="toctree-checkbox-2">
      <i class="fas fa-chevron-down">
      </i>
     </label>
-    <ul>
+    <ul class="current">
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/align/index.html">
+      <a class="reference internal" href="../align/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.align
@@ -194,7 +194,7 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/epoch/index.html">
+      <a class="reference internal" href="../epoch/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.epoch
@@ -203,7 +203,7 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/filter/index.html">
+      <a class="reference internal" href="../filter/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.filter
@@ -212,7 +212,7 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/recon/index.html">
+      <a class="reference internal" href="../recon/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.recon
@@ -220,8 +220,8 @@ const thebe_selector_output = ".output, .cell_output"
        </code>
       </a>
      </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/resample/index.html">
+     <li class="toctree-l3 current active">
+      <a class="current reference internal" href="#">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.resample
@@ -232,7 +232,7 @@ const thebe_selector_output = ".output, .cell_output"
     </ul>
    </li>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="python/recon/index.html">
+    <a class="reference internal" href="../../recon/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.recon
@@ -246,7 +246,7 @@ const thebe_selector_output = ".output, .cell_output"
     </label>
     <ul>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="python/recon/emoca/index.html">
+      <a class="reference internal" href="../../recon/emoca/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.emoca
@@ -260,7 +260,7 @@ const thebe_selector_output = ".output, .cell_output"
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/emoca/models/index.html">
+        <a class="reference internal" href="../../recon/emoca/models/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.emoca.models
@@ -269,7 +269,7 @@ const thebe_selector_output = ".output, .cell_output"
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/emoca/emoca/index.html">
+        <a class="reference internal" href="../../recon/emoca/emoca/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.emoca.emoca
@@ -278,7 +278,7 @@ const thebe_selector_output = ".output, .cell_output"
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/emoca/lbs/index.html">
+        <a class="reference internal" href="../../recon/emoca/lbs/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.emoca.lbs
@@ -289,7 +289,7 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="python/recon/mpipe/index.html">
+      <a class="reference internal" href="../../recon/mpipe/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.mpipe
@@ -303,7 +303,7 @@ const thebe_selector_output = ".output, .cell_output"
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/mpipe/mpipe/index.html">
+        <a class="reference internal" href="../../recon/mpipe/mpipe/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.mpipe.mpipe
@@ -312,7 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/mpipe/transforms/index.html">
+        <a class="reference internal" href="../../recon/mpipe/transforms/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.mpipe.transforms
@@ -323,7 +323,7 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/recon/fan/index.html">
+      <a class="reference internal" href="../../recon/fan/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.fan
@@ -334,7 +334,7 @@ const thebe_selector_output = ".output, .cell_output"
     </ul>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/render/index.html">
+    <a class="reference internal" href="../../render/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
@@ -343,7 +343,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/transforms/index.html">
+    <a class="reference internal" href="../../transforms/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.transforms
@@ -352,7 +352,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/utils/index.html">
+    <a class="reference internal" href="../../utils/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.utils
@@ -403,9 +403,9 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/api/python.md"><button type="button"
+        <a class="dropdown-buttons" href="../../../../_sources/api/python/preproc/resample/index.rst"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
+                data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
                 onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -423,10 +423,10 @@ const thebe_selector_output = ".output, .cell_output"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/preproc/resample/index.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/api/python.md"><button
+        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/api/python/preproc/resample/index.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -446,6 +446,19 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-contents">
+   Module Contents
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -453,21 +466,61 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Python interfaces</h1>
+                <h1>medusa.preproc.resample</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-contents">
+   Module Contents
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="python-interfaces">
-<h1>Python interfaces<a class="headerlink" href="#python-interfaces" title="Permalink to this headline">¶</a></h1>
-<p>Check out the interface!</p>
-<div class="toctree-wrapper compound">
+  <div class="section" id="module-medusa.preproc.resample">
+<span id="medusa-preproc-resample"></span><h1><a class="reference internal" href="#module-medusa.preproc.resample" title="medusa.preproc.resample"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.resample</span></code></a><a class="headerlink" href="#module-medusa.preproc.resample" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="medusa.preproc.resample.logger">
+<span class="sig-prename descclassname"><span class="pre">medusa.preproc.resample.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#medusa.preproc.resample.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="medusa.preproc.resample.resample">
+<span class="sig-prename descclassname"><span class="pre">medusa.preproc.resample.</span></span><span class="sig-name descname"><span class="pre">resample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pchip'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.resample.resample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resamples the data to a given sampling rate.
+This function can be used to resample the time points
+to a higher temporal resolution and/or a constant
+sampling period, which may not be the case for data
+that is acquired using a webcam.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>str</em><em>, </em><em>Data</em>) – Either a path (str, pathlib.Path) to a <cite>gmfx</cite> hdf5 data file
+or a gmfx.io.Data object (i.e., data loaded from the hdf5 file)</p></li>
+<li><p><strong>sampling_freq</strong> (<em>int</em>) – Desired sampling frequency (in Hz); if <cite>None</cite> (default), the inverse
+of the (average) sampling period will be used</p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – Kind of interpolation to use, either ‘pchip’ (default), ‘linear’, ‘quadratic’,
+or ‘cubic’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
@@ -484,7 +537,7 @@ const thebe_selector_output = ".output, .cell_output"
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./api"
+            path: "./api/python/preproc/resample"
         },
         predefinedOutput: true
     }
@@ -496,17 +549,17 @@ const thebe_selector_output = ".output, .cell_output"
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="cli.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../recon/index.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Command-line interface</p>
+            <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.recon</span></code></p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="python/data/index.html" title="next page">
+    <a class='right-next' id="next-link" href="../../recon/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -528,7 +581,7 @@ const thebe_selector_output = ".output, .cell_output"
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <script src="../../../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
   </body>
 </html>
