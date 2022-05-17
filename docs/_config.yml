@@ -67,9 +67,9 @@ launch_buttons:
 # Advanced and power-user settings
 sphinx:
   extra_extensions          : # A list of extra extensions to load by Sphinx (added to those already used by JB).
-    - 'autoapi.extension'  
+    - 'autoapi.extension'     # Need to enable autoapi in JB too, otherwise it errors with a specific autoapi directive
   local_extensions          : # A list of local extensions to load by sphinx specified by "name: path" items
   recursive_update          : false # A boolean indicating whether to overwrite the Sphinx config (true) or recursively update (false)
   config                    :
-    autoapi_dirs: ["mock"]
+    autoapi_dirs: ["../medusa"]  # needed for top-level module docstrings (but not used)
     autoapi_generate_api_docs: False

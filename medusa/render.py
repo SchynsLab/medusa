@@ -1,5 +1,7 @@
-"""
+""" Module with functionality to render 4D face mesh data. 
 
+The ``Renderer`` class is a high-level wrapper around functionality from the
+excellent `pyrender <https://pyrender.readthedocs.io>`_ package.
 """
 
 import numpy as np
