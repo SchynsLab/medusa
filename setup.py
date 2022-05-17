@@ -35,19 +35,27 @@ opts = dict(
         "click",
         "pandas",
         "numpy",
+        "tqdm",
         "imageio",
         "imageio-ffmpeg",
         "opencv-python",
-        "tqdm",
         "matplotlib",
         "scikit-image",
+        "scikit-learn",
         "face_alignment",
         "pyyaml",
+        "mne",
         "h5py",
         "tables",  # to use hdf5 with pandas
         "trimesh",
+        "pyrender",
+        "mediapipe",
+        "mne",
         "chumpy",  # for FLAME model .. really necessary?
     ],
+    extras_require = {
+        'full': ['mne']
+    }
     entry_points={
         "console_scripts": [
             "medusa_videorecon = medusa.cli:videorecon_cmd",
