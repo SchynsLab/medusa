@@ -3,32 +3,8 @@ FAN:
     lm_type: 2D
     face_detector: sfd
 
-DECA:
+EMOCA:
     model_path: ext_data/EMOCA/emoca.ckpt
     topology_path: ext_data/FLAME/geometry/head_template.obj
-    use_tex: True
-    uv_size: 256
-    image_size: 224
-    face_eye_mask_path: ext_data/FLAME/mask/uv_face_eye_mask.png
-    face_mask_path: ext_data/FLAME/mask/uv_face_mask.png
-    fixed_displacement_path: ext_data/FLAME/geometry/fixed_uv_displacements/fixed_displacement_256.npy
-
-E_flame:
-    n_shape: 100
-    n_exp: 50
-    n_tex: 50
-    n_cam: 3
-    n_pose: 6
-    n_light: 27
-
-E_detail:
-    n_detail: 128
-
-D_flame:
     flame_model_path: ext_data/FLAME/geometry/generic_model.pkl
-    flame_lmk_embedding_path: ext_data/FLAME/geometry/landmark_embedding.npy
-    tex_type: BFM
     tex_path: ext_data/FLAME/FLAME_albedo_from_BFM.npz
-
-D_detail:
-    max_z: 0.01

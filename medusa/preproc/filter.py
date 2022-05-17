@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 from scipy.signal import butter, sosfilt
 
-from ..data import load_h5
+from ..core import load_h5
 from ..utils import get_logger
 
 

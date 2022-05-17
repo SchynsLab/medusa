@@ -9,45 +9,25 @@
 import click
 from pathlib import Path
 
+from .core import load_h5
 from .preproc.recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
 from .preproc.filter import filter
 from .preproc.epoch import epoch
-from .data import load_h5
 
-
+# fmt: off
 @click.command()
 @click.argument("video_path", type=click.Path(exists=True, dir_okay=False))
-@click.option(
-    "-e", "--events-path", default=None, type=click.Path(exists=True, dir_okay=False)
-)
-@click.option(
-    "-r",
-    "--recon-model-name",
-    default="emoca",
-    type=click.Choice(["emoca", "mediapipe", "FAN-3D"]),
-)
-@click.option(
-    "-c", "--cfg", default=None, type=click.STRING, help="Path to recon config file"
-)
-@click.option(
-    "--device",
-    default="cuda",
-    type=click.Choice(["cpu", "cuda"]),
-    help="Device to run recon on",
-)
+@click.option("--events-path", default=None, type=click.Path(exists=True, dir_okay=False))
+@click.option("-r", "--recon-model-name", default="emoca", type=click.Choice(["emoca", "mediapipe", "FAN-3D"]))
+@click.option("-c", "--cfg", default=None, type=click.STRING, help="Path to recon config file")
+@click.option("--device", default="cuda", type=click.Choice(["cpu", "cuda"]), help="Device to run recon on")
 @click.option("-o", "--out-dir", type=click.Path(), help="Output directory")
 @click.option("--render-recon", is_flag=True, help="Plot recon on video background")
 @click.option("--render-on-video", is_flag=True, help="Plot recon on video background")
 @click.option("--render-crop", is_flag=True, help="Render cropping results")
-@click.option(
-    "-n",
-    "--n-frames",
-    default=None,
-    type=click.INT,
-    help="Number of frames to reconstruct",
-)
+@click.option("-n", "--n-frames", default=None, type=click.INT, help="Number of frames to reconstruct")
 def videorecon_cmd(
     video_path,
     events_path,
@@ -103,18 +83,10 @@ def epoch_cmd(data, start, end, period):
 @click.command()
 @click.argument("h5_path")
 @click.option("-v", "--video", type=click.Path(exists=True, dir_okay=False))
-@click.option(
-    "-n",
-    "--n-frames",
-    default=None,
-    type=click.INT,
-    help="Number of frames to render (default is all)",
-)
+@click.option("-n", "--n-frames", default=None, type=click.INT, help="Number of frames to render (default is all)")
 @click.option("--no-smooth", is_flag=True, help="Do not render smooth surface")
 @click.option("--wireframe", is_flag=True, help="Render wireframe instead of mesh")
-@click.option(
-    "--alpha", default=None, type=click.FLOAT, help="Alpha (transparency) of face"
-)
+@click.option("--alpha", default=None, type=click.FLOAT, help="Alpha (transparency) of face")
 @click.option("--scaling", default=None, type=click.FLOAT, help="Scale factor")
 @click.option("--fmt", default="gif", help="Output video format")
 def videorender_cmd(
@@ -135,3 +107,4 @@ def videorender_cmd(
         n_frames=n_frames,
         alpha=alpha,
     )
+# fmt: on

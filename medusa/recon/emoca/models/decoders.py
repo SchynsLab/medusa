@@ -19,7 +19,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
-from ..lbs import lbs, batch_rodrigues, rot_mat_to_euler
+from ..lbs import lbs
 
 
 class Generator(nn.Module):
@@ -191,7 +191,6 @@ class FLAMETex(nn.Module):
         texture_mean = tex_space["MU"].reshape(1, -1)
         texture_basis = tex_space["PC"].reshape(-1, 199)  # 199 comp
 
-        num_components = texture_basis.shape[1]
         texture_mean = torch.from_numpy(texture_mean).float()[None, ...]
         texture_basis = torch.from_numpy(texture_basis[:, :n_tex]).float()[None, ...]
         self.register_buffer("texture_mean", texture_mean)

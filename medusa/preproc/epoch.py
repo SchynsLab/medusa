@@ -5,7 +5,7 @@ from datetime import datetime
 from scipy.interpolate import interp1d
 
 from ..utils import get_logger
-from ..data import load_h5
+from ..core import load_h5
 from ..epochs import EpochsArray
 
 

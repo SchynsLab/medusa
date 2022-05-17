@@ -40,7 +40,7 @@ class EMOCA(torch.nn.Module):
         self.device = device
         self.package_root = Path(__file__).parents[2].resolve()
         self._load_cfg(cfg)  # sets self.cfg
-        self._image_size = self.cfg["DECA"]["image_size"]
+        self._crop_img_size = (224, 224)
         self._create_submodels()
 
     def _load_cfg(self, cfg):
@@ -69,50 +69,44 @@ class EMOCA(torch.nn.Module):
         """
 
         # set up parameter list and dict
-        self.param_list = ["shape", "tex", "exp", "pose", "cam", "light"]
-        self.num_list = [self.cfg["E_flame"][f"n_{param}"] for param in self.param_list]
         self.param_dict = {
-            self.param_list[i]: self.num_list[i] for i in range(len(self.param_list))
+            "n_shape": 100,
+            "n_tex": 50,
+            "n_exp": 50,
+            "n_pose": 6,
+            "n_cam": 3,
+            "n_light": 27,
         }
-        self.n_param = sum(self.num_list)
+
+        self.n_param = sum(n for n in self.param_dict.values())
 
         # encoders
         self.E_flame = ResnetEncoder(outsize=self.n_param).to(self.device)
-        self.E_expression = ResnetEncoder(self.cfg["E_flame"]["n_exp"])
-        self.E_detail = ResnetEncoder(outsize=self.cfg["E_detail"]["n_detail"]).to(
-            self.device
-        )
+        self.E_expression = ResnetEncoder(self.param_dict["n_exp"])
+        self.E_detail = ResnetEncoder(outsize=128).to(self.device)
 
         # decoders
-        self.D_flame = FLAME(
-            self.cfg["D_flame"],
-            self.cfg["E_flame"]["n_shape"],
-            self.cfg["E_flame"]["n_exp"],
-        ).to(self.device)
+        self.D_flame = FLAME(self.cfg["EMOCA"], n_shape=100, n_exp=50).to(self.device)
+        self.D_flame_tex = FLAMETex(self.cfg["EMOCA"], n_tex=50).to(self.device)
 
-        if self.cfg["DECA"]["use_tex"]:
-            self.D_flame_tex = FLAMETex(
-                self.cfg["D_flame"], self.cfg["E_flame"]["n_tex"]
-            ).to(self.device)
-
-        latent_dim = self.cfg["E_detail"]["n_detail"] + self.cfg["E_flame"]["n_exp"] + 3
+        latent_dim = 128 + 50 + 3  # (n_detail, n_exp, n_cam)
         self.D_detail = Generator(
             latent_dim=latent_dim,
             out_channels=1,
-            out_scale=self.cfg["D_detail"]["max_z"],
+            out_scale=0.01,
             sample_mode="bilinear",
         ).to(self.device)
 
         # Load weights from checkpoint and apply to models
-        model_path = self.cfg["DECA"]["model_path"]
-        checkpoint = torch.load(model_path)
+        checkpoint = torch.load(self.cfg["EMOCA"]["model_path"])
 
         self.E_flame.load_state_dict(checkpoint["E_flame"])
         self.E_detail.load_state_dict(checkpoint["E_detail"])
         self.E_expression.load_state_dict(checkpoint["E_expression"])
         self.D_detail.load_state_dict(checkpoint["D_detail"])
 
-        self.E_expression.cuda()  # for some reason E_exp should be explicitly cast to cuda
+        # for some reason E_exp should be explicitly cast to cuda
+        self.E_expression.cuda()
 
         # Set everything to 'eval' (inference) mode
         self.E_flame.eval()
@@ -168,7 +162,8 @@ class EMOCA(torch.nn.Module):
         enc_dict = {}
         start = 0
         for key in num_dict:
-            end = start + int(num_dict[key])
+            key = key[2:]  # trim off n_
+            end = start + int(num_dict["n_" + key])
             enc_dict[key] = parameters[:, start:end]
             start = end
             if key == "light":
@@ -183,12 +178,6 @@ class EMOCA(torch.nn.Module):
 
         Parameters
         ----------
-        tform : torch.Tensor
-            A Torch tensor containing the similarity transform parameters
-            that map points on the cropped image to the uncropped image; this
-            is availabe from the `tform_params` attribute of the initialized
-            FAN object (e.g., `fan.tform_params`); if `None`, the vertices
-            will not be transformed to the original image space
         orig_size : tuple
             Tuple containing the original image size (height, width), i.e.,
             before cropping; needed to transform and render the mesh in the
@@ -213,7 +202,6 @@ class EMOCA(torch.nn.Module):
             expression_params=enc_dict["exp"],
             pose_params=enc_dict["pose"],
         )
-
         # Note that `v` is in world space, but pose (global rotation only)
         # is already applied
         v = v.cpu().numpy().squeeze()
@@ -254,8 +242,8 @@ class EMOCA(torch.nn.Module):
         # Note that we need this twice: one for the 'forward' transform (world -> crop raster space)
         # and one for the 'backward' transform (full image raster space -> world)
 
-        OP = create_ortho_matrix(224, 224)  # forward
-        VP = create_viewport_matrix(224, 224)  # forward
+        OP = create_ortho_matrix(*self._crop_img_size)  # forward
+        VP = create_viewport_matrix(*self._crop_img_size)  # forward
         CP = crop_matrix_to_3d(self.tform)  # crop matrix
         VP_ = create_viewport_matrix(*self.img_size)  # backward
         OP_ = create_ortho_matrix(*self.img_size)  # backward

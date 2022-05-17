@@ -6,7 +6,7 @@ from trimesh.registration import icp, procrustes
 from skimage.transform._geometric import _umeyama
 from trimesh.transformations import decompose_matrix, transform_points, compose_matrix
 
-from ..data import load_h5
+from ..core import load_h5
 from ..utils import get_logger
 
 

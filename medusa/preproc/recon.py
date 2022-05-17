@@ -1,9 +1,10 @@
 import numpy as np
+from pathlib import Path
 from collections import defaultdict
 
 from ..recon import EMOCA, FAN, Mediapipe
 from ..io import VideoData
-from ..data import MODEL2CLS
+from ..core import MODEL2CLS
 from ..utils import get_logger
 
 logger = get_logger()
@@ -73,6 +74,8 @@ def videorecon(
 
     if out_dir is None:
         out_dir = video.path.parent
+    else:
+        out_dir = Path(out_dir)
 
     out_dir.mkdir(exist_ok=True, parents=True)
     f_out = str(out_dir / str(video.path.name).replace(".mp4", "_desc-recon"))

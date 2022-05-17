@@ -15,7 +15,6 @@
 
 import numpy as np
 import torch.nn as nn
-from torch.nn.parameter import Parameter
 
 
 class ResNet(nn.Module):

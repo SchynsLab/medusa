@@ -2,18 +2,18 @@ import logging
 
 
 def get_logger(verbose="INFO"):
-    """ Create a Python logger.
-    
+    """Create a Python logger.
+
     Parameters
     ----------
     verbose : str
         Logging level ("INFO", "DEBUG", "WARNING")
-    
+
     Returns
     -------
     logger : logging.Logger
         A Python logger
-    
+
     Examples
     --------
     >>> logger = get_logger()
