@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: "Medusa: 3D face reconstruction and analysis"
+title: "Medusa"
 author: Lukas Snoek
 copyright: "2022"
 logo: logo.png
@@ -47,7 +47,7 @@ html:
   use_issues_button         : true  # Whether to add an "open an issue" button
   use_multitoc_numbering    : true   # Continuous numbering across parts/chapters
   extra_navbar              : Powered by <a href="https://jupyterbook.org">Jupyter Book</a>  # Will be displayed underneath the left navbar.
-  extra_footer              : ""  # Will be displayed underneath the footer.
+  extra_footer              : "Developed at the University of Glasgow"  # Will be displayed underneath the footer.
   google_analytics_id       : ""  # A GA id that can be used to track book views.
   home_page_in_navbar       : true  # Whether to include your home page in the left Navigation Bar
   baseurl                   : ""  # The base URL where your book will be hosted. Used for creating image previews and social links. e.g.: https://mypage.com/mybook/
@@ -67,6 +67,6 @@ launch_buttons:
 # Advanced and power-user settings
 sphinx:
   extra_extensions          : # A list of extra extensions to load by Sphinx (added to those already used by JB). 
-  local_extensions          :   # A list of local extensions to load by sphinx specified by "name: path" items
+  local_extensions          : # A list of local extensions to load by sphinx specified by "name: path" items
   recursive_update          : false # A boolean indicating whether to overwrite the Sphinx config (true) or recursively update (false)
   config                    :
