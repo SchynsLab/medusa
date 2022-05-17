@@ -13,8 +13,8 @@ Module Contents
    Implementation based on https://stackoverflow.com/questions/
    12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter
 
-   :param data: Either a path (str, pathlib.Path) to a `gmfx` hdf5 data file
-                or a gmfx.io.Data object (i.e., data loaded from the hdf5 file)
+   :param data: Either a path (``str`` or ``pathlib.Path``) to a ``medusa`` hdf5
+                data file or a ``Data`` object (like ``FlameData`` or ``MediapipeData``)
    :type data: str, Data
    :param low_pass: Low-pass cutoff (in Hz)
    :type low_pass: float

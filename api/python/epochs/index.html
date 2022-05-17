@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>medusa.epochs &#8212; Medusa: 3D face reconstruction and analysis</title>
+    <title>medusa.epochs &#8212; Medusa</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -83,7 +83,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../../../_static/logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">Medusa: 3D face reconstruction and analysis</h1>
+      <h1 class="site-logo" id="site-title">Medusa</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
@@ -94,7 +94,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../../index.html">
-   Welcome to Medusa!
+   Medusa: 4D face reconstruction and analysis
   </a>
  </li>
 </ul>
@@ -135,7 +135,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="../../python.html">
-   Python interfaces
+   Python interface
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -499,7 +499,7 @@ const thebe_selector_output = ".output, .cell_output"
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.epochs.</span></span><span class="sig-name descname"><span class="pre">EpochsArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.epochs.EpochsArray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">mne.epochs.EpochsArray</span></code></p>
 <p>Custom EpochsArray, with some extra functionality to interact with
-gmfx.</p>
+medusa.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -511,9 +511,9 @@ MNE EPochsArray (the base class)</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="medusa.epochs.EpochsArray.from_gmfx">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_gmfx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includes_motion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.epochs.EpochsArray.from_gmfx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Classmethod to initalize an EpochsArray from gmfx data.</p>
+<dt class="sig sig-object py" id="medusa.epochs.EpochsArray.from_medusa">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_medusa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includes_motion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.epochs.EpochsArray.from_medusa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classmethod to initalize an EpochsArray from medusa data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -622,6 +622,9 @@ as values; the values correspond to the third column of <cite>events_</cite></p>
       By Lukas Snoek<br/>
     
         &copy; Copyright 2022.<br/>
+      <div class="extra_footer">
+        Developed at the University of Glasgow
+      </div>
   </p>
 </footer>
 </main>

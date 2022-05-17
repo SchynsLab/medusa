@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Installation &#8212; Medusa: 3D face reconstruction and analysis</title>
+    <title>Installation &#8212; Medusa</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,7 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Example tutorial" href="../tutorials/example_tutorial.html" />
-    <link rel="prev" title="Welcome to Medusa!" href="../index.html" />
+    <link rel="prev" title="Medusa: 4D face reconstruction and analysis" href="../index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -83,7 +83,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../_static/logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">Medusa: 3D face reconstruction and analysis</h1>
+      <h1 class="site-logo" id="site-title">Medusa</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -94,7 +94,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../index.html">
-   Welcome to Medusa!
+   Medusa: 4D face reconstruction and analysis
   </a>
  </li>
 </ul>
@@ -135,7 +135,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../api/python.html">
-   Python interfaces
+   Python interface
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -446,6 +446,24 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#download-deca">
+   Download DECA
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-the-command-line-interface-cli">
+   Using the command line interface (CLI)
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -458,6 +476,24 @@ const thebe_selector_output = ".output, .cell_output"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#download-deca">
+   Download DECA
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-the-command-line-interface-cli">
+   Using the command line interface (CLI)
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -466,6 +502,44 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>We strongly recommend to install the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package in a separate <a class="reference external" href="https://anaconda.org/anaconda/conda">conda environment</a>. Assuming you have access to the <code class="docutils literal notranslate"><span class="pre">conda</span></code> (by installing <a class="reference external" href="https://www.anaconda.com/products/distribution">Anaconda</a> or <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>), run the following in your terminal to create a new environment named <code class="docutils literal notranslate"><span class="pre">medusa</span></code> with Python version 3.9:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">medusa</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
+</pre></div>
+</div>
+<p>Then, activate the environment and install <code class="docutils literal notranslate"><span class="pre">pytorch</span></code> (used by the 3D reconstruction model) as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">medusa</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">pytorch</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.3</span> <span class="o">-</span><span class="n">c</span> <span class="n">pytorch</span>
+</pre></div>
+</div>
+<p>The next step is to download the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package from Github, either as <a class="reference external" href="https://github.com/lukassnoek/medusa/archive/refs/heads/master.zip">zip file</a> (which you need to extract afterwards) or using <code class="docutils literal notranslate"><span class="pre">git</span></code> (i.e., <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/lukassnoek/medusa.git</span></code>). Finally, again assuming you’re in the root of the downloaded repository (and you have the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> conda environment activated), run the following command to install <code class="docutils literal notranslate"><span class="pre">medusa</span></code> and its dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>At this point, the package’s CLI tools (e.g., <code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code>) and Python API should be available. To verify, run the following commands in your terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">medusa_videorecon</span> <span class="o">--</span><span class="n">help</span>  <span class="c1"># to verify the CLI (should print out options)</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import medusa&#39;</span>  <span class="c1"># to verify the Python API (shouldn&#39;t error)</span>
+</pre></div>
+</div>
+<div class="section" id="download-deca">
+<h2>Download DECA<a class="headerlink" href="#download-deca" title="Permalink to this headline">¶</a></h2>
+<p>If you are on one of Glasgow’s “deepnet” servers and have access to <code class="docutils literal notranslate"><span class="pre">Project0294</span></code> (if not, ask Oliver), you can simply copy the EMOCA model and associated files as follows (assuming you’re currently in the root of the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">/</span><span class="n">analyse</span><span class="o">/</span><span class="n">Project0294</span><span class="o">/</span><span class="n">medusa_data</span><span class="o">/</span><span class="n">data</span><span class="o">/*</span> <span class="n">medusa</span><span class="o">/</span><span class="n">recon</span><span class="o">/</span><span class="n">deca</span><span class="o">/</span><span class="n">data</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>If not … TBD</p>
+</div>
+<div class="section" id="using-the-command-line-interface-cli">
+<h2>Using the command line interface (CLI)<a class="headerlink" href="#using-the-command-line-interface-cli" title="Permalink to this headline">¶</a></h2>
+<p>The command line interface can be used to preprocess video data step by step. The first step, reconstruction of the video frames into 3D meshes, assumes the following directory structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data
+└── sub-01
+    ├── sub-01_task-mini_events.tsv
+    ├── sub-01_task-mini_frametimes.tsv
+    └── sub-01_task-mini.mp4
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">data</span></code> is the toplevel directory, which contains one or more subject-level directories (e.g., <code class="docutils literal notranslate"><span class="pre">sub-01</span></code>). Each subject directory contains at least a video file (for now, only <code class="docutils literal notranslate"><span class="pre">mp4</span></code> files are allowed) ending in <code class="docutils literal notranslate"><span class="pre">_video.mp4</span></code> and a “frame times” file ending in <code class="docutils literal notranslate"><span class="pre">_frametimes.tsv</span></code>. This tabular file (with tab separators) should contain a column named <code class="docutils literal notranslate"><span class="pre">t</span></code> which contains, for every frame in the video, the time in seconds of the acquisition of the frame. The file ending in <code class="docutils literal notranslate"><span class="pre">_events.tsv</span></code> is not strictly necessary for preprocessing, but is needed for the analysis phase.</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -497,7 +571,7 @@ const thebe_selector_output = ".output, .cell_output"
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Welcome to Medusa!</p>
+            <p class="prev-next-title">Medusa: 4D face reconstruction and analysis</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../tutorials/example_tutorial.html" title="next page">
@@ -517,6 +591,9 @@ const thebe_selector_output = ".output, .cell_output"
       By Lukas Snoek<br/>
     
         &copy; Copyright 2022.<br/>
+      <div class="extra_footer">
+        Developed at the University of Glasgow
+      </div>
   </p>
 </footer>
 </main>

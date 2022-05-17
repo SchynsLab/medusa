@@ -12,7 +12,7 @@ Module Contents
    Bases: :py:obj:`mne.epochs.EpochsArray`
 
    Custom EpochsArray, with some extra functionality to interact with
-   gmfx.
+   medusa.
 
    :param args: Positional parameters to be passed to initialization of the
                 MNE EPochsArray (the base class)
@@ -21,10 +21,10 @@ Module Contents
                   MNE EPochsArray (the base class)
    :type kwargs: list
 
-   .. py:method:: from_gmfx(cls, v, sf, events=None, frame_t=None, tmin=-0.5, includes_motion=False)
+   .. py:method:: from_medusa(cls, v, sf, events=None, frame_t=None, tmin=-0.5, includes_motion=False)
       :classmethod:
 
-      Classmethod to initalize an EpochsArray from gmfx data.
+      Classmethod to initalize an EpochsArray from medusa data.
 
       :param v: A 4D numpy array of shape N (events/trails) x T (time points)
                 x nV (number of vertices) x 3 (X, Y, Z)

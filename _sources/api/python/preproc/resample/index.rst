@@ -20,8 +20,8 @@ Module Contents
    sampling period, which may not be the case for data
    that is acquired using a webcam.
 
-   :param data: Either a path (str, pathlib.Path) to a `gmfx` hdf5 data file
-                or a gmfx.io.Data object (i.e., data loaded from the hdf5 file)
+   :param data: Either a path (``str`` or ``pathlib.Path``) to a ``medusa`` hdf5
+                data file or a ``Data`` object (like ``FlameData`` or ``MediapipeData``)
    :type data: str, Data
    :param sampling_freq: Desired sampling frequency (in Hz); if `None` (default), the inverse
                          of the (average) sampling period will be used

@@ -11,8 +11,8 @@ Module Contents
 
    Aligment of 3D meshes over time.
 
-   :param data: Either a path (str, pathlib.Path) to a `gmfx` hdf5 data file
-                or a gmfx.io.Data object (i.e., data loaded from the hdf5 file)
+   :param data: Either a path (``str`` or ``pathlib.Path``) to a ``medusa`` hdf5
+                data file or a ``Data`` object (like ``FlameData`` or ``MediapipeData``)
    :type data: str, Data
    :param algorithm: Either 'icp' or 'umeyama'
    :type algorithm: str

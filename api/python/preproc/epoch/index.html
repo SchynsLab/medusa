@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>medusa.preproc.epoch &#8212; Medusa: 3D face reconstruction and analysis</title>
+    <title>medusa.preproc.epoch &#8212; Medusa</title>
     
   <link href="../../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -83,7 +83,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../../../../_static/logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">Medusa: 3D face reconstruction and analysis</h1>
+      <h1 class="site-logo" id="site-title">Medusa</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
@@ -94,7 +94,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../../../index.html">
-   Welcome to Medusa!
+   Medusa: 4D face reconstruction and analysis
   </a>
  </li>
 </ul>
@@ -135,7 +135,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="../../../python.html">
-   Python interfaces
+   Python interface
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -501,8 +501,8 @@ const thebe_selector_output = ".output, .cell_output"
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>str</em><em>, </em><em>Data</em>) – Either a path (str, pathlib.Path) to a <cite>gmfx</cite> hdf5 data file
-or a gmfx.io.Data object (i.e., data loaded from the hdf5 file)</p></li>
+<li><p><strong>data</strong> (<em>str</em><em>, </em><em>Data</em>) – Either a path (<code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) to a <code class="docutils literal notranslate"><span class="pre">medusa</span></code> hdf5
+data file or a <code class="docutils literal notranslate"><span class="pre">Data</span></code> object (like <code class="docutils literal notranslate"><span class="pre">FlameData</span></code> or <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>)</p></li>
 <li><p><strong>start</strong> (<em>float</em>) – Start of the epoch (in seconds) relative to stimulus onset</p></li>
 <li><p><strong>end</strong> (<em>float</em>) – End of the epoch (in seconds) relative to stimulus onset</p></li>
 <li><p><strong>align_peaks</strong> (<em>bool</em>) – Whether to align peaks across epochs (not implemented yet)</p></li>
@@ -571,6 +571,9 @@ of the epoch; if the second value is None, then the end is at stimulus onset
       By Lukas Snoek<br/>
     
         &copy; Copyright 2022.<br/>
+      <div class="extra_footer">
+        Developed at the University of Glasgow
+      </div>
   </p>
 </footer>
 </main>
