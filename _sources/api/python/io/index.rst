@@ -3,6 +3,13 @@
 
 .. py:module:: medusa.io
 
+.. autoapi-nested-parse::
+
+   Module with functionality (mostly) for working with video data.
+   The `VideoData` class allows for easy looping over frames of a video file,
+   which is used in the reconstruction process (e.g., in the ``videorecon`` function).
+
+
 
 Module Contents
 ---------------

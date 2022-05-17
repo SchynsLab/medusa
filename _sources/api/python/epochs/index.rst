@@ -3,6 +3,12 @@
 
 .. py:module:: medusa.epochs
 
+.. autoapi-nested-parse::
+
+   Module with functionality to store epoched data and easy interaction with
+   and transfer to `MNE <https://mne.tools/stable/index.html>`_.
+
+
 
 Module Contents
 ---------------

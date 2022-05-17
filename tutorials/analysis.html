@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Command-line interface &#8212; Medusa</title>
+    <title>Analysis &#8212; Medusa</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -53,8 +53,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Python interface" href="python.html" />
-    <link rel="prev" title="Analysis" href="../tutorials/analysis.html" />
+    <link rel="next" title="Command-line interface" href="../api/cli.html" />
+    <link rel="prev" title="Preprocessing" href="preprocessing.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -125,29 +125,29 @@ const thebe_selector_output = ".output, .cell_output"
   Tutorials
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../tutorials/reconstruction.html">
+  <a class="reference internal" href="reconstruction.html">
    Reconstruction
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../tutorials/data.html">
+  <a class="reference internal" href="data.html">
    Data representation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../tutorials/rendering.html">
+  <a class="reference internal" href="rendering.html">
    Rendering
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../tutorials/preprocessing.html">
+  <a class="reference internal" href="preprocessing.html">
    Preprocessing
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../tutorials/analysis.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Analysis
   </a>
  </li>
@@ -157,14 +157,14 @@ const thebe_selector_output = ".output, .cell_output"
   API documentation
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../api/cli.html">
    Command-line interface
   </a>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="python.html">
+  <a class="reference internal" href="../api/python.html">
    Python interface
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -174,7 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/core/index.html">
+    <a class="reference internal" href="../api/python/core/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.core
@@ -183,7 +183,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/data/index.html">
+    <a class="reference internal" href="../api/python/data/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.data
@@ -192,7 +192,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/epochs/index.html">
+    <a class="reference internal" href="../api/python/epochs/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.epochs
@@ -201,7 +201,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/io/index.html">
+    <a class="reference internal" href="../api/python/io/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.io
@@ -210,7 +210,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="python/preproc/index.html">
+    <a class="reference internal" href="../api/python/preproc/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.preproc
@@ -224,7 +224,7 @@ const thebe_selector_output = ".output, .cell_output"
     </label>
     <ul>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/align/index.html">
+      <a class="reference internal" href="../api/python/preproc/align/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.align
@@ -233,7 +233,7 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/epoch/index.html">
+      <a class="reference internal" href="../api/python/preproc/epoch/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.epoch
@@ -242,7 +242,7 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/filter/index.html">
+      <a class="reference internal" href="../api/python/preproc/filter/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.filter
@@ -251,7 +251,7 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/recon/index.html">
+      <a class="reference internal" href="../api/python/preproc/recon/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.recon
@@ -260,7 +260,7 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/resample/index.html">
+      <a class="reference internal" href="../api/python/preproc/resample/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.preproc.resample
@@ -271,7 +271,7 @@ const thebe_selector_output = ".output, .cell_output"
     </ul>
    </li>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="python/recon/index.html">
+    <a class="reference internal" href="../api/python/recon/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.recon
@@ -285,7 +285,7 @@ const thebe_selector_output = ".output, .cell_output"
     </label>
     <ul>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="python/recon/emoca/index.html">
+      <a class="reference internal" href="../api/python/recon/emoca/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.emoca
@@ -299,7 +299,7 @@ const thebe_selector_output = ".output, .cell_output"
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/emoca/models/index.html">
+        <a class="reference internal" href="../api/python/recon/emoca/models/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.emoca.models
@@ -308,7 +308,7 @@ const thebe_selector_output = ".output, .cell_output"
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/emoca/emoca/index.html">
+        <a class="reference internal" href="../api/python/recon/emoca/emoca/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.emoca.emoca
@@ -317,7 +317,7 @@ const thebe_selector_output = ".output, .cell_output"
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/emoca/lbs/index.html">
+        <a class="reference internal" href="../api/python/recon/emoca/lbs/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.emoca.lbs
@@ -328,7 +328,7 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="python/recon/mpipe/index.html">
+      <a class="reference internal" href="../api/python/recon/mpipe/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.mpipe
@@ -342,7 +342,7 @@ const thebe_selector_output = ".output, .cell_output"
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/mpipe/mpipe/index.html">
+        <a class="reference internal" href="../api/python/recon/mpipe/mpipe/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.mpipe.mpipe
@@ -351,7 +351,7 @@ const thebe_selector_output = ".output, .cell_output"
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="python/recon/mpipe/transforms/index.html">
+        <a class="reference internal" href="../api/python/recon/mpipe/transforms/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.mpipe.transforms
@@ -362,7 +362,7 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/recon/fan/index.html">
+      <a class="reference internal" href="../api/python/recon/fan/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.fan
@@ -373,7 +373,7 @@ const thebe_selector_output = ".output, .cell_output"
     </ul>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/render/index.html">
+    <a class="reference internal" href="../api/python/render/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
@@ -382,7 +382,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/transforms/index.html">
+    <a class="reference internal" href="../api/python/transforms/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.transforms
@@ -391,7 +391,7 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/utils/index.html">
+    <a class="reference internal" href="../api/python/utils/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.utils
@@ -464,9 +464,9 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/api/cli.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/tutorials/analysis.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
+                data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
                 onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -484,10 +484,10 @@ const thebe_selector_output = ".output, .cell_output"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/cli.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Ftutorials/analysis.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/api/cli.md"><button
+        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/tutorials/analysis.ipynb"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -514,7 +514,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Command-line interface</h1>
+                <h1>Analysis</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -525,17 +525,9 @@ const thebe_selector_output = ".output, .cell_output"
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="command-line-interface">
-<h1>Command-line interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h1>
-<p>The command line interface can be used to preprocess video data step by step. The first step, reconstruction of the video frames into 3D meshes, assumes the following directory structure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data
-└── sub-01
-    ├── sub-01_task-mini_events.tsv
-    ├── sub-01_task-mini_frametimes.tsv
-    └── sub-01_task-mini.mp4
-</pre></div>
-</div>
-<p>where <code class="docutils literal notranslate"><span class="pre">data</span></code> is the toplevel directory, which contains one or more subject-level directories (e.g., <code class="docutils literal notranslate"><span class="pre">sub-01</span></code>). Each subject directory contains at least a video file (for now, only <code class="docutils literal notranslate"><span class="pre">mp4</span></code> files are allowed) ending in <code class="docutils literal notranslate"><span class="pre">_video.mp4</span></code> and a “frame times” file ending in <code class="docutils literal notranslate"><span class="pre">_frametimes.tsv</span></code>. This tabular file (with tab separators) should contain a column named <code class="docutils literal notranslate"><span class="pre">t</span></code> which contains, for every frame in the video, the time in seconds of the acquisition of the frame. The file ending in <code class="docutils literal notranslate"><span class="pre">_events.tsv</span></code> is not strictly necessary for preprocessing, but is needed for the analysis phase.</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="analysis">
+<h1>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h1>
+<p>A tutorial about ERP-like analysis? Maybe also do more complex FIR-based encoding? And/or decoding?</p>
 </div>
 
     <script type="text/x-thebe-config">
@@ -551,7 +543,7 @@ const thebe_selector_output = ".output, .cell_output"
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./api"
+            path: "./tutorials"
         },
         predefinedOutput: true
     }
@@ -563,17 +555,17 @@ const thebe_selector_output = ".output, .cell_output"
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../tutorials/analysis.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="preprocessing.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Analysis</p>
+            <p class="prev-next-title">Preprocessing</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="python.html" title="next page">
+    <a class='right-next' id="next-link" href="../api/cli.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Python interface</p>
+        <p class="prev-next-title">Command-line interface</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
