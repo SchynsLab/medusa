@@ -7,8 +7,7 @@ import numpy as np
 
 
 class PCF:
-    def __init__(self, near=1, far=10000, frame_height=1920,
-                 frame_width=1080, fy=1080):
+    def __init__(self, near=1, far=10000, frame_height=1920, frame_width=1080, fy=1080):
         # fy = focal length in y dir
         self.near = near
         self.far = far
@@ -69,7 +68,7 @@ for idx, weight in procrustes_landmark_basis:
 
 
 def image2world(screen_landmarks, pcf, v_world_ref):
-    
+
     screen_landmarks = project_xy(screen_landmarks, pcf)
     depth_offset = np.mean(screen_landmarks[2, :])
 
@@ -213,8 +212,9 @@ def compute_optimal_rotation(design_matrix):
     return rotation
 
 
-def compute_optimal_scale(centered_weighted_sources, weighted_sources, weighted_targets,
-                          rotation):
+def compute_optimal_scale(
+    centered_weighted_sources, weighted_sources, weighted_targets, rotation
+):
     rotated_centered_weighted_sources = np.matmul(rotation, centered_weighted_sources)
 
     numerator = np.sum(rotated_centered_weighted_sources * weighted_targets)

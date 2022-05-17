@@ -9,10 +9,20 @@ from ..utils import get_logger
 logger = get_logger()
 
 
-def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=None, device='cuda',
-               out_dir=None, render_recon=True, render_on_video=False, render_crop=False, n_frames=None):
-    """ Reconstruction of all frames of a video. 
-    
+def videorecon(
+    video_path,
+    events_path=None,
+    recon_model_name="mediapipe",
+    cfg=None,
+    device="cuda",
+    out_dir=None,
+    render_recon=True,
+    render_on_video=False,
+    render_crop=False,
+    n_frames=None,
+):
+    """Reconstruction of all frames of a video.
+
     Parameters
     ----------
     video_path : str, Path
@@ -43,44 +53,44 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
         frames of the video; nice for debugging
     """
 
-    logger.info(f'Starting recon using for {video_path}')
+    logger.info(f"Starting recon using for {video_path}")
     logger.info(f"Initializing {recon_model_name} recon model")
-    
+
     # Initialize VideoData object here to use metadata
     # in recon_model (like img_size)
-    video = VideoData(video_path, events=events_path)      
+    video = VideoData(video_path, events=events_path)
 
-    # Initialize reconstruction model    
-    if recon_model_name in ['emoca', 'emoca-dense']:
+    # Initialize reconstruction model
+    if recon_model_name in ["emoca", "emoca-dense"]:
         fan = FAN(device=device)  # for face detection / cropping
         recon_model = EMOCA(cfg=cfg, device=device, img_size=video.img_size)
-    elif recon_model_name == 'FAN-3D':
-        recon_model = FAN(device=device, lm_type='3D')
-    elif recon_model_name == 'mediapipe':
+    elif recon_model_name == "FAN-3D":
+        recon_model = FAN(device=device, lm_type="3D")
+    elif recon_model_name == "mediapipe":
         recon_model = Mediapipe()
     else:
         raise NotImplementedError
-    
+
     if out_dir is None:
         out_dir = video.path.parent
-    
-    out_dir.mkdir(exist_ok=True, parents=True)
-    f_out = str(out_dir / str(video.path.name).replace('.mp4', '_desc-recon'))
 
-    if recon_model_name in ['emoca'] and render_crop:
-        video.create_writer(f_out, idf='crop', ext='gif')
+    out_dir.mkdir(exist_ok=True, parents=True)
+    f_out = str(out_dir / str(video.path.name).replace(".mp4", "_desc-recon"))
+
+    if recon_model_name in ["emoca"] and render_crop:
+        video.create_writer(f_out, idf="crop", ext="gif")
 
     # Loop across frames of video, store results in `recon_data`
-    recon_data = defaultdict(list)    
+    recon_data = defaultdict(list)
     for i, frame in video.loop(scaling=None):
-     
-        if recon_model_name in ['emoca']:
+
+        if recon_model_name in ["emoca"]:
 
             # Crop image, add tform to emoca (for adding rigid motion
             # due to cropping), and add crop plot to writer
             frame = fan.prepare_for_emoca(frame)
             recon_model.tform = fan.tform.params
-            
+
             if render_crop:
                 video.write(fan.viz_qc(return_rgba=True))
 
@@ -89,7 +99,7 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
         out = recon_model(frame)
         for attr, data in out.items():
             recon_data[attr].append(data)
-        
+
         if n_frames is not None:
             # If we only want to reconstruct a couple of
             # frames, stop if reached
@@ -107,9 +117,9 @@ def videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=N
     kwargs = {**recon_data, **video.get_metadata()}
     data = DataClass(recon_model_name=recon_model_name, **kwargs)
 
-    # Save data as hdf5 and visualize reconstruction 
-    data.save(f_out + '_shape.h5')
+    # Save data as hdf5 and visualize reconstruction
+    data.save(f_out + "_shape.h5")
 
     if render_recon:
         background = video_path if render_on_video else None
-        data.render_video(f_out + '_shape.gif', video=background)
+        data.render_video(f_out + "_shape.gif", video=background)

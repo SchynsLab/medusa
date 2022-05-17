@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from pathlib import Path
 from scipy.signal import butter, sosfilt
 
@@ -8,15 +7,15 @@ from ..utils import get_logger
 
 
 def filter(data, low_pass, high_pass):
-    """ Applies a bandpass filter the vertex coordinate time series.
+    """Applies a bandpass filter the vertex coordinate time series.
     Implementation based on https://stackoverflow.com/questions/
     12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter
-    
+
     Parameters
     ----------
     data : str, Data
-        Either a path (str, pathlib.Path) to a `gmfx` hdf5 data file
-        or a gmfx.io.Data object (i.e., data loaded from the hdf5 file)
+        Either a path (``str`` or ``pathlib.Path``) to a ``medusa`` hdf5
+        data file or a ``Data`` object (like ``FlameData`` or ``MediapipeData``)
     low_pass : float
         Low-pass cutoff (in Hz)
     high_pass : float
@@ -34,10 +33,10 @@ def filter(data, low_pass, high_pass):
         logger.info(f"Loading data from {data} ...")
         data = load_h5(data)
 
-    nyq = 0.5 * data.sf # sampling freq
+    nyq = 0.5 * data.sf  # sampling freq
     low = high_pass / nyq
     high = low_pass / nyq
-    sos = butter(5, [low, high], analog=False, btype='band', output='sos')
+    sos = butter(5, [low, high], analog=False, btype="band", output="sos")
 
     to_filter = [data.v, data.mats2params().to_numpy()]
     for i in range(len(to_filter)):
@@ -47,15 +46,15 @@ def filter(data, low_pass, high_pass):
         d_ = d_ - mu
 
         d_ = sosfilt(sos, d_, axis=0)
-        
+
         # Undo normalization to get data back on original scale
         to_filter[i] = (d_ + mu).reshape(d.shape).astype(np.float32)
-        
+
     data.v = to_filter[0]
     data.params2mats(to_filter[1])
-    
+
     # Save!
     pth = data.path
-    desc = 'desc-' + pth.split('desc-')[1].split('_')[0] + '+filt'
-    f_out = pth.split('desc-')[0] + desc
-    data.save(f_out + '_shape.h5')
+    desc = "desc-" + pth.split("desc-")[1].split("_")[0] + "+filt"
+    f_out = pth.split("desc-")[0] + desc
+    data.save(f_out + "_shape.h5")
