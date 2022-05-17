@@ -17,7 +17,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install GLU
-      run: sudo apt install -y freeglut-devel
+      run: sudo apt install -y freeglut3-dev
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
