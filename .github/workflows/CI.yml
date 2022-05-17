@@ -24,4 +24,5 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        ./run_tests
+        ./run_unitstests
+        ./run_doctests

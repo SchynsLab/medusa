@@ -11,6 +11,7 @@ from medusa.data import get_example_video
 @pytest.mark.parametrize("render", [True, False])
 def test_videorecon_cmd(model, n_frames, render):
     """ Tests the videorecon command line interface. """
+    
     if model == 'emoca' and 'GITHUB_ACTIONS' in os.environ:
         return 
 
@@ -18,7 +19,7 @@ def test_videorecon_cmd(model, n_frames, render):
     runner = CliRunner()
     
     args = [vid, '-r', model, '-n', n_frames]
-    if render:
+    if render and not 'GITHUB_ACTIONS' in os.environ:
         args.extend(['--render-recon'])
 
     result = runner.invoke(videorecon_cmd, args)

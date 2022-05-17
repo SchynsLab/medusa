@@ -1,4 +1,0 @@
-printf "\nStarting unittests ...\n"
-pytest --disable-warnings tests/
-printf "\nStarting doctests ...\n"
-pytest --doctest-modules medusa/
