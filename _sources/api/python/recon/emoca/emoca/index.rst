@@ -66,12 +66,6 @@ Module Contents
       Decodes the face attributes (vertices, landmarks, texture, detail map)
       from the encoded parameters.
 
-      :param tform: A Torch tensor containing the similarity transform parameters
-                    that map points on the cropped image to the uncropped image; this
-                    is availabe from the `tform_params` attribute of the initialized
-                    FAN object (e.g., `fan.tform_params`); if `None`, the vertices
-                    will not be transformed to the original image space
-      :type tform: torch.Tensor
       :param orig_size: Tuple containing the original image size (height, width), i.e.,
                         before cropping; needed to transform and render the mesh in the
                         original image space

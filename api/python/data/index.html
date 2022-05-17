@@ -54,7 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="medusa.epochs" href="../epochs/index.html" />
-    <link rel="prev" title="Python interface" href="../../python.html" />
+    <link rel="prev" title="medusa.core" href="../core/index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -148,6 +148,15 @@ const thebe_selector_output = ".output, .cell_output"
    </i>
   </label>
   <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../core/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.core
+      </span>
+     </code>
+    </a>
+   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      <code class="xref py py-mod docutils literal notranslate">
@@ -457,8 +466,8 @@ const thebe_selector_output = ".output, .cell_output"
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-contents">
-   Module Contents
+  <a class="reference internal nav-link" href="#package-contents">
+   Package Contents
   </a>
  </li>
 </ul>
@@ -482,8 +491,8 @@ const thebe_selector_output = ".output, .cell_output"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-contents">
-   Module Contents
+  <a class="reference internal nav-link" href="#package-contents">
+   Package Contents
   </a>
  </li>
 </ul>
@@ -497,285 +506,69 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="section" id="module-medusa.data">
 <span id="medusa-data"></span><h1><a class="reference internal" href="#module-medusa.data" title="medusa.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data</span></code></a><a class="headerlink" href="#module-medusa.data" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="medusa.data.BaseData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">BaseData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recon_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'world'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base Data class with attributes and methods common to all Data
-classes (such as FlameData, MediapipeData, etc.).</p>
-<p>Warning: objects should never be initialized with this class directly,
-only when calling super().__init__() from the subclass (like <cite>FlameData</cite>).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)</p></li>
-<li><p><strong>f</strong> (<em>ndarray</em>) – Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-<cite>None</cite> if working with landmarks/vertices only</p></li>
-<li><p><strong>mat</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-the ‘world’ (or ‘model’) matrix for each time point</p></li>
-<li><p><strong>cam_mat</strong> (<em>ndarray</em>) – Numpy array of shape 4x4 (affine matrix) representing the camera matrix</p></li>
-<li><p><strong>frame_t</strong> (<em>ndarray</em>) – Numpy array of length T (time points) with “frame times”, i.e.,
-onset of each frame (in seconds) from the video</p></li>
-<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – A Pandas DataFrame with <cite>N</cite> rows corresponding to <cite>N</cite> separate trials
-and at least two columns: ‘onset’ and ‘trial_type’ (optional: ‘duration’)</p></li>
-<li><p><strong>sf</strong> (<em>int</em><em>, </em><em>float</em>) – Sampling frequency of video</p></li>
-<li><p><strong>recon_model_name</strong> (<em>str</em>) – Name of reconstruction model</p></li>
-<li><p><strong>space</strong> (<em>str</em>) – The space the vertices are currently in; can be either ‘local’ or ‘world’</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Path where the data is saved; if initializing a new object (rather than
-loading one from disk), this should be <cite>None</cite></p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.mats2params">
-<span class="sig-name descname"><span class="pre">mats2params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.mats2params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms a time series (of length T) 4x4 affine matrices to a
-pandas DataFrame with a time series of T x 12 affine parameters
-(translation XYZ, rotation XYZ, scale XYZ, shear XYZ).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.params2mats">
-<span class="sig-name descname"><span class="pre">params2mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.params2mats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Does the oppose as the above function.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves data to disk as a hdf5 file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to save the data to</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.load">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a hdf5 file from disk and returns a Data object.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.events_to_mne">
-<span class="sig-name descname"><span class="pre">events_to_mne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.events_to_mne" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts events DataFrame to (N x 3) array that
-MNE expects.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>events</strong> – An N (number of trials) x 3 array, with the first column
-indicating the sample <em>number</em> indicating the</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.to_mne_rawarray">
-<span class="sig-name descname"><span class="pre">to_mne_rawarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.to_mne_rawarray" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates an MNE <cite>RawArray</cite> object from the vertices (<cite>v</cite>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.render_video" title="Permalink to this definition">¶</a></dt>
-<dd><p>Should be implemented in subclass!</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.plot_data">
-<span class="sig-name descname"><span class="pre">plot_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_motion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pca</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_pca</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.plot_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a plot of the motion (rotation &amp; translation) parameters
-over time and the first <cite>n_pca</cite> PCA components of the
-reconstructed vertices. For FLAME estimates, these parameters are
-relative to the canonical model, so the estimates are plotted relative
-to the value of the first frame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f_out</strong> (<em>str</em><em>, </em><em>Path</em>) – Where to save the plot to (a png file)</p></li>
-<li><p><strong>plot_motion</strong> (<em>bool</em>) – Whether to plot the motion parameters</p></li>
-<li><p><strong>plot_pca</strong> (<em>bool</em>) – Whether to plot the <cite>n_pca</cite> PCA-transformed traces of the data (<cite>self.v</cite>)</p></li>
-<li><p><strong>n_pca</strong> (<em>int</em>) – How many PCA components to plot</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.__len__">
-<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.__len__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.__getitem__">
-<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.__getitem__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.BaseData.__setitem__">
-<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.BaseData.__setitem__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="medusa.data.FlameData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">FlameData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.FlameData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#medusa.data.BaseData" title="medusa.data.BaseData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseData</span></code></a></p>
-<p>Base Data class with attributes and methods common to all Data
-classes (such as FlameData, MediapipeData, etc.).</p>
-<p>Warning: objects should never be initialized with this class directly,
-only when calling super().__init__() from the subclass (like <cite>FlameData</cite>).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)</p></li>
-<li><p><strong>f</strong> (<em>ndarray</em>) – Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-<cite>None</cite> if working with landmarks/vertices only</p></li>
-<li><p><strong>mat</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-the ‘world’ (or ‘model’) matrix for each time point</p></li>
-<li><p><strong>cam_mat</strong> (<em>ndarray</em>) – Numpy array of shape 4x4 (affine matrix) representing the camera matrix</p></li>
-<li><p><strong>frame_t</strong> (<em>ndarray</em>) – Numpy array of length T (time points) with “frame times”, i.e.,
-onset of each frame (in seconds) from the video</p></li>
-<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – A Pandas DataFrame with <cite>N</cite> rows corresponding to <cite>N</cite> separate trials
-and at least two columns: ‘onset’ and ‘trial_type’ (optional: ‘duration’)</p></li>
-<li><p><strong>sf</strong> (<em>int</em><em>, </em><em>float</em>) – Sampling frequency of video</p></li>
-<li><p><strong>recon_model_name</strong> (<em>str</em>) – Name of reconstruction model</p></li>
-<li><p><strong>space</strong> (<em>str</em>) – The space the vertices are currently in; can be either ‘local’ or ‘world’</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Path where the data is saved; if initializing a new object (rather than
-loading one from disk), this should be <cite>None</cite></p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.FlameData.load">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.FlameData.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a hdf5 file from disk and returns a Data object.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.FlameData.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.FlameData.render_video" title="Permalink to this definition">¶</a></dt>
-<dd><p>Should be implemented in subclass!</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="medusa.data.MediapipeData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">MediapipeData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.MediapipeData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#medusa.data.BaseData" title="medusa.data.BaseData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseData</span></code></a></p>
-<p>Base Data class with attributes and methods common to all Data
-classes (such as FlameData, MediapipeData, etc.).</p>
-<p>Warning: objects should never be initialized with this class directly,
-only when calling super().__init__() from the subclass (like <cite>FlameData</cite>).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)</p></li>
-<li><p><strong>f</strong> (<em>ndarray</em>) – Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-<cite>None</cite> if working with landmarks/vertices only</p></li>
-<li><p><strong>mat</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-the ‘world’ (or ‘model’) matrix for each time point</p></li>
-<li><p><strong>cam_mat</strong> (<em>ndarray</em>) – Numpy array of shape 4x4 (affine matrix) representing the camera matrix</p></li>
-<li><p><strong>frame_t</strong> (<em>ndarray</em>) – Numpy array of length T (time points) with “frame times”, i.e.,
-onset of each frame (in seconds) from the video</p></li>
-<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – A Pandas DataFrame with <cite>N</cite> rows corresponding to <cite>N</cite> separate trials
-and at least two columns: ‘onset’ and ‘trial_type’ (optional: ‘duration’)</p></li>
-<li><p><strong>sf</strong> (<em>int</em><em>, </em><em>float</em>) – Sampling frequency of video</p></li>
-<li><p><strong>recon_model_name</strong> (<em>str</em>) – Name of reconstruction model</p></li>
-<li><p><strong>space</strong> (<em>str</em>) – The space the vertices are currently in; can be either ‘local’ or ‘world’</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Path where the data is saved; if initializing a new object (rather than
-loading one from disk), this should be <cite>None</cite></p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.MediapipeData.load">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.MediapipeData.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a hdf5 file from disk and returns a Data object.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.MediapipeData.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.MediapipeData.render_video" title="Permalink to this definition">¶</a></dt>
-<dd><p>Should be implemented in subclass!</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="medusa.data.FANData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">FANData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recon_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'world'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.FANData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#medusa.data.BaseData" title="medusa.data.BaseData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseData</span></code></a></p>
-<p>Base Data class with attributes and methods common to all Data
-classes (such as FlameData, MediapipeData, etc.).</p>
-<p>Warning: objects should never be initialized with this class directly,
-only when calling super().__init__() from the subclass (like <cite>FlameData</cite>).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)</p></li>
-<li><p><strong>f</strong> (<em>ndarray</em>) – Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-<cite>None</cite> if working with landmarks/vertices only</p></li>
-<li><p><strong>mat</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-the ‘world’ (or ‘model’) matrix for each time point</p></li>
-<li><p><strong>cam_mat</strong> (<em>ndarray</em>) – Numpy array of shape 4x4 (affine matrix) representing the camera matrix</p></li>
-<li><p><strong>frame_t</strong> (<em>ndarray</em>) – Numpy array of length T (time points) with “frame times”, i.e.,
-onset of each frame (in seconds) from the video</p></li>
-<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – A Pandas DataFrame with <cite>N</cite> rows corresponding to <cite>N</cite> separate trials
-and at least two columns: ‘onset’ and ‘trial_type’ (optional: ‘duration’)</p></li>
-<li><p><strong>sf</strong> (<em>int</em><em>, </em><em>float</em>) – Sampling frequency of video</p></li>
-<li><p><strong>recon_model_name</strong> (<em>str</em>) – Name of reconstruction model</p></li>
-<li><p><strong>space</strong> (<em>str</em>) – The space the vertices are currently in; can be either ‘local’ or ‘world’</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Path where the data is saved; if initializing a new object (rather than
-loading one from disk), this should be <cite>None</cite></p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.FANData.load">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.FANData.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a hdf5 file from disk and returns a Data object.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.data.FANData.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.FANData.render_video" title="Permalink to this definition">¶</a></dt>
-<dd><p>Should be implemented in subclass!</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="medusa.data.MODEL2CLS">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">MODEL2CLS</span></span><a class="headerlink" href="#medusa.data.MODEL2CLS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<div class="section" id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="medusa.data.load_h5">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">load_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.load_h5" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function to load a hdf5 file and
-immediately initialize the correct data class.</p>
-<p>Located here (instead of io.py or render.py) to
-prevent circular imports.</p>
+<dt class="sig sig-object py" id="medusa.data.get_example_video">
+<span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">get_example_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.get_example_video" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the path to an example video file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to hdf5 file</p>
+<dd class="field-odd"><p><strong>as_path</strong> (<em>bool</em>) – Returns the path as a <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>data</strong> – An object with a class derived from data.BaseData
-(like MediapipeData, or FlameData)</p>
+<dd class="field-even"><p><strong>path</strong> – A string or Path object pointing towards the example
+video file</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>data.BaseData subclass object</p>
+<dd class="field-odd"><p>str, pathlib.Path</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">(</span><span class="n">as_path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="medusa.data.get_example_h5">
+<span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">get_example_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.get_example_h5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves an example hdf5 file with reconstructed 4D
+data from the example video.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>load</strong> (<em>bool</em>) – Whether to return the hdf5 file loaded in memory (<code class="docutils literal notranslate"><span class="pre">True</span></code>)
+or to just return the path to the file</p></li>
+<li><p><strong>model</strong> (<em>str</em>) – Model used to reconstruct the data; either ‘mediapipe’ or
+‘emoca’</p></li>
+<li><p><strong>as_path</strong> (<em>bool</em>) – Whether to return the path as a <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object (<code class="docutils literal notranslate"><span class="pre">True</span></code>)
+or just a string (<code class="docutils literal notranslate"><span class="pre">False</span></code>); ignored when <code class="docutils literal notranslate"><span class="pre">load</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>When <code class="docutils literal notranslate"><span class="pre">load</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns either a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>
+or a <code class="docutils literal notranslate"><span class="pre">FlameData</span></code> object, otherwise a string or <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code>
+object to the file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../core/index.html#medusa.core.MediapipeData" title="medusa.core.MediapipeData">MediapipeData</a>, <a class="reference internal" href="../core/index.html#medusa.core.FlameData" title="medusa.core.FlameData">FlameData</a>, str, Path</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p># Get hdf5 file already loaded in memory
+&gt;&gt;&gt; data = get_example_h5(load=True, model=’mediapipe’)
+&gt;&gt;&gt; data.recon_model_name
+‘mediapipe’
+&gt;&gt;&gt; data.v.shape  # check out reconstructed vertices
+(232, 468, 3)</p>
 </dd></dl>
 
 </div>
@@ -806,11 +599,11 @@ prevent circular imports.</p>
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../../python.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../core/index.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Python interface</p>
+            <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.core</span></code></p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../epochs/index.html" title="next page">

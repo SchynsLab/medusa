@@ -149,6 +149,15 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul class="current">
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../core/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.core
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../data/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
@@ -566,16 +575,9 @@ for the decoding stage.</p>
 from the encoded parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tform</strong> (<em>torch.Tensor</em>) – A Torch tensor containing the similarity transform parameters
-that map points on the cropped image to the uncropped image; this
-is availabe from the <cite>tform_params</cite> attribute of the initialized
-FAN object (e.g., <cite>fan.tform_params</cite>); if <cite>None</cite>, the vertices
-will not be transformed to the original image space</p></li>
-<li><p><strong>orig_size</strong> (<em>tuple</em>) – Tuple containing the original image size (height, width), i.e.,
+<dd class="field-odd"><p><strong>orig_size</strong> (<em>tuple</em>) – Tuple containing the original image size (height, width), i.e.,
 before cropping; needed to transform and render the mesh in the
-original image space</p></li>
-</ul>
+original image space</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>dec_dict</strong> – A dictionary with the results from the decoding stage</p>
