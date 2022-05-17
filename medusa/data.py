@@ -16,11 +16,6 @@ from trimesh.transformations import decompose_matrix, compose_matrix
 
 from .utils import get_logger
 from .render import Renderer
-from .io import VideoData
-
-
-logger = get_logger()
-here = Path(__file__).parent.resolve()
 
 
 class BaseData:
@@ -74,22 +69,24 @@ class BaseData:
         self.space = space
         self.path = path
         self._check()
+        self.logger = get_logger()
     
     def _check(self):
         """ Does some checks to make sure the data works with
         the renderer and other stuff. """
 
+
         # Renderer expects torch floats (float32), not double (float64)
         self.v = self.v.astype(np.float32)
         T = self.v.shape[0]
         if self.frame_t.size > T:
-            logger.warn(f'More frame times {self.frame_t.size} than vertex time points ({T}); trimming ...')
+            self.logger.warn(f'More frame times {self.frame_t.size} than vertex time points ({T}); trimming ...')
             self.frame_t = self.frame_t[:T]
 
         if self.mat is not None:
             if self.mat.shape[0] != T:
                 mT = self.mat.shape[0]
-                logger.warn(f'More mats ({mT}) than vertex time points ({T}); trimming ...')
+                self.logger.warn(f'More mats ({mT}) than vertex time points ({T}); trimming ...')
                 self.mat = self.mat[:T, :, :]
         
         if self.events is not None:
@@ -305,7 +302,7 @@ class BaseData:
         """
     
         if self.mat is None:
-            logger.warn("No motion params available; setting plot_motion to False")
+            self.logger.warn("No motion params available; setting plot_motion to False")
             plot_motion = False
     
         if not plot_motion and not plot_pca:
@@ -369,7 +366,7 @@ class BaseData:
 class FlameData(BaseData):
 
     def __init__(self, *args, **kwargs):
-        
+        here = Path(__file__).parent.resolve()
         kwargs['f'] = np.load(here / 'data/faces_flame.npy')
         if kwargs.get('cam_mat') is None:
             cam_mat = np.eye(4)
@@ -380,7 +377,7 @@ class FlameData(BaseData):
 
     @classmethod
     def load(cls, path):
-        
+        here = Path(__file__).parent.resolve()
         init_kwargs = super().load(path)
         init_kwargs['f'] = np.load(here / 'data/faces_flame.npy')
         return cls(**init_kwargs)
@@ -396,7 +393,7 @@ class FlameData(BaseData):
 class MediapipeData(BaseData):
     
     def __init__(self, *args, **kwargs):
-        
+        here = Path(__file__).parent.resolve()
         kwargs['f'] = np.load(here / 'data/faces_mediapipe.npy')
         if kwargs.get('cam_mat') is None:
             kwargs['cam_mat'] = np.eye(4)

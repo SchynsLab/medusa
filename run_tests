@@ -1,0 +1,4 @@
+printf "\nStarting unittests ...\n"
+pytest tests/
+printf "\nStarting doctests ...\n"
+pytest --doctest-modules medusa/
