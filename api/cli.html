@@ -109,6 +109,11 @@ const thebe_selector_output = ".output, .cell_output"
    Installation
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../getting_started/quickstart.html">
+   Quickstart
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -466,6 +471,15 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="command-line-interface">
 <h1>Command-line interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h1>
+<p>The command line interface can be used to preprocess video data step by step. The first step, reconstruction of the video frames into 3D meshes, assumes the following directory structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data
+└── sub-01
+    ├── sub-01_task-mini_events.tsv
+    ├── sub-01_task-mini_frametimes.tsv
+    └── sub-01_task-mini.mp4
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">data</span></code> is the toplevel directory, which contains one or more subject-level directories (e.g., <code class="docutils literal notranslate"><span class="pre">sub-01</span></code>). Each subject directory contains at least a video file (for now, only <code class="docutils literal notranslate"><span class="pre">mp4</span></code> files are allowed) ending in <code class="docutils literal notranslate"><span class="pre">_video.mp4</span></code> and a “frame times” file ending in <code class="docutils literal notranslate"><span class="pre">_frametimes.tsv</span></code>. This tabular file (with tab separators) should contain a column named <code class="docutils literal notranslate"><span class="pre">t</span></code> which contains, for every frame in the video, the time in seconds of the acquisition of the frame. The file ending in <code class="docutils literal notranslate"><span class="pre">_events.tsv</span></code> is not strictly necessary for preprocessing, but is needed for the analysis phase.</p>
 </div>
 
     <script type="text/x-thebe-config">
