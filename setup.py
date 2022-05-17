@@ -53,9 +53,9 @@ opts = dict(
         "mne",
         "chumpy",  # for FLAME model .. really necessary?
     ],
-    extras_require = {
-        'full': ['mne']
-    }
+    #extras_require = {
+    #    'full': ['mne']
+    #},
     entry_points={
         "console_scripts": [
             "medusa_videorecon = medusa.cli:videorecon_cmd",
