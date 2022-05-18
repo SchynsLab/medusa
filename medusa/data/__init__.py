@@ -1,5 +1,30 @@
+import cv2
 from pathlib import Path
 from ..core import load_h5
+
+def get_example_frame():
+    """Loads an example frame from the example video.
+    
+    Parameters
+    ----------
+    as_path : bool
+        Returns the path as a ``pathlib.Path`` object
+
+    Returns
+    -------
+    img : np.ndarray
+        A 3D numpy array of shape frame width x height x 3 (RGB)
+
+    Examples
+    --------
+    >>> img = get_example_frame()
+    """
+
+    here = Path(__file__).parent
+    vid_path = here / "example_vid.mp4"
+    _, img = cv2.VideoCapture(str(vid_path)).read()
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    return img
 
 
 def get_example_video(as_path=True):

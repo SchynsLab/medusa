@@ -1,7 +1,9 @@
 """ Module with functionality to render 4D face mesh data. 
 
 The ``Renderer`` class is a high-level wrapper around functionality from the
-excellent `pyrender <https://pyrender.readthedocs.io>`_ package.
+excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
+
+.. [1] Matl, Matthew. *pyrender* [computer software]. https://github.com/mmatl/pyrender
 """
 
 import numpy as np
@@ -61,8 +63,6 @@ class Renderer:
             # Note to self: zfar might have to be increased if the face is
             # very small; will increase rendering time though
             camera = IntrinsicsCamera(fx=w, fy=w, cx=w / 2, cy=h / 2, zfar=300)
-            # For mediapipe renderings, we don't need to zoom out
-            self.zoom_out = 0
 
         camera_node = Node(camera=camera, matrix=self.cam_mat)
         scene.add_node(camera_node)

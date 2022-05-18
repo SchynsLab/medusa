@@ -451,6 +451,7 @@ class FlameData(BaseData):
 
 
 class MediapipeData(BaseData):
+
     def __init__(self, *args, **kwargs):
         here = Path(__file__).parent.resolve()
         kwargs["f"] = np.load(here / "data/faces_mediapipe.npy")
@@ -478,6 +479,14 @@ class MediapipeData(BaseData):
 
 
 class FANData(BaseData):
+
+    def __init__(self, *args, **kwargs):
+        here = Path(__file__).parent.resolve()
+        kwargs["f"] = np.load(here / "data/faces_fan.npy")
+
+        super().__init__(*args, **kwargs)
+
+
     @classmethod
     def load(cls, path):
 

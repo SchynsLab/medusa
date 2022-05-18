@@ -6,6 +6,7 @@ parts:
   - file: getting_started/installation
   - file: getting_started/quickstart
   - file: getting_started/citation
+    title: Citation
 - caption: Tutorials
   chapters:
   - file: tutorials/reconstruction
@@ -13,6 +14,8 @@ parts:
   - file: tutorials/rendering
   - file: tutorials/preprocessing
   - file: tutorials/analysis
+  - file: tutorials/experimentation
+    title: Experimentation
 - caption: API documentation
   chapters:
   - file: api/cli
