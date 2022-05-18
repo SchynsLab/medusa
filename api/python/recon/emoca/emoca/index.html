@@ -54,7 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="medusa.recon.emoca.lbs" href="../lbs/index.html" />
+    <link rel="next" title="medusa.recon.mpipe" href="../../mpipe/index.html" />
     <link rel="prev" title="medusa.recon.emoca.models.encoders" href="../models/encoders/index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -322,15 +322,6 @@ const thebe_selector_output = ".output, .cell_output"
          </code>
         </a>
        </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../lbs/index.html">
-         <code class="xref py py-mod docutils literal notranslate">
-          <span class="pre">
-           medusa.recon.emoca.lbs
-          </span>
-         </code>
-        </a>
-       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -352,15 +343,6 @@ const thebe_selector_output = ".output, .cell_output"
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
            medusa.recon.mpipe.mpipe
-          </span>
-         </code>
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../../mpipe/transforms/index.html">
-         <code class="xref py py-mod docutils literal notranslate">
-          <span class="pre">
-           medusa.recon.mpipe.transforms
           </span>
          </code>
         </a>
@@ -682,10 +664,10 @@ relative position and scale of the bounding box into the reconstructed vertices.
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fan</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span>   <span class="c1"># need FAN for cropping!</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cropped_img</span> <span class="o">=</span> <span class="n">fan</span><span class="o">.</span><span class="n">prepare_for_emoca</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">tform</span> <span class="o">=</span> <span class="n">fan</span><span class="o">.</span><span class="n">tform</span><span class="o">.</span><span class="n">params</span>  <span class="c1"># crucial!</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">cropped_img</span><span class="p">)</span>  <span class="c1"># reconstruct!</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>    <span class="c1"># vertices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">cropped_img</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>    
 <span class="go">(5023, 3)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  <span class="c1"># local-to-world matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  
 <span class="go">(4, 4)</span>
 </pre></div>
 </div>
@@ -728,10 +710,10 @@ relative position and scale of the bounding box into the reconstructed vertices.
             <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.emoca.models.encoders</span></code></p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../lbs/index.html" title="next page">
+    <a class='right-next' id="next-link" href="../../mpipe/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.emoca.lbs</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -74,10 +74,10 @@ Module Contents
       >>> fan = FAN(lm_type='2D')   # need FAN for cropping!
       >>> cropped_img = fan.prepare_for_emoca(img)
       >>> model.tform = fan.tform.params  # crucial!
-      >>> out = model(cropped_img)  # reconstruct!
-      >>> out['v'].shape    # vertices
+      >>> out = model(cropped_img)  # doctest: +SKIP
+      >>> out['v'].shape    # doctest: +SKIP
       (5023, 3)
-      >>> out['mat'].shape  # local-to-world matrix
+      >>> out['mat'].shape  # doctest: +SKIP
       (4, 4)
 
 

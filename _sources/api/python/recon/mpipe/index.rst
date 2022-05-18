@@ -11,6 +11,5 @@ Submodules
    :maxdepth: 1
 
    mpipe/index.rst
-   transforms/index.rst
 
 

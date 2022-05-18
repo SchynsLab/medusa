@@ -20,6 +20,5 @@ Submodules
    :maxdepth: 1
 
    emoca/index.rst
-   lbs/index.rst
 
 
