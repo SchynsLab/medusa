@@ -515,15 +515,51 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="command-line-interface">
 <h1>Command-line interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h1>
-<p>The command line interface can be used to preprocess video data step by step. The first step, reconstruction of the video frames into 3D meshes, assumes the following directory structure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data
-└── sub-01
-    ├── sub-01_task-mini_events.tsv
-    ├── sub-01_task-mini_frametimes.tsv
-    └── sub-01_task-mini.mp4
+<p>If you’re familiar with using terminals and command line interfaces (CLI), Medusa’s
+CLI might be useful for you. The CLI exposes Medusa’s most important functionality
+to the command line, which can be used after installing the Python package. All CLI
+commands start with <code class="docutils literal notranslate"><span class="pre">medusa_</span></code> followed by the operation that it exposes. For example,
+<code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code> is a command-line interface of the package’s Python function
+<span class="xref myst"><code class="docutils literal notranslate"><span class="pre">videorecon</span></code></span>. The arguments and options of each CLI command
+can be inspected by running the command with a single option <code class="docutils literal notranslate"><span class="pre">--help</span></code>, like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>medusa_videorecon --help
+
+<span class="go">Usage: medusa_videorecon [OPTIONS] VIDEO_PATH</span>
+
+<span class="go">Options:</span>
+<span class="go">  --events-path FILE</span>
+<span class="go">  -r, --recon-model-name [emoca|mediapipe|FAN-3D]</span>
+<span class="go">  -c, --cfg TEXT                  Path to recon config file</span>
+<span class="go">  --device [cpu|cuda]             Device to run recon on</span>
+<span class="go">  -o, --out-dir PATH              Output directory</span>
+<span class="go">  --render-recon                  Plot recon on video background</span>
+<span class="go">  --render-on-video               Plot recon on video background</span>
+<span class="go">  --render-crop                   Render cropping results</span>
+<span class="go">  -n, --n-frames INTEGER          Number of frames to reconstruct</span>
+<span class="go">  --help                          Show this message and exit.</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">data</span></code> is the toplevel directory, which contains one or more subject-level directories (e.g., <code class="docutils literal notranslate"><span class="pre">sub-01</span></code>). Each subject directory contains at least a video file (for now, only <code class="docutils literal notranslate"><span class="pre">mp4</span></code> files are allowed) ending in <code class="docutils literal notranslate"><span class="pre">_video.mp4</span></code> and a “frame times” file ending in <code class="docutils literal notranslate"><span class="pre">_frametimes.tsv</span></code>. This tabular file (with tab separators) should contain a column named <code class="docutils literal notranslate"><span class="pre">t</span></code> which contains, for every frame in the video, the time in seconds of the acquisition of the frame. The file ending in <code class="docutils literal notranslate"><span class="pre">_events.tsv</span></code> is not strictly necessary for preprocessing, but is needed for the analysis phase.</p>
+<p>For example, the <code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code> command has a single mandatory argument,
+<code class="docutils literal notranslate"><span class="pre">VIDEO_PATH</span></code>, and several (non-mandatory) options, like <code class="docutils literal notranslate"><span class="pre">--events-path</span></code> and
+<code class="docutils literal notranslate"><span class="pre">--recon-model-name</span></code>. If the option accepts an argument, like <code class="docutils literal notranslate"><span class="pre">--recon-model-name</span></code> or
+<code class="docutils literal notranslate"><span class="pre">--out-dir</span></code>, then it also shows the available options (such as “emoca”, “mediapipe”, or
+“FAN-3D”, in case of <code class="docutils literal notranslate"><span class="pre">--recon-model-name</span></code>) or the expected input type (like “PATH” in
+case of <code class="docutils literal notranslate"><span class="pre">--out-dir</span></code>). If you, for example, would like to reconstruct your video,
+<code class="docutils literal notranslate"><span class="pre">my_vid.mp4</span></code>, using the “mediapipe” model and store the output in the <code class="docutils literal notranslate"><span class="pre">recon/</span></code> directory,
+you’d run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/</span>
+</pre></div>
+</div>
+<p>In addition, there may be some options which are not followed by an argument, like
+<code class="docutils literal notranslate"><span class="pre">--render-recon</span></code> (which are not followed by available options or expected input type).
+So, if you’d want to run the same reconstruction as the previous command, but this time
+also render the reconstruction (<code class="docutils literal notranslate"><span class="pre">--render-recon</span></code>) on top of the input video
+(<code class="docutils literal notranslate"><span class="pre">--render-on-video</span></code>), you’d run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/ --render-recon --render-on-video</span>
+</pre></div>
+</div>
+<p>Each CLI command follows its underlying Python function closely in terms of which
+arguments it expects and which options it accepts.</p>
 </div>
 
     <script type="text/x-thebe-config">

@@ -70,7 +70,7 @@ Module Contents
       >>> from medusa.data import get_example_frame
       >>> from medusa.recon import FAN
       >>> img = get_example_frame()
-      >>> model = EMOCA(img.shape[:2], device='cpu')  # use 'cuda' whenever possible!
+      >>> model = EMOCA(img.shape[:2], device='cpu')  # doctest: +SKIP
       >>> fan = FAN(lm_type='2D')   # need FAN for cropping!
       >>> cropped_img = fan.prepare_for_emoca(img)
       >>> model.tform = fan.tform.params  # crucial!
