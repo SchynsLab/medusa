@@ -547,7 +547,7 @@ can be inspected by running the command with a single option <code class="docuti
 case of <code class="docutils literal notranslate"><span class="pre">--out-dir</span></code>). If you, for example, would like to reconstruct your video,
 <code class="docutils literal notranslate"><span class="pre">my_vid.mp4</span></code>, using the “mediapipe” model and store the output in the <code class="docutils literal notranslate"><span class="pre">recon/</span></code> directory,
 you’d run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/
 </pre></div>
 </div>
 <p>In addition, there may be some options which are not followed by an argument, like
@@ -555,7 +555,7 @@ you’d run:</p>
 So, if you’d want to run the same reconstruction as the previous command, but this time
 also render the reconstruction (<code class="docutils literal notranslate"><span class="pre">--render-recon</span></code>) on top of the input video
 (<code class="docutils literal notranslate"><span class="pre">--render-on-video</span></code>), you’d run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/ --render-recon --render-on-video</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/ --render-recon --render-on-video
 </pre></div>
 </div>
 <p>Each CLI command follows its underlying Python function closely in terms of which
