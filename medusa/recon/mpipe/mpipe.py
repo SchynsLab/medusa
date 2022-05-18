@@ -10,7 +10,7 @@ import numpy as np
 from pathlib import Path
 from trimesh.exchange.obj import load_obj
 
-from .transforms import PCF, image2world
+from ._transforms import PCF, image2world
 
 
 class Mediapipe:
