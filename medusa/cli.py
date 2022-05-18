@@ -1,10 +1,18 @@
-# Module with command-line interface functions, created
-# using `click`. Each function can be accessed on the command
-# line as `medusa_{operation}`, e.g. `medusa_recon` or
-# `medusa_align` with arguments and options corresponding
-# to the function arguments, e.g.
-#
-# `medusa_filter some_h5_file.h5 -l 3 -h 0.01`
+""" Module with command-line interface functions, created using ``click``.
+Each function can be accessed on the command line as ``medusa_{operation}``,
+e.g. ``medusa_videorecon`` or ``medusa_align`` with arguments and options corresponding
+to the function arguments, e.g.
+
+``medusa_filter some_h5_file.h5 -l 3 -h 0.01``
+
+To get an overview of the mandatory arguments and options, run the command with the
+option ``--help``, e.g.:
+
+```medusa_filter --help``
+
+For more information, check out the
+`documentation <https://lukas-snoek.com/medusa/api/cli.html`_.
+"""
 
 import click
 from pathlib import Path
