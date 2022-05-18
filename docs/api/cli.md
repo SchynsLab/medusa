@@ -36,7 +36,7 @@ case of `--out-dir`). If you, for example, would like to reconstruct your video,
 you'd run:
 
 ```console
-medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/
+$ medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/
 ```
 
 In addition, there may be some options which are not followed by an argument, like
@@ -46,7 +46,7 @@ also render the reconstruction (`--render-recon`) on top of the input video
 (`--render-on-video`), you'd run:
 
 ```console
-medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/ --render-recon --render-on-video
+$ medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/ --render-recon --render-on-video
 ```
 
 Each CLI command follows its underlying Python function closely in terms of which
