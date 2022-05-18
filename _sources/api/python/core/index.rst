@@ -232,7 +232,7 @@ Module Contents
 
 
 
-.. py:class:: FANData(v, f=None, mat=None, cam_mat=None, frame_t=None, events=None, sf=None, img_size=None, recon_model_name=None, space='world', path=None)
+.. py:class:: FANData(*args, **kwargs)
 
    Bases: :py:obj:`BaseData`
 

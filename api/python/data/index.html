@@ -117,7 +117,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../getting_started/citation.html">
-   How to cite Medusa and its dependencies
+   Citation
   </a>
  </li>
 </ul>
@@ -150,6 +150,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../../../tutorials/analysis.html">
    Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../tutorials/experimentation.html">
+   Experimentation
   </a>
  </li>
 </ul>
@@ -519,6 +524,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.data.get_example_frame">
+     get_example_frame
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.data.get_example_video">
      get_example_video
     </a>
@@ -556,6 +566,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.data.get_example_frame">
+     get_example_frame
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.data.get_example_video">
      get_example_video
     </a>
@@ -580,6 +595,27 @@ const thebe_selector_output = ".output, .cell_output"
 <span id="medusa-data"></span><h1><a class="reference internal" href="#module-medusa.data" title="medusa.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data</span></code></a><a class="headerlink" href="#module-medusa.data" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="medusa.data.get_example_frame">
+<span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">get_example_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.get_example_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads an example frame from the example video.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>as_path</strong> (<em>bool</em>) – Returns the path as a <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>img</strong> – A 3D numpy array of shape frame width x height x 3 (RGB)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.data.get_example_video">
 <span class="sig-prename descclassname"><span class="pre">medusa.data.</span></span><span class="sig-name descname"><span class="pre">get_example_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.get_example_video" title="Permalink to this definition">¶</a></dt>

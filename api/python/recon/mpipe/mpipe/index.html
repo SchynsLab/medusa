@@ -117,7 +117,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../../../getting_started/citation.html">
-   How to cite Medusa and its dependencies
+   Citation
   </a>
  </li>
 </ul>
@@ -150,6 +150,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../../../../../tutorials/analysis.html">
    Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../../tutorials/experimentation.html">
+   Experimentation
   </a>
  </li>
 </ul>
@@ -524,6 +529,11 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.recon.mpipe.mpipe.Mediapipe.model">
+       model
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#medusa.recon.mpipe.mpipe.Mediapipe.__call__">
        __call__
       </a>
@@ -568,6 +578,11 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.recon.mpipe.mpipe.Mediapipe.model">
+       model
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#medusa.recon.mpipe.mpipe.Mediapipe.__call__">
        __call__
       </a>
@@ -592,26 +607,74 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="section" id="module-medusa.recon.mpipe.mpipe">
 <span id="medusa-recon-mpipe-mpipe"></span><h1><a class="reference internal" href="#module-medusa.recon.mpipe.mpipe" title="medusa.recon.mpipe.mpipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a><a class="headerlink" href="#module-medusa.recon.mpipe.mpipe" title="Permalink to this headline">¶</a></h1>
+<p>Module with a wrapper around a Mediapipe face mesh model <a class="footnote-reference brackets" href="#id2" id="id1">1</a> that can be
+used in Medusa.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Kartynnik, Y., Ablavatski, A., Grishchenko, I., &amp; Grundmann, M. (2019).
+Real-time facial surface geometry from monocular video on mobile GPUs. arXiv
+preprint arXiv:1907.06724</p>
+</dd>
+</dl>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.recon.mpipe.mpipe.Mediapipe">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.mpipe.mpipe.</span></span><span class="sig-name descname"><span class="pre">Mediapipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">static_image_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.mpipe.mpipe.Mediapipe" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>A Mediapipe face mesh reconstruction model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="medusa.recon.mpipe.mpipe.Mediapipe.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#medusa.recon.mpipe.mpipe.Mediapipe.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The actual Mediapipe model object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>mediapipe.solutions.face_mesh.FaceMesh</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.mpipe.mpipe.Mediapipe.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.mpipe.mpipe.Mediapipe.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performns reconstruction.</p>
+<dd><p>Performs reconstruction of the face as a list of landmarks (vertices).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>image</strong> (<em>np.ndarray</em>) – A 3D (w x h x 3) numpy array representing a RGB image</p>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>out</strong> – A dictionary with two keys: <code class="docutils literal notranslate"><span class="pre">&quot;v&quot;</span></code>, the reconstructed vertices (468 in
+total) and <code class="docutils literal notranslate"><span class="pre">&quot;mat&quot;</span></code>, a 4x4 Numpy array representing the local-to-world
+matrix</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>This implementation returns 468 vertices instead of the original 478, because
+the last 10 vertices (representing the irises) are not present in the canonical
+model.</p>
+<p class="rubric">Examples</p>
+<p>To reconstruct an example, simply call the <code class="docutils literal notranslate"><span class="pre">Mediapipe</span></code> object:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">Mediapipe</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>  <span class="c1"># reconstruct!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>    <span class="c1"># vertices</span>
+<span class="go">(468, 3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  <span class="c1"># local-to-world matrix</span>
+<span class="go">(4, 4)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.mpipe.mpipe.Mediapipe.close">
 <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.mpipe.mpipe.Mediapipe.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Closes context manager.</p>
+<p>Ideally, after you’re doing with reconstructing each frame of the video,
+you call this method to close the manually opened context (but shouldn’t
+matter much if you only instantiate a single model).</p>
 </dd></dl>
 
 </dd></dl>

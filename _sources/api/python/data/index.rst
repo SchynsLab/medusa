@@ -7,6 +7,21 @@
 Package Contents
 ----------------
 
+.. py:function:: get_example_frame()
+
+   Loads an example frame from the example video.
+
+   :param as_path: Returns the path as a ``pathlib.Path`` object
+   :type as_path: bool
+
+   :returns: **img** -- A 3D numpy array of shape frame width x height x 3 (RGB)
+   :rtype: np.ndarray
+
+   .. rubric:: Examples
+
+   >>> img = get_example_frame()
+
+
 .. py:function:: get_example_video(as_path=True)
 
    Retrieves the path to an example video file.

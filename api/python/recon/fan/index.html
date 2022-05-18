@@ -117,7 +117,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../../getting_started/citation.html">
-   How to cite Medusa and its dependencies
+   Citation
   </a>
  </li>
 </ul>
@@ -150,6 +150,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../../../../tutorials/analysis.html">
    Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../tutorials/experimentation.html">
+   Experimentation
   </a>
  </li>
 </ul>
@@ -529,6 +534,11 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.model">
+       model
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.prepare_for_emoca">
        prepare_for_emoca
       </a>
@@ -583,6 +593,11 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.model">
+       model
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.prepare_for_emoca">
        prepare_for_emoca
       </a>
@@ -612,6 +627,19 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="section" id="module-medusa.recon.fan">
 <span id="medusa-recon-fan"></span><h1><a class="reference internal" href="#module-medusa.recon.fan" title="medusa.recon.fan"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.fan</span></code></a><a class="headerlink" href="#module-medusa.recon.fan" title="Permalink to this headline">¶</a></h1>
+<p>Module with functionality to use the FAN-3D model.</p>
+<p>This module contains a reconstruction model based on the <code class="docutils literal notranslate"><span class="pre">face_alignment</span></code> package
+by <a class="reference external" href="https://www.adrianbulat.com/face-alignment">Adrian Bulat</a> <a class="footnote-reference brackets" href="#id2" id="id1">1</a>. It is used both
+as a reconstruction model as well as a way to estimate a bounding box as expected by
+the EMOCA model (which uses the bounding box to crop the original image).</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Bulat, A., &amp; Tzimiropoulos, G. (2017). How far are we from solving the 2d &amp; 3d
+face alignment problem?(and a dataset of 230,000 3d facial landmarks).
+In <em>Proceedings of the IEEE International Conference on Computer Vision</em>
+(pp. 1021-1030).</p>
+</dd>
+</dl>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 <dl class="py data">
@@ -622,32 +650,46 @@ const thebe_selector_output = ".output, .cell_output"
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.fan.</span></span><span class="sig-name descname"><span class="pre">FAN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">224</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sfd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_prev_fan_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_prev_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN" title="Permalink to this definition">¶</a></dt>
-<dd><p>FAN face detection and landmark estimation, as implemented by
-Bulat &amp; Tzimiropoulos (2017, Arxiv), adapted for use with DECA
-by Yao Feng (<a class="reference external" href="https://github.com/YadiraF">https://github.com/YadiraF</a>), and further modified by
-Lukas Snoek</p>
+<dd><p>A wrapper around the FAN-3D landmark prediction model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="medusa.recon.fan.FAN.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#medusa.recon.fan.FAN.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The actual face alignment model</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>device</strong> (<em>str</em>) – Device to use, either ‘cpu’ or ‘cuda’ (for GPU)</p></li>
-<li><p><strong>target_size</strong> (<em>int</em>) – Size to crop the image to, assuming a square crop; default (224)
-corresponds to image size that DECA expects</p></li>
-<li><p><strong>face_detector</strong> (<em>str</em>) – Face detector algorithm to use (default: ‘sfd’, as used in DECA)</p></li>
-<li><p><strong>lm_type</strong> (<em>str</em>) – Either ‘2D’ (using 2D landmarks) or ‘3D’ (using 3D landmarks)</p></li>
-<li><p><strong>use_prev_fan_bbox</strong> (<em>bool</em>) – Whether to use the previous bbox from FAN to do an initial crop (True)
-or whether to run the FAN face detection algorithm again (False)</p></li>
-<li><p><strong>use_prev_bbox</strong> (<em>bool</em>) – Whether to use the previous DECA-style bbox (True) or whether to
-run FAN again to estimate landmarks from which to create a new
-bbox (False); this should only be used when there is very little
-rigid motion of the face!</p></li>
-</ul>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>face_alignment.FaceAlignment</p>
 </dd>
 </dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN.prepare_for_emoca">
 <span class="sig-name descname"><span class="pre">prepare_for_emoca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN.prepare_for_emoca" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs all steps of the cropping / preprocessing pipeline
 necessary for use with DECA/EMOCA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>image</strong> (<em>str</em><em>, </em><em>Path</em><em>, </em><em>np.ndarray</em>) – Either a string or <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object to an image or a numpy array
+(width x height x 3) representing the already loaded RGB image</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>img</strong> – The preprocessed (normalized) and cropped image as a <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code>
+of shape (1, 3, 224, 224), as EMOCA expects (the 1 is the batch size)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>To preprocess (which includes cropping) an image:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cropped_img</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">prepare_for_emoca</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">tuple</span><span class="p">(</span><span class="n">cropped_img</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>  <span class="c1">#</span>
+<span class="go">(1, 3, 224, 224)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">

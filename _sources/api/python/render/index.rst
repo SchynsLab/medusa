@@ -8,7 +8,9 @@
    Module with functionality to render 4D face mesh data.
 
    The ``Renderer`` class is a high-level wrapper around functionality from the
-   excellent `pyrender <https://pyrender.readthedocs.io>`_ package.
+   excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
+
+   .. [1] Matl, Matthew. *pyrender* [computer software]. https://github.com/mmatl/pyrender
 
 
 
