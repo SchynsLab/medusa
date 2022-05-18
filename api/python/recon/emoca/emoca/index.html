@@ -524,28 +524,23 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.benchmark">
-     benchmark
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA">
      EMOCA
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.encode">
-       encode
+      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.tform">
+       tform
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.decode">
-       decode
+      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.benchmark">
+       benchmark
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.forward">
-       forward
+      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.__call__">
+       __call__
       </a>
      </li>
     </ul>
@@ -578,28 +573,23 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.benchmark">
-     benchmark
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA">
      EMOCA
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.encode">
-       encode
+      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.tform">
+       tform
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.decode">
-       decode
+      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.benchmark">
+       benchmark
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.forward">
-       forward
+      <a class="reference internal nav-link" href="#medusa.recon.emoca.emoca.EMOCA.__call__">
+       __call__
       </a>
      </li>
     </ul>
@@ -619,94 +609,87 @@ const thebe_selector_output = ".output, .cell_output"
 <span id="medusa-recon-emoca-emoca"></span><h1><a class="reference internal" href="#module-medusa.recon.emoca.emoca" title="medusa.recon.emoca.emoca"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.emoca.emoca</span></code></a><a class="headerlink" href="#module-medusa.recon.emoca.emoca" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<dl class="py data">
-<dt class="sig sig-object py" id="medusa.recon.emoca.emoca.benchmark">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.emoca.emoca.</span></span><span class="sig-name descname"><span class="pre">benchmark</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#medusa.recon.emoca.emoca.benchmark" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.recon.emoca.emoca.EMOCA">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.emoca.emoca.</span></span><span class="sig-name descname"><span class="pre">EMOCA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.emoca.emoca.EMOCA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
-<p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<p>An wrapper around the EMOCA face reconstruction model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img_size</strong> (<em>tuple</em>) – Original (before cropping!) image dimensions of
+video frame (width, height); needed for baking in
+translation due to cropping</p></li>
+<li><p><strong>cfg</strong> (<em>str</em>) – Path to YAML config file. If <cite>None</cite> (default), it
+will use the package’s default config file.</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ (uses GPU) or ‘cpu’</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="medusa.recon.emoca.emoca.EMOCA.tform">
+<span class="sig-name descname"><span class="pre">tform</span></span><a class="headerlink" href="#medusa.recon.emoca.emoca.EMOCA.tform" title="Permalink to this definition">¶</a></dt>
+<dd><p>A 3x3 numpy array with the cropping transformation matrix;
+needs to be set before running the actual reconstruction!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
-<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<p class="rubric">Examples</p>
+<p>To initialize an EMOCA model:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img_size</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">EMOCA</span><span class="p">(</span><span class="n">img_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>  <span class="c1"># use &#39;cuda&#39; whenever possible!</span>
 </pre></div>
 </div>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call <code class="xref py py-meth docutils literal notranslate"><span class="pre">to()</span></code>, etc.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As per the example above, an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> call to the parent class
-must be made before assignment on the child.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><p><strong>training</strong> (<em>bool</em>) – Boolean represents whether this module is in training or
-evaluation mode.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.recon.emoca.emoca.EMOCA.encode">
-<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.emoca.emoca.EMOCA.encode" title="Permalink to this definition">¶</a></dt>
-<dd><p>“Encodes” the image into FLAME parameters, i.e., predict FLAME
-parameters for the given image. Note that, at the moment, it only
-works for a single image, not a batch of images.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>image</strong> (<em>torch.Tensor</em>) – A Tensor with shape 1 (batch size) x 3 (color ch.) x 244 (w) x 244 (h)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>enc_dict</strong> – A dictionary with all encoded parameters and some extra data needed
-for the decoding stage.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.recon.emoca.emoca.EMOCA.decode">
-<span class="sig-name descname"><span class="pre">decode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enc_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.emoca.emoca.EMOCA.decode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decodes the face attributes (vertices, landmarks, texture, detail map)
-from the encoded parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>orig_size</strong> (<em>tuple</em>) – Tuple containing the original image size (height, width), i.e.,
-before cropping; needed to transform and render the mesh in the
-original image space</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>dec_dict</strong> – A dictionary with the results from the decoding stage</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If <cite>tform</cite> parameter is not <cite>None</cite> and <cite>orig_size</cite> is <cite>None</cite>. In other
-words, if <cite>tform</cite> is supplied, <cite>orig_size</cite> should be supplied as well</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.recon.emoca.emoca.EMOCA.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.emoca.emoca.EMOCA.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="medusa.recon.emoca.emoca.EMOCA.benchmark">
+<span class="sig-name descname"><span class="pre">benchmark</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#medusa.recon.emoca.emoca.EMOCA.benchmark" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="medusa.recon.emoca.emoca.EMOCA.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.emoca.emoca.EMOCA.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs reconstruction of the face as a list of landmarks (vertices).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>image</strong> (<em>torch.Tensor</em>) – A 4D (1 x 3 x w x h) <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code> representing a RGB image (and a
+batch dimension of 1)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>out</strong> – A dictionary with two keys: <code class="docutils literal notranslate"><span class="pre">&quot;v&quot;</span></code>, the reconstructed vertices (5023 in
+total) and <code class="docutils literal notranslate"><span class="pre">&quot;mat&quot;</span></code>, a 4x4 Numpy array representing the local-to-world
+matrix</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Before calling <code class="docutils literal notranslate"><span class="pre">__call__</span></code>, you <em>must</em> set the <code class="docutils literal notranslate"><span class="pre">tform</span></code> attribute to the
+estimated cropping matrix (see example below). This is necessary to encode the
+relative position and scale of the bounding box into the reconstructed vertices.</p>
+<p class="rubric">Examples</p>
+<p>To reconstruct an example, call the <code class="docutils literal notranslate"><span class="pre">EMOCA</span></code> object, but make sure to set the
+<code class="docutils literal notranslate"><span class="pre">tform</span></code> attribute first:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.recon</span> <span class="kn">import</span> <span class="n">FAN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">EMOCA</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>  <span class="c1"># use &#39;cuda&#39; whenever possible!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fan</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span>   <span class="c1"># need FAN for cropping!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cropped_img</span> <span class="o">=</span> <span class="n">fan</span><span class="o">.</span><span class="n">prepare_for_emoca</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">tform</span> <span class="o">=</span> <span class="n">fan</span><span class="o">.</span><span class="n">tform</span><span class="o">.</span><span class="n">params</span>  <span class="c1"># crucial!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">cropped_img</span><span class="p">)</span>  <span class="c1"># reconstruct!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>    <span class="c1"># vertices</span>
+<span class="go">(5023, 3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  <span class="c1"># local-to-world matrix</span>
+<span class="go">(4, 4)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </dd></dl>
 

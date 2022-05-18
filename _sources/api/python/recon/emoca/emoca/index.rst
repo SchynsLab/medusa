@@ -7,78 +7,78 @@
 Module Contents
 ---------------
 
-.. py:data:: benchmark
-   :annotation: = True
-
-   
-
 .. py:class:: EMOCA(img_size, cfg=None, device='cuda')
 
    Bases: :py:obj:`torch.nn.Module`
 
-   Base class for all neural network modules.
+   An wrapper around the EMOCA face reconstruction model.
 
-   Your models should also subclass this class.
+   :param img_size: Original (before cropping!) image dimensions of
+                    video frame (width, height); needed for baking in
+                    translation due to cropping
+   :type img_size: tuple
+   :param cfg: Path to YAML config file. If `None` (default), it
+               will use the package's default config file.
+   :type cfg: str
+   :param device: Either 'cuda' (uses GPU) or 'cpu'
+   :type device: str
 
-   Modules can also contain other Modules, allowing to nest them in
-   a tree structure. You can assign the submodules as regular attributes::
+   .. attribute:: tform
 
-       import torch.nn as nn
-       import torch.nn.functional as F
+      A 3x3 numpy array with the cropping transformation matrix;
+      needs to be set before running the actual reconstruction!
 
-       class Model(nn.Module):
-           def __init__(self):
-               super().__init__()
-               self.conv1 = nn.Conv2d(1, 20, 5)
-               self.conv2 = nn.Conv2d(20, 20, 5)
+      :type: np.ndarray
 
-           def forward(self, x):
-               x = F.relu(self.conv1(x))
-               return F.relu(self.conv2(x))
+   .. rubric:: Examples
 
-   Submodules assigned in this way will be registered, and will have their
-   parameters converted too when you call :meth:`to`, etc.
+   To initialize an EMOCA model:
 
-   .. note::
-       As per the example above, an ``__init__()`` call to the parent class
-       must be made before assignment on the child.
+   >>> from medusa.data import get_example_frame
+   >>> img_size = get_example_frame().shape[:2]
+   >>> model = EMOCA(img_size, device='cpu')  # use 'cuda' whenever possible!
 
-   :ivar training: Boolean represents whether this module is in training or
-                   evaluation mode.
-   :vartype training: bool
+   .. py:attribute:: benchmark
+      :annotation: = True
 
-   .. py:method:: encode(self, image)
+      
 
-      "Encodes" the image into FLAME parameters, i.e., predict FLAME
-      parameters for the given image. Note that, at the moment, it only
-      works for a single image, not a batch of images.
+   .. py:method:: __call__(self, image)
 
-      :param image: A Tensor with shape 1 (batch size) x 3 (color ch.) x 244 (w) x 244 (h)
+      Performs reconstruction of the face as a list of landmarks (vertices).
+
+      :param image: A 4D (1 x 3 x w x h) ``torch.Tensor`` representing a RGB image (and a
+                    batch dimension of 1)
       :type image: torch.Tensor
 
-      :returns: **enc_dict** -- A dictionary with all encoded parameters and some extra data needed
-                for the decoding stage.
+      :returns: **out** -- A dictionary with two keys: ``"v"``, the reconstructed vertices (5023 in
+                total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
+                matrix
       :rtype: dict
 
+      .. rubric:: Notes
 
-   .. py:method:: decode(self, enc_dict)
+      Before calling ``__call__``, you *must* set the ``tform`` attribute to the
+      estimated cropping matrix (see example below). This is necessary to encode the
+      relative position and scale of the bounding box into the reconstructed vertices.
 
-      Decodes the face attributes (vertices, landmarks, texture, detail map)
-      from the encoded parameters.
+      .. rubric:: Examples
 
-      :param orig_size: Tuple containing the original image size (height, width), i.e.,
-                        before cropping; needed to transform and render the mesh in the
-                        original image space
-      :type orig_size: tuple
+      To reconstruct an example, call the ``EMOCA`` object, but make sure to set the
+      ``tform`` attribute first:
 
-      :returns: **dec_dict** -- A dictionary with the results from the decoding stage
-      :rtype: dict
-
-      :raises ValueError: If `tform` parameter is not `None` and `orig_size` is `None`. In other
-          words, if `tform` is supplied, `orig_size` should be supplied as well
-
-
-   .. py:method:: forward(self, img)
+      >>> from medusa.data import get_example_frame
+      >>> from medusa.recon import FAN
+      >>> img = get_example_frame()
+      >>> model = EMOCA(img.shape[:2], device='cpu')  # use 'cuda' whenever possible!
+      >>> fan = FAN(lm_type='2D')   # need FAN for cropping!
+      >>> cropped_img = fan.prepare_for_emoca(img)
+      >>> model.tform = fan.tform.params  # crucial!
+      >>> out = model(cropped_img)  # reconstruct!
+      >>> out['v'].shape    # vertices
+      (5023, 3)
+      >>> out['mat'].shape  # local-to-world matrix
+      (4, 4)
 
 
 

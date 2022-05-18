@@ -651,6 +651,26 @@ In <em>Proceedings of the IEEE International Conference on Computer Vision</em>
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.fan.</span></span><span class="sig-name descname"><span class="pre">FAN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">224</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sfd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_prev_fan_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_prev_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN" title="Permalink to this definition">¶</a></dt>
 <dd><p>A wrapper around the FAN-3D landmark prediction model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device</strong> (<em>str</em>) – Device to use, either ‘cpu’ or ‘cuda’ (for GPU)</p></li>
+<li><p><strong>target_size</strong> (<em>int</em>) – Size to crop the image to, assuming a square crop; default (224)
+corresponds to image size that EMOCA expects (ignored if not calling
+<code class="docutils literal notranslate"><span class="pre">prepare_for_emoca</span></code>)</p></li>
+<li><p><strong>face_detector</strong> (<em>str</em>) – Face detector algorithm to use (default: ‘sfd’, as used in EMOCA)</p></li>
+<li><p><strong>lm_type</strong> (<em>str</em>) – Either ‘2D’ (using 2D landmarks, necessary when using it for EMOCA) or
+‘3D’ (using 3D landmarks), necessary when using it as a reconstruction
+model</p></li>
+<li><p><strong>use_prev_fan_bbox</strong> (<em>bool</em>) – Whether to use the previous bbox from FAN to do an initial crop (True)
+or whether to run the FAN face detection algorithm again (False)</p></li>
+<li><p><strong>use_prev_bbox</strong> (<em>bool</em>) – Whether to use the previous DECA-style bbox (True) or whether to
+run FAN again to estimate landmarks from which to create a new
+bbox (False); this should only be used when there is very little
+rigid motion of the face!</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN.model">
 <span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#medusa.recon.fan.FAN.model" title="Permalink to this definition">¶</a></dt>
@@ -662,6 +682,15 @@ In <em>Proceedings of the IEEE International Conference on Computer Vision</em>
 </dl>
 </dd></dl>
 
+<p class="rubric">Examples</p>
+<p>To create a FAN-3D based reconstruction model:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">recon_model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;3D&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To create a FAN-2D model for cropping images (as expected by EMOCA):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">recon_model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN.prepare_for_emoca">
 <span class="sig-name descname"><span class="pre">prepare_for_emoca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN.prepare_for_emoca" title="Permalink to this definition">¶</a></dt>
@@ -695,28 +724,64 @@ of shape (1, 3, 224, 224), as EMOCA expects (the 1 is the batch size)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimates (2D) landmarks (vertices) on the face.</p>
+<dd><p>Estimates landmarks (vertices) on the face.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>image</strong> (<em>str</em><em>, </em><em>Path</em><em>, or </em><em>numpy array</em>) – Path (str or pathlib Path) pointing to image file or 3D numpy array
-(with np.uint8 values) representing a RGB image</p>
+<dd class="field-odd"><p><strong>image</strong> (<em>str</em><em>, </em><em>Path</em><em>, </em><em>np.ndarray</em>) – Either a string or <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object to an image or a numpy array
+(width x height x 3) representing the already loaded RGB image</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>out</strong> – A dictionary with one key: <code class="docutils literal notranslate"><span class="pre">&quot;v&quot;</span></code>, the reconstructed vertices (68 in
+total) with 2 (if using <code class="docutils literal notranslate"><span class="pre">lm_type='2D'</span></code>) or 3 (if using <code class="docutils literal notranslate"><span class="pre">lm_type='3D'</span></code>)
+coordinates</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
-<p>:raises ValueError : if <cite>image</cite> is <cite>None</cite> <em>and</em> self.img_orig is <cite>None</cite>:</p>
+<p class="rubric">Examples</p>
+<p>To reconstruct an example, simply call the <code class="docutils literal notranslate"><span class="pre">FAN</span></code> object:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;3D&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>  <span class="c1"># reconstruct!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>    <span class="c1"># vertices</span>
+<span class="go">(68, 3)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN.viz_qc">
 <span class="sig-name descname"><span class="pre">viz_qc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_rgba</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN.viz_qc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Visualizes the inferred 2D landmarks &amp; bounding box, as well as the final
+<dd><p>Visualizes the inferred 3D landmarks &amp; bounding box, as well as the final
 cropped image.</p>
-<dl class="simple">
-<dt>f_out<span class="classifier">str, Path</span></dt><dd><p>Path to save viz to</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f_out</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to save viz to; if <code class="docutils literal notranslate"><span class="pre">None</span></code>, returned as an RGBA image</p></li>
+<li><p><strong>return_rgba</strong> (<em>bool</em>) – Whether to return a numpy image with the raw pixel RGBA intensities
+(True) or not (False; return nothing)</p></li>
+</ul>
 </dd>
-<dt>return_rgba<span class="classifier">bool</span></dt><dd><p>Whether to return a numpy image with the raw pixel RGBA intensities
-(True) or not (False; return nothing)</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>img</strong> – The rendered image as a numpy array (if <code class="docutils literal notranslate"><span class="pre">f_out</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>To visualize the landmark and (EMOCA-style) bounding box:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fan</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cropped_img</span> <span class="o">=</span> <span class="n">fan</span><span class="o">.</span><span class="n">prepare_for_emoca</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viz_img</span> <span class="o">=</span> <span class="n">fan</span><span class="o">.</span><span class="n">viz_qc</span><span class="p">(</span><span class="n">return_rgba</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viz_img</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(480, 640, 4)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

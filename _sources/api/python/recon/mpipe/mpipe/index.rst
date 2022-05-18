@@ -21,6 +21,13 @@ Module Contents
 
    A Mediapipe face mesh reconstruction model.
 
+   :param static_image_mode: Whether to expect a sequence of related images
+                             (like in a video)
+   :type static_image_mode: bool
+   :param kwargs: Extra keyword arguments to be passed to
+                  the initialization of FaceMesh
+   :type kwargs: dict
+
    .. attribute:: model
 
       The actual Mediapipe model object
