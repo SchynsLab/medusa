@@ -16,6 +16,7 @@ autoapi_dirs = ["../../medusa"]
 autoapi_options = ["members", "undoc-members", "show-inheritance", "special-members"]
 autoapi_ignore = ["*version.py", "*cli.py"]
 autoapi_add_toctree_entry = False
+autoapi_python_class_content = 'class'
 
 # -- Project information -----------------------------------------------------
 

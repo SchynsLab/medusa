@@ -15,25 +15,25 @@ from .transforms import PCF, image2world
 
 class Mediapipe:
     """ A Mediapipe face mesh reconstruction model.
+
+    Parameters
+    ----------
+    static_image_mode : bool
+        Whether to expect a sequence of related images
+        (like in a video)
+    kwargs : dict
+        Extra keyword arguments to be passed to
+        the initialization of FaceMesh
     
     Attributes
     ----------
     model : mediapipe.solutions.face_mesh.FaceMesh
         The actual Mediapipe model object
+
     """ 
     
     def __init__(self, static_image_mode=True, **kwargs):
-        """Initializes a Mediapipe recon model.
-
-        Parameters
-        ----------
-        static_image_mode : bool
-            Whether to expect a sequence of related images
-            (like in a video)
-        kwargs : dict
-            Extra keyword arguments to be passed to
-            the initialization of FaceMesh
-        """
+        """ Initializes a Mediapipe recon model. """
 
         # Importing here speeds up CLI
         import mediapipe as mp
@@ -51,6 +51,7 @@ class Mediapipe:
     def _load_reference(self):
         """ Loads the vertices and faces of the references template
         in world space. """
+
         path = Path(__file__).parents[2] / "data/mediapipe_template.obj"
         with open(path, "r") as f_in:
             obj = load_obj(f_in)

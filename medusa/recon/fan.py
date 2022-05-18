@@ -29,11 +29,45 @@ logger = get_logger()
 class FAN:
     """ A wrapper around the FAN-3D landmark prediction model.
     
+    Parameters
+    ----------
+    device : str
+        Device to use, either 'cpu' or 'cuda' (for GPU)
+    target_size : int
+        Size to crop the image to, assuming a square crop; default (224)
+        corresponds to image size that EMOCA expects (ignored if not calling
+        ``prepare_for_emoca``)
+    face_detector : str
+        Face detector algorithm to use (default: 'sfd', as used in EMOCA)
+    lm_type : str
+        Either '2D' (using 2D landmarks, necessary when using it for EMOCA) or
+        '3D' (using 3D landmarks), necessary when using it as a reconstruction
+        model
+    use_prev_fan_bbox : bool
+        Whether to use the previous bbox from FAN to do an initial crop (True)
+        or whether to run the FAN face detection algorithm again (False)
+    use_prev_bbox : bool
+        Whether to use the previous DECA-style bbox (True) or whether to
+        run FAN again to estimate landmarks from which to create a new
+        bbox (False); this should only be used when there is very little
+        rigid motion of the face!
+        
     Attributes
     ----------
     model : face_alignment.FaceAlignment
         The actual face alignment model
+
+    Examples
+    --------
+    To create a FAN-3D based reconstruction model:
+    
+    >>> recon_model = FAN(lm_type='3D')
+    
+    To create a FAN-2D model for cropping images (as expected by EMOCA):
+    
+    >>> recon_model = FAN(lm_type='2D')
     """
+
     def __init__(
         self,
         device="cpu",
@@ -43,40 +77,7 @@ class FAN:
         use_prev_fan_bbox=False,
         use_prev_bbox=False,
     ):
-        """
-        Parameters
-        ----------
-        device : str
-            Device to use, either 'cpu' or 'cuda' (for GPU)
-        target_size : int
-            Size to crop the image to, assuming a square crop; default (224)
-            corresponds to image size that EMOCA expects (ignored if not calling
-            ``prepare_for_emoca``)
-        face_detector : str
-            Face detector algorithm to use (default: 'sfd', as used in EMOCA)
-        lm_type : str
-            Either '2D' (using 2D landmarks, necessary when using it for EMOCA) or
-            '3D' (using 3D landmarks), necessary when using it as a reconstruction
-            model
-        use_prev_fan_bbox : bool
-            Whether to use the previous bbox from FAN to do an initial crop (True)
-            or whether to run the FAN face detection algorithm again (False)
-        use_prev_bbox : bool
-            Whether to use the previous DECA-style bbox (True) or whether to
-            run FAN again to estimate landmarks from which to create a new
-            bbox (False); this should only be used when there is very little
-            rigid motion of the face!
-            
-        Examples
-        --------
-        To create a FAN-3D based reconstruction model:
-        
-        >>> recon_model = FAN(lm_type='3D')
-        
-        To create a FAN-2D model for cropping images (as expected by EMOCA):
-        
-        >>> recon_model = FAN(lm_type='2D')
-        """
+        """ Initializes a FAN object. """
 
         self.model = FaceAlignment(
             getattr(LandmarksType, f"_{lm_type}"),
@@ -135,7 +136,7 @@ class FAN:
         if self.bbox is None or not self.use_prev_bbox:
             # Only run this when we want a new bbox or
             # when there isn't a bbox estimated yet
-            self.__call__()
+            _ = self.__call__()
             self._create_bbox()
 
         self._crop()
@@ -143,17 +144,31 @@ class FAN:
         return img
 
     def __call__(self, image=None):
-        """Estimates (2D) landmarks (vertices) on the face.
+        """Estimates landmarks (vertices) on the face.
 
         Parameters
         ----------
-        image : str, Path, or numpy array
-            Path (str or pathlib Path) pointing to image file or 3D numpy array
-            (with np.uint8 values) representing a RGB image
+        image : str, Path, np.ndarray
+            Either a string or ``pathlib.Path`` object to an image or a numpy array
+            (width x height x 3) representing the already loaded RGB image
 
-        Raises
-        ------
-        ValueError : if `image` is `None` *and* self.img_orig is `None`
+        Returns
+        -------
+        out : dict
+            A dictionary with one key: ``"v"``, the reconstructed vertices (68 in 
+            total) with 2 (if using ``lm_type='2D'``) or 3 (if using ``lm_type='3D'``)
+            coordinates
+
+        Examples
+        --------
+        To reconstruct an example, simply call the ``FAN`` object:
+        
+        >>> from medusa.data import get_example_frame
+        >>> model = FAN(lm_type='3D')
+        >>> img = get_example_frame()
+        >>> out = model(img)  # reconstruct!
+        >>> out['v'].shape    # vertices
+        (68, 3)
         """
 
         if image is not None:
@@ -189,7 +204,7 @@ class FAN:
         return {"v": lm}
 
     def _create_bbox(self, scale=1.25):
-        """Creates a bounding box (bbox) based on the landmarks by creating
+        """ Creates a bounding box (bbox) based on the landmarks by creating
         a box around the outermost landmarks (+10%), as done in the original
         DECA usage.
 
@@ -216,9 +231,9 @@ class FAN:
         )  # top right
 
     def _crop(self):
-        """Using the bounding box (`self.bbox`), crops the image by warping the image
+        """ Using the bounding box (`self.bbox`), crops the image by warping the image
         based on a similarity transform of the bounding box to the corners of target size
-        image."""
+        image. """
         w, h = self.target_size, self.target_size
         dst = np.array([[0, 0], [0, w - 1], [h - 1, 0]])
         self.tform = estimate_transform("similarity", self.bbox[:3, :], dst)
@@ -229,8 +244,8 @@ class FAN:
         )
 
     def _preprocess(self):
-        """Resizes, tranposes (channels, width, height), rescales (/255) the data,
-        casts the data to torch, and add a batch dimension (`unsqueeze`)."""
+        """ Resizes, tranposes (channels, width, height), rescales (/255) the data,
+        casts the data to torch, and add a batch dimension (`unsqueeze`). """
         img = resize(
             self.img_crop, (self.target_size, self.target_size), anti_aliasing=True
         )
@@ -240,14 +255,33 @@ class FAN:
         return img.unsqueeze(0)  # add singleton batch dim
 
     def viz_qc(self, f_out=None, return_rgba=False):
-        """Visualizes the inferred 2D landmarks & bounding box, as well as the final
+        """ Visualizes the inferred 3D landmarks & bounding box, as well as the final
         cropped image.
 
+        Parameters
+        ----------
         f_out : str, Path
-            Path to save viz to
+            Path to save viz to; if ``None``, returned as an RGBA image
         return_rgba : bool
             Whether to return a numpy image with the raw pixel RGBA intensities
             (True) or not (False; return nothing)
+            
+        Returns
+        -------
+        img : np.ndarray
+            The rendered image as a numpy array (if ``f_out`` is ``None``)
+        
+        Examples
+        --------
+        To visualize the landmark and (EMOCA-style) bounding box:
+        
+        >>> from medusa.data import get_example_frame
+        >>> img = get_example_frame()
+        >>> fan = FAN(lm_type='2D')
+        >>> cropped_img = fan.prepare_for_emoca(img) 
+        >>> viz_img = fan.viz_qc(return_rgba=True)
+        >>> viz_img.shape
+        (480, 640, 4)
         """
 
         if f_out is None and return_rgba is False:

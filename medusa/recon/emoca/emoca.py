@@ -1,40 +1,48 @@
 import yaml
+import torch
 import numpy as np
 from pathlib import Path
-from pyrender.camera import OrthographicCamera
 
 from .models.encoders import ResnetEncoder
 from .models.decoders import FLAME, FLAMETex, Generator
 from ...transforms import create_viewport_matrix, create_ortho_matrix, crop_matrix_to_3d
 
-import torch
-
-# May have some speed benefits
-torch.backends.cudnn.benchmark = True
-
 
 class EMOCA(torch.nn.Module):
+    """ An wrapper around the EMOCA face reconstruction model.        
+
+    Parameters
+    ----------
+    img_size : tuple
+        Original (before cropping!) image dimensions of
+        video frame (width, height); needed for baking in
+        translation due to cropping
+    cfg : str
+        Path to YAML config file. If `None` (default), it
+        will use the package's default config file.
+    device : str
+        Either 'cuda' (uses GPU) or 'cpu'
+
+    Attributes
+    ----------
+    tform : np.ndarray
+        A 3x3 numpy array with the cropping transformation matrix;
+        needs to be set before running the actual reconstruction!
+
+    Examples
+    --------
+    To initialize an EMOCA model:
+    
+    >>> from medusa.data import get_example_frame
+    >>> img_size = get_example_frame().shape[:2]
+    >>> model = EMOCA(img_size, device='cpu')  # use 'cuda' whenever possible!
+    """    
+
+    # May have some speed benefits
+    torch.backends.cudnn.benchmark = True
+
     def __init__(self, img_size, cfg=None, device="cuda"):
-        """Initializes an EMOCA model object.
-
-        Parameters
-        ----------
-        img_size : tuple
-            Original (before cropping!) image dimensions of
-            video frame (width, height); needed for baking in
-            translation due to cropping
-        cfg : str
-            Path to YAML config file. If `None` (default), it
-            will use the package's default config file.
-        device : str
-            Either 'cuda' (uses GPU) or 'cpu'
-
-        Attributes
-        ----------
-        tform : np.ndarray
-            A 3x3 numpy array with the cropping transformation matrix;
-            needs to be set before running the actual reconstruction!
-        """
+        """Initializes an EMOCA model object."""
         super().__init__()
         self.img_size = img_size
         self.device = device
@@ -59,7 +67,7 @@ class EMOCA(torch.nn.Module):
                     self.cfg[section][key] = str(self.package_root.parent / value)
 
     def _create_submodels(self):
-        """Creates all EMOCA encoding and decoding submodels. To summarize:
+        """ Creates all EMOCA encoding and decoding submodels. To summarize:
         - `E_flame`: predicts (coarse) FLAME parameters given an image
         - `E_expression`: predicts expression FLAME parameters given an image
         - `E_detail`: predicts detail FLAME parameters given an image
@@ -82,7 +90,7 @@ class EMOCA(torch.nn.Module):
 
         # encoders
         self.E_flame = ResnetEncoder(outsize=self.n_param).to(self.device)
-        self.E_expression = ResnetEncoder(self.param_dict["n_exp"])
+        self.E_expression = ResnetEncoder(self.param_dict["n_exp"]).to(self.device)
         self.E_detail = ResnetEncoder(outsize=128).to(self.device)
 
         # decoders
@@ -106,7 +114,7 @@ class EMOCA(torch.nn.Module):
         self.D_detail.load_state_dict(checkpoint["D_detail"])
 
         # for some reason E_exp should be explicitly cast to cuda
-        self.E_expression.cuda()
+        self.E_expression.to(self.device)
 
         # Set everything to 'eval' (inference) mode
         self.E_flame.eval()
@@ -115,7 +123,7 @@ class EMOCA(torch.nn.Module):
         self.D_detail.eval()
         torch.set_grad_enabled(False)  # apparently speeds up forward pass, too
 
-    def encode(self, image):
+    def _encode(self, image):
         """ "Encodes" the image into FLAME parameters, i.e., predict FLAME
         parameters for the given image. Note that, at the moment, it only
         works for a single image, not a batch of images.
@@ -172,7 +180,7 @@ class EMOCA(torch.nn.Module):
 
         return enc_dict
 
-    def decode(self, enc_dict):
+    def _decode(self, enc_dict):
         """Decodes the face attributes (vertices, landmarks, texture, detail map)
         from the encoded parameters.
 
@@ -272,7 +280,47 @@ class EMOCA(torch.nn.Module):
         # #inp_D_detail = torch.cat([enc_dict['pose'][:, 3:], enc_dict['exp'], enc_dict['detail']], dim=1)
         # #uv_z = self.D_detail(inp_D_detail)
 
-    def forward(self, img):
-        enc_dict = self.encode(img)
-        dec_dict = self.decode(enc_dict)
+    def __call__(self, image):
+        """ Performs reconstruction of the face as a list of landmarks (vertices).
+
+        Parameters
+        ----------
+        image : torch.Tensor
+            A 4D (1 x 3 x w x h) ``torch.Tensor`` representing a RGB image (and a 
+            batch dimension of 1)
+
+        Returns
+        -------
+        out : dict
+            A dictionary with two keys: ``"v"``, the reconstructed vertices (5023 in 
+            total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
+            matrix
+        
+        Notes
+        -----
+        Before calling ``__call__``, you *must* set the ``tform`` attribute to the
+        estimated cropping matrix (see example below). This is necessary to encode the
+        relative position and scale of the bounding box into the reconstructed vertices.    
+        
+        Examples
+        --------
+        To reconstruct an example, call the ``EMOCA`` object, but make sure to set the
+        ``tform`` attribute first:
+        
+        >>> from medusa.data import get_example_frame
+        >>> from medusa.recon import FAN
+        >>> img = get_example_frame()
+        >>> model = EMOCA(img.shape[:2], device='cpu')  # use 'cuda' whenever possible!
+        >>> fan = FAN(lm_type='2D')   # need FAN for cropping!
+        >>> cropped_img = fan.prepare_for_emoca(img)
+        >>> model.tform = fan.tform.params  # crucial!
+        >>> out = model(cropped_img)  # reconstruct!
+        >>> out['v'].shape    # vertices
+        (5023, 3)
+        >>> out['mat'].shape  # local-to-world matrix
+        (4, 4)
+        """
+
+        enc_dict = self._encode(image)
+        dec_dict = self._decode(enc_dict)
         return dec_dict
