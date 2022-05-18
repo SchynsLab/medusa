@@ -35,7 +35,7 @@ class EMOCA(torch.nn.Module):
     
     >>> from medusa.data import get_example_frame
     >>> img_size = get_example_frame().shape[:2]
-    >>> model = EMOCA(img_size, device='cpu')  # use 'cuda' whenever possible!
+    >>> model = EMOCA(img_size, device='cpu')  # doctest: +SKIP
     """    
 
     # May have some speed benefits
