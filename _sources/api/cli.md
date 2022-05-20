@@ -16,16 +16,23 @@ $ medusa_videorecon --help
 
 Usage: medusa_videorecon [OPTIONS] VIDEO_PATH
 
+  Performs frame-by-frame 3D face reconstruction of a video file.
+
 Options:
-  --events-path FILE
+  --events-path FILE              Path to events-file (a .tsv file)
+  -o, --out PATH                  File to save output to (shouldn't have an
+                                  extension)
   -r, --recon-model-name [emoca|mediapipe|FAN-3D]
-  -c, --cfg TEXT                  Path to recon config file
-  --device [cpu|cuda]             Device to run recon on
-  -o, --out-dir PATH              Output directory
-  --render-recon                  Plot recon on video background
-  --render-on-video               Plot recon on video background
-  --render-crop                   Render cropping results
-  -n, --n-frames INTEGER          Number of frames to reconstruct
+                                  Name of the reconstruction model
+  -c, --cfg TEXT                  Path to a custom Medusa config file
+  --device [cpu|cuda]             Device to run the reconstruction on (only
+                                  relevant for FAN/EMOCA
+  --render-recon                  Render the reconstruction as a video
+  --render-on-video               Render the reconstruction on top of the
+                                  original video
+  --render-format [gif|mp4]       Format of rendering output
+  -n, --n-frames INTEGER          Number of frames to reconstruct (5 means
+                                  'reconstruct only the 5 first frames)
   --help                          Show this message and exit.
 ```
 

@@ -493,11 +493,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.preproc.resample.logger">
-     logger
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.preproc.resample.resample">
      resample
     </a>
@@ -530,11 +525,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.preproc.resample.logger">
-     logger
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.preproc.resample.resample">
      resample
     </a>
@@ -554,11 +544,6 @@ const thebe_selector_output = ".output, .cell_output"
 <span id="medusa-preproc-resample"></span><h1><a class="reference internal" href="#module-medusa.preproc.resample" title="medusa.preproc.resample"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.resample</span></code></a><a class="headerlink" href="#module-medusa.preproc.resample" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<dl class="py data">
-<dt class="sig sig-object py" id="medusa.preproc.resample.logger">
-<span class="sig-prename descclassname"><span class="pre">medusa.preproc.resample.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#medusa.preproc.resample.logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.preproc.resample.resample">
 <span class="sig-prename descclassname"><span class="pre">medusa.preproc.resample.</span></span><span class="sig-name descname"><span class="pre">resample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pchip'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.resample.resample" title="Permalink to this definition">¶</a></dt>
@@ -577,6 +562,12 @@ of the (average) sampling period will be used</p></li>
 <li><p><strong>kind</strong> (<em>str</em>) – Kind of interpolation to use, either ‘pchip’ (default), ‘linear’, ‘quadratic’,
 or ‘cubic’</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>data</strong> – An object with a class inherited from <code class="docutils literal notranslate"><span class="pre">medusa.core.BaseData</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>medusa.core.*Data</p>
 </dd>
 </dl>
 </dd></dl>

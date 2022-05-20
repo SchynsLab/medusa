@@ -655,16 +655,23 @@ example:</p>
 
 <span class="go">Usage: medusa_videorecon [OPTIONS] VIDEO_PATH</span>
 
+<span class="go">  Performs frame-by-frame 3D face reconstruction of a video file.</span>
+
 <span class="go">Options:</span>
-<span class="go">  --events-path FILE</span>
+<span class="go">  --events-path FILE              Path to events-file (a .tsv file)</span>
+<span class="go">  -o, --out PATH                  File to save output to (shouldn&#39;t have an</span>
+<span class="go">                                  extension)</span>
 <span class="go">  -r, --recon-model-name [emoca|mediapipe|FAN-3D]</span>
-<span class="go">  -c, --cfg TEXT                  Path to recon config file</span>
-<span class="go">  --device [cpu|cuda]             Device to run recon on</span>
-<span class="go">  -o, --out-dir PATH              Output directory</span>
-<span class="go">  --render-recon                  Plot recon on video background</span>
-<span class="go">  --render-on-video               Plot recon on video background</span>
-<span class="go">  --render-crop                   Render cropping results</span>
-<span class="go">  -n, --n-frames INTEGER          Number of frames to reconstruct</span>
+<span class="go">                                  Name of the reconstruction model</span>
+<span class="go">  -c, --cfg TEXT                  Path to a custom Medusa config file</span>
+<span class="go">  --device [cpu|cuda]             Device to run the reconstruction on (only</span>
+<span class="go">                                  relevant for FAN/EMOCA</span>
+<span class="go">  --render-recon                  Render the reconstruction as a video</span>
+<span class="go">  --render-on-video               Render the reconstruction on top of the</span>
+<span class="go">                                  original video</span>
+<span class="go">  --render-format [gif|mp4]       Format of rendering output</span>
+<span class="go">  -n, --n-frames INTEGER          Number of frames to reconstruct (5 means</span>
+<span class="go">                                  &#39;reconstruct only the 5 first frames)</span>
 <span class="go">  --help                          Show this message and exit.</span>
 </pre></div>
 </div>

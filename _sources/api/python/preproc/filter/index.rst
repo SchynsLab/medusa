@@ -20,8 +20,8 @@ Module Contents
    :type low_pass: float
    :param high_pass: High-pass cutoff (in Hz)
    :type high_pass: float
-   :param video: Path to video to render reconstruction on top of
-                 (optional)
-   :type video: str
+
+   :returns: **data** -- An object with a class inherited from ``medusa.core.BaseData``
+   :rtype: medusa.core.*Data
 
 

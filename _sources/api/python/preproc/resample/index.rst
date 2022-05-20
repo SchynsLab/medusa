@@ -7,11 +7,6 @@
 Module Contents
 ---------------
 
-.. py:data:: logger
-   
-
-   
-
 .. py:function:: resample(data, sampling_freq=None, kind='pchip')
 
    Resamples the data to a given sampling rate.
@@ -29,5 +24,8 @@ Module Contents
    :param kind: Kind of interpolation to use, either 'pchip' (default), 'linear', 'quadratic',
                 or 'cubic'
    :type kind: str
+
+   :returns: **data** -- An object with a class inherited from ``medusa.core.BaseData``
+   :rtype: medusa.core.*Data
 
 

@@ -28,4 +28,7 @@ Module Contents
    :param baseline_mode: How to perform baseline correction (options: 'mean', 'ratio')
    :type baseline_mode: str
 
+   :returns: **data** -- An object with a class inherited from ``medusa.core.BaseData``
+   :rtype: medusa.core.*Data
+
 

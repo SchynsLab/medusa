@@ -493,11 +493,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.preproc.recon.logger">
-     logger
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.preproc.recon.videorecon">
      videorecon
     </a>
@@ -530,11 +525,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.preproc.recon.logger">
-     logger
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.preproc.recon.videorecon">
      videorecon
     </a>
@@ -554,14 +544,9 @@ const thebe_selector_output = ".output, .cell_output"
 <span id="medusa-preproc-recon"></span><h1><a class="reference internal" href="#module-medusa.preproc.recon" title="medusa.preproc.recon"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.recon</span></code></a><a class="headerlink" href="#module-medusa.preproc.recon" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<dl class="py data">
-<dt class="sig sig-object py" id="medusa.preproc.recon.logger">
-<span class="sig-prename descclassname"><span class="pre">medusa.preproc.recon.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#medusa.preproc.recon.logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.preproc.recon.videorecon">
-<span class="sig-prename descclassname"><span class="pre">medusa.preproc.recon.</span></span><span class="sig-name descname"><span class="pre">videorecon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recon_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_recon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_on_video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.recon.videorecon" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.preproc.recon.</span></span><span class="sig-name descname"><span class="pre">videorecon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recon_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.recon.videorecon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reconstruction of all frames of a video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -575,15 +560,15 @@ columns are ‘duration’ and ‘modulation’</p></li>
 and ‘FAN-3D’</p></li>
 <li><p><strong>cfg</strong> (<em>str</em>) – Path to config file for EMOCA reconstruction; ignored if not using emoca</p></li>
 <li><p><strong>device</strong> (<em>str</em>) – Either “cuda” (for GPU) or “cpu” (ignored when using mediapipe)</p></li>
-<li><p><strong>out_dir</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to directory where recon data (and associated
-files) are saved; if <cite>None</cite>, same directory as video is used</p></li>
-<li><p><strong>render_on_video</strong> (<em>bool</em>) – Whether to render the reconstruction on top of the video;
-this may substantially increase rendering time!</p></li>
-<li><p><strong>render_crop</strong> (<em>bool</em>) – Whether to render the cropping results (only relevant when using EMOCA,
-ignored otherwise)</p></li>
 <li><p><strong>n_frames</strong> (<em>int</em>) – If not <cite>None</cite> (default), only reconstruct and render the first <cite>n_frames</cite>
 frames of the video; nice for debugging</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>data</strong> – An object with a class inherited from <code class="docutils literal notranslate"><span class="pre">medusa.core.BaseData</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>medusa.core.*Data</p>
 </dd>
 </dl>
 </dd></dl>
