@@ -4,15 +4,6 @@
 .. py:module:: medusa.recon.emoca
 
 
-Subpackages
------------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   models/index.rst
-
-
 Submodules
 ----------
 .. toctree::

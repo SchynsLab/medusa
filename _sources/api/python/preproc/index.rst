@@ -3,6 +3,13 @@
 
 .. py:module:: medusa.preproc
 
+.. autoapi-nested-parse::
+
+   Bla bla some info on preprocessing.
+
+   More bla bla.
+
+
 
 Submodules
 ----------

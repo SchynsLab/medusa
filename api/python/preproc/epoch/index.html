@@ -305,15 +305,6 @@ const thebe_selector_output = ".output, .cell_output"
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="../../recon/emoca/models/index.html">
-         <code class="xref py py-mod docutils literal notranslate">
-          <span class="pre">
-           medusa.recon.emoca.models
-          </span>
-         </code>
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="../../recon/emoca/emoca/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
@@ -559,7 +550,7 @@ const thebe_selector_output = ".output, .cell_output"
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.preproc.epoch.epoch">
-<span class="sig-prename descclassname"><span class="pre">medusa.preproc.epoch.</span></span><span class="sig-name descname"><span class="pre">epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_correct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(None,</span> <span class="pre">None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.epoch.epoch" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.preproc.epoch.</span></span><span class="sig-name descname"><span class="pre">epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_correct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(None,</span> <span class="pre">None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.epoch.epoch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates epochs of the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -568,9 +559,6 @@ const thebe_selector_output = ".output, .cell_output"
 data file or a <code class="docutils literal notranslate"><span class="pre">Data</span></code> object (like <code class="docutils literal notranslate"><span class="pre">FlameData</span></code> or <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>)</p></li>
 <li><p><strong>start</strong> (<em>float</em>) – Start of the epoch (in seconds) relative to stimulus onset</p></li>
 <li><p><strong>end</strong> (<em>float</em>) – End of the epoch (in seconds) relative to stimulus onset</p></li>
-<li><p><strong>align_peaks</strong> (<em>bool</em>) – Whether to align peaks across epochs (not implemented yet)</p></li>
-<li><p><strong>max_shift</strong> (<em>float</em>) – Maximum allowed shift (in seconds) for peak alignment; if <cite>peak_align</cite>
-is False, then this argument is ignored</p></li>
 <li><p><strong>baseline_correct</strong> (<em>bool</em>) – Whether to apply baseline correction</p></li>
 <li><p><strong>baseline_window</strong> (<em>tuple</em><em>[</em><em>float</em><em>]</em>) – Tuple with two values, indicating baseline start and end (in seconds),
 respectively; if the first value is None, then the start is the beginning

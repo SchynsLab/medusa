@@ -17,10 +17,13 @@
 Module Contents
 ---------------
 
-.. py:class:: Renderer(camera_type='orthographic', smooth=True, wireframe=False, cam_mat=None, viewport=(224, 224))
+.. py:class:: Renderer(viewport, camera_type='orthographic', smooth=True, wireframe=False, cam_mat=None)
 
    A high-level wrapper around a pyrender-based renderer.
 
+   :param viewport: Desired output image size (width, height), in pixels; should match
+                    the original image (before cropping) that was reconstructed
+   :type viewport: tuple[int]
    :param camera_type: Either 'orthographic' (for Flame-based reconstructions) or
                        'intrinsic' (for mediapipe reconstruction)
    :type camera_type: str
@@ -31,9 +34,6 @@ Module Contents
    :param zoom_out: How much to translate the camera into the positive z direction
                     (necessary for Flame-based reconstructions)
    :type zoom_out: int/float
-   :param viewport: Desired output image size (width, height), in pixels; should match
-                    the original image (before cropping) that was reconstructed
-   :type viewport: tuple[int]
 
    .. py:method:: __call__(self, v, f)
 

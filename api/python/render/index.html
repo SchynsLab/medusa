@@ -305,15 +305,6 @@ const thebe_selector_output = ".output, .cell_output"
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="../recon/emoca/models/index.html">
-         <code class="xref py py-mod docutils literal notranslate">
-          <span class="pre">
-           medusa.recon.emoca.models
-          </span>
-         </code>
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="../recon/emoca/emoca/index.html">
          <code class="xref py py-mod docutils literal notranslate">
           <span class="pre">
@@ -601,19 +592,19 @@ excellent <a class="reference external" href="https://pyrender.readthedocs.io">p
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.render.Renderer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.render.</span></span><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orthographic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">viewport</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(224,</span> <span class="pre">224)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.render.Renderer" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.render.</span></span><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">viewport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orthographic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.render.Renderer" title="Permalink to this definition">¶</a></dt>
 <dd><p>A high-level wrapper around a pyrender-based renderer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>viewport</strong> (<em>tuple</em><em>[</em><em>int</em><em>]</em>) – Desired output image size (width, height), in pixels; should match
+the original image (before cropping) that was reconstructed</p></li>
 <li><p><strong>camera_type</strong> (<em>str</em>) – Either ‘orthographic’ (for Flame-based reconstructions) or
 ‘intrinsic’ (for mediapipe reconstruction)</p></li>
 <li><p><strong>smooth</strong> (<em>bool</em>) – Whether to render a smooth mesh (by normal interpolation) or not</p></li>
 <li><p><strong>wireframe</strong> (<em>bool</em>) – Whether to render a wireframe instead of a surface</p></li>
 <li><p><strong>zoom_out</strong> (<em>int/float</em>) – How much to translate the camera into the positive z direction
 (necessary for Flame-based reconstructions)</p></li>
-<li><p><strong>viewport</strong> (<em>tuple</em><em>[</em><em>int</em><em>]</em>) – Desired output image size (width, height), in pixels; should match
-the original image (before cropping) that was reconstructed</p></li>
 </ul>
 </dd>
 </dl>

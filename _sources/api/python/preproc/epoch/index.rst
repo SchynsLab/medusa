@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:function:: epoch(data, start=-0.5, end=3.0, period=0.01, align_peaks=False, max_shift=0.5, baseline_correct=False, baseline_window=(None, None), baseline_mode='mean')
+.. py:function:: epoch(data, start=-0.5, end=3.0, period=0.01, baseline_correct=False, baseline_window=(None, None), baseline_mode='mean')
 
    Creates epochs of the data.
 
@@ -18,11 +18,6 @@ Module Contents
    :type start: float
    :param end: End of the epoch (in seconds) relative to stimulus onset
    :type end: float
-   :param align_peaks: Whether to align peaks across epochs (not implemented yet)
-   :type align_peaks: bool
-   :param max_shift: Maximum allowed shift (in seconds) for peak alignment; if `peak_align`
-                     is False, then this argument is ignored
-   :type max_shift: float
    :param baseline_correct: Whether to apply baseline correction
    :type baseline_correct: bool
    :param baseline_window: Tuple with two values, indicating baseline start and end (in seconds),

@@ -1,7 +1,9 @@
-:py:mod:`medusa.recon.emoca.models.decoders`
-============================================
+:orphan:
 
-.. py:module:: medusa.recon.emoca.models.decoders
+:py:mod:`medusa.recon.emoca._decoders`
+======================================
+
+.. py:module:: medusa.recon.emoca._decoders
 
 
 Module Contents
