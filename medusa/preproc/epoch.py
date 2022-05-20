@@ -14,8 +14,6 @@ def epoch(
     start=-0.5,
     end=3.0,
     period=0.01,
-    align_peaks=False,
-    max_shift=0.5,
     baseline_correct=False,
     baseline_window=(None, None),
     baseline_mode="mean",
@@ -31,11 +29,6 @@ def epoch(
         Start of the epoch (in seconds) relative to stimulus onset
     end : float
         End of the epoch (in seconds) relative to stimulus onset
-    align_peaks : bool
-        Whether to align peaks across epochs (not implemented yet)
-    max_shift : float
-        Maximum allowed shift (in seconds) for peak alignment; if `peak_align`
-        is False, then this argument is ignored
     baseline_correct : bool
         Whether to apply baseline correction
     baseline_window : tuple[float]
@@ -99,10 +92,6 @@ def epoch(
 
         # Store in 4D (N, T, V, 3) epochs array
         epochs[i, ...] = epoched
-
-    if align_peaks:
-        # TODO in the future (maybe)
-        pass
 
     if baseline_correct:
         # Implementation based on MNE, with some tweaks

@@ -3,8 +3,8 @@ import torch
 import numpy as np
 from pathlib import Path
 
-from .models.encoders import ResnetEncoder
-from .models.decoders import FLAME, FLAMETex, Generator
+from ._encoders import ResnetEncoder
+from ._decoders import FLAME, FLAMETex, Generator
 from ...transforms import create_viewport_matrix, create_ortho_matrix, crop_matrix_to_3d
 
 

@@ -18,6 +18,9 @@ class Renderer:
 
     Parameters
     ----------
+    viewport : tuple[int]
+        Desired output image size (width, height), in pixels; should match
+        the original image (before cropping) that was reconstructed
     camera_type : str
         Either 'orthographic' (for Flame-based reconstructions) or
         'intrinsic' (for mediapipe reconstruction)
@@ -28,18 +31,15 @@ class Renderer:
     zoom_out : int/float
         How much to translate the camera into the positive z direction
         (necessary for Flame-based reconstructions)
-    viewport : tuple[int]
-        Desired output image size (width, height), in pixels; should match
-        the original image (before cropping) that was reconstructed
     """
 
     def __init__(
         self,
+        viewport,
         camera_type="orthographic",
         smooth=True,
         wireframe=False,
         cam_mat=None,
-        viewport=(224, 224),
     ):
 
         self.camera_type = camera_type

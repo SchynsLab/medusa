@@ -126,3 +126,5 @@ def videorecon(
     if render_recon:
         background = video_path if render_on_video else None
         data.render_video(f_out + "_shape.gif", video=background)
+
+    return data
