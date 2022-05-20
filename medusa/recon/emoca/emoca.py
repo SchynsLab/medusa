@@ -1,3 +1,10 @@
+""" Module with a wrapper around a EMOCA reconstruction model [1]_ that can be
+used in Medusa. 
+
+.. [1] Danecek, R., Black, M. J., & Bolkart, T. (2022). EMOCA: Emotion Driven Monocular
+       Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
+""" 
+
 import yaml
 import torch
 import numpy as np
@@ -54,17 +61,16 @@ class EMOCA(torch.nn.Module):
     def _load_cfg(self, cfg):
         """Loads a (default) config file."""
         if cfg is None:
-            cfg = self.package_root / "configs/emoca.yaml"
+            cfg = self.package_root / "configs/recon.yaml"
 
         with open(cfg, "r") as f_in:
-            self.cfg = yaml.safe_load(f_in)
+            self.cfg = yaml.safe_load(f_in)['EMOCA']
 
         # Make sure the paths are absolute!
-        for section, options in self.cfg.items():
-            for key, value in options.items():
-                if "path" in key:
-                    # We assume data is stored at one dire above the package root
-                    self.cfg[section][key] = str(self.package_root.parent / value)
+        for key, value in self.cfg.items():
+            if "path" in key:
+                # We assume data is stored at one dire above the package root
+                self.cfg[key] = str(self.package_root.parent / value)
 
     def _create_submodels(self):
         """ Creates all EMOCA encoding and decoding submodels. To summarize:
@@ -94,8 +100,8 @@ class EMOCA(torch.nn.Module):
         self.E_detail = ResnetEncoder(outsize=128).to(self.device)
 
         # decoders
-        self.D_flame = FLAME(self.cfg["EMOCA"], n_shape=100, n_exp=50).to(self.device)
-        self.D_flame_tex = FLAMETex(self.cfg["EMOCA"], n_tex=50).to(self.device)
+        self.D_flame = FLAME(self.cfg, n_shape=100, n_exp=50).to(self.device)
+        self.D_flame_tex = FLAMETex(self.cfg, n_tex=50).to(self.device)
 
         latent_dim = 128 + 50 + 3  # (n_detail, n_exp, n_cam)
         self.D_detail = Generator(
@@ -106,7 +112,7 @@ class EMOCA(torch.nn.Module):
         ).to(self.device)
 
         # Load weights from checkpoint and apply to models
-        checkpoint = torch.load(self.cfg["EMOCA"]["model_path"])
+        checkpoint = torch.load(self.cfg["model_path"])
 
         self.E_flame.load_state_dict(checkpoint["E_flame"])
         self.E_detail.load_state_dict(checkpoint["E_detail"])

@@ -2,8 +2,8 @@
 used in Medusa. 
 
 .. [1] Kartynnik, Y., Ablavatski, A., Grishchenko, I., & Grundmann, M. (2019). 
-   Real-time facial surface geometry from monocular video on mobile GPUs. arXiv
-   preprint arXiv:1907.06724
+   Real-time facial surface geometry from monocular video on mobile GPUs. *arXiv
+   preprint arXiv:1907.06724*
 """ 
 
 import numpy as np
