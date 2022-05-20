@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>medusa.transforms &#8212; Medusa</title>
+    <title>medusa.transform &#8212; Medusa</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -198,15 +198,6 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../epochs/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.epochs
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../io/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
@@ -364,7 +355,7 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="current reference internal" href="#">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.transforms
+       medusa.transform
       </span>
      </code>
     </a>
@@ -443,7 +434,7 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../../_sources/api/python/transforms/index.rst"><button type="button"
+        <a class="dropdown-buttons" href="../../../_sources/api/python/transform/index.rst"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
@@ -463,10 +454,10 @@ const thebe_selector_output = ".output, .cell_output"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/transforms/index.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/transform/index.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/api/python/transforms/index.rst"><button
+        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/api/python/transform/index.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -497,17 +488,17 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.transforms.create_viewport_matrix">
+    <a class="reference internal nav-link" href="#medusa.transform.create_viewport_matrix">
      create_viewport_matrix
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.transforms.create_ortho_matrix">
+    <a class="reference internal nav-link" href="#medusa.transform.create_ortho_matrix">
      create_ortho_matrix
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.transforms.crop_matrix_to_3d">
+    <a class="reference internal nav-link" href="#medusa.transform.crop_matrix_to_3d">
      crop_matrix_to_3d
     </a>
    </li>
@@ -523,7 +514,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>medusa.transforms</h1>
+                <h1>medusa.transform</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -539,17 +530,17 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.transforms.create_viewport_matrix">
+    <a class="reference internal nav-link" href="#medusa.transform.create_viewport_matrix">
      create_viewport_matrix
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.transforms.create_ortho_matrix">
+    <a class="reference internal nav-link" href="#medusa.transform.create_ortho_matrix">
      create_ortho_matrix
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.transforms.crop_matrix_to_3d">
+    <a class="reference internal nav-link" href="#medusa.transform.crop_matrix_to_3d">
      crop_matrix_to_3d
     </a>
    </li>
@@ -564,13 +555,13 @@ const thebe_selector_output = ".output, .cell_output"
             
               <div>
                 
-  <div class="section" id="module-medusa.transforms">
-<span id="medusa-transforms"></span><h1><a class="reference internal" href="#module-medusa.transforms" title="medusa.transforms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.transforms</span></code></a><a class="headerlink" href="#module-medusa.transforms" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-medusa.transform">
+<span id="medusa-transform"></span><h1><a class="reference internal" href="#module-medusa.transform" title="medusa.transform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.transform</span></code></a><a class="headerlink" href="#module-medusa.transform" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="medusa.transforms.create_viewport_matrix">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">create_viewport_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.create_viewport_matrix" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="medusa.transform.create_viewport_matrix">
+<span class="sig-prename descclassname"><span class="pre">medusa.transform.</span></span><span class="sig-name descname"><span class="pre">create_viewport_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transform.create_viewport_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a viewport matrix that transforms vertices in NDC [-1, 1]
 space to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
 <a class="reference external" href="https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-transform/">https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-transform/</a>
@@ -593,8 +584,8 @@ viewport (screen) space origin is in the top left.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="medusa.transforms.create_ortho_matrix">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">create_ortho_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">znear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zfar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.create_ortho_matrix" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="medusa.transform.create_ortho_matrix">
+<span class="sig-prename descclassname"><span class="pre">medusa.transform.</span></span><span class="sig-name descname"><span class="pre">create_ortho_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">znear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zfar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transform.create_ortho_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates an orthographic projection matrix, as
 used by EMOCA/DECA. Based on the pyrender implementaiton.
 Assumes an xmag and ymag of 1.</p>
@@ -617,8 +608,8 @@ Assumes an xmag and ymag of 1.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="medusa.transforms.crop_matrix_to_3d">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">crop_matrix_to_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_33</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.crop_matrix_to_3d" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="medusa.transform.crop_matrix_to_3d">
+<span class="sig-prename descclassname"><span class="pre">medusa.transform.</span></span><span class="sig-name descname"><span class="pre">crop_matrix_to_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_33</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transform.crop_matrix_to_3d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a 3x3 matrix used for cropping (on 2D coordinates)
 into a 4x4 matrix that can be used to transform 3D vertices.
 It assumes that there is no rotation element.</p>
@@ -651,7 +642,7 @@ It assumes that there is no rotation element.</p>
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./api/python/transforms"
+            path: "./api/python/transform"
         },
         predefinedOutput: true
     }

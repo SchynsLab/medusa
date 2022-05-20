@@ -55,7 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="medusa.preproc" href="../preproc/index.html" />
-    <link rel="prev" title="medusa.epochs" href="../epochs/index.html" />
+    <link rel="prev" title="medusa.data" href="../data/index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -193,15 +193,6 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.data
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../epochs/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.epochs
       </span>
      </code>
     </a>
@@ -361,10 +352,10 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../transforms/index.html">
+    <a class="reference internal" href="../transform/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.transforms
+       medusa.transform
       </span>
      </code>
     </a>
@@ -553,6 +544,28 @@ const thebe_selector_output = ".output, .cell_output"
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.io.EpochsArrayBase">
+     EpochsArrayBase
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.io.EpochsArray">
+     EpochsArray
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.io.EpochsArray.from_medusa">
+       from_medusa
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.io.EpochsArray.events_to_mne">
+       events_to_mne
+      </a>
+     </li>
+    </ul>
+   </li>
   </ul>
  </li>
 </ul>
@@ -633,6 +646,28 @@ const thebe_selector_output = ".output, .cell_output"
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#medusa.io.VideoData.get_metadata">
        get_metadata
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.io.EpochsArrayBase">
+     EpochsArrayBase
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.io.EpochsArray">
+     EpochsArray
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.io.EpochsArray.from_medusa">
+       from_medusa
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.io.EpochsArray.events_to_mne">
+       events_to_mne
       </a>
      </li>
     </ul>
@@ -767,6 +802,87 @@ of a Data object.</p>
 
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="medusa.io.EpochsArrayBase">
+<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">EpochsArrayBase</span></span><a class="headerlink" href="#medusa.io.EpochsArrayBase" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="medusa.io.EpochsArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">EpochsArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.EpochsArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">mne.epochs.EpochsArray</span></code></p>
+<p>Custom EpochsArray, with some extra functionality to interact with
+medusa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<em>list</em>) – Positional parameters to be passed to initialization of the
+MNE EPochsArray (the base class)</p></li>
+<li><p><strong>kwargs</strong> (<em>list</em>) – Keyword parameters to be passed to initialization of the
+MNE EPochsArray (the base class)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="medusa.io.EpochsArray.from_medusa">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_medusa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includes_motion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.EpochsArray.from_medusa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classmethod to initalize an EpochsArray from medusa data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> (<em>np.ndarray</em>) – A 4D numpy array of shape N (events/trails) x T (time points)
+x nV (number of vertices) x 3 (X, Y, Z)</p></li>
+<li><p><strong>sf</strong> (<em>float</em>) – Sampling frequency of the data (<cite>v</cite>)</p></li>
+<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – events : pd.DataFrame
+A BIDS-style DataFrame with event (trial) information,
+with at least the columns ‘onset’ and ‘trial_type’</p></li>
+<li><p><strong>frame_t</strong> (<em>np.ndarray</em>) – A 1D numpy array with the onset of each frame from
+the video that was reconstructed</p></li>
+<li><p><strong>tmin</strong> (<em>float</em>) – Start (in seconds) of each epoch relative to stimulus onset</p></li>
+<li><p><strong>includes_motion</strong> (<em>bool</em>) – Whether the data (<cite>v</cite>) also includes the epoched motion parameters;
+if so, it is assumed that the last 12 values in the third dimension
+of <cite>v</cite> represents the motion parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>An instance of the EpochsArray class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="medusa.io.EpochsArray.events_to_mne">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">events_to_mne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.EpochsArray.events_to_mne" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts events DataFrame to (N x 3) array that
+MNE expects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – A BIDS-style DataFrame with event (trial) information,
+with at least the columns ‘onset’ and ‘trial_type’</p></li>
+<li><p><strong>frame_t</strong> (<em>np.ndarray</em>) – A 1D numpy array with the onset of each frame from
+the video that was reconstructed; necessary for
+converting event onsets in seconds to event onsets
+in samples (TODO: use sf for this?)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>events_</strong> (<em>np.ndarray</em>) – An N (number of trials) x 3 array, with the first column
+indicating the sample <em>number</em> (not time) and the third
+column indicating the sample condition (see the returned
+<cite>event_id</cite> dictionary for the mapping between condition number
+and string representation)</p></li>
+<li><p><strong>event_id</strong> (<em>dict</em>) – A dictionary with condition strings as keys and condition numbers
+as values; the values correspond to the third column of <cite>events_</cite></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -795,11 +911,11 @@ of a Data object.</p>
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../epochs/index.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../data/index.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epochs</span></code></p>
+            <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data</span></code></p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../preproc/index.html" title="next page">

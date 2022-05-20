@@ -52,6 +52,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="medusa.core" href="python/core/index.html" />
@@ -193,15 +195,6 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.data
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="python/epochs/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.epochs
       </span>
      </code>
     </a>
@@ -361,10 +354,10 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/transforms/index.html">
+    <a class="reference internal" href="python/transform/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.transforms
+       medusa.transform
       </span>
      </code>
     </a>
@@ -556,6 +549,85 @@ const thebe_selector_output = ".output, .cell_output"
     </code>
    </span>
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-recon">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.recon
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-align">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.align
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-resample">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.resample
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-filter">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.filter
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-epoch">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.epoch
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#medusa-transform">
+   <span class="xref myst">
+    <code class="docutils literal notranslate">
+     <span class="pre">
+      medusa.transform
+     </span>
+    </code>
+   </span>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#medusa-utils">
+   <span class="xref myst">
+    <code class="docutils literal notranslate">
+     <span class="pre">
+      medusa.utils
+     </span>
+    </code>
+   </span>
+  </a>
  </li>
 </ul>
 
@@ -642,6 +714,85 @@ const thebe_selector_output = ".output, .cell_output"
     </code>
    </span>
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-recon">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.recon
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-align">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.align
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-resample">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.resample
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-filter">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.filter
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-preproc-epoch">
+     <span class="xref myst">
+      <code class="docutils literal notranslate">
+       <span class="pre">
+        medusa.preproc.epoch
+       </span>
+      </code>
+     </span>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#medusa-transform">
+   <span class="xref myst">
+    <code class="docutils literal notranslate">
+     <span class="pre">
+      medusa.transform
+     </span>
+    </code>
+   </span>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#medusa-utils">
+   <span class="xref myst">
+    <code class="docutils literal notranslate">
+     <span class="pre">
+      medusa.utils
+     </span>
+    </code>
+   </span>
+  </a>
  </li>
 </ul>
 
@@ -654,34 +805,126 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="python-interface">
 <h1>Python interface<a class="headerlink" href="#python-interface" title="Permalink to this headline">¶</a></h1>
-<p>Check out the interface!</p>
-<p>The package’s most important modules are:</p>
+<p>Medusa’s Python interface allows you to use its functionality in Python. The package
+contains several submodules, of which the most important ones are:</p>
 <div class="section" id="medusa-core">
 <h2><a class="reference internal" href="python/core/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.core</span></code></span></a><a class="headerlink" href="#medusa-core" title="Permalink to this headline">¶</a></h2>
-<p>Bla</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">core</span></code> module contains the core data classes used in Medusa. The most important class
+is the <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class. This class contains most of the functionality to initialize,
+transform, visualize, load, and save reconstruction data. The <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class should
+not be used by itself; instead, use one of the other data classes that inherit from
+the <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FlameData</span></code>: for data from reconstruction models that use the <a class="reference external" href="https://flame.is.tue.mpg.de/">FLAME</a>
+topology (such as <a class="reference internal" href="python/recon/emoca/index.html"><span class="doc std std-doc">EMOCA</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>: for data from the <a class="reference internal" href="python/recon/mpipe/index.html"><span class="doc std std-doc">Mediapipe</span></a> reconstruction model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FANData</span></code>: for data from the <a class="reference internal" href="python/recon/fan/index.html"><span class="doc std std-doc">FAN-3D</span></a> reconstruction model</p></li>
+</ul>
 </div>
 <div class="section" id="medusa-recon">
 <h2><a class="reference internal" href="python/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.recon</span></code></span></a><a class="headerlink" href="#medusa-recon" title="Permalink to this headline">¶</a></h2>
-<p>Bla</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">recon</span></code> module contains implementations of several 3D face reconstruction models.
+These implementations are basically wrappers around their original implementations,
+which may have been simplified greatly (such as in the case of EMOCA). Each model is
+implemented as a class that performs reconstruction when calling its <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method.</p>
+<p>For example, if you want to use the Mediapipe model to reconstruct the face in an image:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.recon</span> <span class="kn">import</span> <span class="n">Mediapipe</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Mediapipe</span><span class="p">()</span>
+
+<span class="c1"># Below is equivalent to: results = model.__call__(img)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The following model classes are available:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="python/recon/fan/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">FAN</span></code></span></a></p></li>
+<li><p><a class="reference internal" href="python/recon/mpipe/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">Mediapipe</span></code></span></a></p></li>
+<li><p><a class="reference internal" href="python/recon/emoca/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">EMOCA</span></code></span></a></p></li>
+</ul>
 </div>
 <div class="section" id="medusa-io">
 <h2><a class="reference internal" href="python/io/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.io</span></code></span></a><a class="headerlink" href="#medusa-io" title="Permalink to this headline">¶</a></h2>
-<p>bla</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">io</span></code> module contains some code to make processing, reading, and writing videos
+easier, implemented in the <code class="docutils literal notranslate"><span class="pre">VideoData</span></code> class. It also contains the <code class="docutils literal notranslate"><span class="pre">EpochsArray</span></code> class,
+a subclass of the <a class="reference external" href="https://mne.tools/stable/generated/mne.EpochsArray.html">MNE EpochsArray</a>,
+which allows you to read in epoched data from Medusa and save it as an MNE-compatible FIF
+file.</p>
 </div>
 <div class="section" id="medusa-render">
 <h2><a class="reference internal" href="python/render/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.render</span></code></span></a><a class="headerlink" href="#medusa-render" title="Permalink to this headline">¶</a></h2>
-<p>Bla</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">render</span></code> module contains code to render (sequences of) 3D meshes as 2D images
+(or videos). Under the hood, it makes heavy use of the awesome <a class="reference external" href="https://pyrender.readthedocs.io/">pyrender</a>
+package, which may not be the fastest renderer available, but its versatility and easy-of-use
+makes it ideal for Medusa’s purposes.</p>
+<p>The main object in the <code class="docutils literal notranslate"><span class="pre">io</span></code> module is the <code class="docutils literal notranslate"><span class="pre">Renderer</span></code> class, which makes it easy to
+create scenes, add meshes, and subsequently render 3D face meshes.</p>
 </div>
 <div class="section" id="medusa-cli">
 <h2><a class="reference internal" href="cli.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.cli</span></code></span></a><a class="headerlink" href="#medusa-cli" title="Permalink to this headline">¶</a></h2>
-<p>Not documented here.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cli</span></code> submodule contains the definition of the Medusa functions exposed to the
+command-line interface. Its functionality is documented <a class="reference internal" href="cli.html"><span class="doc std std-doc">here</span></a>.</p>
 </div>
 <div class="section" id="medusa-preproc">
 <h2><a class="reference internal" href="python/preproc/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc</span></code></span></a><a class="headerlink" href="#medusa-preproc" title="Permalink to this headline">¶</a></h2>
-<p>Which consists of</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.recon</span></code></span></a></p></li>
-</ul>
+<p>The bulk of Medusa’s functionality in contained in the <code class="docutils literal notranslate"><span class="pre">preproc</span></code> module and its
+submodules. As its name suggests, it contains code to preprocess time series of 3D
+face reconstructions.</p>
+<p>The submodules are summarized below.</p>
+<div class="section" id="medusa-preproc-recon">
+<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.recon</span></code></span></a><a class="headerlink" href="#medusa-preproc-recon" title="Permalink to this headline">¶</a></h3>
+<p>This submodule contains a single function, <code class="docutils literal notranslate"><span class="pre">videorecon</span></code>, that performs frame-by-frame 3D
+reconstruction of a video and returns the results as an object of the appropriate
+data class (e.g., <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>).</p>
+</div>
+<div class="section" id="medusa-preproc-align">
+<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></span></a><a class="headerlink" href="#medusa-preproc-align" title="Permalink to this headline">¶</a></h3>
+<p>This submodule contains a single function, <code class="docutils literal notranslate"><span class="pre">align</span></code>, that performs alignment (“motion correction”)
+of a sequence of 3D meshes. It returns an instance of a data class of which the <code class="docutils literal notranslate"><span class="pre">v</span></code>
+attribute (i.e., the vertices) have been aligned (either to a canonical model, like for
+EMOCA and Mediapipe, or the mesh of the first time point, like for FAN). Note that this
+function changes the <code class="docutils literal notranslate"><span class="pre">.space</span></code> attribute from <code class="docutils literal notranslate"><span class="pre">&quot;world&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;local&quot;</span></code>.</p>
+</div>
+<div class="section" id="medusa-preproc-resample">
+<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.resample</span></code></span></a><a class="headerlink" href="#medusa-preproc-resample" title="Permalink to this headline">¶</a></h3>
+<p>This submodule contains a single function, <code class="docutils literal notranslate"><span class="pre">resample</span></code>, that performs temporal resampling
+of the 3D mesh time series by interpolating the data at a regular, evenly-spaced grid
+with a specific sampling frequency. It returns an instance of the data class of which
+the data (<code class="docutils literal notranslate"><span class="pre">v</span></code> and, optionally, <code class="docutils literal notranslate"><span class="pre">mat</span></code>) has been resampled and the sampling frequency
+(<code class="docutils literal notranslate"><span class="pre">.sf</span></code> attribute) has been changed accordingly.</p>
+</div>
+<div class="section" id="medusa-preproc-filter">
+<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></span></a><a class="headerlink" href="#medusa-preproc-filter" title="Permalink to this headline">¶</a></h3>
+<p>This submodule contains a single function, <code class="docutils literal notranslate"><span class="pre">filter</span></code>, that performs temporal filtering
+of the 3D mesh time series using a Butterworth filter. It returns an instance of the
+appropriate data class.</p>
+</div>
+<div class="section" id="medusa-preproc-epoch">
+<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.epoch</span></code></span></a><a class="headerlink" href="#medusa-preproc-epoch" title="Permalink to this headline">¶</a></h3>
+<p>This submodule performs “epoching” on the time series of the reconstructed 3D face
+meshes. Here, an “epoch” refers to an equal duration chunk of signal, usually time-locked
+to repeated experimental events (such as stimulus onsets or button presses; definition
+adapted from <a class="reference external" href="https://mne.tools/stable/auto_tutorials/epochs/10_epochs_overview.html">MNE</a>).</p>
+<p>It also (optionally) performs baseline correction and returns either a 4D numpy array
+of shape <span class="math notranslate nohighlight">\(N\)</span> (epochs) <span class="math notranslate nohighlight">\(\times\ T\)</span> (number of time points of epoch) <span class="math notranslate nohighlight">\(\times\ V\)</span> (number of vertices)
+<span class="math notranslate nohighlight">\(\times\ 3\)</span> (X, Y, Z), or an MNE-compatible <a class="reference external" href="https://mne.tools/stable/generated/mne.EpochsArray.html"><code class="docutils literal notranslate"><span class="pre">EpochsArray</span></code></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In Medusa, you can only use this functionality when you actually have an events-file with
+stimulus/response/trial onsets (see <a class="reference internal" href="../getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a> for more
+information).</p>
+</div>
+</div>
+</div>
+<div class="section" id="medusa-transform">
+<h2><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.transform</span></code></span><a class="headerlink" href="#medusa-transform" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">transform</span></code> module contains several functions to transform vertices between
+different spaces (e.g., world space, NDC space, and raster space). This module is probably
+not relevant for most users.</p>
+</div>
+<div class="section" id="medusa-utils">
+<h2><a class="reference internal" href="python/utils/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.utils</span></code></span></a><a class="headerlink" href="#medusa-utils" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">utils</span></code> module contains some utility functions, for example to create a nice
+logger.</p>
 </div>
 <div class="toctree-wrapper compound">
 </div>

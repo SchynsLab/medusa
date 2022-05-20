@@ -1,7 +1,7 @@
-:py:mod:`medusa.transforms`
-===========================
+:py:mod:`medusa.transform`
+==========================
 
-.. py:module:: medusa.transforms
+.. py:module:: medusa.transform
 
 
 Module Contents

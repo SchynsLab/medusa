@@ -198,15 +198,6 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../api/python/epochs/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.epochs
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../api/python/io/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
@@ -361,10 +352,10 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../api/python/transforms/index.html">
+    <a class="reference internal" href="../api/python/transform/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.transforms
+       medusa.transform
       </span>
      </code>
     </a>
@@ -486,6 +477,46 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#citing-reconstruction-models">
+   Citing reconstruction models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emoca">
+     EMOCA
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mediapipe">
+     Mediapipe
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fan">
+     FAN
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#miscellaneous">
+   Miscellaneous
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#an-example-methods-section">
+   An example methods section
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -498,6 +529,46 @@ const thebe_selector_output = ".output, .cell_output"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#citing-reconstruction-models">
+   Citing reconstruction models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emoca">
+     EMOCA
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mediapipe">
+     Mediapipe
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fan">
+     FAN
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#miscellaneous">
+   Miscellaneous
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#an-example-methods-section">
+   An example methods section
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -506,13 +577,62 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="how-to-cite-medusa-and-its-dependencies">
 <h1>How to cite Medusa and its dependencies<a class="headerlink" href="#how-to-cite-medusa-and-its-dependencies" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p>EMOCA/DECA/FLAME</p></li>
-<li><p>FAN</p></li>
-<li><p>Mediapipe <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id5" title="Camillo Lugaresi, Jiuqiang Tang, Hadon Nash, Chris McClanahan, Esha Uboweja, Michael Hays, Fan Zhang, Chuo-Ling Chang, Ming Guang Yong, Juhyun Lee, and others. Mediapipe: a framework for building perception pipelines. arXiv preprint arXiv:1906.08172, 2019.">Lugaresi <em>et al.</em>, 2019</a>]</span></p></li>
-<li><p>MNE</p></li>
-<li><p>trimesh</p></li>
-</ul>
+<p>If you use Medusa, please cite it as follows:</p>
+<blockquote>
+<div><p>Snoek, L., Garrod, O., Jack, R., &amp; Schyns, P. (2022). Dynamic Face Imaging: a novel analysis framework for 3D face expression and perception.</p>
+</div></blockquote>
+<div class="section" id="citing-reconstruction-models">
+<h2>Citing reconstruction models<a class="headerlink" href="#citing-reconstruction-models" title="Permalink to this headline">¶</a></h2>
+<p>Please also cite the following, depending on the reconstruction model you use.</p>
+<div class="section" id="emoca">
+<h3>EMOCA<a class="headerlink" href="#emoca" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Danecek, R., Black, M. J., &amp; Bolkart, T. (2022). EMOCA: Emotion Driven Monocular
+Face Capture and Animation. <em>arXiv preprint arXiv:2204.11312</em>.</p>
+</div></blockquote>
+<blockquote>
+<div><p>Feng, Y., Feng, H., Black, M. J., &amp; Bolkart, T. (2021). Learning an animatable detailed 3D face model from in-the-wild images. <em>ACM Transactions on Graphics (TOG), 40</em>(4), 1-13.</p>
+</div></blockquote>
+</div>
+<div class="section" id="mediapipe">
+<h3>Mediapipe<a class="headerlink" href="#mediapipe" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Kartynnik, Y., Ablavatski, A., Grishchenko, I., &amp; Grundmann, M. (2019). Real-time facial surface geometry from monocular video on mobile GPUs. <em>arXiv preprint arXiv:1907.06724</em></p>
+</div></blockquote>
+<blockquote>
+<div><p>Lugaresi, C., Tang, J., Nash, H., McClanahan, C., Uboweja, E., Hays, M., … &amp; Grundmann, M. (2019). Mediapipe: A framework for building perception pipelines. <em>arXiv preprint arXiv:1906.08172</em>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="fan">
+<h3>FAN<a class="headerlink" href="#fan" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Bulat, A., &amp; Tzimiropoulos, G. (2017). How far are we from solving the 2d &amp; 3d face alignment problem?(and a dataset of 230,000 3d facial landmarks). In Proceedings of the IEEE International Conference on Computer Vision (pp. 1021-1030).</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
+<p>If you use <a class="reference external" href="https://mne.tools">MNE-Python</a> to analyze data from Medusa, please cite it
+as follows:</p>
+<blockquote>
+<div><p>Alexandre Gramfort, Martin Luessi, Eric Larson, Denis A. Engemann, Daniel Strohmeier, Christian Brodbeck, Roman Goj, Mainak Jas, Teon Brooks, Lauri Parkkonen, and Matti S. Hämäläinen. MEG and EEG data analysis with MNE-Python. <em>Frontiers in Neuroscience, 7</em>(267):1–13, 2013. doi:10.3389/fnins.2013.00267.</p>
+</div></blockquote>
+<p>Consider citing <a class="reference external" href="https://trimsh.org/">trimesh</a> and <a class="reference external" href="https://pyrender.readthedocs.io/">pyrender</a>
+as well, given that they are crucial to the functionality of Medusa:</p>
+<blockquote>
+<div><p>Trimesh [Computer software]. (2019). Retrieved from <a class="reference external" href="https://github.com/mikedh/trimesh">https://github.com/mikedh/trimesh</a></p>
+</div></blockquote>
+<blockquote>
+<div><p>Matl, M. (2019). Pyrender [Computer software]. Retried from <a class="reference external" href="https://github.com/mmatl/pyrender">https://github.com/mmatl/pyrender</a></p>
+</div></blockquote>
+</div>
+<div class="section" id="an-example-methods-section">
+<h2>An example methods section<a class="headerlink" href="#an-example-methods-section" title="Permalink to this headline">¶</a></h2>
+<p>The following is an example paragraph that you can include in your methods section:</p>
+<blockquote>
+<div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque facilisis fringilla rhoncus. Suspendisse sit amet elit ante. Cras aliquet diam lectus, et varius risus convallis in. Pellentesque vel quam tincidunt, varius augue eget, posuere orci. Nam pellentesque eleifend vestibulum. Quisque varius ex et ornare facilisis. Integer quis elementum erat, in tincidunt tortor. Sed odio urna, feugiat in sapien a, faucibus rutrum sapien. Nunc ultrices tempus felis, non accumsan odio maximus vel. Vestibulum vitae justo sit amet magna lobortis posuere. Proin nisi tellus, congue nec sem et, ullamcorper blandit purus. Quisque molestie at arcu sodales commodo. Nunc euismod urna quis nisl condimentum, vitae porta felis imperdiet. Proin quis ante eu lectus tempor lacinia tincidunt nec turpis.</p>
+</div></blockquote>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
