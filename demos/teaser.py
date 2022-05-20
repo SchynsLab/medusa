@@ -6,6 +6,7 @@ from medusa.data import load_h5
 from medusa.render import Renderer
 from medusa.preproc import videorecon
 from imageio import get_writer, get_reader
+from pygifsicle import optimize
 
 SCALE = 0.2
 VID = 'pexels_2.mp4'
@@ -30,19 +31,19 @@ font_color = (255, 255, 255)
 writer = get_writer('demos/teaser.gif', mode='I', fps=fps)
 
 ### INTRODUCTION ###
-txt1_pos = (int(650 * SCALE), int(500 * SCALE))
-txt2_pos = (int(250 * SCALE), int(620 * SCALE))
-for i in range(70):
-    img = np.zeros((h, w, 4)).astype(np.uint8)
-    cv2.putText(img, 'Medusa:', txt1_pos, font, 5 * SCALE, font_color,
-                1, cv2.LINE_AA)
-    cv2.putText(img, '4D face reconstruction and analysis', txt2_pos,
-                font, 2.5 * SCALE, font_color, 1, cv2.LINE_AA)
+# txt1_pos = (int(650 * SCALE), int(500 * SCALE))
+# txt2_pos = (int(250 * SCALE), int(620 * SCALE))
+# for i in range(70):
+#     img = np.zeros((h, w, 4)).astype(np.uint8)
+#     cv2.putText(img, 'Medusa:', txt1_pos, font, 5 * SCALE, font_color,
+#                 1, cv2.LINE_AA)
+#     cv2.putText(img, '4D face reconstruction and analysis', txt2_pos,
+#                 font, 2.5 * SCALE, font_color, 1, cv2.LINE_AA)
     
-    writer.append_data(img)
+#     writer.append_data(img)
     
-    if i > 50:
-        font_color = [fc - 20 for fc in font_color]
+#     if i > 50:
+#         font_color = [fc - 20 for fc in font_color]
 
 reader = get_reader('test_data/pexels/pexels_2.mp4')
 for i, img in enumerate(reader):
@@ -60,8 +61,10 @@ for i, img in enumerate(reader):
         img = renderer.alpha_blend(recon, img, face_alpha=alpha)
     
     writer.append_data(img)
-    if i > 100:
+    if i > 150:
         break
 
 writer.close()
 reader.close()
+
+#optimize('demos/teaser.gif')
