@@ -38,6 +38,11 @@ def epoch(
         (i.e., 0)
     baseline_mode : str
         How to perform baseline correction (options: 'mean', 'ratio')
+        
+    Returns
+    -------
+    data : medusa.core.*Data
+        An object with a class inherited from ``medusa.core.BaseData``
     """
 
     logger = get_logger()

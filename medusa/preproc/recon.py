@@ -7,8 +7,6 @@ from ..io import VideoData
 from ..core import MODEL2CLS
 from ..utils import get_logger
 
-logger = get_logger()
-
 
 def videorecon(
     video_path,
@@ -16,10 +14,6 @@ def videorecon(
     recon_model_name="mediapipe",
     cfg=None,
     device="cuda",
-    out_dir=None,
-    render_recon=True,
-    render_on_video=False,
-    render_crop=False,
     n_frames=None,
 ):
     """Reconstruction of all frames of a video.
@@ -40,20 +34,17 @@ def videorecon(
         Path to config file for EMOCA reconstruction; ignored if not using emoca
     device : str
         Either "cuda" (for GPU) or "cpu" (ignored when using mediapipe)
-    out_dir : str, Path
-        Path to directory where recon data (and associated
-        files) are saved; if `None`, same directory as video is used
-    render_on_video : bool
-        Whether to render the reconstruction on top of the video;
-        this may substantially increase rendering time!
-    render_crop : bool
-        Whether to render the cropping results (only relevant when using EMOCA,
-        ignored otherwise)
     n_frames : int
         If not `None` (default), only reconstruct and render the first `n_frames`
         frames of the video; nice for debugging
+        
+    Returns
+    -------
+    data : medusa.core.*Data
+        An object with a class inherited from ``medusa.core.BaseData``
     """
 
+    logger = get_logger()
     logger.info(f"Starting recon using for {video_path}")
     logger.info(f"Initializing {recon_model_name} recon model")
 
@@ -72,17 +63,6 @@ def videorecon(
     else:
         raise NotImplementedError
 
-    if out_dir is None:
-        out_dir = video.path.parent
-    else:
-        out_dir = Path(out_dir)
-
-    out_dir.mkdir(exist_ok=True, parents=True)
-    f_out = str(out_dir / str(video.path.name).replace(".mp4", "_desc-recon"))
-
-    if recon_model_name in ["emoca"] and render_crop:
-        video.create_writer(f_out, idf="crop", ext="gif")
-
     # Loop across frames of video, store results in `recon_data`
     recon_data = defaultdict(list)
     for i, frame in video.loop(scaling=None):
@@ -93,9 +73,6 @@ def videorecon(
             # due to cropping), and add crop plot to writer
             frame = fan.prepare_for_emoca(frame)
             recon_model.tform = fan.tform.params
-
-            if render_crop:
-                video.write(fan.viz_qc(return_rgba=True))
 
         # Reconstruct and store whatever `recon_model`` returns
         # in `recon_data`
@@ -119,12 +96,5 @@ def videorecon(
     DataClass = MODEL2CLS[recon_model_name]
     kwargs = {**recon_data, **video.get_metadata()}
     data = DataClass(recon_model_name=recon_model_name, **kwargs)
-
-    # Save data as hdf5 and visualize reconstruction
-    data.save(f_out + "_shape.h5")
-
-    if render_recon:
-        background = video_path if render_on_video else None
-        data.render_video(f_out + "_shape.gif", video=background)
 
     return data

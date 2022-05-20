@@ -10,7 +10,7 @@ from ..core import load_h5
 from ..utils import get_logger
 
 
-def align(data, algorithm, qc=False, additive_alignment=False, ignore_existing=False):
+def align(data, algorithm, additive_alignment=False, ignore_existing=False):
     """Aligment of 3D meshes over time.
 
     Parameters
@@ -27,6 +27,11 @@ def align(data, algorithm, qc=False, additive_alignment=False, ignore_existing=F
         top of the existing ones (if present; ignored otherwise)
     ignore_existing : bool
         Whether to ignore the existing alignment parameters
+
+    Returns
+    -------
+    data : medusa.core.*Data
+        An object with a class inherited from ``medusa.core.BaseData``
     """
 
     logger = get_logger()
@@ -163,17 +168,9 @@ def align(data, algorithm, qc=False, additive_alignment=False, ignore_existing=F
     # this for the first frame (otherwise we 're-introduce' the global motion,
     # but this time in the camera, and we assume a fixed camera of course)
     data.cam_mat = np.linalg.inv(data.mat[0, ...]) @ data.cam_mat
-
-    # Save!
-    pth = data.path
-    desc = "desc-" + pth.split("desc-")[1].split("_")[0] + "+align"
-    f_out = pth.split("desc-")[0] + desc
-
-    if qc:
-        data.plot_data(f_out + "_qc.png", plot_motion=True, plot_pca=True, n_pca=3)
-
     data.space = "local"
-    data.save(f_out + "_shape.h5")
+
+    return data
 
 
 def _icp(source, target, scale=True, ignore_shear=True):

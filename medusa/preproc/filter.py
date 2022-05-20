@@ -20,9 +20,11 @@ def filter(data, low_pass, high_pass):
         Low-pass cutoff (in Hz)
     high_pass : float
         High-pass cutoff (in Hz)
-    video : str
-        Path to video to render reconstruction on top of
-        (optional)
+
+    Returns
+    -------
+    data : medusa.core.*Data
+        An object with a class inherited from ``medusa.core.BaseData``
     """
 
     logger = get_logger()

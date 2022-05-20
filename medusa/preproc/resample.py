@@ -5,8 +5,6 @@ from scipy.interpolate import interp1d, PchipInterpolator
 from ..core import load_h5
 from ..utils import get_logger
 
-logger = get_logger()
-
 
 def resample(data, sampling_freq=None, kind="pchip"):
     """Resamples the data to a given sampling rate.
@@ -26,7 +24,14 @@ def resample(data, sampling_freq=None, kind="pchip"):
     kind : str
         Kind of interpolation to use, either 'pchip' (default), 'linear', 'quadratic',
         or 'cubic'
+
+    Returns
+    -------
+    data : medusa.core.*Data
+        An object with a class inherited from ``medusa.core.BaseData``
     """
+
+    logger = get_logger()
 
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it

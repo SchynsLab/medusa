@@ -26,12 +26,12 @@ def test_videorecon_cmd(model, n_frames, render):
 
     result = runner.invoke(videorecon_cmd, args)
     assert(result.exit_code == 0)
-    expected_h5 = Path(vid.replace('.mp4', '_desc-recon_shape.h5'))
+    expected_h5 = Path(vid.replace('.mp4', '.h5'))
     assert(expected_h5.is_file())
     expected_h5.unlink()
     
     if render and not 'GITHUB_ACTIONS' in os.environ:
-        expected_gif = Path(vid.replace('.mp4', '_desc-recon_shape.gif'))
+        expected_gif = Path(vid.replace('.mp4', '.gif'))
         assert(expected_gif.is_file())
         expected_gif.unlink()
         
