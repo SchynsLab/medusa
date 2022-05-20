@@ -134,6 +134,9 @@ exp/*/data
 exp/*/*.py
 test_data
 ext_data
+demos/*.gif
+demos/*.mp4
+demos/*.h5
 
 # Docs
 docs/_build
