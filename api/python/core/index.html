@@ -778,19 +778,16 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="section" id="module-medusa.core">
 <span id="medusa-core"></span><h1><a class="reference internal" href="#module-medusa.core" title="medusa.core"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.core</span></code></a><a class="headerlink" href="#module-medusa.core" title="Permalink to this headline">¶</a></h1>
-<p>Module with core functionality of the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package,
-most importantly the <code class="docutils literal notranslate"><span class="pre">Data</span></code> classes. The <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class
-stores reconstructed data from videos and other (meta)data needed
-to further process, analyze, and visualize it. The reconstructed data
-from each model supported by <code class="docutils literal notranslate"><span class="pre">medusa</span></code> is stored in an object from
-a specific class which inherits from <code class="docutils literal notranslate"><span class="pre">BaseData</span></code>. For example,
-reconstructed data from
+<p>Module with core functionality of the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package, most importantly the
+<code class="docutils literal notranslate"><span class="pre">Data</span></code> classes. The <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class stores reconstructed data from videos and other
+(meta)data needed to further process, analyze, and visualize it.</p>
+<p>The reconstructed data from each model supported by <code class="docutils literal notranslate"><span class="pre">medusa</span></code> is stored in an object from
+a specific class which inherits from <code class="docutils literal notranslate"><span class="pre">BaseData</span></code>. For example, reconstructed data from
 <a class="reference external" href="https://google.github.io/mediapipe/solutions/face_mesh.html">mediapipe</a> is stored
 in using the <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> class. Other classes include the <code class="docutils literal notranslate"><span class="pre">FANData</span></code> for
 reconstructions from <a class="reference external" href="https://github.com/1adrianb/face-alignment">FAN</a> and
-<code class="docutils literal notranslate"><span class="pre">FlameData</span></code> for reconstructions from models using the
-<a class="reference external" href="https://flame.is.tue.mpg.de/">FLAME topology</a> (such as
-<a class="reference external" href="https://emoca.is.tue.mpg.de/">EMOCA</a>).</p>
+<code class="docutils literal notranslate"><span class="pre">FlameData</span></code> for reconstructions from models using the <a class="reference external" href="https://flame.is.tue.mpg.de/">FLAME topology</a>
+(such as <a class="reference external" href="https://emoca.is.tue.mpg.de/">EMOCA</a>).</p>
 <p>The data can be saved to disk as a <a class="reference external" href="https://www.hdfgroup.org/solutions/hdf5/">HDF5</a>
 file (using <a class="reference external" href="http://www.h5py.org/">h5py</a>) with the <code class="docutils literal notranslate"><span class="pre">save</span></code> method and loaded from
 disk using the <code class="docutils literal notranslate"><span class="pre">load</span></code> (static)method.</p>
