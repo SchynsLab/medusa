@@ -3,6 +3,15 @@
 
 .. py:module:: medusa.recon.emoca.emoca
 
+.. autoapi-nested-parse::
+
+   Module with a wrapper around a EMOCA reconstruction model [1]_ that can be
+   used in Medusa.
+
+   .. [1] Danecek, R., Black, M. J., & Bolkart, T. (2022). EMOCA: Emotion Driven Monocular
+          Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
+
+
 
 Module Contents
 ---------------
