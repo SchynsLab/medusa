@@ -116,6 +116,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="getting_started/citation.html">
+   How to cite Medusa and its dependencies
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="getting_started/license.html">
    Citation
   </a>
  </li>
@@ -476,6 +481,24 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#when-not-to-use-medusa">
+   When (not) to use Medusa?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#documentation-overview">
+   Documentation overview
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -488,6 +511,24 @@ const thebe_selector_output = ".output, .cell_output"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#when-not-to-use-medusa">
+   When (not) to use Medusa?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#documentation-overview">
+   Documentation overview
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -501,6 +542,27 @@ to reconstruct a series of 3D meshes of (moving) faces from video files: one 3D 
 each frame of the video (resulting in a “4D” representation of facial movement). In
 addition to functionality to reconstruct faces, Medusa also contains functionality to
 preprocess and analyze the resulting 4D reconstructions.</p>
+<div class="section" id="when-not-to-use-medusa">
+<h2>When (not) to use Medusa?<a class="headerlink" href="#when-not-to-use-medusa" title="Permalink to this headline">¶</a></h2>
+<p>Medusa allows you to reconstruct, preprocess, and analyze frame-by-frame time series
+of 3D faces from videos. The data that Medusa outputs is basically a set of 3D points
+(“vertices”), which together represent face shape, that move over time. Medusa then
+processes these points in a similar way that fMRI or EEG/MEG software processes voxels
+or sensors, but instead of representing “brain activity”, it represents face movement!
+Medusa makes relatively few assumptions as to how you want to (further) analyze the
+face and just returns the raw set of vertices. For some ideas on how to analyze such data,
+check out the <a class="reference internal" href="tutorials/analysis.html"><span class="doc std std-doc">analysis tutorials</span></a>.</p>
+<p>If you just want to perform face detection, pose estimation, or want to extract
+high-level properties such as action units or categorical emotions, check out the
+awesome <a class="reference external" href="https://py-feat.org/">Py-Feat</a> Python package.</p>
+</div>
+<div class="section" id="documentation-overview">
+<h2>Documentation overview<a class="headerlink" href="#documentation-overview" title="Permalink to this headline">¶</a></h2>
+<p>On this website, you can find general information about Medusa (such as how to <a class="reference internal" href="getting_started/installation.html"><span class="doc std std-doc">install</span></a>
+and <a class="reference internal" href="getting_started/citation.html"><span class="doc std std-doc">cite</span></a> it), as well as several <span class="xref myst">tutorials</span>
+and details on Medusa’s <a class="reference internal" href="api/cli.html"><span class="doc std std-doc">command-line interface</span></a> and <a class="reference internal" href="api/python.html"><span class="doc std std-doc">Python interface</span></a>.</p>
+<p>A great way to get more familiar with the package is to check out the <a class="reference internal" href="getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a>!</p>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">

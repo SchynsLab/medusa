@@ -117,7 +117,7 @@ stimulus/response/trial onsets (see [quickstart](../getting_started/quickstart) 
 information). 
 ```
 
-## [`medusa.transform`](./python/transforms/index)
+## [`medusa.transform`](./python/transform/index)
 
 The `transform` module contains several functions to transform vertices between
 different spaces (e.g., world space, NDC space, and raster space). This module is probably

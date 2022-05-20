@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Installation &#8212; Medusa</title>
+    <title>License &#8212; Medusa</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,8 +54,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Quickstart" href="quickstart.html" />
-    <link rel="prev" title="Medusa: 4D face reconstruction and analysis" href="../index.html" />
+    <link rel="next" title="Reconstruction" href="../tutorials/reconstruction.html" />
+    <link rel="prev" title="How to cite Medusa and its dependencies" href="citation.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -105,8 +105,8 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
    Installation
   </a>
  </li>
@@ -120,8 +120,8 @@ const thebe_selector_output = ".output, .cell_output"
    How to cite Medusa and its dependencies
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="license.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Citation
   </a>
  </li>
@@ -439,7 +439,7 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/getting_started/installation.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/getting_started/license.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -459,10 +459,10 @@ const thebe_selector_output = ".output, .cell_output"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fgetting_started/installation.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fgetting_started/license.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/getting_started/installation.md"><button
+        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/getting_started/license.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -482,19 +482,6 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#download-deca">
-   Download DECA
-  </a>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -502,58 +489,20 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Installation</h1>
+                <h1>License</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#download-deca">
-   Download DECA
-  </a>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>We strongly recommend to install the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package in a separate <a class="reference external" href="https://anaconda.org/anaconda/conda">conda environment</a>. Assuming you have access to the <code class="docutils literal notranslate"><span class="pre">conda</span></code> (by installing <a class="reference external" href="https://www.anaconda.com/products/distribution">Anaconda</a> or <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>), run the following in your terminal to create a new environment named <code class="docutils literal notranslate"><span class="pre">medusa</span></code> with Python version 3.9:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">medusa</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
-</pre></div>
-</div>
-<p>Then, activate the environment and install <code class="docutils literal notranslate"><span class="pre">pytorch</span></code> (used by the 3D reconstruction model) as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">medusa</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="n">pytorch</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.3</span> <span class="o">-</span><span class="n">c</span> <span class="n">pytorch</span>
-</pre></div>
-</div>
-<p>The next step is to download the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package from Github, either as <a class="reference external" href="https://github.com/lukassnoek/medusa/archive/refs/heads/master.zip">zip file</a> (which you need to extract afterwards) or using <code class="docutils literal notranslate"><span class="pre">git</span></code> (i.e., <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/lukassnoek/medusa.git</span></code>). Finally, again assuming you’re in the root of the downloaded repository (and you have the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> conda environment activated), run the following command to install <code class="docutils literal notranslate"><span class="pre">medusa</span></code> and its dependencies:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
-</pre></div>
-</div>
-<p>At this point, the package’s CLI tools (e.g., <code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code>) and Python API should be available. To verify, run the following commands in your terminal:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">medusa_videorecon</span> <span class="o">--</span><span class="n">help</span>  <span class="c1"># to verify the CLI (should print out options)</span>
-<span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import medusa&#39;</span>  <span class="c1"># to verify the Python API (shouldn&#39;t error)</span>
-</pre></div>
-</div>
-<div class="section" id="download-deca">
-<h2>Download DECA<a class="headerlink" href="#download-deca" title="Permalink to this headline">¶</a></h2>
-<p>If you are on one of Glasgow’s “deepnet” servers and have access to <code class="docutils literal notranslate"><span class="pre">Project0294</span></code> (if not, ask Oliver), you can simply copy the EMOCA model and associated files as follows (assuming you’re currently in the root of the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">/</span><span class="n">analyse</span><span class="o">/</span><span class="n">Project0294</span><span class="o">/</span><span class="n">medusa_data</span><span class="o">/</span><span class="n">data</span><span class="o">/*</span> <span class="n">medusa</span><span class="o">/</span><span class="n">recon</span><span class="o">/</span><span class="n">deca</span><span class="o">/</span><span class="n">data</span><span class="o">/</span>
-</pre></div>
-</div>
-<p>If not … TBD</p>
-</div>
+  <div class="tex2jax_ignore mathjax_ignore section" id="license">
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>TBD</p>
 </div>
 
     <script type="text/x-thebe-config">
@@ -581,17 +530,17 @@ const thebe_selector_output = ".output, .cell_output"
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../index.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="citation.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Medusa: 4D face reconstruction and analysis</p>
+            <p class="prev-next-title">How to cite Medusa and its dependencies</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="quickstart.html" title="next page">
+    <a class='right-next' id="next-link" href="../tutorials/reconstruction.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Quickstart</p>
+        <p class="prev-next-title">Reconstruction</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
