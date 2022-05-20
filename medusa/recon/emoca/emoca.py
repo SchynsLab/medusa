@@ -5,7 +5,7 @@ from pathlib import Path
 
 from ._encoders import ResnetEncoder
 from ._decoders import FLAME, FLAMETex, Generator
-from ...transforms import create_viewport_matrix, create_ortho_matrix, crop_matrix_to_3d
+from ...transform import create_viewport_matrix, create_ortho_matrix, crop_matrix_to_3d
 
 
 class EMOCA(torch.nn.Module):
