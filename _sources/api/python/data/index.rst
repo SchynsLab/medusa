@@ -3,6 +3,16 @@
 
 .. py:module:: medusa.data
 
+.. autoapi-nested-parse::
+
+   This module contains functions to load in example data, which
+   is used for examples and tests. The example data is the following video:
+   https://www.pexels.com/video/close-up-of-a-woman-showing-different-facial-expressions-3063839/
+   made freely available by Wolfgang Langer.
+
+   The video was trimmed to 10 seconds and resized in order to reduce disk space.
+
+
 
 Package Contents
 ----------------
