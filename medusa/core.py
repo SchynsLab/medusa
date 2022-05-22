@@ -37,10 +37,12 @@ from .render import Renderer
 
 class BaseData:
     """Base Data class with attributes and methods common to all Data
-    classes (such as FlameData, MediapipeData, etc.).
+    classes (such as ``FlameData``, ``MediapipeData``, etc.).
 
     Warning: objects should never be initialized with this class directly,
-    only when calling super().__init__() from the subclass (like `FlameData`).
+    only when calling super().__init__() from the subclass (like ``FlameData``). Note,
+    though, that the initialization parameters are the same for every class that
+    inherits from ``BaseData``.
 
     Parameters
     ----------
@@ -138,6 +140,26 @@ class BaseData:
         """Transforms a time series (of length T) 4x4 affine matrices to a
         pandas DataFrame with a time series of T x 12 affine parameters
         (translation XYZ, rotation XYZ, scale XYZ, shear XYZ).
+        
+        Parameters
+        ----------
+        to_df : bool
+            Whether to return the parameters as a pandas ``DataFrame`` or
+            not (in which case it's returned as a numpy array)
+
+        Returns
+        -------
+        params : pd.DataFrame, np.ndarray
+            Either a ``DataFrame`` or numpy array, depending on the ``to_df`` parameter
+            
+        Examples
+        --------
+        Convert the sequences of affine matrices to a 2D numpy array:
+        >>> from medusa.data import get_example_h5
+        >>> data = get_example_h5(load=True, model="mediapipe")
+        >>> params = data.mats2params(to_df=False)
+        >>> params.shape
+        (232, 12)
         """
 
         if self.mat is None:
@@ -175,7 +197,26 @@ class BaseData:
         return params
 
     def params2mats(self, params):
-        """Does the oppose as the above function."""
+        """ Converts a sequence of global (affine) motion parameters into a sequence
+        of 4x4 affine matrices and updates the ``.mat`` attribute. Essentially
+        does the opposite of the ``mats2params`` method. 
+        
+        Parameters
+        ----------
+        params : np.ndarray
+            A 2D numpy array of shape T (time points) x 12
+            
+        Examples
+        --------
+        Convert the sequences of affine matrices to a 2D numpy array and uses the
+        ``params2mats`` function to reverse it.
+        >>> from medusa.data import get_example_h5
+        >>> data = get_example_h5(load=True, model="mediapipe")
+        >>> orig_mats = data.mat.copy()
+        >>> params = data.mats2params(to_df=False)
+        >>> data.params2mats(params)
+        >>> np.testing.assert_array_almost_equal(orig_mats, data.mat)  # passes!
+        """
         T = params.shape[0]
         mats = np.zeros((T, 4, 4))
         for i in range(T):
@@ -187,12 +228,23 @@ class BaseData:
         self.mat = mats
 
     def save(self, path, compression_level=9):
-        """Saves data to disk as a hdf5 file.
+        """ Saves (meta)data to disk as an HDF5 file.
 
         Parameters
         ----------
         path : str
             Path to save the data to
+        compression_level : int
+            Level of compression (higher = more compression, but slower; max = 9)
+        
+        Examples
+        --------
+        Save data to disk:
+        >>> import os
+        >>> from medusa.data import get_example_h5
+        >>> data = get_example_h5(load=True, model="mediapipe")
+        >>> data.save('./my_data.h5')
+        >>> os.remove('./my_data.h5')  # clean up
         """
 
         out_dir = Path(path).parent
@@ -222,7 +274,33 @@ class BaseData:
 
     @staticmethod
     def load(path):
-        """Loads a hdf5 file from disk and returns a Data object."""
+        """ Loads an HDF5 file from disk, parses its contents, and creates the
+        initialization parameters necessary to initialize a ``*Data`` object. It
+        does not return a ``*Data`` object itself; only a dictionary with the parameters. 
+        
+        Important: it is probably better to call the ``load`` method from a specific
+        data class (e.g., ``MediapipeData``) than the ``load`` method from the
+        ``BaseData`` class.
+        
+        Parameters
+        ----------
+        path : str, pathlib.Path
+            A path towards an HDF5 file data reconstructed by Medusa
+            
+        Returns
+        -------
+        init_kwargs : dict
+            Parameters necessary to initialize a ``*Data`` object.
+            
+        Examples
+        --------
+        Get Mediapipe reconstruction data and initialize a ``MediapipeData`` object.
+        >>> from medusa.data import get_example_h5
+        >>> from medusa.core import MediapipeData
+        >>> path = get_example_h5(load=False, model="mediapipe")
+        >>> init_kwargs = BaseData.load(path)
+        >>> data = MediapipeData(**init_kwargs)               
+        """
 
         init_kwargs = dict()
         with h5py.File(path, "r") as f_in:
@@ -246,36 +324,15 @@ class BaseData:
 
         return init_kwargs
 
-    def events_to_mne(self):
-        """Converts events DataFrame to (N x 3) array that
-        MNE expects.
-
-        Returns
-        -------
-        events : np.ndarray
-            An N (number of trials) x 3 array, with the first column
-            indicating the sample *number* indicating the
-        """
-
-        if self.events is None:
-            raise ValueError("There are no events associated with this data object!")
-
-        event_id = {k: i for i, k in enumerate(self.events["trial_type"].unique())}
-        events = np.zeros((self.events.shape[0], 3))
-        for i, (_, ev) in enumerate(self.events.iterrows()):
-            events[i, 2] = event_id[ev["trial_type"]]
-            events[i, 0] = np.argmin(np.abs(self.frame_t - ev["onset"]))
-
-            if events[i, 0] > 0.05:
-                raise ValueError(
-                    f"Nearest sample > 0.05 seconds away for trial {i+1}; "
-                    "Try resampling the data to a higher resolution!"
-                )
-
-        return events, event_id
-
     def to_mne_rawarray(self):
-        """Creates an MNE `RawArray` object from the vertices (`v`)."""
+        """ Creates an MNE `RawArray` object from the vertices (`v`).
+        
+        Examples
+        --------
+        >>> from medusa.data import get_example_h5
+        >>> data = get_example_h5(load=True)
+        >>> rawarray = data.to_mne_rawarray()
+        """
         import mne
 
         T, nV = self.v.shape[:2]
@@ -285,10 +342,10 @@ class BaseData:
             ch_types=["misc"] * np.prod(self.v.shape[1:]),
             sfreq=self.sf,
         )
-        return mne.io.RawArray(self.v.reshape(T, -1), info)
+        return mne.io.RawArray(self.v.reshape(-1, T), info, verbose=False)
 
     def _rescale(self, img, scaling):
-        """Rescales an image with a scaling factor `scaling`."""
+        """ Rescales an image with a scaling factor `scaling`."""
         img = rescale(
             img, scaling, preserve_range=True, anti_aliasing=True, channel_axis=2
         )
@@ -298,7 +355,27 @@ class BaseData:
     def render_video(
         self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None
     ):
-        """Should be implemented in subclass!"""
+        """ Renders the sequence of 3D meshes as a video. It is assumed that this
+        method is only called from a child class (e.g., ``MediapipeData``).
+                
+        Parameters
+        ----------
+        f_out: str
+            Filename of output
+        renderer : ``medusa.render.Renderer``
+            The renderer object
+        video : str
+            Path to video, in order to render face on top of original video frames
+        scaling : float
+            A scaling factor of the resulting video; 0.25 means 25% of original size
+        n_frames : int
+            Number of frames to render; e.g., ``10`` means "render only the first
+            10 frames of the video"; nice for debugging. If ``None`` (default), all
+            frames are rendered
+        alpha : float
+            Alpha (transparency) level of the rendered face; lower = more transparent;
+            minimum = 0 (invisible), maximum = 1 (fully opaque)
+        """
 
         w, h = self.img_size
         if scaling is not None:
@@ -337,7 +414,7 @@ class BaseData:
             reader.close()
 
     def plot_data(self, f_out, plot_motion=True, plot_pca=True, n_pca=3):
-        """Creates a plot of the motion (rotation & translation) parameters
+        """ Creates a plot of the motion (rotation & translation) parameters
         over time and the first `n_pca` PCA components of the
         reconstructed vertices. For FLAME estimates, these parameters are
         relative to the canonical model, so the estimates are plotted relative
@@ -353,6 +430,14 @@ class BaseData:
             Whether to plot the `n_pca` PCA-transformed traces of the data (`self.v`)
         n_pca : int
             How many PCA components to plot
+        
+        Examples
+        --------
+        >>> import os
+        >>> from medusa.data import get_example_h5
+        >>> data = get_example_h5(load=True)
+        >>> data.plot_data('./example_plot.png')
+        >>> os.remove('./example_plot.png')    
         """
 
         if self.mat is None:
