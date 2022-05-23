@@ -56,44 +56,11 @@ def align(data, algorithm, additive_alignment=False, ignore_existing=False):
         v_idx = range(17)  # contour only
     elif data.recon_model_name == "mediapipe":
         # Technically not necessary anymore, because we have the model parameters
-        v_idx = [
-            389,
-            356,
-            454,
-            323,
-            361,
-            288,
-            397,
-            365,
-            379,
-            378,
-            400,
-            377,  # contour
-            152,
-            148,
-            176,
-            149,
-            150,
-            136,
-            172,
-            58,
-            132,
-            93,
-            234,
-            127,
-            162,  # contour
-            94,
-            19,
-            1,
-            4,
-            5,
-            195,
-            197,
-            6,
-        ]  # nose ridge
+        v_idx = [389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377,  # contour
+                 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162,  # contour
+                 94, 19, 1, 4, 5, 195, 197, 6]  # nose ridge
     elif data.recon_model_name == "emoca":
         import pickle
-
         with open("FLAME_masks.pkl", "rb") as f_in:
             vidx = pickle.load(f_in, encoding="latin1")["scalp"]
     else:

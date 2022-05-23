@@ -101,32 +101,32 @@ class EMOCA(torch.nn.Module):
 
         # decoders
         self.D_flame = FLAME(self.cfg, n_shape=100, n_exp=50).to(self.device)
-        self.D_flame_tex = FLAMETex(self.cfg, n_tex=50).to(self.device)
+        # self.D_flame_tex = FLAMETex(self.cfg, n_tex=50).to(self.device)
 
-        latent_dim = 128 + 50 + 3  # (n_detail, n_exp, n_cam)
-        self.D_detail = Generator(
-            latent_dim=latent_dim,
-            out_channels=1,
-            out_scale=0.01,
-            sample_mode="bilinear",
-        ).to(self.device)
+        # latent_dim = 128 + 50 + 3  # (n_detail, n_exp, n_cam)
+        # self.D_detail = Generator(
+        #     latent_dim=latent_dim,
+        #     out_channels=1,
+        #     out_scale=0.01,
+        #     sample_mode="bilinear",
+        # ).to(self.device)
 
         # Load weights from checkpoint and apply to models
         checkpoint = torch.load(self.cfg["model_path"])
 
         self.E_flame.load_state_dict(checkpoint["E_flame"])
-        self.E_detail.load_state_dict(checkpoint["E_detail"])
+        # self.E_detail.load_state_dict(checkpoint["E_detail"])
         self.E_expression.load_state_dict(checkpoint["E_expression"])
-        self.D_detail.load_state_dict(checkpoint["D_detail"])
+        # self.D_detail.load_state_dict(checkpoint["D_detail"])
 
         # for some reason E_exp should be explicitly cast to cuda
         self.E_expression.to(self.device)
 
         # Set everything to 'eval' (inference) mode
         self.E_flame.eval()
-        self.E_detail.eval()
+        # self.E_detail.eval()
         self.E_expression.eval()
-        self.D_detail.eval()
+        # self.D_detail.eval()
         torch.set_grad_enabled(False)  # apparently speeds up forward pass, too
 
     def _encode(self, image):

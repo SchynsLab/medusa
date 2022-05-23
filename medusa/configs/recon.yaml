@@ -5,6 +5,5 @@ FAN:
 
 EMOCA:
     model_path: ext_data/EMOCA/emoca.ckpt
-    topology_path: ext_data/FLAME/geometry/head_template.obj
-    flame_model_path: ext_data/FLAME/geometry/generic_model.pkl
-    tex_path: ext_data/FLAME/FLAME_albedo_from_BFM.npz
+    flame_model_path: ext_data/FLAME/generic_model.pkl
+    #tex_path: ext_data/FLAME/FLAME_albedo_from_BFM.npz
