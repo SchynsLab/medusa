@@ -721,7 +721,7 @@ class FANData(BaseData):
         >>> from medusa.preproc import videorecon
         >>> from medusa.data import get_example_video
         >>> path = get_example_video()
-        >>> fan_data = videorecon(path, recon_model_name='FAN-3D')
+        >>> fan_data = videorecon(path, recon_model_name='FAN-3D', device='cpu')
         """
 
         init_kwargs = super().load(path)
