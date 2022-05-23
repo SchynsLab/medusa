@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:function:: align(data, algorithm, additive_alignment=False, ignore_existing=False)
+.. py:function:: align(data, algorithm='icp', additive_alignment=False, ignore_existing=False)
 
    Aligment of 3D meshes over time.
 

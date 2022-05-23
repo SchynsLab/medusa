@@ -32,7 +32,7 @@ Module Contents
    classes (such as ``FlameData``, ``MediapipeData``, etc.).
 
    Warning: objects should never be initialized with this class directly,
-   only when calling super().__init__() from the subclass (like ``FlameData``). Note,
+   only when calling ``super().__init__()`` from the subclass (like ``FlameData``). Note,
    though, that the initialization parameters are the same for every class that
    inherits from ``BaseData``.
 
@@ -78,6 +78,7 @@ Module Contents
       .. rubric:: Examples
 
       Convert the sequences of affine matrices to a 2D numpy array:
+
       >>> from medusa.data import get_example_h5
       >>> data = get_example_h5(load=True, model="mediapipe")
       >>> params = data.mats2params(to_df=False)
@@ -98,6 +99,7 @@ Module Contents
 
       Convert the sequences of affine matrices to a 2D numpy array and uses the
       ``params2mats`` function to reverse it.
+
       >>> from medusa.data import get_example_h5
       >>> data = get_example_h5(load=True, model="mediapipe")
       >>> orig_mats = data.mat.copy()
@@ -118,6 +120,7 @@ Module Contents
       .. rubric:: Examples
 
       Save data to disk:
+
       >>> import os
       >>> from medusa.data import get_example_h5
       >>> data = get_example_h5(load=True, model="mediapipe")
@@ -145,6 +148,7 @@ Module Contents
       .. rubric:: Examples
 
       Get Mediapipe reconstruction data and initialize a ``MediapipeData`` object.
+
       >>> from medusa.data import get_example_h5
       >>> from medusa.core import MediapipeData
       >>> path = get_example_h5(load=False, model="mediapipe")
@@ -213,51 +217,32 @@ Module Contents
 
    .. py:method:: __len__(self)
 
+      Returns the number of time points of the reconstructed vertices (i.e.,
+      the number of reconstructed frames from the video.
+
 
    .. py:method:: __getitem__(self, idx)
 
+      Returns the vertices at a particular time point (``idx``).
+
+      :param idx: Index into the time dimension of the data
+      :type idx: int
+
 
    .. py:method:: __setitem__(self, idx, v)
+
+      Replace the vertices at time point ``idx`` with ``v``.
+
+      :param idx: Index into the time dimension of the data
+      :type idx: int
+      :param v: Numpy array with vertices of shape ``nV`` (number of verts) x 3 (XYZ)
+      :type v: np.ndarray
 
 
 
 .. py:class:: FlameData(*args, **kwargs)
 
    Bases: :py:obj:`BaseData`
-
-   Base Data class with attributes and methods common to all Data
-   classes (such as ``FlameData``, ``MediapipeData``, etc.).
-
-   Warning: objects should never be initialized with this class directly,
-   only when calling super().__init__() from the subclass (like ``FlameData``). Note,
-   though, that the initialization parameters are the same for every class that
-   inherits from ``BaseData``.
-
-   :param v: Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)
-   :type v: ndarray
-   :param f: Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-             `None` if working with landmarks/vertices only
-   :type f: ndarray
-   :param mat: Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-               the 'world' (or 'model') matrix for each time point
-   :type mat: ndarray
-   :param cam_mat: Numpy array of shape 4x4 (affine matrix) representing the camera matrix
-   :type cam_mat: ndarray
-   :param frame_t: Numpy array of length T (time points) with "frame times", i.e.,
-                   onset of each frame (in seconds) from the video
-   :type frame_t: ndarray
-   :param events: A Pandas DataFrame with `N` rows corresponding to `N` separate trials
-                  and at least two columns: 'onset' and 'trial_type' (optional: 'duration')
-   :type events: pd.DataFrame
-   :param sf: Sampling frequency of video
-   :type sf: int, float
-   :param recon_model_name: Name of reconstruction model
-   :type recon_model_name: str
-   :param space: The space the vertices are currently in; can be either 'local' or 'world'
-   :type space: str
-   :param path: Path where the data is saved; if initializing a new object (rather than
-                loading one from disk), this should be `None`
-   :type path: str
 
    .. py:method:: load(cls, path)
       :classmethod:
@@ -279,6 +264,7 @@ Module Contents
       .. rubric:: Examples
 
       Get Mediapipe reconstruction data and initialize a ``MediapipeData`` object.
+
       >>> from medusa.data import get_example_h5
       >>> from medusa.core import MediapipeData
       >>> path = get_example_h5(load=False, model="mediapipe")
@@ -313,87 +299,90 @@ Module Contents
 
    Bases: :py:obj:`BaseData`
 
-   Base Data class with attributes and methods common to all Data
-   classes (such as ``FlameData``, ``MediapipeData``, etc.).
+   Data class specific to reconstructions from the Mediapipe model.
 
-   Warning: objects should never be initialized with this class directly,
-   only when calling super().__init__() from the subclass (like ``FlameData``). Note,
-   though, that the initialization parameters are the same for every class that
-   inherits from ``BaseData``.
+   Warning: we recommend against initializing a ``MediapipeData`` object directly
+   (i.e., through the ``__init__`` class constructor). Instead, use the high-level
+   ``videorecon`` function, which returns a ``MediapipeData`` object. Or, if you
+   are loading data from disk, use the ``load`` classmethod (see examples)
 
-   :param v: Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)
-   :type v: ndarray
-   :param f: Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-             `None` if working with landmarks/vertices only
-   :type f: ndarray
-   :param mat: Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-               the 'world' (or 'model') matrix for each time point
-   :type mat: ndarray
-   :param cam_mat: Numpy array of shape 4x4 (affine matrix) representing the camera matrix
-   :type cam_mat: ndarray
-   :param frame_t: Numpy array of length T (time points) with "frame times", i.e.,
-                   onset of each frame (in seconds) from the video
-   :type frame_t: ndarray
-   :param events: A Pandas DataFrame with `N` rows corresponding to `N` separate trials
-                  and at least two columns: 'onset' and 'trial_type' (optional: 'duration')
-   :type events: pd.DataFrame
-   :param sf: Sampling frequency of video
-   :type sf: int, float
-   :param recon_model_name: Name of reconstruction model
-   :type recon_model_name: str
-   :param space: The space the vertices are currently in; can be either 'local' or 'world'
-   :type space: str
-   :param path: Path where the data is saved; if initializing a new object (rather than
-                loading one from disk), this should be `None`
-   :type path: str
+   :param \*args: Positional (non-keyword) arguments passed to the ``BaseData`` constructor
+   :type \*args: iterable
+   :param \*\*kwargs: Keyword arguments passed to the ``BaseData`` constructor
+   :type \*\*kwargs: dict
+
+   .. rubric:: Examples
+
+   We recommend creating ``MediapipeData`` objects by loading the corresponding
+   HDF5 file from disk (see ``load`` docstring).
 
    .. py:method:: load(cls, path)
       :classmethod:
 
-      Loads an HDF5 file from disk, parses its contents, and creates the
-      initialization parameters necessary to initialize a ``*Data`` object. It
-      does not return a ``*Data`` object itself; only a dictionary with the parameters.
+      Loads Mediapipe data from a HDF5 file and returns a ``MediapipeData``
+      object.
 
-      Important: it is probably better to call the ``load`` method from a specific
-      data class (e.g., ``MediapipeData``) than the ``load`` method from the
-      ``BaseData`` class.
-
-      :param path: A path towards an HDF5 file data reconstructed by Medusa
+      :param path: Path to HDF5 file with Mediapipe data
       :type path: str, pathlib.Path
 
-      :returns: **init_kwargs** -- Parameters necessary to initialize a ``*Data`` object.
-      :rtype: dict
+      :rtype: A ``MediapipeData`` object
 
       .. rubric:: Examples
 
-      Get Mediapipe reconstruction data and initialize a ``MediapipeData`` object.
+      The ``load`` classmethod is the recommended way to initialize a ``MediapipeData``
+      object with already reconstructed data:
+
       >>> from medusa.data import get_example_h5
-      >>> from medusa.core import MediapipeData
-      >>> path = get_example_h5(load=False, model="mediapipe")
-      >>> init_kwargs = BaseData.load(path)
-      >>> data = MediapipeData(**init_kwargs)
+      >>> path = get_example_h5()
+      >>> mp_data = MediapipeData.load(path)
+
+      If the data is not reconstructed yet, use the ``videorecon`` function to create
+      such an object:
+
+      >>> from medusa.preproc import videorecon
+      >>> from medusa.data import get_example_video
+      >>> path = get_example_video()
+      >>> mp_data = videorecon(path, recon_model_name='mediapipe')
 
 
    .. py:method:: render_video(self, f_out, smooth=False, wireframe=False, **kwargs)
 
-      Renders the sequence of 3D meshes as a video. It is assumed that this
-      method is only called from a child class (e.g., ``MediapipeData``).
+      Renders a video of the reconstructed vertices.
 
-      :param f_out: Filename of output
-      :type f_out: str
-      :param renderer: The renderer object
-      :type renderer: ``medusa.render.Renderer``
-      :param video: Path to video, in order to render face on top of original video frames
-      :type video: str
-      :param scaling: A scaling factor of the resulting video; 0.25 means 25% of original size
-      :type scaling: float
-      :param n_frames: Number of frames to render; e.g., ``10`` means "render only the first
-                       10 frames of the video"; nice for debugging. If ``None`` (default), all
-                       frames are rendered
-      :type n_frames: int
-      :param alpha: Alpha (transparency) level of the rendered face; lower = more transparent;
-                    minimum = 0 (invisible), maximum = 1 (fully opaque)
-      :type alpha: float
+      Note: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")
+      determines the format of the rendered video.
+
+      :param f_out: Path where the video should be saved
+      :type f_out: str, pathlib.Path
+      :param smooth: Whether to render a smooth mesh or not (ignored when ``wireframe=True``)
+      :type smooth: bool
+      :param wireframe: Whether to render wireframe instead of the full mesh
+      :type wireframe: bool
+      :param \*\*kwargs: Keyword arguments passed to the ``render_video`` method from ``BaseData``;
+                         options include ``video``, ``scaling``, ``n_frames``, and ``alpha``
+      :type \*\*kwargs: dict
+
+      .. rubric:: Examples
+
+      Rendering a GIF with just the wireframe:
+
+      >>> from pathlib import Path
+      >>> from medusa.data import get_example_h5
+      >>> data = get_example_h5(load=True)
+      >>> f_out = Path('./example_vid_recon.gif')
+      >>> data.render_video(f_out, wireframe=True)
+      >>> f_out.is_file()
+      True
+
+      Rendering an MP4 video with a smooth mesh on top of the original video:
+
+      >>> from medusa.data import get_example_video
+      >>> vid = get_example_video()
+      >>> data = get_example_h5(load=True)
+      >>> f_out = Path('./example_vid_recon.mp4')
+      >>> data.render_video(f_out, smooth=True, video=vid)
+      >>> f_out.is_file()
+      True
 
 
 
@@ -401,108 +390,86 @@ Module Contents
 
    Bases: :py:obj:`BaseData`
 
-   Base Data class with attributes and methods common to all Data
-   classes (such as ``FlameData``, ``MediapipeData``, etc.).
+   Data class specific to reconstructions from the FAN-3D model.
 
-   Warning: objects should never be initialized with this class directly,
-   only when calling super().__init__() from the subclass (like ``FlameData``). Note,
-   though, that the initialization parameters are the same for every class that
-   inherits from ``BaseData``.
+   Warning: we recommend against initializing a ``FANData`` object directly
+   (i.e., through the ``__init__`` class constructor). Instead, use the high-level
+   ``videorecon`` function, which returns a ``FANData`` object. Or, if you
+   are loading data from disk, use the ``load`` classmethod (see examples)
 
-   :param v: Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)
-   :type v: ndarray
-   :param f: Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-             `None` if working with landmarks/vertices only
-   :type f: ndarray
-   :param mat: Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-               the 'world' (or 'model') matrix for each time point
-   :type mat: ndarray
-   :param cam_mat: Numpy array of shape 4x4 (affine matrix) representing the camera matrix
-   :type cam_mat: ndarray
-   :param frame_t: Numpy array of length T (time points) with "frame times", i.e.,
-                   onset of each frame (in seconds) from the video
-   :type frame_t: ndarray
-   :param events: A Pandas DataFrame with `N` rows corresponding to `N` separate trials
-                  and at least two columns: 'onset' and 'trial_type' (optional: 'duration')
-   :type events: pd.DataFrame
-   :param sf: Sampling frequency of video
-   :type sf: int, float
-   :param recon_model_name: Name of reconstruction model
-   :type recon_model_name: str
-   :param space: The space the vertices are currently in; can be either 'local' or 'world'
-   :type space: str
-   :param path: Path where the data is saved; if initializing a new object (rather than
-                loading one from disk), this should be `None`
-   :type path: str
+   :param \*args: Positional (non-keyword) arguments passed to the ``BaseData`` constructor
+   :type \*args: iterable
+   :param \*\*kwargs: Keyword arguments passed to the ``BaseData`` constructor
+   :type \*\*kwargs: dict
+
+   .. rubric:: Examples
+
+   We recommend creating ``FANData`` objects by loading the corresponding
+   HDF5 file from disk (see ``load`` docstring).
 
    .. py:method:: load(cls, path)
       :classmethod:
 
-      Loads an HDF5 file from disk, parses its contents, and creates the
-      initialization parameters necessary to initialize a ``*Data`` object. It
-      does not return a ``*Data`` object itself; only a dictionary with the parameters.
+      Loads FAN-3D data from a HDF5 file and returns a ``FANData``
+      object.
 
-      Important: it is probably better to call the ``load`` method from a specific
-      data class (e.g., ``MediapipeData``) than the ``load`` method from the
-      ``BaseData`` class.
-
-      :param path: A path towards an HDF5 file data reconstructed by Medusa
+      :param path: Path to HDF5 file with FAN-3D data
       :type path: str, pathlib.Path
 
-      :returns: **init_kwargs** -- Parameters necessary to initialize a ``*Data`` object.
-      :rtype: dict
+      :rtype: A ``FANData`` object
 
       .. rubric:: Examples
 
-      Get Mediapipe reconstruction data and initialize a ``MediapipeData`` object.
-      >>> from medusa.data import get_example_h5
-      >>> from medusa.core import MediapipeData
-      >>> path = get_example_h5(load=False, model="mediapipe")
-      >>> init_kwargs = BaseData.load(path)
-      >>> data = MediapipeData(**init_kwargs)
+      If the data is not reconstructed yet, use the ``videorecon`` function to create
+      such an object:
+
+      >>> from medusa.preproc import videorecon
+      >>> from medusa.data import get_example_video
+      >>> path = get_example_video()
+      >>> fan_data = videorecon(path, recon_model_name='FAN-3D')
 
 
-   .. py:method:: render_video(self, f_out, video=None, margin=25)
+   .. py:method:: render_video(self, f_out, video=None)
 
-      Renders the sequence of 3D meshes as a video. It is assumed that this
-      method is only called from a child class (e.g., ``MediapipeData``).
+      Renders a video of the reconstructed vertices.
 
-      :param f_out: Filename of output
-      :type f_out: str
-      :param renderer: The renderer object
-      :type renderer: ``medusa.render.Renderer``
-      :param video: Path to video, in order to render face on top of original video frames
-      :type video: str
-      :param scaling: A scaling factor of the resulting video; 0.25 means 25% of original size
-      :type scaling: float
-      :param n_frames: Number of frames to render; e.g., ``10`` means "render only the first
-                       10 frames of the video"; nice for debugging. If ``None`` (default), all
-                       frames are rendered
-      :type n_frames: int
-      :param alpha: Alpha (transparency) level of the rendered face; lower = more transparent;
-                    minimum = 0 (invisible), maximum = 1 (fully opaque)
-      :type alpha: float
+      Note: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")
+      determines the format of the rendered video.
+
+      :param f_out: Path where the video should be saved
+      :type f_out: str, pathlib.Path
+      :param video: Path to video, if you want to render the face on top of the original video;
+                    default is ``None`` (i.e., do not render on top of video)
+      :type video: str, pathlib.Path
 
 
 
 .. py:data:: MODEL2CLS
    
 
-   
+   Dictionary with a mapping from model names (keys) to their associated data
+   classes (values).
 
 .. py:function:: load_h5(path)
 
-   Convenience function to load a hdf5 file and
-   immediately initialize the correct data class.
+   Convenience function to load a hdf5 file and immediately initialize the correct
+   data class.
 
-   Located here (instead of io.py or render.py) to
-   prevent circular imports.
+   Located here (instead of ``io.py`` or ``render.py``) to prevent circular imports.
 
-   :param path: Path to hdf5 file
+   :param path: Path to an HDF5 file
    :type path: str
 
    :returns: **data** -- An object with a class derived from data.BaseData
-             (like MediapipeData, or FlameData)
-   :rtype: data.BaseData subclass object
+             (like ``MediapipeData``, or ``FlameData``)
+   :rtype: ``data.BaseData`` subclass object
+
+   .. rubric:: Examples
+
+   Load in HDF5 data reconstructed by Mediapipe:
+
+   >>> from medusa.data import get_example_h5
+   >>> path = get_example_h5(load=False)
+   >>> data = load_h5(path)
 
 

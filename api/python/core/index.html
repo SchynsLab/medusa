@@ -789,7 +789,7 @@ disk using the <code class="docutils literal notranslate"><span class="pre">load
 <dd><p>Base Data class with attributes and methods common to all Data
 classes (such as <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>, <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>, etc.).</p>
 <p>Warning: objects should never be initialized with this class directly,
-only when calling super().__init__() from the subclass (like <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>). Note,
+only when calling <code class="docutils literal notranslate"><span class="pre">super().__init__()</span></code> from the subclass (like <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>). Note,
 though, that the initialization parameters are the same for every class that
 inherits from <code class="docutils literal notranslate"><span class="pre">BaseData</span></code>.</p>
 <dl class="field-list simple">
@@ -832,12 +832,14 @@ not (in which case it’s returned as a numpy array)</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Convert the sequences of affine matrices to a 2D numpy array:
-&gt;&gt;&gt; from medusa.data import get_example_h5
-&gt;&gt;&gt; data = get_example_h5(load=True, model=”mediapipe”)
-&gt;&gt;&gt; params = data.mats2params(to_df=False)
-&gt;&gt;&gt; params.shape
-(232, 12)</p>
+<p>Convert the sequences of affine matrices to a 2D numpy array:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mats2params</span><span class="p">(</span><span class="n">to_df</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(232, 12)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -853,13 +855,15 @@ does the opposite of the <code class="docutils literal notranslate"><span class=
 </dl>
 <p class="rubric">Examples</p>
 <p>Convert the sequences of affine matrices to a 2D numpy array and uses the
-<code class="docutils literal notranslate"><span class="pre">params2mats</span></code> function to reverse it.
-&gt;&gt;&gt; from medusa.data import get_example_h5
-&gt;&gt;&gt; data = get_example_h5(load=True, model=”mediapipe”)
-&gt;&gt;&gt; orig_mats = data.mat.copy()
-&gt;&gt;&gt; params = data.mats2params(to_df=False)
-&gt;&gt;&gt; data.params2mats(params)
-&gt;&gt;&gt; np.testing.assert_array_almost_equal(orig_mats, data.mat)  # passes!</p>
+<code class="docutils literal notranslate"><span class="pre">params2mats</span></code> function to reverse it.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">orig_mats</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mats2params</span><span class="p">(</span><span class="n">to_df</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">params2mats</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">orig_mats</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>  <span class="c1"># passes!</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -875,12 +879,14 @@ does the opposite of the <code class="docutils literal notranslate"><span class=
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Save data to disk:
-&gt;&gt;&gt; import os
-&gt;&gt;&gt; from medusa.data import get_example_h5
-&gt;&gt;&gt; data = get_example_h5(load=True, model=”mediapipe”)
-&gt;&gt;&gt; data.save(‘./my_data.h5’)
-&gt;&gt;&gt; os.remove(‘./my_data.h5’)  # clean up</p>
+<p>Save data to disk:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;./my_data.h5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;./my_data.h5&#39;</span><span class="p">)</span>  <span class="c1"># clean up</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -904,12 +910,14 @@ data class (e.g., <code class="docutils literal notranslate"><span class="pre">M
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Get Mediapipe reconstruction data and initialize a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object.
-&gt;&gt;&gt; from medusa.data import get_example_h5
-&gt;&gt;&gt; from medusa.core import MediapipeData
-&gt;&gt;&gt; path = get_example_h5(load=False, model=”mediapipe”)
-&gt;&gt;&gt; init_kwargs = BaseData.load(path)
-&gt;&gt;&gt; data = MediapipeData(<a href="#id1"><span class="problematic" id="id2">**</span></a>init_kwargs)</p>
+<p>Get Mediapipe reconstruction data and initialize a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.core</span> <span class="kn">import</span> <span class="n">MediapipeData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">init_kwargs</span> <span class="o">=</span> <span class="n">BaseData</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">MediapipeData</span><span class="p">(</span><span class="o">**</span><span class="n">init_kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -977,17 +985,34 @@ to the value of the first frame.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core.BaseData.__len__">
 <span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.BaseData.__len__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the number of time points of the reconstructed vertices (i.e.,
+the number of reconstructed frames from the video.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core.BaseData.__getitem__">
 <span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.BaseData.__getitem__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the vertices at a particular time point (<code class="docutils literal notranslate"><span class="pre">idx</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>idx</strong> (<em>int</em>) – Index into the time dimension of the data</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core.BaseData.__setitem__">
 <span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.BaseData.__setitem__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Replace the vertices at time point <code class="docutils literal notranslate"><span class="pre">idx</span></code> with <code class="docutils literal notranslate"><span class="pre">v</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> (<em>int</em>) – Index into the time dimension of the data</p></li>
+<li><p><strong>v</strong> (<em>np.ndarray</em>) – Numpy array with vertices of shape <code class="docutils literal notranslate"><span class="pre">nV</span></code> (number of verts) x 3 (XYZ)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -995,33 +1020,6 @@ to the value of the first frame.</p>
 <dt class="sig sig-object py" id="medusa.core.FlameData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core.</span></span><span class="sig-name descname"><span class="pre">FlameData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.FlameData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#medusa.core.BaseData" title="medusa.core.BaseData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseData</span></code></a></p>
-<p>Base Data class with attributes and methods common to all Data
-classes (such as <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>, <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>, etc.).</p>
-<p>Warning: objects should never be initialized with this class directly,
-only when calling super().__init__() from the subclass (like <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>). Note,
-though, that the initialization parameters are the same for every class that
-inherits from <code class="docutils literal notranslate"><span class="pre">BaseData</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)</p></li>
-<li><p><strong>f</strong> (<em>ndarray</em>) – Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-<cite>None</cite> if working with landmarks/vertices only</p></li>
-<li><p><strong>mat</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-the ‘world’ (or ‘model’) matrix for each time point</p></li>
-<li><p><strong>cam_mat</strong> (<em>ndarray</em>) – Numpy array of shape 4x4 (affine matrix) representing the camera matrix</p></li>
-<li><p><strong>frame_t</strong> (<em>ndarray</em>) – Numpy array of length T (time points) with “frame times”, i.e.,
-onset of each frame (in seconds) from the video</p></li>
-<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – A Pandas DataFrame with <cite>N</cite> rows corresponding to <cite>N</cite> separate trials
-and at least two columns: ‘onset’ and ‘trial_type’ (optional: ‘duration’)</p></li>
-<li><p><strong>sf</strong> (<em>int</em><em>, </em><em>float</em>) – Sampling frequency of video</p></li>
-<li><p><strong>recon_model_name</strong> (<em>str</em>) – Name of reconstruction model</p></li>
-<li><p><strong>space</strong> (<em>str</em>) – The space the vertices are currently in; can be either ‘local’ or ‘world’</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Path where the data is saved; if initializing a new object (rather than
-loading one from disk), this should be <cite>None</cite></p></li>
-</ul>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core.FlameData.load">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.FlameData.load" title="Permalink to this definition">¶</a></dt>
@@ -1043,12 +1041,14 @@ data class (e.g., <code class="docutils literal notranslate"><span class="pre">M
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Get Mediapipe reconstruction data and initialize a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object.
-&gt;&gt;&gt; from medusa.data import get_example_h5
-&gt;&gt;&gt; from medusa.core import MediapipeData
-&gt;&gt;&gt; path = get_example_h5(load=False, model=”mediapipe”)
-&gt;&gt;&gt; init_kwargs = BaseData.load(path)
-&gt;&gt;&gt; data = MediapipeData(<a href="#id3"><span class="problematic" id="id4">**</span></a>init_kwargs)</p>
+<p>Get Mediapipe reconstruction data and initialize a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.core</span> <span class="kn">import</span> <span class="n">MediapipeData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">init_kwargs</span> <span class="o">=</span> <span class="n">BaseData</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">MediapipeData</span><span class="p">(</span><span class="o">**</span><span class="n">init_kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1079,82 +1079,91 @@ minimum = 0 (invisible), maximum = 1 (fully opaque)</p></li>
 <dt class="sig sig-object py" id="medusa.core.MediapipeData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core.</span></span><span class="sig-name descname"><span class="pre">MediapipeData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.MediapipeData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#medusa.core.BaseData" title="medusa.core.BaseData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseData</span></code></a></p>
-<p>Base Data class with attributes and methods common to all Data
-classes (such as <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>, <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>, etc.).</p>
-<p>Warning: objects should never be initialized with this class directly,
-only when calling super().__init__() from the subclass (like <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>). Note,
-though, that the initialization parameters are the same for every class that
-inherits from <code class="docutils literal notranslate"><span class="pre">BaseData</span></code>.</p>
+<p>Data class specific to reconstructions from the Mediapipe model.</p>
+<p>Warning: we recommend against initializing a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object directly
+(i.e., through the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> class constructor). Instead, use the high-level
+<code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function, which returns a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object. Or, if you
+are loading data from disk, use the <code class="docutils literal notranslate"><span class="pre">load</span></code> classmethod (see examples)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)</p></li>
-<li><p><strong>f</strong> (<em>ndarray</em>) – Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-<cite>None</cite> if working with landmarks/vertices only</p></li>
-<li><p><strong>mat</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-the ‘world’ (or ‘model’) matrix for each time point</p></li>
-<li><p><strong>cam_mat</strong> (<em>ndarray</em>) – Numpy array of shape 4x4 (affine matrix) representing the camera matrix</p></li>
-<li><p><strong>frame_t</strong> (<em>ndarray</em>) – Numpy array of length T (time points) with “frame times”, i.e.,
-onset of each frame (in seconds) from the video</p></li>
-<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – A Pandas DataFrame with <cite>N</cite> rows corresponding to <cite>N</cite> separate trials
-and at least two columns: ‘onset’ and ‘trial_type’ (optional: ‘duration’)</p></li>
-<li><p><strong>sf</strong> (<em>int</em><em>, </em><em>float</em>) – Sampling frequency of video</p></li>
-<li><p><strong>recon_model_name</strong> (<em>str</em>) – Name of reconstruction model</p></li>
-<li><p><strong>space</strong> (<em>str</em>) – The space the vertices are currently in; can be either ‘local’ or ‘world’</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Path where the data is saved; if initializing a new object (rather than
-loading one from disk), this should be <cite>None</cite></p></li>
+<li><p><strong>*args</strong> (<em>iterable</em>) – Positional (non-keyword) arguments passed to the <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> constructor</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Keyword arguments passed to the <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> constructor</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>We recommend creating <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> objects by loading the corresponding
+HDF5 file from disk (see <code class="docutils literal notranslate"><span class="pre">load</span></code> docstring).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core.MediapipeData.load">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.MediapipeData.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads an HDF5 file from disk, parses its contents, and creates the
-initialization parameters necessary to initialize a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object. It
-does not return a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object itself; only a dictionary with the parameters.</p>
-<p>Important: it is probably better to call the <code class="docutils literal notranslate"><span class="pre">load</span></code> method from a specific
-data class (e.g., <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>) than the <code class="docutils literal notranslate"><span class="pre">load</span></code> method from the
-<code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class.</p>
+<dd><p>Loads Mediapipe data from a HDF5 file and returns a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>
+object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>, </em><em>pathlib.Path</em>) – A path towards an HDF5 file data reconstructed by Medusa</p>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>, </em><em>pathlib.Path</em>) – Path to HDF5 file with Mediapipe data</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>init_kwargs</strong> – Parameters necessary to initialize a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Get Mediapipe reconstruction data and initialize a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object.
-&gt;&gt;&gt; from medusa.data import get_example_h5
-&gt;&gt;&gt; from medusa.core import MediapipeData
-&gt;&gt;&gt; path = get_example_h5(load=False, model=”mediapipe”)
-&gt;&gt;&gt; init_kwargs = BaseData.load(path)
-&gt;&gt;&gt; data = MediapipeData(<a href="#id5"><span class="problematic" id="id6">**</span></a>init_kwargs)</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">load</span></code> classmethod is the recommended way to initialize a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>
+object with already reconstructed data:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mp_data</span> <span class="o">=</span> <span class="n">MediapipeData</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If the data is not reconstructed yet, use the <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function to create
+such an object:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.preproc</span> <span class="kn">import</span> <span class="n">videorecon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mp_data</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">recon_model_name</span><span class="o">=</span><span class="s1">&#39;mediapipe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core.MediapipeData.render_video">
 <span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.MediapipeData.render_video" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the sequence of 3D meshes as a video. It is assumed that this
-method is only called from a child class (e.g., <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>).</p>
+<dd><p>Renders a video of the reconstructed vertices.</p>
+<p>Note: the extension of the <code class="docutils literal notranslate"><span class="pre">f_out</span></code> parameter (e.g., “.gif” or “.mp4”)
+determines the format of the rendered video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>f_out</strong> (<em>str</em>) – Filename of output</p></li>
-<li><p><strong>renderer</strong> (<code class="docutils literal notranslate"><span class="pre">medusa.render.Renderer</span></code>) – The renderer object</p></li>
-<li><p><strong>video</strong> (<em>str</em>) – Path to video, in order to render face on top of original video frames</p></li>
-<li><p><strong>scaling</strong> (<em>float</em>) – A scaling factor of the resulting video; 0.25 means 25% of original size</p></li>
-<li><p><strong>n_frames</strong> (<em>int</em>) – Number of frames to render; e.g., <code class="docutils literal notranslate"><span class="pre">10</span></code> means “render only the first
-10 frames of the video”; nice for debugging. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), all
-frames are rendered</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Alpha (transparency) level of the rendered face; lower = more transparent;
-minimum = 0 (invisible), maximum = 1 (fully opaque)</p></li>
+<li><p><strong>f_out</strong> (<em>str</em><em>, </em><em>pathlib.Path</em>) – Path where the video should be saved</p></li>
+<li><p><strong>smooth</strong> (<em>bool</em>) – Whether to render a smooth mesh or not (ignored when <code class="docutils literal notranslate"><span class="pre">wireframe=True</span></code>)</p></li>
+<li><p><strong>wireframe</strong> (<em>bool</em>) – Whether to render wireframe instead of the full mesh</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Keyword arguments passed to the <code class="docutils literal notranslate"><span class="pre">render_video</span></code> method from <code class="docutils literal notranslate"><span class="pre">BaseData</span></code>;
+options include <code class="docutils literal notranslate"><span class="pre">video</span></code>, <code class="docutils literal notranslate"><span class="pre">scaling</span></code>, <code class="docutils literal notranslate"><span class="pre">n_frames</span></code>, and <code class="docutils literal notranslate"><span class="pre">alpha</span></code></p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Rendering a GIF with just the wireframe:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f_out</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;./example_vid_recon.gif&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">render_video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f_out</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Rendering an MP4 video with a smooth mesh on top of the original video:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f_out</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;./example_vid_recon.mp4&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">render_video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="n">vid</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f_out</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -1163,79 +1172,58 @@ minimum = 0 (invisible), maximum = 1 (fully opaque)</p></li>
 <dt class="sig sig-object py" id="medusa.core.FANData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core.</span></span><span class="sig-name descname"><span class="pre">FANData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.FANData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#medusa.core.BaseData" title="medusa.core.BaseData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseData</span></code></a></p>
-<p>Base Data class with attributes and methods common to all Data
-classes (such as <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>, <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>, etc.).</p>
-<p>Warning: objects should never be initialized with this class directly,
-only when calling super().__init__() from the subclass (like <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>). Note,
-though, that the initialization parameters are the same for every class that
-inherits from <code class="docutils literal notranslate"><span class="pre">BaseData</span></code>.</p>
+<p>Data class specific to reconstructions from the FAN-3D model.</p>
+<p>Warning: we recommend against initializing a <code class="docutils literal notranslate"><span class="pre">FANData</span></code> object directly
+(i.e., through the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> class constructor). Instead, use the high-level
+<code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function, which returns a <code class="docutils literal notranslate"><span class="pre">FANData</span></code> object. Or, if you
+are loading data from disk, use the <code class="docutils literal notranslate"><span class="pre">load</span></code> classmethod (see examples)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)</p></li>
-<li><p><strong>f</strong> (<em>ndarray</em>) – Integer numpy array of shape nF (no. faces) x 3 (vertices per face); can be
-<cite>None</cite> if working with landmarks/vertices only</p></li>
-<li><p><strong>mat</strong> (<em>ndarray</em>) – Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
-the ‘world’ (or ‘model’) matrix for each time point</p></li>
-<li><p><strong>cam_mat</strong> (<em>ndarray</em>) – Numpy array of shape 4x4 (affine matrix) representing the camera matrix</p></li>
-<li><p><strong>frame_t</strong> (<em>ndarray</em>) – Numpy array of length T (time points) with “frame times”, i.e.,
-onset of each frame (in seconds) from the video</p></li>
-<li><p><strong>events</strong> (<em>pd.DataFrame</em>) – A Pandas DataFrame with <cite>N</cite> rows corresponding to <cite>N</cite> separate trials
-and at least two columns: ‘onset’ and ‘trial_type’ (optional: ‘duration’)</p></li>
-<li><p><strong>sf</strong> (<em>int</em><em>, </em><em>float</em>) – Sampling frequency of video</p></li>
-<li><p><strong>recon_model_name</strong> (<em>str</em>) – Name of reconstruction model</p></li>
-<li><p><strong>space</strong> (<em>str</em>) – The space the vertices are currently in; can be either ‘local’ or ‘world’</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Path where the data is saved; if initializing a new object (rather than
-loading one from disk), this should be <cite>None</cite></p></li>
+<li><p><strong>*args</strong> (<em>iterable</em>) – Positional (non-keyword) arguments passed to the <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> constructor</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Keyword arguments passed to the <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> constructor</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>We recommend creating <code class="docutils literal notranslate"><span class="pre">FANData</span></code> objects by loading the corresponding
+HDF5 file from disk (see <code class="docutils literal notranslate"><span class="pre">load</span></code> docstring).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core.FANData.load">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.FANData.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads an HDF5 file from disk, parses its contents, and creates the
-initialization parameters necessary to initialize a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object. It
-does not return a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object itself; only a dictionary with the parameters.</p>
-<p>Important: it is probably better to call the <code class="docutils literal notranslate"><span class="pre">load</span></code> method from a specific
-data class (e.g., <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>) than the <code class="docutils literal notranslate"><span class="pre">load</span></code> method from the
-<code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class.</p>
+<dd><p>Loads FAN-3D data from a HDF5 file and returns a <code class="docutils literal notranslate"><span class="pre">FANData</span></code>
+object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>, </em><em>pathlib.Path</em>) – A path towards an HDF5 file data reconstructed by Medusa</p>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>, </em><em>pathlib.Path</em>) – Path to HDF5 file with FAN-3D data</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>init_kwargs</strong> – Parameters necessary to initialize a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">FANData</span></code> object</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Get Mediapipe reconstruction data and initialize a <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code> object.
-&gt;&gt;&gt; from medusa.data import get_example_h5
-&gt;&gt;&gt; from medusa.core import MediapipeData
-&gt;&gt;&gt; path = get_example_h5(load=False, model=”mediapipe”)
-&gt;&gt;&gt; init_kwargs = BaseData.load(path)
-&gt;&gt;&gt; data = MediapipeData(<a href="#id7"><span class="problematic" id="id8">**</span></a>init_kwargs)</p>
+<p>If the data is not reconstructed yet, use the <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function to create
+such an object:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.preproc</span> <span class="kn">import</span> <span class="n">videorecon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fan_data</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">recon_model_name</span><span class="o">=</span><span class="s1">&#39;FAN-3D&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core.FANData.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.FANData.render_video" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the sequence of 3D meshes as a video. It is assumed that this
-method is only called from a child class (e.g., <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>).</p>
+<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.FANData.render_video" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a video of the reconstructed vertices.</p>
+<p>Note: the extension of the <code class="docutils literal notranslate"><span class="pre">f_out</span></code> parameter (e.g., “.gif” or “.mp4”)
+determines the format of the rendered video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>f_out</strong> (<em>str</em>) – Filename of output</p></li>
-<li><p><strong>renderer</strong> (<code class="docutils literal notranslate"><span class="pre">medusa.render.Renderer</span></code>) – The renderer object</p></li>
-<li><p><strong>video</strong> (<em>str</em>) – Path to video, in order to render face on top of original video frames</p></li>
-<li><p><strong>scaling</strong> (<em>float</em>) – A scaling factor of the resulting video; 0.25 means 25% of original size</p></li>
-<li><p><strong>n_frames</strong> (<em>int</em>) – Number of frames to render; e.g., <code class="docutils literal notranslate"><span class="pre">10</span></code> means “render only the first
-10 frames of the video”; nice for debugging. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), all
-frames are rendered</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Alpha (transparency) level of the rendered face; lower = more transparent;
-minimum = 0 (invisible), maximum = 1 (fully opaque)</p></li>
+<li><p><strong>f_out</strong> (<em>str</em><em>, </em><em>pathlib.Path</em>) – Path where the video should be saved</p></li>
+<li><p><strong>video</strong> (<em>str</em><em>, </em><em>pathlib.Path</em>) – Path to video, if you want to render the face on top of the original video;
+default is <code class="docutils literal notranslate"><span class="pre">None</span></code> (i.e., do not render on top of video)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1246,27 +1234,35 @@ minimum = 0 (invisible), maximum = 1 (fully opaque)</p></li>
 <dl class="py data">
 <dt class="sig sig-object py" id="medusa.core.MODEL2CLS">
 <span class="sig-prename descclassname"><span class="pre">medusa.core.</span></span><span class="sig-name descname"><span class="pre">MODEL2CLS</span></span><a class="headerlink" href="#medusa.core.MODEL2CLS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Dictionary with a mapping from model names (keys) to their associated data
+classes (values).</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.core.load_h5">
 <span class="sig-prename descclassname"><span class="pre">medusa.core.</span></span><span class="sig-name descname"><span class="pre">load_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core.load_h5" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function to load a hdf5 file and
-immediately initialize the correct data class.</p>
-<p>Located here (instead of io.py or render.py) to
-prevent circular imports.</p>
+<dd><p>Convenience function to load a hdf5 file and immediately initialize the correct
+data class.</p>
+<p>Located here (instead of <code class="docutils literal notranslate"><span class="pre">io.py</span></code> or <code class="docutils literal notranslate"><span class="pre">render.py</span></code>) to prevent circular imports.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to hdf5 file</p>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to an HDF5 file</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>data</strong> – An object with a class derived from data.BaseData
-(like MediapipeData, or FlameData)</p>
+(like <code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>, or <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>data.BaseData subclass object</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">data.BaseData</span></code> subclass object</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Load in HDF5 data reconstructed by Mediapipe:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">load_h5</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
