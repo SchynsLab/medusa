@@ -3,7 +3,6 @@ from pathlib import Path
 from scipy.interpolate import interp1d, PchipInterpolator
 
 from ..core import load_h5
-from ..utils import get_logger
 
 
 def resample(data, sampling_freq=None, kind="pchip"):
@@ -31,12 +30,9 @@ def resample(data, sampling_freq=None, kind="pchip"):
         An object with a class inherited from ``medusa.core.BaseData``
     """
 
-    logger = get_logger()
-
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
         # (used by CLI)
-        logger.info(f"Loading data from {data} ...")
         data = load_h5(data)
 
     ft = data.frame_t
@@ -45,7 +41,7 @@ def resample(data, sampling_freq=None, kind="pchip"):
         # np.diff gives sampling *period*
         sampling_period = np.mean(np.diff(ft))
         sampling_freq = 1 / sampling_period
-        logger.info(f"Using the average sampling rate ({sampling_freq:.2f} Hz)")
+        data.logger.info(f"Using the average sampling rate ({sampling_freq:.2f} Hz)")
     else:
         sampling_period = 1 / sampling_freq
 
@@ -83,8 +79,4 @@ def resample(data, sampling_freq=None, kind="pchip"):
 
     data.frame_t = new_ft  # save new frame times!
 
-    # Save!
-    pth = data.path
-    desc = "desc-" + pth.split("desc-")[1].split("_")[0] + "+interp"
-    f_out = pth.split("desc-")[0] + desc
-    data.save(f_out + "_shape.h5")
+    return data

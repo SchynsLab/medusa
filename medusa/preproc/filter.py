@@ -3,7 +3,6 @@ from pathlib import Path
 from scipy.signal import butter, sosfilt
 
 from ..core import load_h5
-from ..utils import get_logger
 
 
 def filter(data, low_pass, high_pass):
@@ -27,12 +26,9 @@ def filter(data, low_pass, high_pass):
         An object with a class inherited from ``medusa.core.BaseData``
     """
 
-    logger = get_logger()
-
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
         # (used by CLI)
-        logger.info(f"Loading data from {data} ...")
         data = load_h5(data)
 
     nyq = 0.5 * data.sf  # sampling freq

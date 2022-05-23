@@ -4,6 +4,7 @@ which is used in the reconstruction process (e.g., in the ``videorecon`` functio
 """
 
 import cv2
+import logging
 import imageio
 import numpy as np
 import pandas as pd
@@ -13,8 +14,6 @@ from datetime import datetime
 from skimage.transform import rescale
 
 from .utils import get_logger
-
-logger = get_logger()
 
 
 class VideoData:
@@ -28,6 +27,10 @@ class VideoData:
     events : str, Path
         Path to a TSV file with event information (optional);
         should contain at least the columns 'onset' and 'trial_type'
+    scaling : float
+        Scaling factor of video frames (e.g., 0.25 means scale to 25% of original)
+    loglevel : str  
+        Logging level (e.g., 'INFO' or 'WARNING')
 
     Attributes
     ----------
@@ -42,9 +45,12 @@ class VideoData:
         frame of the video
     """
 
-    def __init__(self, path, events=None, find_files=True):
+    def __init__(self, path, events=None, find_files=True, scaling=None, loglevel='INFO'):
         self.path = Path(path)
         self.events = events
+        self.scaling = scaling
+        self.logger = get_logger()
+        self.logger.setLevel(loglevel)
         self._validate()
         self._extract_metadata()
 
@@ -90,7 +96,6 @@ class VideoData:
             self.events = pd.read_csv(self.events, sep="\t")
         else:
             self.events = None
-            logger.warning(f"Did not find events file for video {self.path}!")
 
     def _find_frame_t(self):
         """Looks for a "frame times" file associated with the video,
@@ -106,37 +111,30 @@ class VideoData:
             # per second as FPS (and equivalently `sf`, sampling freq)
             frame_t = pd.read_csv(ft_path, sep="\t")["t"].to_numpy()
             sampling_period = np.diff(frame_t)
-            self.sf, sf_std = 1 / sampling_period.mean(), 1 / sampling_period.std()
-            logger.info(
-                f"Average FPS/sampling frequency: {self.sf:.2f} (SD: {sf_std:.2f})"
-            )
+            self.sf = 1 / sampling_period.mean()
         else:
-            logger.warning(
-                f"Did not find frame times file for {self.path} "
-                f"assuming constant FPS/sampling frequency ({self.sf})!"
-            )
-
             end = self.n_img * (1 / self.sf)
             frame_t = np.linspace(0, end, endpoint=False, num=self.n_img)
 
+        self.logger.info(
+            f"Estimated sampling frequency of video: {self.sf:.2f})"
+        )
+
         self.frame_t = frame_t
 
-    def _rescale(self, img, scaling):
+    def _rescale(self, img):
         """Rescales an image with a scaling factor `scaling`."""
         img = rescale(
-            img, scaling, preserve_range=True, anti_aliasing=True, channel_axis=2
+            img, self.scaling, preserve_range=True, anti_aliasing=True, channel_axis=2
         )
         img = img.round().astype(np.uint8)
         return img
 
-    def loop(self, scaling=None, return_index=True, verbose=True):
+    def loop(self, return_index=True):
         """Loops across frames of a video.
 
         Parameters
         ----------
-        scaling : float
-            If not `None` (default), rescale image with this factor
-            (e.g., 0.25 means reduce image to 25% or original)
         return_index : bool
             Whether to return the frame index and the image; if `False`,
             only the image is returned
@@ -150,7 +148,7 @@ class VideoData:
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
         self.stop_loop_ = False
 
-        if verbose:
+        if self.logger.level <= logging.INFO:
             iter_ = tqdm(reader, desc=f"{desc} Recon frames", total=self.n_img)
         else:
             iter_ = reader
@@ -161,8 +159,8 @@ class VideoData:
             if self.stop_loop_:
                 break
 
-            if scaling is not None:
-                img = self._rescale(img, scaling=scaling)
+            if self.scaling is not None:
+                img = self._rescale(img)
 
             i += 1
             if return_index:
@@ -198,6 +196,7 @@ class VideoData:
             "img_size": self.img_size,
             "events": self.events,
             "sf": self.sf,
+            "loglevel": self.logger.level
         }
 
 

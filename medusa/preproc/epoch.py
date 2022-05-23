@@ -4,7 +4,6 @@ from tqdm import tqdm
 from datetime import datetime
 from scipy.interpolate import interp1d
 
-from ..utils import get_logger
 from ..core import load_h5
 from ..io import EpochsArray
 
@@ -45,14 +44,11 @@ def epoch(
         An object with a class inherited from ``medusa.core.BaseData``
     """
 
-    logger = get_logger()
-
     # TODO: rename .mat to .affine (cf. nifti)
 
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
         # (used by CLI)
-        logger.info(f"Loading data from {data} ...")
         data = load_h5(data)
 
     if data.events is None:

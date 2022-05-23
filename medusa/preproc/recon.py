@@ -15,7 +15,7 @@ def videorecon(
     cfg=None,
     device="cuda",
     n_frames=None,
-    verbose=True
+    loglevel='INFO'
 ):
     """Reconstruction of all frames of a video.
 
@@ -38,8 +38,9 @@ def videorecon(
     n_frames : int
         If not `None` (default), only reconstruct and render the first `n_frames`
         frames of the video; nice for debugging
-    verbose : bool
-        Whether to print out extra information
+    loglevel : str
+        Logging level, options are (in order of verbosity): 'DEBUG', 'INFO', 'WARNING',
+        'ERROR', and 'CRITICAL'
 
     Returns
     -------
@@ -48,12 +49,13 @@ def videorecon(
     """
 
     logger = get_logger()
+    logger.setLevel(loglevel)
     logger.info(f"Starting recon using for {video_path}")
     logger.info(f"Initializing {recon_model_name} recon model")
 
     # Initialize VideoData object here to use metadata
     # in recon_model (like img_size)
-    video = VideoData(video_path, events=events_path)
+    video = VideoData(video_path, events=events_path, loglevel=loglevel)
 
     # Initialize reconstruction model
     if recon_model_name in ["emoca", "emoca-dense"]:
@@ -68,7 +70,7 @@ def videorecon(
 
     # Loop across frames of video, store results in `recon_data`
     recon_data = defaultdict(list)
-    for i, frame in video.loop(scaling=None, verbose=verbose):
+    for i, frame in video.loop():
 
         if recon_model_name in ["emoca"]:
 

@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 from tqdm import tqdm
 from pathlib import Path
@@ -7,11 +8,9 @@ from skimage.transform._geometric import _umeyama
 from trimesh.transformations import decompose_matrix, transform_points, compose_matrix
 
 from ..core import load_h5
-from ..utils import get_logger
 
 
-def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False,
-          verbose=True):
+def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False):
     """Aligment of 3D meshes over time.
 
     Parameters
@@ -28,8 +27,6 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
         top of the existing ones (if present; ignored otherwise)
     ignore_existing : bool
         Whether to ignore the existing alignment parameters
-    verbose : bool
-        Whether to print extra information
 
     Returns
     -------
@@ -37,10 +34,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
         An object with a class inherited from ``medusa.core.BaseData``
     """
 
-    logger = get_logger()
-
     if isinstance(data, (str, Path)):
-        logger.info(f"Loading data from {data} ...")
         data = load_h5(data)
 
     if data.space == "local" and not additive_alignment and not ignore_existing:
@@ -69,7 +63,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     else:
         raise ValueError("Unknown reconstruction model!")
 
-    if verbose:
+    if data.logger.level <= logging.INFO:
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Align frames")
         iter_ = tqdm(range(data.v.shape[0]), desc=desc)
     else:

@@ -20,6 +20,7 @@ os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 import cv2
 import h5py
+import logging
 import imageio
 import numpy as np
 import pandas as pd
@@ -71,6 +72,8 @@ class BaseData:
     path : str
         Path where the data is saved; if initializing a new object (rather than
         loading one from disk), this should be `None`
+    loglevel : int
+        Logging level of current logger
     """
 
     def __init__(
@@ -86,6 +89,7 @@ class BaseData:
         recon_model_name=None,
         space="world",
         path=None,
+        loglevel=20
     ):
 
         self.v = v
@@ -100,6 +104,7 @@ class BaseData:
         self.space = space
         self.path = path
         self.logger = get_logger()
+        self.logger.setLevel(loglevel)
         self._check()
 
     def _check(self):
@@ -270,6 +275,7 @@ class BaseData:
             f_out["frame_t"].attrs["sf"] = self.sf
             f_out.attrs["data_class"] = self.__class__.__name__
             f_out.attrs["path"] = path
+            f_out.attrs["loglevel"] = self.logger.level
 
         # Note to self: need to do this outside h5py.File context,
         # because Pandas assumes a buffer or path, not an
@@ -316,7 +322,7 @@ class BaseData:
                 else:
                     init_kwargs[attr] = None
 
-            for attr in ["img_size", "recon_model_name", "path", "space"]:
+            for attr in ["img_size", "recon_model_name", "path", "space", "loglevel"]:
                 init_kwargs[attr] = f_in.attrs[attr]
 
             init_kwargs["sf"] = f_in["frame_t"].attrs["sf"]
@@ -359,8 +365,7 @@ class BaseData:
         return img
 
     def render_video(
-        self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None,
-        verbose=True
+        self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None
     ):
         """ Renders the sequence of 3D meshes as a video. It is assumed that this
         method is only called from a child class (e.g., ``MediapipeData``).
@@ -393,7 +398,7 @@ class BaseData:
 
         writer = imageio.get_writer(f_out, mode="I", fps=self.sf)
 
-        if verbose:
+        if self.logger.level <= logging.INFO:
             desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
             iter_ = tqdm(range(len(self)), desc=f"{desc} Render shape")
         else:
@@ -732,7 +737,7 @@ class FANData(BaseData):
         init_kwargs = super().load(path)
         return cls(**init_kwargs)
 
-    def render_video(self, f_out, video=None, verbose=True):
+    def render_video(self, f_out, video=None):
         """ Renders a video of the reconstructed vertices. 
         
         Note: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")
@@ -771,7 +776,7 @@ class FANData(BaseData):
         writer = imageio.get_writer(f_out, mode="I", fps=self.sf)
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
         
-        if verbose:
+        if self.logger.level <= logging.INFO:
             iter_ = tqdm(range(len(self)), desc=f"{desc} Render shape")
         else:
             iter_ = range(len(self))
