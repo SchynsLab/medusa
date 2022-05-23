@@ -16,7 +16,8 @@ disk using the ``load`` (static)method.
 """
 
 import os
-os.environ["DISPLAY"] = ":0.0"
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
+#os.environ["DISPLAY"] = ":0.0"
 
 import cv2
 import h5py
@@ -257,7 +258,8 @@ class BaseData:
 
             for attr in ["v", "f", "frame_t", "mat", "cam_mat"]:
                 data = getattr(self, attr, None)
-                if attr != "f":
+
+                if attr != "f" and data is not None:
                     data = data.astype(np.float32)
 
                 if data is not None:
@@ -738,6 +740,20 @@ class FANData(BaseData):
         video : str, pathlib.Path
             Path to video, if you want to render the face on top of the original video;
             default is ``None`` (i.e., do not render on top of video)
+            
+        Examples
+        --------
+        Rendering a GIF with wireframe (only possibility) on top of video:
+        
+        >>> from pathlib import Path
+        >>> from medusa.data import get_example_video
+        >>> from medusa.data import get_example_h5
+        >>> vid = get_example_video()
+        >>> data = get_example_h5(load=True, model='fan')
+        >>> f_out = Path('./example_vid_recon.gif')
+        >>> data.render_video(f_out, video=vid)
+        >>> f_out.is_file()
+        True
         """
 
         if video is not None:

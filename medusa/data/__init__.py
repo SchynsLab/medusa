@@ -84,7 +84,7 @@ def get_example_h5(load=False, model="mediapipe", as_path=True):
 
     Returns
     -------
-    MediapipeData, FlameData, str, Path
+    MediapipeData, FlameData, FANData, str, Path
         When ``load`` is ``True``, returns either a ``MediapipeData``
         or a ``FlameData`` object, otherwise a string or ``pathlib.Path``
         object to the file
