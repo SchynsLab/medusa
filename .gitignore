@@ -141,3 +141,5 @@ demos/*.h5
 # Docs
 docs/_build
 docs/autoapi/_build
+docs/getting_started/*.mp4
+docs/getting_started/*.gif
