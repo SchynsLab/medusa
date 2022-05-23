@@ -360,6 +360,7 @@ class BaseData:
 
     def render_video(
         self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None,
+        verbose=True
     ):
         """ Renders the sequence of 3D meshes as a video. It is assumed that this
         method is only called from a child class (e.g., ``MediapipeData``).
@@ -391,9 +392,14 @@ class BaseData:
             reader = imageio.get_reader(video)
 
         writer = imageio.get_writer(f_out, mode="I", fps=self.sf)
-        desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
 
-        for i in tqdm(range(len(self)), desc=f"{desc} Render shape"):
+        if verbose:
+            desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
+            iter_ = tqdm(range(len(self)), desc=f"{desc} Render shape")
+        else:
+            iter_ = range(len(selff))
+
+        for i in iter_:
 
             if n_frames is not None:
                 if i == n_frames:
