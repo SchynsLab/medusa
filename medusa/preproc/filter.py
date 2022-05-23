@@ -55,8 +55,4 @@ def filter(data, low_pass, high_pass):
     data.v = to_filter[0]
     data.params2mats(to_filter[1])
 
-    # Save!
-    pth = data.path
-    desc = "desc-" + pth.split("desc-")[1].split("_")[0] + "+filt"
-    f_out = pth.split("desc-")[0] + desc
-    data.save(f_out + "_shape.h5")
+    return data

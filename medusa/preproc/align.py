@@ -10,7 +10,7 @@ from ..core import load_h5
 from ..utils import get_logger
 
 
-def align(data, algorithm, additive_alignment=False, ignore_existing=False):
+def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False):
     """Aligment of 3D meshes over time.
 
     Parameters

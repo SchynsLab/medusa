@@ -40,7 +40,7 @@ class BaseData:
     classes (such as ``FlameData``, ``MediapipeData``, etc.).
 
     Warning: objects should never be initialized with this class directly,
-    only when calling super().__init__() from the subclass (like ``FlameData``). Note,
+    only when calling ``super().__init__()`` from the subclass (like ``FlameData``). Note,
     though, that the initialization parameters are the same for every class that
     inherits from ``BaseData``.
 
@@ -155,6 +155,7 @@ class BaseData:
         Examples
         --------
         Convert the sequences of affine matrices to a 2D numpy array:
+        
         >>> from medusa.data import get_example_h5
         >>> data = get_example_h5(load=True, model="mediapipe")
         >>> params = data.mats2params(to_df=False)
@@ -210,6 +211,7 @@ class BaseData:
         --------
         Convert the sequences of affine matrices to a 2D numpy array and uses the
         ``params2mats`` function to reverse it.
+
         >>> from medusa.data import get_example_h5
         >>> data = get_example_h5(load=True, model="mediapipe")
         >>> orig_mats = data.mat.copy()
@@ -240,6 +242,7 @@ class BaseData:
         Examples
         --------
         Save data to disk:
+
         >>> import os
         >>> from medusa.data import get_example_h5
         >>> data = get_example_h5(load=True, model="mediapipe")
@@ -295,6 +298,7 @@ class BaseData:
         Examples
         --------
         Get Mediapipe reconstruction data and initialize a ``MediapipeData`` object.
+
         >>> from medusa.data import get_example_h5
         >>> from medusa.core import MediapipeData
         >>> path = get_example_h5(load=False, model="mediapipe")
@@ -329,6 +333,7 @@ class BaseData:
         
         Examples
         --------
+
         >>> from medusa.data import get_example_h5
         >>> data = get_example_h5(load=True)
         >>> rawarray = data.to_mne_rawarray()
@@ -353,7 +358,7 @@ class BaseData:
         return img
 
     def render_video(
-        self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None
+        self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None,
     ):
         """ Renders the sequence of 3D meshes as a video. It is assumed that this
         method is only called from a child class (e.g., ``MediapipeData``).
@@ -433,6 +438,7 @@ class BaseData:
         
         Examples
         --------
+
         >>> import os
         >>> from medusa.data import get_example_h5
         >>> data = get_example_h5(load=True)
@@ -493,16 +499,36 @@ class BaseData:
         plt.close()
 
     def __len__(self):
+        """ Returns the number of time points of the reconstructed vertices (i.e.,
+        the number of reconstructed frames from the video. """
         return self.v.shape[0]
 
     def __getitem__(self, idx):
+        """ Returns the vertices at a particular time point (``idx``).
+        
+        Parameters
+        ----------
+        idx : int
+            Index into the time dimension of the data
+        """
         return self.v[idx, :, :]
 
     def __setitem__(self, idx, v):
+        """ Replace the vertices at time point ``idx`` with ``v``. 
+        
+        Parameters
+        ----------
+        idx : int
+            Index into the time dimension of the data
+        v : np.ndarray
+            Numpy array with vertices of shape ``nV`` (number of verts) x 3 (XYZ)
+        """
         self.v[idx, ...] = v
 
 
 class FlameData(BaseData):
+    """ """
+    
     def __init__(self, *args, **kwargs):
         here = Path(__file__).parent.resolve()
         kwargs["f"] = np.load(here / "data/faces_flame.npy")
@@ -534,7 +560,25 @@ class FlameData(BaseData):
 
 
 class MediapipeData(BaseData):
+    """Data class specific to reconstructions from the Mediapipe model.
 
+    Warning: we recommend against initializing a ``MediapipeData`` object directly
+    (i.e., through the ``__init__`` class constructor). Instead, use the high-level
+    ``videorecon`` function, which returns a ``MediapipeData`` object. Or, if you
+    are loading data from disk, use the ``load`` classmethod (see examples)
+
+    Parameters
+    ----------
+    *args : iterable
+        Positional (non-keyword) arguments passed to the ``BaseData`` constructor
+    **kwargs: dict
+        Keyword arguments passed to the ``BaseData`` constructor
+        
+    Examples
+    --------
+    We recommend creating ``MediapipeData`` objects by loading the corresponding
+    HDF5 file from disk (see ``load`` docstring). 
+    """
     def __init__(self, *args, **kwargs):
         here = Path(__file__).parent.resolve()
         kwargs["f"] = np.load(here / "data/faces_mediapipe.npy")
@@ -545,12 +589,78 @@ class MediapipeData(BaseData):
 
     @classmethod
     def load(cls, path):
+        """ Loads Mediapipe data from a HDF5 file and returns a ``MediapipeData``
+        object.
+        
+        Parameters
+        ----------
+        path : str, pathlib.Path
+            Path to HDF5 file with Mediapipe data
+        
+        Returns
+        -------
+        A ``MediapipeData`` object
+        
+        Examples
+        --------
+        The ``load`` classmethod is the recommended way to initialize a ``MediapipeData``
+        object with already reconstructed data:
+        
+        >>> from medusa.data import get_example_h5
+        >>> path = get_example_h5()
+        >>> mp_data = MediapipeData.load(path)
 
+        If the data is not reconstructed yet, use the ``videorecon`` function to create
+        such an object:
+        
+        >>> from medusa.preproc import videorecon
+        >>> from medusa.data import get_example_video
+        >>> path = get_example_video()
+        >>> mp_data = videorecon(path, recon_model_name='mediapipe')
+        """
         init_kwargs = super().load(path)
         return cls(**init_kwargs)
 
     def render_video(self, f_out, smooth=False, wireframe=False, **kwargs):
-
+        """ Renders a video of the reconstructed vertices. 
+        
+        Note: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")
+        determines the format of the rendered video.
+        
+        Parameters
+        ----------
+        f_out : str, pathlib.Path
+            Path where the video should be saved
+        smooth : bool
+            Whether to render a smooth mesh or not (ignored when ``wireframe=True``)
+        wireframe : bool
+            Whether to render wireframe instead of the full mesh
+        **kwargs : dict
+            Keyword arguments passed to the ``render_video`` method from ``BaseData``;
+            options include ``video``, ``scaling``, ``n_frames``, and ``alpha``
+            
+        Examples
+        --------
+        Rendering a GIF with just the wireframe:
+        
+        >>> from pathlib import Path
+        >>> from medusa.data import get_example_h5
+        >>> data = get_example_h5(load=True)
+        >>> f_out = Path('./example_vid_recon.gif')
+        >>> data.render_video(f_out, wireframe=True)
+        >>> f_out.is_file()
+        True
+        
+        Rendering an MP4 video with a smooth mesh on top of the original video:
+        
+        >>> from medusa.data import get_example_video 
+        >>> vid = get_example_video()
+        >>> data = get_example_h5(load=True)
+        >>> f_out = Path('./example_vid_recon.mp4')
+        >>> data.render_video(f_out, smooth=True, video=vid)
+        >>> f_out.is_file()
+        True
+        """
         renderer = Renderer(
             camera_type="intrinsic",
             viewport=self.img_size,
@@ -562,38 +672,86 @@ class MediapipeData(BaseData):
 
 
 class FANData(BaseData):
+    """Data class specific to reconstructions from the FAN-3D model.
+
+    Warning: we recommend against initializing a ``FANData`` object directly
+    (i.e., through the ``__init__`` class constructor). Instead, use the high-level
+    ``videorecon`` function, which returns a ``FANData`` object. Or, if you
+    are loading data from disk, use the ``load`` classmethod (see examples)
+
+    Parameters
+    ----------
+    *args : iterable
+        Positional (non-keyword) arguments passed to the ``BaseData`` constructor
+    **kwargs: dict
+        Keyword arguments passed to the ``BaseData`` constructor
+        
+    Examples
+    --------
+    We recommend creating ``FANData`` objects by loading the corresponding
+    HDF5 file from disk (see ``load`` docstring). 
+    """
 
     def __init__(self, *args, **kwargs):
         here = Path(__file__).parent.resolve()
         kwargs["f"] = np.load(here / "data/faces_fan.npy")
-
         super().__init__(*args, **kwargs)
-
 
     @classmethod
     def load(cls, path):
+        """ Loads FAN-3D data from a HDF5 file and returns a ``FANData``
+        object.
+        
+        Parameters
+        ----------
+        path : str, pathlib.Path
+            Path to HDF5 file with FAN-3D data
+        
+        Returns
+        -------
+        A ``FANData`` object
+        
+        Examples
+        --------
+        If the data is not reconstructed yet, use the ``videorecon`` function to create
+        such an object:
+        
+        >>> from medusa.preproc import videorecon
+        >>> from medusa.data import get_example_video
+        >>> path = get_example_video()
+        >>> fan_data = videorecon(path, recon_model_name='FAN-3D')
+        """
 
         init_kwargs = super().load(path)
         return cls(**init_kwargs)
 
-    def render_video(self, f_out, video=None, margin=25):
+    def render_video(self, f_out, video=None):
+        """ Renders a video of the reconstructed vertices. 
+        
+        Note: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")
+        determines the format of the rendered video.
+        
+        Parameters
+        ----------
+        f_out : str, pathlib.Path
+            Path where the video should be saved
+        video : str, pathlib.Path
+            Path to video, if you want to render the face on top of the original video;
+            default is ``None`` (i.e., do not render on top of video)
+        """
 
         if video is not None:
             # Plot face on top of video, so need to load in video
             reader = imageio.get_reader(video)
-            v = self.v
-        else:
-            v = self.v
-            h = int(v[:, :, 0].max()) - int(v[:, :, 0].min()) + margin * 2
-            w = int(v[:, :, 1].max()) - int(v[:, :, 1].min()) + margin * 2
-            v = v - v.min(axis=(0, 1)) + margin
+        
+        v = self.v
+        w, h = self.img_size
 
         writer = imageio.get_writer(f_out, mode="I", fps=self.sf)
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
 
         for i in tqdm(range(len(self)), desc=f"{desc} Render shape"):
 
-            # fig, ax = plt.subplots()
             if video is not None:
                 background = reader.get_data(i)
             else:
@@ -616,25 +774,34 @@ class FANData(BaseData):
 
 
 MODEL2CLS = {"emoca": FlameData, "mediapipe": MediapipeData, "FAN-3D": FANData}
+""" Dictionary with a mapping from model names (keys) to their associated data
+classes (values)."""
 
 
 def load_h5(path):
-    """Convenience function to load a hdf5 file and
-    immediately initialize the correct data class.
+    """Convenience function to load a hdf5 file and immediately initialize the correct
+    data class.
 
-    Located here (instead of io.py or render.py) to
-    prevent circular imports.
+    Located here (instead of ``io.py`` or ``render.py``) to prevent circular imports.
 
     Parameters
     ----------
     path : str
-        Path to hdf5 file
+        Path to an HDF5 file
 
     Returns
     -------
-    data : data.BaseData subclass object
+    data : ``data.BaseData`` subclass object
         An object with a class derived from data.BaseData
-        (like MediapipeData, or FlameData)
+        (like ``MediapipeData``, or ``FlameData``)
+        
+    Examples
+    --------
+    Load in HDF5 data reconstructed by Mediapipe:
+    
+    >>> from medusa.data import get_example_h5
+    >>> path = get_example_h5(load=False)
+    >>> data = load_h5(path)    
     """
     # peek at recon model
     with h5py.File(path, "r") as f_in:
