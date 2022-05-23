@@ -397,7 +397,7 @@ class BaseData:
             desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
             iter_ = tqdm(range(len(self)), desc=f"{desc} Render shape")
         else:
-            iter_ = range(len(selff))
+            iter_ = range(len(self))
 
         for i in iter_:
 
