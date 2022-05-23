@@ -35,4 +35,18 @@ Module Contents
    :returns: **data** -- An object with a class inherited from ``medusa.core.BaseData``
    :rtype: medusa.core.*Data
 
+   .. rubric:: Examples
+
+   Reconstruct a video using Mediapipe:
+
+   >>> from medusa.data import get_example_video
+   >>> vid = get_example_video()
+   >>> data = videorecon(vid, recon_model_name='mediapipe')
+
+   Reconstruct a video using FAN-3D, but only the first 50 frames of the video:
+
+   >>> data = videorecon(vid, recon_model_name='FAN-3D', n_frames=50)
+   >>> data.v.shape
+   (50, 68, 3)
+
 
