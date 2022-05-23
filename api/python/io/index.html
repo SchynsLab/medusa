@@ -493,11 +493,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.io.logger">
-     logger
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.io.VideoData">
      VideoData
     </a>
@@ -599,11 +594,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#medusa.io.logger">
-     logger
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.io.VideoData">
      VideoData
     </a>
@@ -695,14 +685,9 @@ The <cite>VideoData</cite> class allows for easy looping over frames of a video 
 which is used in the reconstruction process (e.g., in the <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function).</p>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<dl class="py data">
-<dt class="sig sig-object py" id="medusa.io.logger">
-<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#medusa.io.logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.io.VideoData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">find_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoData" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">find_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loglevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INFO'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoData" title="Permalink to this definition">¶</a></dt>
 <dd><p>” Contains (meta)data and functionality associated
 with video files (mp4 files only currently).</p>
 <dl class="field-list simple">
@@ -711,6 +696,8 @@ with video files (mp4 files only currently).</p>
 <li><p><strong>path</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to mp4 file</p></li>
 <li><p><strong>events</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to a TSV file with event information (optional);
 should contain at least the columns ‘onset’ and ‘trial_type’</p></li>
+<li><p><strong>scaling</strong> (<em>float</em>) – Scaling factor of video frames (e.g., 0.25 means scale to 25% of original)</p></li>
+<li><p><strong>loglevel</strong> (<em>str</em>) – Logging level (e.g., ‘INFO’ or ‘WARNING’)</p></li>
 </ul>
 </dd>
 </dl>
@@ -761,16 +748,12 @@ frame of the video</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.io.VideoData.loop">
-<span class="sig-name descname"><span class="pre">loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoData.loop" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoData.loop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loops across frames of a video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>scaling</strong> (<em>float</em>) – If not <cite>None</cite> (default), rescale image with this factor
-(e.g., 0.25 means reduce image to 25% or original)</p></li>
-<li><p><strong>return_index</strong> (<em>bool</em>) – Whether to return the frame index and the image; if <cite>False</cite>,
-only the image is returned</p></li>
-</ul>
+<dd class="field-odd"><p><strong>return_index</strong> (<em>bool</em>) – Whether to return the frame index and the image; if <cite>False</cite>,
+only the image is returned</p>
 </dd>
 <dt class="field-even">Yields</dt>
 <dd class="field-even"><p><strong>img</strong> (<em>np.ndarray</em>) – Numpy array (dtype: <cite>np.uint8</cite>) of shape width x height x 3 (RGB)</p>

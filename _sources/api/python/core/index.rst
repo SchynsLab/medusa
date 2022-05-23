@@ -26,7 +26,7 @@
 Module Contents
 ---------------
 
-.. py:class:: BaseData(v, f=None, mat=None, cam_mat=None, frame_t=None, events=None, sf=None, img_size=None, recon_model_name=None, space='world', path=None)
+.. py:class:: BaseData(v, f=None, mat=None, cam_mat=None, frame_t=None, events=None, sf=None, img_size=None, recon_model_name=None, space='world', path=None, loglevel=20)
 
    Base Data class with attributes and methods common to all Data
    classes (such as ``FlameData``, ``MediapipeData``, etc.).
@@ -61,6 +61,8 @@ Module Contents
    :param path: Path where the data is saved; if initializing a new object (rather than
                 loading one from disk), this should be `None`
    :type path: str
+   :param loglevel: Logging level of current logger
+   :type loglevel: int
 
    .. py:method:: mats2params(self, to_df=True)
 
@@ -167,7 +169,7 @@ Module Contents
       >>> rawarray = data.to_mne_rawarray()
 
 
-   .. py:method:: render_video(self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None, verbose=True)
+   .. py:method:: render_video(self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None)
 
       Renders the sequence of 3D meshes as a video. It is assumed that this
       method is only called from a child class (e.g., ``MediapipeData``).
@@ -429,7 +431,7 @@ Module Contents
       >>> fan_data = videorecon(path, recon_model_name='FAN-3D', device='cpu')
 
 
-   .. py:method:: render_video(self, f_out, video=None, verbose=True)
+   .. py:method:: render_video(self, f_out, video=None)
 
       Renders a video of the reconstructed vertices.
 

@@ -14,12 +14,7 @@
 Module Contents
 ---------------
 
-.. py:data:: logger
-   
-
-   
-
-.. py:class:: VideoData(path, events=None, find_files=True)
+.. py:class:: VideoData(path, events=None, find_files=True, scaling=None, loglevel='INFO')
 
    " Contains (meta)data and functionality associated
    with video files (mp4 files only currently).
@@ -29,6 +24,10 @@ Module Contents
    :param events: Path to a TSV file with event information (optional);
                   should contain at least the columns 'onset' and 'trial_type'
    :type events: str, Path
+   :param scaling: Scaling factor of video frames (e.g., 0.25 means scale to 25% of original)
+   :type scaling: float
+   :param loglevel: Logging level (e.g., 'INFO' or 'WARNING')
+   :type loglevel: str
 
    .. attribute:: sf
 
@@ -55,13 +54,10 @@ Module Contents
 
       :type: np.ndarray
 
-   .. py:method:: loop(self, scaling=None, return_index=True, verbose=True)
+   .. py:method:: loop(self, return_index=True)
 
       Loops across frames of a video.
 
-      :param scaling: If not `None` (default), rescale image with this factor
-                      (e.g., 0.25 means reduce image to 25% or original)
-      :type scaling: float
       :param return_index: Whether to return the frame index and the image; if `False`,
                            only the image is returned
       :type return_index: bool
