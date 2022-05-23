@@ -442,6 +442,20 @@ Module Contents
                     default is ``None`` (i.e., do not render on top of video)
       :type video: str, pathlib.Path
 
+      .. rubric:: Examples
+
+      Rendering a GIF with wireframe (only possibility) on top of video:
+
+      >>> from pathlib import Path
+      >>> from medusa.data import get_example_video
+      >>> from medusa.data import get_example_h5
+      >>> vid = get_example_video()
+      >>> data = get_example_h5(load=True, model='fan')
+      >>> f_out = Path('./example_vid_recon.gif')
+      >>> data.render_video(f_out, video=vid)
+      >>> f_out.is_file()
+      True
+
 
 
 .. py:data:: MODEL2CLS

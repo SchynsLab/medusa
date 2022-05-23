@@ -68,7 +68,7 @@ Package Contents
    :returns: When ``load`` is ``True``, returns either a ``MediapipeData``
              or a ``FlameData`` object, otherwise a string or ``pathlib.Path``
              object to the file
-   :rtype: MediapipeData, FlameData, str, Path
+   :rtype: MediapipeData, FlameData, FANData, str, Path
 
    .. rubric:: Examples
 
