@@ -73,9 +73,13 @@ def videorecon_cmd(video_path, events_path, out, recon_model_name, cfg, device,
               help="Whether to ignore existing alignment and run alignment")
 @click.option("--qc", is_flag=True,
               help="Generate a QC figure with motion and PCA traces")
-def align_cmd(data_file, out, algorithm, additive_alignment, ignore_existing, qc):
+@click.option("--reference-index", default=0, 
+              help="Index of reference mesh to align other meshes to (default = 0 = first")
+def align_cmd(data_file, out, algorithm, additive_alignment, ignore_existing, qc,
+              reference_index):
     """ Performs alignment ("motion correction") of a mesh time series. """
-    data = align(data_file, algorithm, additive_alignment, ignore_existing)
+    data = align(data_file, algorithm, additive_alignment, ignore_existing,
+                 reference_index)
 
     if out is None:
         out = data_file.replace('.h5', '')

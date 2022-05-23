@@ -6,11 +6,9 @@ from ..core import load_h5
 
 
 def resample(data, sampling_freq=None, kind="pchip"):
-    """Resamples the data to a given sampling rate.
-    This function can be used to resample the time points
-    to a higher temporal resolution and/or a constant
-    sampling period, which may not be the case for data
-    that is acquired using a webcam.
+    """Resamples the data to a given sampling rate. This function can be used to
+    resample the time points to a higher temporal resolution and/or a constant
+    sampling period, which may not be the case for data that is acquired using a webcam.
 
     Parameters
     ----------

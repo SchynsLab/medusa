@@ -10,7 +10,8 @@ from trimesh.transformations import decompose_matrix, transform_points, compose_
 from ..core import load_h5
 
 
-def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False):
+def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False,
+          reference_index=0):
     """Aligment of 3D meshes over time.
 
     Parameters
@@ -27,6 +28,11 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
         top of the existing ones (if present; ignored otherwise)
     ignore_existing : bool
         Whether to ignore the existing alignment parameters
+    reference_index : int
+        Index of the mesh used as the reference mesh; for reconstructions that already
+        include the local-to-world matrix, the reference mesh is only used to fix the
+        camera to; for other reconstructions, the reference mesh is used as the target
+        to align all other meshes to
 
     Returns
     -------
@@ -81,9 +87,9 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     # Are we going to do (additional) data-driven alignment?
     if data.mat is None or ignore_existing or additive_alignment:
 
-        # Set target to be the first timepoint; this is an arbitrary choice,
+        # Set target to be the reference index; default is 0, this is an arbitrary choice,
         # but common in e.g. fMRI motion correction
-        target = data.v[0, vidx, :]
+        target = data.v[reference_index, vidx, :]
 
         for i in iter_:
 
@@ -135,7 +141,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     # the rendering will be in the "right" pixel space; note that we only do
     # this for the first frame (otherwise we 're-introduce' the global motion,
     # but this time in the camera, and we assume a fixed camera of course)
-    data.cam_mat = np.linalg.inv(data.mat[0, ...]) @ data.cam_mat
+    data.cam_mat = np.linalg.inv(data.mat[reference_index, ...]) @ data.cam_mat
     data.space = "local"
 
     return data
