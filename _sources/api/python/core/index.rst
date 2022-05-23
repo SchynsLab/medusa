@@ -167,7 +167,7 @@ Module Contents
       >>> rawarray = data.to_mne_rawarray()
 
 
-   .. py:method:: render_video(self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None)
+   .. py:method:: render_video(self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None, verbose=True)
 
       Renders the sequence of 3D meshes as a video. It is assumed that this
       method is only called from a child class (e.g., ``MediapipeData``).

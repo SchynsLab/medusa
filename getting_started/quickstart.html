@@ -550,16 +550,16 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-23 14:56 [INFO   ]  Starting recon using for /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/data/example_vid.mp4
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-23 15:03 [INFO   ]  Starting recon using for /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/data/example_vid.mp4
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-23 14:56 [INFO   ]  Initializing mediapipe recon model
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-23 15:03 [INFO   ]  Initializing mediapipe recon model
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-23 14:56 [WARNING]  Did not find events file for video /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/data/example_vid.mp4!
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-23 15:03 [WARNING]  Did not find events file for video /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/data/example_vid.mp4!
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-23 14:56 [WARNING]  Did not find frame times file for /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/data/example_vid.mp4 assuming constant FPS/sampling frequency (23.98)!
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-23 15:03 [WARNING]  Did not find frame times file for /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/data/example_vid.mp4 assuming constant FPS/sampling frequency (23.98)!
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
@@ -594,28 +594,35 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
 <span class="nn">Input In [4],</span> in <span class="ni">&lt;cell line: 2&gt;</span><span class="nt">()</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">f_out</span> <span class="o">=</span> <span class="s1">&#39;./example_vid_recon.mp4&#39;</span>
 <span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">data</span><span class="o">.</span><span class="n">render_video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="n">vid</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">Video</span><span class="p">(</span><span class="s1">&#39;./example_vid_recon.mp4&#39;</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/core.py:672,</span> in <span class="ni">MediapipeData.render_video</span><span class="nt">(self, f_out, smooth, wireframe, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">626</span> <span class="sd">&quot;&quot;&quot; Renders a video of the reconstructed vertices. </span>
-<span class="g g-Whitespace">    </span><span class="mi">627</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">628</span><span class="sd"> Note: the extension of the ``f_out`` parameter (e.g., &quot;.gif&quot; or &quot;.mp4&quot;)</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/core.py:678,</span> in <span class="ni">MediapipeData.render_video</span><span class="nt">(self, f_out, smooth, wireframe, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">632</span> <span class="sd">&quot;&quot;&quot; Renders a video of the reconstructed vertices. </span>
+<span class="g g-Whitespace">    </span><span class="mi">633</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">634</span><span class="sd"> Note: the extension of the ``f_out`` parameter (e.g., &quot;.gif&quot; or &quot;.mp4&quot;)</span>
 <span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">663</span><span class="sd"> True</span>
-<span class="g g-Whitespace">    </span><span class="mi">664</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">665</span> <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">666</span>     <span class="n">camera_type</span><span class="o">=</span><span class="s2">&quot;intrinsic&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">667</span>     <span class="n">viewport</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">669</span><span class="sd"> True</span>
+<span class="g g-Whitespace">    </span><span class="mi">670</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">671</span> <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">672</span>     <span class="n">camera_type</span><span class="o">=</span><span class="s2">&quot;intrinsic&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">673</span>     <span class="n">viewport</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">,</span>
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">670</span>     <span class="n">cam_mat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_mat</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">671</span> <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">672</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">render_video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">676</span>     <span class="n">cam_mat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_mat</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">677</span> <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">678</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">render_video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="ne">TypeError</span>: render_video() got an unexpected keyword argument &#39;verbose&#39;
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/core.py:400,</span> in <span class="ni">BaseData.render_video</span><span class="nt">(self, f_out, renderer, video, scaling, n_frames, alpha, verbose)</span>
+<span class="g g-Whitespace">    </span><span class="mi">398</span>     <span class="n">iter_</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)),</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2"> Render shape&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">400</span>     <span class="n">iter_</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selff</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">402</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iter_</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span>     <span class="k">if</span> <span class="n">n_frames</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="ne">NameError</span>: name &#39;selff&#39; is not defined
 </pre></div>
 </div>
 </div>

@@ -23,27 +23,34 @@ Video('./example_vid_recon.mp4', embed=True)
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mTypeError[0m                                 Traceback (most recent call last)
+[0;31mNameError[0m                                 Traceback (most recent call last)
 Input [0;32mIn [4][0m, in [0;36m<cell line: 2>[0;34m()[0m
 [1;32m      1[0m f_out [38;5;241m=[39m [38;5;124m'[39m[38;5;124m./example_vid_recon.mp4[39m[38;5;124m'[39m
 [0;32m----> 2[0m [43mdata[49m[38;5;241;43m.[39;49m[43mrender_video[49m[43m([49m[43mf_out[49m[43m,[49m[43m [49m[43mwireframe[49m[38;5;241;43m=[39;49m[38;5;28;43;01mTrue[39;49;00m[43m,[49m[43m [49m[43mvideo[49m[38;5;241;43m=[39;49m[43mvid[49m[43m,[49m[43m [49m[43mverbose[49m[38;5;241;43m=[39;49m[38;5;28;43;01mFalse[39;49;00m[43m)[49m
 [1;32m      3[0m Video([38;5;124m'[39m[38;5;124m./example_vid_recon.mp4[39m[38;5;124m'[39m, embed[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
 
-File [0;32m/opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/core.py:672[0m, in [0;36mMediapipeData.render_video[0;34m(self, f_out, smooth, wireframe, **kwargs)[0m
-[1;32m    626[0m [38;5;124;03m""" Renders a video of the reconstructed vertices. [39;00m
-[1;32m    627[0m [38;5;124;03m[39;00m
-[1;32m    628[0m [38;5;124;03mNote: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")[39;00m
+File [0;32m/opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/core.py:678[0m, in [0;36mMediapipeData.render_video[0;34m(self, f_out, smooth, wireframe, **kwargs)[0m
+[1;32m    632[0m [38;5;124;03m""" Renders a video of the reconstructed vertices. [39;00m
+[1;32m    633[0m [38;5;124;03m[39;00m
+[1;32m    634[0m [38;5;124;03mNote: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")[39;00m
 [0;32m   (...)[0m
-[1;32m    663[0m [38;5;124;03mTrue[39;00m
-[1;32m    664[0m [38;5;124;03m"""[39;00m
-[1;32m    665[0m renderer [38;5;241m=[39m Renderer(
-[1;32m    666[0m     camera_type[38;5;241m=[39m[38;5;124m"[39m[38;5;124mintrinsic[39m[38;5;124m"[39m,
-[1;32m    667[0m     viewport[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39mimg_size,
+[1;32m    669[0m [38;5;124;03mTrue[39;00m
+[1;32m    670[0m [38;5;124;03m"""[39;00m
+[1;32m    671[0m renderer [38;5;241m=[39m Renderer(
+[1;32m    672[0m     camera_type[38;5;241m=[39m[38;5;124m"[39m[38;5;124mintrinsic[39m[38;5;124m"[39m,
+[1;32m    673[0m     viewport[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39mimg_size,
 [0;32m   (...)[0m
-[1;32m    670[0m     cam_mat[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39mcam_mat,
-[1;32m    671[0m )
-[0;32m--> 672[0m [38;5;28;43msuper[39;49m[43m([49m[43m)[49m[38;5;241;43m.[39;49m[43mrender_video[49m[43m([49m[43mf_out[49m[43m,[49m[43m [49m[43mrenderer[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m    676[0m     cam_mat[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39mcam_mat,
+[1;32m    677[0m )
+[0;32m--> 678[0m [38;5;28;43msuper[39;49m[43m([49m[43m)[49m[38;5;241;43m.[39;49m[43mrender_video[49m[43m([49m[43mf_out[49m[43m,[49m[43m [49m[43mrenderer[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
 
-[0;31mTypeError[0m: render_video() got an unexpected keyword argument 'verbose'
-TypeError: render_video() got an unexpected keyword argument 'verbose'
+File [0;32m/opt/hostedtoolcache/Python/3.9.12/x64/lib/python3.9/site-packages/medusa/core.py:400[0m, in [0;36mBaseData.render_video[0;34m(self, f_out, renderer, video, scaling, n_frames, alpha, verbose)[0m
+[1;32m    398[0m     iter_ [38;5;241m=[39m tqdm([38;5;28mrange[39m([38;5;28mlen[39m([38;5;28mself[39m)), desc[38;5;241m=[39m[38;5;124mf[39m[38;5;124m"[39m[38;5;132;01m{[39;00mdesc[38;5;132;01m}[39;00m[38;5;124m Render shape[39m[38;5;124m"[39m)
+[1;32m    399[0m [38;5;28;01melse[39;00m:
+[0;32m--> 400[0m     iter_ [38;5;241m=[39m [38;5;28mrange[39m([38;5;28mlen[39m([43mselff[49m))
+[1;32m    402[0m [38;5;28;01mfor[39;00m i [38;5;129;01min[39;00m iter_:
+[1;32m    404[0m     [38;5;28;01mif[39;00m n_frames [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+
+[0;31mNameError[0m: name 'selff' is not defined
+NameError: name 'selff' is not defined
 
