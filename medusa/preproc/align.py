@@ -10,7 +10,8 @@ from ..core import load_h5
 from ..utils import get_logger
 
 
-def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False):
+def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False,
+          verbose=True):
     """Aligment of 3D meshes over time.
 
     Parameters
@@ -27,6 +28,8 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
         top of the existing ones (if present; ignored otherwise)
     ignore_existing : bool
         Whether to ignore the existing alignment parameters
+    verbose : bool
+        Whether to print extra information
 
     Returns
     -------
@@ -66,11 +69,16 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     else:
         raise ValueError("Unknown reconstruction model!")
 
+    if verbose:
+        desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Align frames")
+        iter_ = tqdm(range(data.v.shape[0]), desc=desc)
+    else:
+        iter_ = range(data.v.shape[0])
+
     # Are we going to use the existing alignment parameters (local-to-world)?
     if data.mat is not None and not ignore_existing:
 
-        desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Align frames")
-        for i in tqdm(range(data.v.shape[0]), desc=desc):
+        for i in iter_:
             # Use inverse of local-to-world matrix (i.e., world-to-local)
             # to 'remove' global motion
             this_mat = np.linalg.inv(data.mat[i, ...])
@@ -83,8 +91,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
         # but common in e.g. fMRI motion correction
         target = data.v[0, vidx, :]
 
-        desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Align frames")
-        for i in tqdm(range(data.v.shape[0]), desc=desc):
+        for i in iter_:
 
             if data.mat is not None:
                 # What do we use as the initial/original matrix?

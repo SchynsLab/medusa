@@ -17,7 +17,6 @@ disk using the ``load`` (static)method.
 
 import os
 os.environ['PYOPENGL_PLATFORM'] = 'egl'
-#os.environ["DISPLAY"] = ":0.0"
 
 import cv2
 import h5py
@@ -727,7 +726,7 @@ class FANData(BaseData):
         init_kwargs = super().load(path)
         return cls(**init_kwargs)
 
-    def render_video(self, f_out, video=None):
+    def render_video(self, f_out, video=None, verbose=True):
         """ Renders a video of the reconstructed vertices. 
         
         Note: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")
@@ -765,8 +764,13 @@ class FANData(BaseData):
 
         writer = imageio.get_writer(f_out, mode="I", fps=self.sf)
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
+        
+        if verbose:
+            iter_ = tqdm(range(len(self)), desc=f"{desc} Render shape")
+        else:
+            iter_ = range(len(self))
 
-        for i in tqdm(range(len(self)), desc=f"{desc} Render shape"):
+        for i in iter_:
 
             if video is not None:
                 background = reader.get_data(i)

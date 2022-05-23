@@ -15,6 +15,7 @@ def videorecon(
     cfg=None,
     device="cuda",
     n_frames=None,
+    verbose=True
 ):
     """Reconstruction of all frames of a video.
 
@@ -37,7 +38,9 @@ def videorecon(
     n_frames : int
         If not `None` (default), only reconstruct and render the first `n_frames`
         frames of the video; nice for debugging
-        
+    verbose : bool
+        Whether to print out extra information
+
     Returns
     -------
     data : medusa.core.*Data
@@ -65,7 +68,7 @@ def videorecon(
 
     # Loop across frames of video, store results in `recon_data`
     recon_data = defaultdict(list)
-    for i, frame in video.loop(scaling=None):
+    for i, frame in video.loop(scaling=None, verbose=verbose):
 
         if recon_model_name in ["emoca"]:
 

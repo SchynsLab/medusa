@@ -129,7 +129,7 @@ class VideoData:
         img = img.round().astype(np.uint8)
         return img
 
-    def loop(self, scaling=None, return_index=True):
+    def loop(self, scaling=None, return_index=True, verbose=True):
         """Loops across frames of a video.
 
         Parameters
@@ -150,8 +150,13 @@ class VideoData:
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
         self.stop_loop_ = False
 
+        if verbose:
+            iter_ = tqdm(reader, desc=f"{desc} Recon frames", total=self.n_img)
+        else:
+            iter_ = reader
+
         i = 0
-        for img in tqdm(reader, desc=f"{desc} Recon frames", total=self.n_img):
+        for img in iter_:
 
             if self.stop_loop_:
                 break
