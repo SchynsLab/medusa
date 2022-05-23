@@ -429,7 +429,7 @@ Module Contents
       >>> fan_data = videorecon(path, recon_model_name='FAN-3D', device='cpu')
 
 
-   .. py:method:: render_video(self, f_out, video=None)
+   .. py:method:: render_video(self, f_out, video=None, verbose=True)
 
       Renders a video of the reconstructed vertices.
 

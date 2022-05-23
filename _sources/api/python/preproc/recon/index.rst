@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:function:: videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=None, device='cuda', n_frames=None)
+.. py:function:: videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=None, device='cuda', n_frames=None, verbose=True)
 
    Reconstruction of all frames of a video.
 
@@ -28,6 +28,8 @@ Module Contents
    :param n_frames: If not `None` (default), only reconstruct and render the first `n_frames`
                     frames of the video; nice for debugging
    :type n_frames: int
+   :param verbose: Whether to print out extra information
+   :type verbose: bool
 
    :returns: **data** -- An object with a class inherited from ``medusa.core.BaseData``
    :rtype: medusa.core.*Data

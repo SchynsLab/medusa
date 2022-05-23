@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:function:: align(data, algorithm='icp', additive_alignment=False, ignore_existing=False)
+.. py:function:: align(data, algorithm='icp', additive_alignment=False, ignore_existing=False, verbose=True)
 
    Aligment of 3D meshes over time.
 
@@ -23,6 +23,8 @@ Module Contents
    :type additive_alignment: bool
    :param ignore_existing: Whether to ignore the existing alignment parameters
    :type ignore_existing: bool
+   :param verbose: Whether to print extra information
+   :type verbose: bool
 
    :returns: **data** -- An object with a class inherited from ``medusa.core.BaseData``
    :rtype: medusa.core.*Data

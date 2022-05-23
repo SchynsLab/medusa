@@ -55,7 +55,7 @@ Module Contents
 
       :type: np.ndarray
 
-   .. py:method:: loop(self, scaling=None, return_index=True)
+   .. py:method:: loop(self, scaling=None, return_index=True, verbose=True)
 
       Loops across frames of a video.
 
