@@ -3,7 +3,7 @@ from PIL import Image
 from imageio import get_reader, get_writer
 from medusa.render import Renderer
 from medusa.core import load_h5
-from collections import defaultdict
+from collections import namedtuple
 from tqdm import tqdm
 
 
@@ -18,6 +18,7 @@ class Demo:
         self.background_color = background_color
         self.fps = self.recon.sf
         self.current = 0
+        self.show_vid = False
         self._queue = []
         self._configure()
         
@@ -31,16 +32,23 @@ class Demo:
                                   wireframe=True)
         self.background = Image.new('RGBA', self.size, self.background_color)
 
-    def add_txt(self, txt, t, t_start=None):
-        
-        self._queue['txt']['t'].append(t)
-        self._queue['txt']['t_start'].append(t_start)
-    
-    def add_recon(self, t, t_start=None):
-        pass
+    def activate_vid(self, t, t_start=0, fade_in=0.5):
 
-    def add_vid(self, t, t_start=None):
-        pass 
+        self.vid_p = Params(t, t_start, fade_in)       
+        self.show_vid = True
+        self.vid_params = {
+            't_start': self._t2f(t),
+            't_end': self._t2f(t_start + t),
+            'alpha': np.linspace(0, 1, num=self._t2f(fade_in)),
+            'counter': 0
+        }
+
+    def reset(self):
+        self.show_vid = False
+        self.vid_params = {
+            't_start': 0,
+            't_end': np.inf
+        } 
 
     def _t2f(self, t):
         return int(round(t * self.fps))
@@ -58,26 +66,42 @@ class Demo:
     def render(self, t, name='Render'):
         
         frames = self._t2f(t)
-        for f in tqdm(range(frames), desc=name):
+        for tf in tqdm(range(frames), desc=name):
             
             bg = self.background.copy()
             
-            #if f >= self.f_vid_start:
-            still = self.get_vid_frame(f)
-            bg = Image.blend(bg, still, alpha=1)
-            bg.putalpha(255)
+            if self.show_vid:
+                if tf >= self.vid_params['t_start'] and tf < self.vid_params['t_end']:            
+                    still = self.get_vid_frame(tf)
+                    alpha = self.vid_params['alpha'][self.vid_params['counter']]
+                    bg = Image.blend(bg, still, alpha=alpha)
+                    bg.putalpha(255)
+                    self.vid_params['counter'] += 1
 
-            recon = self._renderer(self.recon.v[f, ...], self.recon.f)
+            recon = self._renderer(self.recon.v[tf, ...], self.recon.f)
             img = self._renderer.alpha_blend(recon, np.array(bg)[..., :3], face_alpha=0.1)
-            
+            img = Image.fromarray(img)            
             #recon = Image.fromarray(recon)
-            #img = Image.alpha_composite(recon, bg)
             img = np.array(img).astype(np.uint8)
             self._writer.append_data(img)
+            self.current += 1
             
     def close(self):
         self._reader.close()
         self._writer.close()
+
+
+class Params:
+    
+    def __init__(self, t, t_start, fade_in):
+        self.t = t
+        self.t_start = t_start
+        self.fade_in = fade_in
+        self._convert()
+        
+    def _convert(self):
+        pass
+
 
     
 if __name__ == '__main__':
@@ -87,7 +111,9 @@ if __name__ == '__main__':
     f_out = 'demos/teaser_test.gif'
             
     demo = Demo(vid, recon, f_out, scale=0.2)
+    demo.activate_vid()
     demo.render(t=1)
+    demo.reset()
     demo.close()
         
         

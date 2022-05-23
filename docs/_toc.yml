@@ -6,8 +6,8 @@ parts:
   - file: getting_started/installation
   - file: getting_started/quickstart
   - file: getting_started/citation
-  - file: getting_started/license
     title: Citation
+  - file: getting_started/license
 - caption: Tutorials
   chapters:
   - file: tutorials/reconstruction
