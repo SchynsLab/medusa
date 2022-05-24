@@ -590,7 +590,7 @@ frames of the video; nice for debugging</p></li>
 </pre></div>
 </div>
 <p>Reconstruct a video using FAN-3D, but only the first 50 frames of the video:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">recon_model_name</span><span class="o">=</span><span class="s1">&#39;FAN-3D&#39;</span><span class="p">,</span> <span class="n">n_frames</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">recon_model_name</span><span class="o">=</span><span class="s1">&#39;FAN-3D&#39;</span><span class="p">,</span> <span class="n">n_frames</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span>
 <span class="go">(50, 68, 3)</span>
 </pre></div>
