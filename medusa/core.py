@@ -104,7 +104,7 @@ class BaseData:
         self.space = space
         self.path = path
         self.logger = get_logger()
-        self.logger.setLevel(loglevel)
+        self.logger.setLevel(int(loglevel))
         self._check()
 
     def _check(self):
@@ -707,6 +707,7 @@ class FANData(BaseData):
     def __init__(self, *args, **kwargs):
         here = Path(__file__).parent.resolve()
         kwargs["f"] = np.load(here / "data/faces_fan.npy")
+        kwargs["cam_mat"] = np.eye(4)
         super().__init__(*args, **kwargs)
 
     @classmethod

@@ -26,6 +26,22 @@ def resample(data, sampling_freq=None, kind="pchip"):
     -------
     data : medusa.core.*Data
         An object with a class inherited from ``medusa.core.BaseData``
+        
+    Examples
+    --------
+    Resample a time series of 3D meshes to a sampling frequency of 50 Hz
+    
+    >>> from medusa.data import get_example_h5
+    >>> data = get_example_h5(load=True, model='mediapipe')
+    >>> data.sf  # sampling frequency
+    23.98
+    >>> data.v.shape[0]  # how many time points?
+    232
+    >>> data = resample(data, sampling_freq=50)
+    >>> data.sf  # corresponds to desired sampling_freq!
+    50
+    >>> data.v.shape[0]  # how many time points after resampling?
+    482
     """
 
     if isinstance(data, (str, Path)):

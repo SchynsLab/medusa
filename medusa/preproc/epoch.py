@@ -44,8 +44,6 @@ def epoch(
         An object with a class inherited from ``medusa.core.BaseData``
     """
 
-    # TODO: rename .mat to .affine (cf. nifti)
-
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
         # (used by CLI)
