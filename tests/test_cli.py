@@ -20,7 +20,7 @@ def test_videorecon_cmd(model, n_frames, render):
     runner = CliRunner()
     
     args = [vid, '-r', model, '-n', n_frames]
-    if render and not 'GITHUB_ACTIONS' in os.environ:
+    if render:
         # Only test rendering locally, because doesn't work on GH actions
         args.extend(['--render-recon'])
 
@@ -30,9 +30,7 @@ def test_videorecon_cmd(model, n_frames, render):
     assert(expected_h5.is_file())
     expected_h5.unlink()
     
-    if render and not 'GITHUB_ACTIONS' in os.environ:
+    if render:
         expected_gif = Path(vid.replace('.mp4', '.gif'))
         assert(expected_gif.is_file())
         expected_gif.unlink()
-        
-

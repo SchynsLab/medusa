@@ -71,6 +71,7 @@ def epoch(
     epochs = np.zeros((N, T, *D.shape[1:]))
 
     # Loop over trials (onsets)
+    
     desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Epoch trials")
     for i, onset in tqdm(data.events["onset"].iteritems(), total=N, desc=desc):
 
