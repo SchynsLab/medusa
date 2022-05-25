@@ -185,19 +185,62 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../../core/index.html">
+    <a class="reference internal" href="../../core3d/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.core
+       medusa.core3d
       </span>
      </code>
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../core4d/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.core4d
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../../data/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.data
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../data/example_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.example_data
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../data/template_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.template_data
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../epochs/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.epochs
       </span>
      </code>
     </a>
@@ -219,8 +262,8 @@ const thebe_selector_output = ".output, .cell_output"
       </span>
      </code>
     </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -280,8 +323,8 @@ const thebe_selector_output = ".output, .cell_output"
       </span>
      </code>
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -294,8 +337,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-      <label for="toctree-checkbox-4">
+      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+      <label for="toctree-checkbox-5">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -319,8 +362,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-      <label for="toctree-checkbox-5">
+      <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+      <label for="toctree-checkbox-6">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -352,15 +395,6 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../topology/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.topology
       </span>
      </code>
     </a>
@@ -555,7 +589,7 @@ const thebe_selector_output = ".output, .cell_output"
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.preproc.epoch.epoch">
-<span class="sig-prename descclassname"><span class="pre">medusa.preproc.epoch.</span></span><span class="sig-name descname"><span class="pre">epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_correct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(None,</span> <span class="pre">None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.epoch.epoch" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.preproc.epoch.</span></span><span class="sig-name descname"><span class="pre">epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_correct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(None,</span> <span class="pre">None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_back_grand_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.epoch.epoch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates epochs of the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -570,13 +604,17 @@ respectively; if the first value is None, then the start is the beginning
 of the epoch; if the second value is None, then the end is at stimulus onset
 (i.e., 0)</p></li>
 <li><p><strong>baseline_mode</strong> (<em>str</em>) – How to perform baseline correction (options: ‘mean’, ‘ratio’)</p></li>
+<li><p><strong>add_back_grand_mean</strong> (<em>bool</em>) – Whether to add back the grand mean (average across all events and across
+the entire time series); if <code class="docutils literal notranslate"><span class="pre">False</span></code>, the baseline of each event is centered
+around zero; if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the baseline of each event is centered around the grand
+mean of all events</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>data</strong> – An object with a class inherited from <code class="docutils literal notranslate"><span class="pre">medusa.core.BaseData</span></code></p>
+<dd class="field-even"><p><strong>epochsarray</strong> – An EpochsArray object</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>medusa.core.*Data</p>
+<dd class="field-odd"><p><a class="reference internal" href="../../epochs/index.html#medusa.epochs.EpochsArray" title="medusa.epochs.EpochsArray">medusa.epochs.EpochsArray</a></p>
 </dd>
 </dl>
 </dd></dl>

@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:function:: epoch(data, start=-0.5, end=3.0, period=0.01, baseline_correct=False, baseline_window=(None, None), baseline_mode='mean')
+.. py:function:: epoch(data, start=-0.5, end=3.0, period=0.01, baseline_correct=False, baseline_window=(None, None), baseline_mode='mean', add_back_grand_mean=False)
 
    Creates epochs of the data.
 
@@ -27,8 +27,13 @@ Module Contents
    :type baseline_window: tuple[float]
    :param baseline_mode: How to perform baseline correction (options: 'mean', 'ratio')
    :type baseline_mode: str
+   :param add_back_grand_mean: Whether to add back the grand mean (average across all events and across
+                               the entire time series); if ``False``, the baseline of each event is centered
+                               around zero; if ``True``, the baseline of each event is centered around the grand
+                               mean of all events
+   :type add_back_grand_mean: bool
 
-   :returns: **data** -- An object with a class inherited from ``medusa.core.BaseData``
-   :rtype: medusa.core.*Data
+   :returns: **epochsarray** -- An EpochsArray object
+   :rtype: medusa.epochs.EpochsArray
 
 

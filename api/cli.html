@@ -187,19 +187,62 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/core/index.html">
+    <a class="reference internal" href="python/core3d/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.core
+       medusa.core3d
       </span>
      </code>
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="python/core4d/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.core4d
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="python/data/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.data
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/data/example_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.example_data
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/data/template_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.template_data
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/epochs/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.epochs
       </span>
      </code>
     </a>
@@ -221,8 +264,8 @@ const thebe_selector_output = ".output, .cell_output"
       </span>
      </code>
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -282,8 +325,8 @@ const thebe_selector_output = ".output, .cell_output"
       </span>
      </code>
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -296,8 +339,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-      <label for="toctree-checkbox-4">
+      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+      <label for="toctree-checkbox-5">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -321,8 +364,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-      <label for="toctree-checkbox-5">
+      <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+      <label for="toctree-checkbox-6">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -354,15 +397,6 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="python/topology/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.topology
       </span>
      </code>
     </a>
@@ -670,7 +704,7 @@ example:</p>
 <span class="go">  --events-path FILE              Path to events-file (a .tsv file)</span>
 <span class="go">  -o, --out PATH                  File to save output to (shouldn&#39;t have an</span>
 <span class="go">                                  extension)</span>
-<span class="go">  -r, --recon-model-name [emoca|mediapipe|FAN-3D]</span>
+<span class="go">  -r, --recon-model-name [emoca|mediapipe|FAN]</span>
 <span class="go">                                  Name of the reconstruction model</span>
 <span class="go">  -c, --cfg TEXT                  Path to a custom Medusa config file</span>
 <span class="go">  --device [cpu|cuda]             Device to run the reconstruction on (only</span>
@@ -798,7 +832,7 @@ or GIF (depending on the <code class="docutils literal notranslate"><span class=
 reconstruction data and, if you want to render the reconstruction on top of the original
 videon, a video file (e.g., <code class="docutils literal notranslate"><span class="pre">--video</span> <span class="pre">my_video.mp4</span></code>).</p>
 <p>This CLI command uses the <code class="docutils literal notranslate"><span class="pre">render_video</span></code> method from the
-<a class="reference internal" href="python/core/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.core.BaseData</span></code></span></a> class, which in turn uses the
+<span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.core.BaseData</span></code></span> class, which in turn uses the
 <a class="reference internal" href="python/render/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.render.Renderer</span></code></span></a> class (a wrapper around a
 <a class="reference external" href="https://pyrender.readthedocs.io/">pyrender</a> renderer).</p>
 </div>

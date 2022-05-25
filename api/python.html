@@ -56,7 +56,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="medusa.core" href="python/core/index.html" />
+    <link rel="next" title="medusa.core3d" href="python/core3d/index.html" />
     <link rel="prev" title="Command-line interface" href="cli.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -187,19 +187,62 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="python/core/index.html">
+    <a class="reference internal" href="python/core3d/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.core
+       medusa.core3d
       </span>
      </code>
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="python/core4d/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.core4d
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="python/data/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.data
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/data/example_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.example_data
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/data/template_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.template_data
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/epochs/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.epochs
       </span>
      </code>
     </a>
@@ -221,8 +264,8 @@ const thebe_selector_output = ".output, .cell_output"
       </span>
      </code>
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -282,8 +325,8 @@ const thebe_selector_output = ".output, .cell_output"
       </span>
      </code>
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -296,8 +339,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-      <label for="toctree-checkbox-4">
+      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+      <label for="toctree-checkbox-5">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -321,8 +364,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-      <label for="toctree-checkbox-5">
+      <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+      <label for="toctree-checkbox-6">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -354,15 +397,6 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="python/topology/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.topology
       </span>
      </code>
     </a>
@@ -822,7 +856,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p>Medusa’s Python interface allows you to use its functionality in Python. The package
 contains several submodules, of which the most important ones are:</p>
 <div class="section" id="medusa-core">
-<h2><a class="reference internal" href="python/core/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.core</span></code></span></a><a class="headerlink" href="#medusa-core" title="Permalink to this headline">¶</a></h2>
+<h2><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.core</span></code></span><a class="headerlink" href="#medusa-core" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">core</span></code> module contains the core data classes used in Medusa. The most important class
 is the <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class. This class contains most of the functionality to initialize,
 transform, visualize, load, and save reconstruction data. The <code class="docutils literal notranslate"><span class="pre">BaseData</span></code> class should
@@ -832,7 +866,7 @@ the <code class="docutils literal notranslate"><span class="pre">BaseData</span>
 <li><p><code class="docutils literal notranslate"><span class="pre">FlameData</span></code>: for data from reconstruction models that use the <a class="reference external" href="https://flame.is.tue.mpg.de/">FLAME</a>
 topology (such as <a class="reference internal" href="python/recon/emoca/index.html"><span class="doc std std-doc">EMOCA</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">MediapipeData</span></code>: for data from the <a class="reference internal" href="python/recon/mpipe/index.html"><span class="doc std std-doc">Mediapipe</span></a> reconstruction model</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">FANData</span></code>: for data from the <a class="reference internal" href="python/recon/fan/index.html"><span class="doc std std-doc">FAN-3D</span></a> reconstruction model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FANData</span></code>: for data from the <a class="reference internal" href="python/recon/fan/index.html"><span class="doc std std-doc">FAN</span></a> reconstruction model</p></li>
 </ul>
 </div>
 <div class="section" id="medusa-recon">
@@ -976,10 +1010,10 @@ logger.</p>
             <p class="prev-next-title">Command-line interface</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="python/core/index.html" title="next page">
+    <a class='right-next' id="next-link" href="python/core3d/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.core</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.core3d</span></code></p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

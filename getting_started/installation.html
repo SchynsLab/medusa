@@ -185,19 +185,62 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../api/python/core/index.html">
+    <a class="reference internal" href="../api/python/core3d/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.core
+       medusa.core3d
       </span>
      </code>
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../api/python/core4d/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.core4d
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../api/python/data/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.data
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/python/data/example_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.example_data
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/python/data/template_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.template_data
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/python/epochs/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.epochs
       </span>
      </code>
     </a>
@@ -219,8 +262,8 @@ const thebe_selector_output = ".output, .cell_output"
       </span>
      </code>
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -280,8 +323,8 @@ const thebe_selector_output = ".output, .cell_output"
       </span>
      </code>
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -294,8 +337,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-      <label for="toctree-checkbox-4">
+      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+      <label for="toctree-checkbox-5">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -319,8 +362,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-      <label for="toctree-checkbox-5">
+      <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+      <label for="toctree-checkbox-6">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -352,15 +395,6 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../api/python/topology/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.topology
       </span>
      </code>
     </a>
@@ -556,15 +590,15 @@ substantial decreases in runtime. If you have access to a GPU, you can enable
 GPU processing by installing the appropriate CUDA toolkit as well. Run the command
 below depending on whether you want to run the models on GPU or CPU only:</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="0d86a439-85f6-4da8-a8f0-f8578b520f63" name="14f8e082-c055-4c84-8817-a58401976621" type="radio">
-</input><label class="tabbed-label" for="0d86a439-85f6-4da8-a8f0-f8578b520f63">
+<input checked="checked" id="1fe0f3b4-b656-4144-a382-cdabcd5fbfeb" name="ebf398ce-735c-468d-89e7-b4c07da1884e" type="radio">
+</input><label class="tabbed-label" for="1fe0f3b4-b656-4144-a382-cdabcd5fbfeb">
 GPU</label><div class="tabbed-content docutils">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pytorch</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.3</span> <span class="o">-</span><span class="n">c</span> <span class="n">pytorch</span>
 </pre></div>
 </div>
 </div>
-<input id="428c052b-0442-45ba-bfc2-48063f19d229" name="14f8e082-c055-4c84-8817-a58401976621" type="radio">
-</input><label class="tabbed-label" for="428c052b-0442-45ba-bfc2-48063f19d229">
+<input id="749378db-5ad0-48ed-a5b4-0712cef2c47a" name="ebf398ce-735c-468d-89e7-b4c07da1884e" type="radio">
+</input><label class="tabbed-label" for="749378db-5ad0-48ed-a5b4-0712cef2c47a">
 CPU</label><div class="tabbed-content docutils">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pytorch</span> <span class="n">cpuonly</span> <span class="o">-</span><span class="n">c</span> <span class="n">pytorch</span>
 </pre></div>

@@ -22,7 +22,7 @@ Options:
   --events-path FILE              Path to events-file (a .tsv file)
   -o, --out PATH                  File to save output to (shouldn't have an
                                   extension)
-  -r, --recon-model-name [emoca|mediapipe|FAN-3D]
+  -r, --recon-model-name [emoca|mediapipe|FAN]
                                   Name of the reconstruction model
   -c, --cfg TEXT                  Path to a custom Medusa config file
   --device [cpu|cuda]             Device to run the reconstruction on (only
