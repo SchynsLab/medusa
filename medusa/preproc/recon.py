@@ -1,11 +1,10 @@
 import numpy as np
-from pathlib import Path
 from collections import defaultdict
 
 from ..recon import EMOCA, FAN, Mediapipe
 from ..io import VideoData
-from ..core import MODEL2CLS
 from ..utils import get_logger
+from ..core4d import Flame4D, Mediapipe4D, Fan4D
 
 
 def videorecon(
@@ -30,7 +29,7 @@ def videorecon(
         columns are 'duration' and 'modulation'
     recon_model_name : str
         Name of reconstruction model, options are: 'emoca', 'mediapipe',
-        and 'FAN-3D'
+        and 'fan'
     cfg : str
         Path to config file for EMOCA reconstruction; ignored if not using emoca
     device : str
@@ -55,9 +54,9 @@ def videorecon(
     >>> vid = get_example_video()
     >>> data = videorecon(vid, recon_model_name='mediapipe')
 
-    Reconstruct a video using FAN-3D, but only the first 50 frames of the video:
+    Reconstruct a video using FAN, but only the first 50 frames of the video:
 
-    >>> data = videorecon(vid, recon_model_name='FAN-3D', n_frames=50, device='cpu')
+    >>> data = videorecon(vid, recon_model_name='fan', n_frames=50, device='cpu')
     >>> data.v.shape
     (50, 68, 3)
     """
@@ -75,7 +74,7 @@ def videorecon(
     if recon_model_name in ["emoca", "emoca-dense"]:
         fan = FAN(device=device)  # for face detection / cropping
         recon_model = EMOCA(cfg=cfg, device=device, img_size=video.img_size)
-    elif recon_model_name == "FAN-3D":
+    elif recon_model_name == "fan":
         recon_model = FAN(device=device, lm_type="3D")
     elif recon_model_name == "mediapipe":
         recon_model = Mediapipe()
@@ -112,6 +111,7 @@ def videorecon(
 
     # Create Data object using the class corresponding to
     # the model (e.g., FlameData for `emoca`, MediapipeData for `mediapipe`)
+    MODEL2CLS = {"emoca": Flame4D, "mediapipe": Mediapipe4D, "fan": Fan4D}
     DataClass = MODEL2CLS[recon_model_name]
     kwargs = {**recon_data, **video.get_metadata()}
     data = DataClass(recon_model_name=recon_model_name, **kwargs)

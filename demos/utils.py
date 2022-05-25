@@ -2,7 +2,7 @@ import numpy as np
 from PIL import Image
 from imageio import get_reader, get_writer
 from medusa.render import Renderer
-from medusa.core import load_h5
+from medusa.core3d import load_h5
 from collections import namedtuple
 from tqdm import tqdm
 

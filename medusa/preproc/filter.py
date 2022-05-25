@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 from scipy.signal import butter, sosfilt
 
-from ..core import load_h5
+from ..io import load_h5
 
 
 def filter(data, low_pass, high_pass):

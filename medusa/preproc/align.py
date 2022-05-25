@@ -7,7 +7,7 @@ from trimesh.registration import icp, procrustes
 from skimage.transform._geometric import _umeyama
 from trimesh.transformations import decompose_matrix, transform_points, compose_matrix
 
-from ..core import load_h5
+from ..io import load_h5
 
 
 def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False,
@@ -85,7 +85,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     # vidx represents the index of the vertices that we'll use for
     # alignment (using *all* vertices is not a good idea, as it may
     # inadvertently try to align non-rigid motion)
-    if data.recon_model_name == "FAN-3D":
+    if data.recon_model_name == "fan":
         v_idx = range(17)  # contour only
     elif data.recon_model_name == "mediapipe":
         # Technically not necessary anymore, because we have the model parameters

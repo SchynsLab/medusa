@@ -16,7 +16,7 @@ topology (such as [EMOCA](./python/recon/emoca/index))
 
 * `MediapipeData`: for data from the [Mediapipe](./python/recon/mpipe/index) reconstruction model
 
-* `FANData`: for data from the [FAN-3D](./python/recon/fan/index) reconstruction model
+* `FANData`: for data from the [FAN](./python/recon/fan/index) reconstruction model
 
 ## [`medusa.recon`](./python/recon/index)
 

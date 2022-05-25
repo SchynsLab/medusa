@@ -17,7 +17,7 @@ For more information, check out the
 import click
 from pathlib import Path
 
-from .core import load_h5
+from .io import load_h5
 from .preproc.recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
@@ -31,7 +31,7 @@ from .preproc.epoch import epoch
               help='Path to events-file (a .tsv file)')
 @click.option("-o", "--out", default=None, type=click.Path(),
               help="File to save output to (shouldn't have an extension)")
-@click.option("-r", "--recon-model-name", default="emoca", type=click.Choice(["emoca", "mediapipe", "FAN-3D"]),
+@click.option("-r", "--recon-model-name", default="emoca", type=click.Choice(["emoca", "mediapipe", "fan"]),
               help='Name of the reconstruction model')
 @click.option("-c", "--cfg", default=None, type=click.STRING,
               help="Path to a custom Medusa config file")
@@ -117,7 +117,7 @@ def resample_cmd(data_file, out, sampling_freq, kind):
               help="Low-pass filter in hertz")
 @click.option("-h", "--high-pass", default=0.005,
               help="High-pass filter in hertz")
-def filter_cmd(data_file, low_pass, high_pass):
+def filter_cmd(data_file, out, low_pass, high_pass):
     """ Performs temporal filtering of a mesh time series. """
 
     data = filter(data_file, low_pass, high_pass)
@@ -138,15 +138,25 @@ def filter_cmd(data_file, low_pass, high_pass):
               help="End of epoch (in seconds), relative to event onset")
 @click.option("-p", "--period", default=0.1,
               help="Desired period (1 / sampling frequency) of epoch (in seconds)")
-def epoch_cmd(data_file, start, end, period):
+@click.option("--add-back-grand-mean", is_flag=True,
+              help="Whether to add back the grand mean after baseline correction")
+@click.option("--to-mne", is_flag=True,
+              help="Whether convert the output to an MNE EpochsArray object")
+def epoch_cmd(data_file, out, start, end, period, add_back_grand_mean, to_mne):
     """ Performs epoching of a mesh time series. """
 
-    data = epoch(data_file, start, end, period)
+    data = load_h5(data_file)
+    epochsarray = epoch(data, start, end, period, add_back_grand_mean)
 
     if out is None:
         out = data_file.replace('.h5', '')
-
-    data.save(out + '.h5')
+    print(out)
+    if to_mne:
+        epochsarray = epochsarray.to_mne(frame_t=data.frame_t, include_global_motion=True)
+        epochsarray.save(out + '_epo.fif', split_size="2GB", fmt="single",
+                         overwrite=True, split_naming="bids", verbose="WARNING")
+    else:
+        epochsarray.save(out + '_epo.h5')
 
 
 @click.command()
@@ -171,8 +181,7 @@ def videorender_cmd(data_file, out, video, n_frames, no_smooth, wireframe, alpha
     """ Renders the reconstructed mesh time series as a video (gif or mp4)."""
 
     data = load_h5(data_file)
-    h5_path = Path(h5_path)
-    
+
     if out is None:
         out = data_file.replace('.h5', '')
 

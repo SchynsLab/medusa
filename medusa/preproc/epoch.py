@@ -4,8 +4,8 @@ from tqdm import tqdm
 from datetime import datetime
 from scipy.interpolate import interp1d
 
-from ..core import load_h5
-from ..io import EpochsArray
+from ..io import load_h5
+from ..epochs import EpochsArray
 
 
 def epoch(
@@ -16,6 +16,7 @@ def epoch(
     baseline_correct=False,
     baseline_window=(None, None),
     baseline_mode="mean",
+    add_back_grand_mean=False
 ):
     """Creates epochs of the data.
 
@@ -37,11 +38,16 @@ def epoch(
         (i.e., 0)
     baseline_mode : str
         How to perform baseline correction (options: 'mean', 'ratio')
-        
+    add_back_grand_mean : bool
+        Whether to add back the grand mean (average across all events and across
+        the entire time series); if ``False``, the baseline of each event is centered
+        around zero; if ``True``, the baseline of each event is centered around the grand
+        mean of all events
+
     Returns
     -------
-    data : medusa.core.*Data
-        An object with a class inherited from ``medusa.core.BaseData``
+    epochsarray : medusa.epochs.EpochsArray
+        An EpochsArray object
     """
 
     if isinstance(data, (str, Path)):
@@ -67,7 +73,7 @@ def epoch(
 
     # epochs: N (stimuli) x T (time points) x V (vertices) x 3 (XYZ)
     N = data.events.shape[0]
-    T = int((end - start) / period + 1)
+    T = int(round((end - start) / period + 1))
     epochs = np.zeros((N, T, *D.shape[1:]))
 
     # Loop over trials (onsets)
@@ -113,39 +119,63 @@ def epoch(
         # our data is still in interpretable (and renderable) units
         if baseline_mode == "mean":
             epochs -= baseline.mean(axis=1, keepdims=True)
-            epochs += baseline.mean(axis=(0, 1))  # 'grand mean'
+            if add_back_grand_mean:
+                epochs += baseline.mean(axis=(0, 1))  # 'grand mean'
         elif baseline_mode == "ratio":
             epochs /= baseline.mean(axis=1, keepdims=True)
-            epochs *= baseline.mean(axis=(0, 1))
+            if add_back_grand_mean:
+                epochs *= baseline.mean(axis=(0, 1))
         else:
             raise NotImplementedError
 
+    print(epochs)
+
+    frame_t = np.linspace(start, end, endpoint=True, num=T)
+    v = epochs[..., :-12].reshape((N, T, data.v.shape[1], 3))
+    params = epochs[..., -12:]
+    epochs_arr = EpochsArray(v=v, params=params, frame_t=frame_t, events=data.events,
+                             recon_model_name=data.recon_model_name)
+    
+    return epochs_arr
+
+    #mne_epochs_arr = epochs_arr.to_mne(data.frame_t)
+    #evoked = mne_epochs_arr.average(picks='misc')
+    #fig = evoked.plot(picks='misc')
+    #fig.savefig('test.png')
     # av = np.nanmean(epochs, axis=0)
     # data.v = av[:, :-12].reshape((av.shape[0], -1, 3))
     # data.params2mats(av[:, -12:])
 
+    # from ..core3d import Mediapipe3D
+    # neutral = Mediapipe3D()
+    # data = neutral.animate(v=av[:, :-12].reshape((av.shape[0], -1, 3)),
+    #                         mat=data.mat, sf=data.sf, is_deltas=True, frame_t=frame_t)
+    # data.render_video('test.gif')
     # for i in range(data.v.shape[0]):
     #    v_ = data.v[i, ...]
     #    v_ = np.c_[v_, np.ones(v_.shape[0])]
     #    data.v[i, ...] = (v_ @ data.mat[i, ...].T)[:, :3]
 
+    # data.cam_mat = data.mat[0, ...] @ data.cam_mat
+    # data.space = 'world'
     # data.sf = 1 / period
     # data.render_video('test.gif', video=None)
 
+    #epochsarray = EpochsArray()
     # Create (custom) EpochsArray and save
-    epochs_array = EpochsArray.from_medusa(
-        epochs,
-        events=data.events,
-        frame_t=data.frame_t,
-        sf=1 / period,
-        tmin=start,
-        includes_motion=True,
-    )
-    epochs_array.save(
-        data.path.replace("_shape.h5", "_epo.fif"),
-        split_size="2GB",
-        fmt="single",
-        overwrite=True,
-        split_naming="bids",
-        verbose="WARNING",
-    )
+    # epochs_array = EpochsArray.from_medusa(
+    #     epochs,
+    #     events=data.events,
+    #     frame_t=data.frame_t,
+    #     sf=1 / period,
+    #     tmin=start,
+    #     includes_motion=True,
+    # )
+    # epochs_array.save(
+    #     data.path.replace("_shape.h5", "_epo.fif"),
+    #     split_size="2GB",
+    #     fmt="single",
+    #     overwrite=True,
+    #     split_naming="bids",
+    #     verbose="WARNING",
+    # )

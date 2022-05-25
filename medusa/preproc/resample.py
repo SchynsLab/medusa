@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 from scipy.interpolate import interp1d, PchipInterpolator
 
-from ..core import load_h5
+from ..io import load_h5
 
 
 def resample(data, sampling_freq=None, kind="pchip"):

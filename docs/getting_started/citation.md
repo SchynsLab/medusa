@@ -36,6 +36,7 @@ Consider citing [trimesh](https://trimsh.org/) and [pyrender](https://pyrender.r
 as well, given that they are crucial to the functionality of Medusa:
 
 > Trimesh [Computer software]. (2019). Retrieved from https://github.com/mikedh/trimesh
+
 > Matl, M. (2019). Pyrender [Computer software]. Retrieved from https://github.com/mmatl/pyrender
 
 ## An example methods section

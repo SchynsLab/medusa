@@ -59,7 +59,7 @@ class FAN:
 
     Examples
     --------
-    To create a FAN-3D based reconstruction model:
+    To create a FAN based reconstruction model:
     
     >>> recon_model = FAN(lm_type='3D')
     
