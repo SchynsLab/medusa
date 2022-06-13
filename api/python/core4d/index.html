@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>medusa.core4d &#8212; Medusa</title>
     
-  <link href="../../../_static/css/theme.css" rel="stylesheet">
-  <link href="../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,21 +20,17 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -40,12 +38,13 @@
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../../../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../../../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -63,7 +62,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -72,9 +85,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -92,14 +106,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../../index.html">
-   Medusa: 4D face reconstruction and analysis
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    Medusa: 4D face reconstruction and analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Getting started
  </span>
@@ -444,92 +459,197 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../../_sources/api/python/core4d/index.rst"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/lukassnoek/medusa"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/core4d/index.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/lukassnoek/medusa/edit/master/api/python/core4d/index.rst"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
-</div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
-        </div>
-
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/lukassnoek/medusa"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/core4d/index.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/lukassnoek/medusa/edit/master/api/python/core4d/index.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../../_sources/api/python/core4d/index.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-contents">
    Module Contents
@@ -647,12 +767,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>medusa.core4d</h1>
@@ -786,11 +905,12 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="section" id="module-medusa.core4d">
-<span id="medusa-core4d"></span><h1><a class="reference internal" href="#module-medusa.core4d" title="medusa.core4d"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.core4d</span></code></a><a class="headerlink" href="#module-medusa.core4d" title="Permalink to this headline">¶</a></h1>
+  <section id="module-medusa.core4d">
+<span id="medusa-core4d"></span><h1><a class="reference internal" href="#module-medusa.core4d" title="medusa.core4d"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.core4d</span></code></a><a class="headerlink" href="#module-medusa.core4d" title="Permalink to this headline">#</a></h1>
 <p>Module with core 4D functionality of the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package, most importantly the
 <code class="docutils literal notranslate"><span class="pre">*4D</span></code> classes. The <code class="docutils literal notranslate"><span class="pre">Base4D</span></code> class defines a template class from which
 model-specific classes (such as <code class="docutils literal notranslate"><span class="pre">Flame4D</span></code>) inherit. Objects initialized from these
@@ -806,11 +926,11 @@ reconstructions from <a class="reference external" href="https://github.com/1adr
 <p>The data can be saved to disk as a <a class="reference external" href="https://www.hdfgroup.org/solutions/hdf5/">HDF5</a>
 file (using <a class="reference external" href="http://www.h5py.org/">h5py</a>) with the <code class="docutils literal notranslate"><span class="pre">save</span></code> method and loaded from
 disk using the <code class="docutils literal notranslate"><span class="pre">load</span></code> (static)method.</p>
-<div class="section" id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core4d.</span></span><span class="sig-name descname"><span class="pre">Base4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(512,</span> <span class="pre">512)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recon_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'world'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loglevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core4d.</span></span><span class="sig-name descname"><span class="pre">Base4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(512,</span> <span class="pre">512)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recon_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'world'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loglevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D" title="Permalink to this definition">#</a></dt>
 <dd><p>Base Data class with attributes and methods common to all 4D data classes
 (such as <code class="docutils literal notranslate"><span class="pre">Flame4D</span></code>, <code class="docutils literal notranslate"><span class="pre">Mediapipe4D</span></code>, etc.).</p>
 <p>Warning: objects should never be initialized with this class directly,
@@ -841,7 +961,7 @@ loading one from disk), this should be <cite>None</cite></p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.mats2params">
-<span class="sig-name descname"><span class="pre">mats2params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.mats2params" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">mats2params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.mats2params" title="Permalink to this definition">#</a></dt>
 <dd><p>Transforms a time series (of length T) 4x4 affine matrices to a
 pandas DataFrame with a time series of T x 12 affine parameters
 (translation XYZ, rotation XYZ, scale XYZ, shear XYZ).</p>
@@ -870,7 +990,7 @@ not (in which case it’s returned as a numpy array)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.params2mats">
-<span class="sig-name descname"><span class="pre">params2mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.params2mats" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">params2mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.params2mats" title="Permalink to this definition">#</a></dt>
 <dd><p>Converts a sequence of global (affine) motion parameters into a sequence
 of 4x4 affine matrices and updates the <code class="docutils literal notranslate"><span class="pre">.mat</span></code> attribute. Essentially
 does the opposite of the <code class="docutils literal notranslate"><span class="pre">mats2params</span></code> method.</p>
@@ -894,7 +1014,7 @@ does the opposite of the <code class="docutils literal notranslate"><span class=
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.save" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.save" title="Permalink to this definition">#</a></dt>
 <dd><p>Saves (meta)data to disk as an HDF5 file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -917,7 +1037,7 @@ does the opposite of the <code class="docutils literal notranslate"><span class=
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.load">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.load" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.load" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads an HDF5 file from disk, parses its contents, and creates the
 initialization parameters necessary to initialize a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object. It
 does not return a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object itself; only a dictionary with the parameters.</p>
@@ -950,7 +1070,7 @@ Note that it’s easier to just call the <code class="docutils literal notransla
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.to_mne_rawarray">
-<span class="sig-name descname"><span class="pre">to_mne_rawarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.to_mne_rawarray" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">to_mne_rawarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.to_mne_rawarray" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates an MNE <cite>RawArray</cite> object from the vertices (<cite>v</cite>).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
@@ -962,7 +1082,7 @@ Note that it’s easier to just call the <code class="docutils literal notransla
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.render_video" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.render_video" title="Permalink to this definition">#</a></dt>
 <dd><p>Renders the sequence of 3D meshes as a video. It is assumed that this
 method is only called from a child class (e.g., <code class="docutils literal notranslate"><span class="pre">Mediapipe4D</span></code>).</p>
 <dl class="field-list simple">
@@ -984,7 +1104,7 @@ minimum = 0 (invisible), maximum = 1 (fully opaque)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.plot_data">
-<span class="sig-name descname"><span class="pre">plot_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_motion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pca</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_pca</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.plot_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">plot_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_motion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pca</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_pca</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.plot_data" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a plot of the motion (rotation &amp; translation) parameters
 over time and the first <cite>n_pca</cite> PCA components of the
 reconstructed vertices. For FLAME and Mediapipe estimates, these parameters are
@@ -1012,14 +1132,14 @@ to the value of the first frame.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.__len__">
-<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.__len__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.__len__" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns the number of time points of the reconstructed vertices (i.e.,
 the number of reconstructed frames from the video.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.__getitem__">
-<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.__getitem__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.__getitem__" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns the vertices at a particular time point (<code class="docutils literal notranslate"><span class="pre">idx</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1030,7 +1150,7 @@ the number of reconstructed frames from the video.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Base4D.__setitem__">
-<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.__setitem__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Base4D.__setitem__" title="Permalink to this definition">#</a></dt>
 <dd><p>Replace the vertices at time point <code class="docutils literal notranslate"><span class="pre">idx</span></code> with <code class="docutils literal notranslate"><span class="pre">v</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1046,7 +1166,7 @@ the number of reconstructed frames from the video.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.core4d.Flame4D">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core4d.</span></span><span class="sig-name descname"><span class="pre">Flame4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Flame4D" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core4d.</span></span><span class="sig-name descname"><span class="pre">Flame4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Flame4D" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#medusa.core4d.Base4D" title="medusa.core4d.Base4D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Base4D</span></code></a></p>
 <p>4D data class specific to reconstructions from models based on the FLAME
 topology.</p>
@@ -1067,7 +1187,7 @@ are loading data from disk, use the <code class="docutils literal notranslate"><
 HDF5 file from disk (see <code class="docutils literal notranslate"><span class="pre">load</span></code> docstring).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Flame4D.load">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Flame4D.load" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Flame4D.load" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads an HDF5 file from disk, parses its contents, and creates the
 initialization parameters necessary to initialize a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object. It
 does not return a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object itself; only a dictionary with the parameters.</p>
@@ -1100,7 +1220,7 @@ Note that it’s easier to just call the <code class="docutils literal notransla
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Flame4D.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Flame4D.render_video" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Flame4D.render_video" title="Permalink to this definition">#</a></dt>
 <dd><p>Renders the sequence of 3D meshes as a video. It is assumed that this
 method is only called from a child class (e.g., <code class="docutils literal notranslate"><span class="pre">Mediapipe4D</span></code>).</p>
 <dl class="field-list simple">
@@ -1124,7 +1244,7 @@ minimum = 0 (invisible), maximum = 1 (fully opaque)</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.core4d.Mediapipe4D">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core4d.</span></span><span class="sig-name descname"><span class="pre">Mediapipe4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Mediapipe4D" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core4d.</span></span><span class="sig-name descname"><span class="pre">Mediapipe4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Mediapipe4D" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#medusa.core4d.Base4D" title="medusa.core4d.Base4D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Base4D</span></code></a></p>
 <p>4D data class specific to reconstructions from the Mediapipe model.</p>
 <p>Warning: we recommend against initializing a <code class="docutils literal notranslate"><span class="pre">Mediapipe4D</span></code> object directly
@@ -1144,7 +1264,7 @@ are loading data from disk, use the <code class="docutils literal notranslate"><
 HDF5 file from disk (see <code class="docutils literal notranslate"><span class="pre">load</span></code> docstring).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Mediapipe4D.load">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Mediapipe4D.load" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Mediapipe4D.load" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads Mediapipe data from a HDF5 file and returns a <code class="docutils literal notranslate"><span class="pre">Mediapipe4D</span></code>
 object.</p>
 <dl class="field-list simple">
@@ -1175,7 +1295,7 @@ such an object:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Mediapipe4D.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Mediapipe4D.render_video" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Mediapipe4D.render_video" title="Permalink to this definition">#</a></dt>
 <dd><p>Renders a video of the reconstructed vertices.</p>
 <p>Note: the extension of the <code class="docutils literal notranslate"><span class="pre">f_out</span></code> parameter (e.g., “.gif” or “.mp4”)
 determines the format of the rendered video.</p>
@@ -1217,7 +1337,7 @@ options include <code class="docutils literal notranslate"><span class="pre">vid
 
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.core4d.Fan4D">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core4d.</span></span><span class="sig-name descname"><span class="pre">Fan4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Fan4D" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.core4d.</span></span><span class="sig-name descname"><span class="pre">Fan4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Fan4D" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#medusa.core4d.Base4D" title="medusa.core4d.Base4D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Base4D</span></code></a></p>
 <p>Data class specific to reconstructions from the FAN (3D) model.</p>
 <p>Warning: we recommend against initializing a <code class="docutils literal notranslate"><span class="pre">Fan4D</span></code> object directly
@@ -1237,7 +1357,7 @@ are loading data from disk, use the <code class="docutils literal notranslate"><
 HDF5 file from disk (see <code class="docutils literal notranslate"><span class="pre">load</span></code> docstring).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Fan4D.load">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Fan4D.load" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Fan4D.load" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads FAN data from a HDF5 file and returns a <code class="docutils literal notranslate"><span class="pre">Fan4D</span></code> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1260,7 +1380,7 @@ such an object:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.core4d.Fan4D.render_video">
-<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Fan4D.render_video" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">render_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.core4d.Fan4D.render_video" title="Permalink to this definition">#</a></dt>
 <dd><p>Renders a video of the reconstructed vertices.</p>
 <p>Note: the extension of the <code class="docutils literal notranslate"><span class="pre">f_out</span></code> parameter (e.g., “.gif” or “.mp4”)
 determines the format of the rendered video.</p>
@@ -1290,8 +1410,8 @@ default is <code class="docutils literal notranslate"><span class="pre">None</sp
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1315,9 +1435,11 @@ default is <code class="docutils literal notranslate"><span class="pre">None</sp
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="../core3d/index.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1333,27 +1455,31 @@ default is <code class="docutils literal notranslate"><span class="pre">None</sp
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Lukas Snoek<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      Developed at the University of Glasgow
+    </div>
+</p>
+        </footer>
+    </div>
     
-      By Lukas Snoek<br/>
-    
-        &copy; Copyright 2022.<br/>
-      <div class="extra_footer">
-        Developed at the University of Glasgow
-      </div>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>
