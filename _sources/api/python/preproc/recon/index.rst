@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:function:: videorecon(video_path, events_path=None, recon_model_name='mediapipe', cfg=None, device='cuda', n_frames=None, loglevel='INFO')
+.. py:function:: videorecon(video_path, events_path=None, recon_model_name='mediapipe', device='cuda', n_frames=None, loglevel='INFO')
 
    Reconstruction of all frames of a video.
 
@@ -21,8 +21,6 @@ Module Contents
    :param recon_model_name: Name of reconstruction model, options are: 'emoca', 'mediapipe',
                             and 'fan'
    :type recon_model_name: str
-   :param cfg: Path to config file for EMOCA reconstruction; ignored if not using emoca
-   :type cfg: str
    :param device: Either "cuda" (for GPU) or "cpu" (ignored when using mediapipe)
    :type device: str
    :param n_frames: If not `None` (default), only reconstruct and render the first `n_frames`

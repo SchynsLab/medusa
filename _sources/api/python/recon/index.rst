@@ -10,7 +10,6 @@ Subpackages
    :titlesonly:
    :maxdepth: 3
 
-   emoca/index.rst
    mpipe/index.rst
 
 

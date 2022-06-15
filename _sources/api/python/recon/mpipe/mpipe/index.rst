@@ -34,6 +34,9 @@ Module Contents
 
       :type: mediapipe.solutions.face_mesh.FaceMesh
 
+   .. py:method:: get_faces(self)
+
+
    .. py:method:: __call__(self, image)
 
       Performs reconstruction of the face as a list of landmarks (vertices).

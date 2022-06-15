@@ -345,31 +345,6 @@ const thebe_selector_output = ".output, .cell_output"
     </label>
     <ul>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="../../recon/emoca/index.html">
-       <code class="xref py py-mod docutils literal notranslate">
-        <span class="pre">
-         medusa.recon.emoca
-        </span>
-       </code>
-      </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-      <label for="toctree-checkbox-5">
-       <i class="fas fa-chevron-down">
-       </i>
-      </label>
-      <ul>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../../recon/emoca/emoca/index.html">
-         <code class="xref py py-mod docutils literal notranslate">
-          <span class="pre">
-           medusa.recon.emoca.emoca
-          </span>
-         </code>
-        </a>
-       </li>
-      </ul>
-     </li>
-     <li class="toctree-l3 has-children">
       <a class="reference internal" href="../../recon/mpipe/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
@@ -377,8 +352,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-      <label for="toctree-checkbox-6">
+      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+      <label for="toctree-checkbox-5">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -410,15 +385,6 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../transform/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.transform
       </span>
      </code>
     </a>
@@ -709,7 +675,7 @@ title="Print to PDF"
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.preproc.recon.videorecon">
-<span class="sig-prename descclassname"><span class="pre">medusa.preproc.recon.</span></span><span class="sig-name descname"><span class="pre">videorecon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recon_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loglevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INFO'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.recon.videorecon" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.preproc.recon.</span></span><span class="sig-name descname"><span class="pre">videorecon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recon_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loglevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INFO'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.preproc.recon.videorecon" title="Permalink to this definition">#</a></dt>
 <dd><p>Reconstruction of all frames of a video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -721,7 +687,6 @@ columns ‘onset’ (in seconds) and ‘trial_type’; optional
 columns are ‘duration’ and ‘modulation’</p></li>
 <li><p><strong>recon_model_name</strong> (<em>str</em>) – Name of reconstruction model, options are: ‘emoca’, ‘mediapipe’,
 and ‘fan’</p></li>
-<li><p><strong>cfg</strong> (<em>str</em>) – Path to config file for EMOCA reconstruction; ignored if not using emoca</p></li>
 <li><p><strong>device</strong> (<em>str</em>) – Either “cuda” (for GPU) or “cpu” (ignored when using mediapipe)</p></li>
 <li><p><strong>n_frames</strong> (<em>int</em>) – If not <cite>None</cite> (default), only reconstruct and render the first <cite>n_frames</cite>
 frames of the video; nice for debugging</p></li>

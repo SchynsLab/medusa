@@ -28,7 +28,7 @@
 Module Contents
 ---------------
 
-.. py:class:: Base4D(v, f=None, mat=None, cam_mat=None, frame_t=None, events=None, sf=None, img_size=(512, 512), recon_model_name=None, space='world', path=None, loglevel=20)
+.. py:class:: Base4D(v, f, mat=None, cam_mat=None, frame_t=None, events=None, sf=None, img_size=(512, 512), recon_model_name=None, space='world', path=None, loglevel=20)
 
    Base Data class with attributes and methods common to all 4D data classes
    (such as ``Flame4D``, ``Mediapipe4D``, etc.).
@@ -173,7 +173,7 @@ Module Contents
       >>> rawarray = data.to_mne_rawarray()
 
 
-   .. py:method:: render_video(self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None)
+   .. py:method:: render_video(self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None, overlay=None)
 
       Renders the sequence of 3D meshes as a video. It is assumed that this
       method is only called from a child class (e.g., ``Mediapipe4D``).
@@ -271,53 +271,43 @@ Module Contents
    .. py:method:: load(cls, path)
       :classmethod:
 
-      Loads an HDF5 file from disk, parses its contents, and creates the
-      initialization parameters necessary to initialize a ``*Data`` object. It
-      does not return a ``*Data`` object itself; only a dictionary with the parameters.
+      Loads existing data (stored as an HDF5 file) from disk and uses it to
+      instantiate a ``Flame4D`` object.
 
-      Important: it is probably better to call the ``load`` method from a specific
-      data class (e.g., ``Mediapipe4D``) than the ``load`` method from the
-      ``Base4D`` class.
-
-      :param path: A path towards an HDF5 file data reconstructed by Medusa
+      :param path: A path to an HDF5 file with data from a Flame-based reconstruction model
       :type path: str, pathlib.Path
 
-      :returns: **init_kwargs** -- Parameters necessary to initialize a ``*4D`` object.
-      :rtype: dict
+      :rtype: An ``Flame4D`` object
 
       .. rubric:: Examples
 
-      Get Mediapipe reconstruction data and initialize a ``Mediapipe4D`` object.
-      Note that it's easier to just call the ``load`` classmethod from the
-      ``Mediapipe4D`` class directly, i.e., ``Mediapipe4D.load(path)``.
+      Load data from a ``mediapipe`` reconstruction:
 
       >>> from medusa.data import get_example_h5
-      >>> from medusa.core4d import Mediapipe4D
-      >>> path = get_example_h5(load=False, model="mediapipe")
-      >>> init_kwargs = Base4D.load(path)
-      >>> data = Mediapipe4D(**init_kwargs)
+      >>> path_to_h5 = get_example_h5(load=False)
+      >>> data = Flame4D.load(path_to_h5)
+      >>> type(data)
+      <class 'medusa.core4d.Flame4D'>
 
 
    .. py:method:: render_video(self, f_out, smooth=False, wireframe=False, **kwargs)
 
-      Renders the sequence of 3D meshes as a video. It is assumed that this
-      method is only called from a child class (e.g., ``Mediapipe4D``).
+      Renders a video from the 4D reconstruction.
 
-      :param f_out: Filename of output
-      :type f_out: str
-      :param renderer: The renderer object
-      :type renderer: ``medusa.render.Renderer``
-      :param video: Path to video, in order to render face on top of original video frames
-      :type video: str
-      :param scaling: A scaling factor of the resulting video; 0.25 means 25% of original size
-      :type scaling: float
-      :param n_frames: Number of frames to render; e.g., ``10`` means "render only the first
-                       10 frames of the video"; nice for debugging. If ``None`` (default), all
-                       frames are rendered
-      :type n_frames: int
-      :param alpha: Alpha (transparency) level of the rendered face; lower = more transparent;
-                    minimum = 0 (invisible), maximum = 1 (fully opaque)
-      :type alpha: float
+      :param f_out: Path to save the video to
+      :type f_out: str, pathlib.Path
+      :param smooth: Whether to render a smooth face (using smooth shading) or not (using flat
+                     shading)
+      :type smooth: bool
+      :param wireframe: Whether to render a wireframe instead of an opaque face (if ``True``, the
+                        ``smooth`` parameter is ignored)
+      :type wireframe: bool
+      :param kwargs: Additional keyword arguments passed to the ``Base4D.render_video`` method
+      :type kwargs: dict
+
+      .. rubric:: Examples
+
+      Render a video
 
 
 
@@ -454,7 +444,7 @@ Module Contents
       >>> fan_data = videorecon(path, recon_model_name='fan', device='cpu')
 
 
-   .. py:method:: render_video(self, f_out, video=None)
+   .. py:method:: render_video(self, f_out, video=None, scaling=None, n_frames=None, **kwargs)
 
       Renders a video of the reconstructed vertices.
 

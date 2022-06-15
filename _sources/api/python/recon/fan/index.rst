@@ -68,6 +68,9 @@ Module Contents
 
    >>> recon_model = FAN(lm_type='2D')
 
+   .. py:method:: get_faces(self)
+
+
    .. py:method:: prepare_for_emoca(self, image)
 
       Runs all steps of the cropping / preprocessing pipeline

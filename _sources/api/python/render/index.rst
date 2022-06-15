@@ -35,7 +35,7 @@ Module Contents
                     (necessary for Flame-based reconstructions)
    :type zoom_out: int/float
 
-   .. py:method:: __call__(self, v, f)
+   .. py:method:: __call__(self, v, f, overlay=None, cmap_name='bwr')
 
       Performs the actual rendering.
 

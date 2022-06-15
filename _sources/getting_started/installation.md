@@ -24,13 +24,13 @@ GPU processing by installing the appropriate CUDA toolkit as well. Run the comma
 below depending on whether you want to run the models on GPU or CPU only:
 
 ````{tabbed} GPU
-```console
+```
 conda install pytorch cudatoolkit=11.3 -c pytorch
 ```
 ````
 
 ````{tabbed} CPU
-```console
+```
 conda install pytorch cpuonly -c pytorch
 ```
 ````

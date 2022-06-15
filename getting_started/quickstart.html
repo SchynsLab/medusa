@@ -347,31 +347,6 @@ const thebe_selector_output = ".output, .cell_output"
     </label>
     <ul>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="../api/python/recon/emoca/index.html">
-       <code class="xref py py-mod docutils literal notranslate">
-        <span class="pre">
-         medusa.recon.emoca
-        </span>
-       </code>
-      </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-      <label for="toctree-checkbox-5">
-       <i class="fas fa-chevron-down">
-       </i>
-      </label>
-      <ul>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../api/python/recon/emoca/emoca/index.html">
-         <code class="xref py py-mod docutils literal notranslate">
-          <span class="pre">
-           medusa.recon.emoca.emoca
-          </span>
-         </code>
-        </a>
-       </li>
-      </ul>
-     </li>
-     <li class="toctree-l3 has-children">
       <a class="reference internal" href="../api/python/recon/mpipe/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
@@ -379,8 +354,8 @@ const thebe_selector_output = ".output, .cell_output"
         </span>
        </code>
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-      <label for="toctree-checkbox-6">
+      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+      <label for="toctree-checkbox-5">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -412,15 +387,6 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../api/python/transform/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.transform
       </span>
      </code>
     </a>
@@ -716,10 +682,13 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-06-14 14:03 [INFO   ]  NumExpr defaulting to 2 threads.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-06-15 13:17 [INFO   ]  NumExpr defaulting to 2 threads.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-06-14 14:03 [INFO   ]  No OpenGL_accelerate module loaded: No module named &#39;OpenGL_accelerate&#39;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-06-15 13:17 [INFO   ]  OpenGL_accelerate module loaded
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-06-15 13:17 [INFO   ]  Using accelerated ArrayDatatype
 </pre></div>
 </div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
@@ -728,12 +697,12 @@ title="Print to PDF"
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">medusa.preproc</span> <span class="kn">import</span> <span class="n">videorecon</span>
 <span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">data</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">recon_model_name</span><span class="o">=</span><span class="s1">&#39;mediapipe&#39;</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.13/x64/lib/python3.9/site-packages/medusa/preproc/recon.py:80,</span> in <span class="ni">videorecon</span><span class="nt">(video_path, events_path, recon_model_name, cfg, device, n_frames, loglevel)</span>
-<span class="g g-Whitespace">     </span><span class="mi">78</span>     <span class="n">recon_model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">lm_type</span><span class="o">=</span><span class="s2">&quot;3D&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">79</span> <span class="k">elif</span> <span class="n">recon_model_name</span> <span class="o">==</span> <span class="s2">&quot;mediapipe&quot;</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">80</span>     <span class="n">recon_model</span> <span class="o">=</span> <span class="n">Mediapipe</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">81</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">82</span>     <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.13/x64/lib/python3.9/site-packages/medusa/preproc/recon.py:78,</span> in <span class="ni">videorecon</span><span class="nt">(video_path, events_path, recon_model_name, device, n_frames, loglevel)</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span>     <span class="n">recon_model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">lm_type</span><span class="o">=</span><span class="s2">&quot;3D&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">77</span> <span class="k">elif</span> <span class="n">recon_model_name</span> <span class="o">==</span> <span class="s2">&quot;mediapipe&quot;</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">78</span>     <span class="n">recon_model</span> <span class="o">=</span> <span class="n">Mediapipe</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">79</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">80</span>     <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 <span class="nn">File /opt/hostedtoolcache/Python/3.9.13/x64/lib/python3.9/site-packages/medusa/recon/mpipe/mpipe.py:39,</span> in <span class="ni">Mediapipe.__init__</span><span class="nt">(self, static_image_mode, **kwargs)</span>
 <span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="sd">&quot;&quot;&quot; Initializes a Mediapipe recon model. &quot;&quot;&quot;</span>

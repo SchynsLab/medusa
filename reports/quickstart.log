@@ -27,12 +27,12 @@ Input [0;32mIn [2][0m, in [0;36m<cell line: 2>[0;34m()[0m
 [1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mmedusa[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpreproc[39;00m [38;5;28;01mimport[39;00m videorecon
 [0;32m----> 2[0m data [38;5;241m=[39m [43mvideorecon[49m[43m([49m[43mvid[49m[43m,[49m[43m [49m[43mrecon_model_name[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mmediapipe[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mloglevel[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mWARNING[39;49m[38;5;124;43m'[39;49m[43m)[49m
 
-File [0;32m/opt/hostedtoolcache/Python/3.9.13/x64/lib/python3.9/site-packages/medusa/preproc/recon.py:80[0m, in [0;36mvideorecon[0;34m(video_path, events_path, recon_model_name, cfg, device, n_frames, loglevel)[0m
-[1;32m     78[0m     recon_model [38;5;241m=[39m FAN(device[38;5;241m=[39mdevice, lm_type[38;5;241m=[39m[38;5;124m"[39m[38;5;124m3D[39m[38;5;124m"[39m)
-[1;32m     79[0m [38;5;28;01melif[39;00m recon_model_name [38;5;241m==[39m [38;5;124m"[39m[38;5;124mmediapipe[39m[38;5;124m"[39m:
-[0;32m---> 80[0m     recon_model [38;5;241m=[39m [43mMediapipe[49m[43m([49m[43m)[49m
-[1;32m     81[0m [38;5;28;01melse[39;00m:
-[1;32m     82[0m     [38;5;28;01mraise[39;00m [38;5;167;01mNotImplementedError[39;00m
+File [0;32m/opt/hostedtoolcache/Python/3.9.13/x64/lib/python3.9/site-packages/medusa/preproc/recon.py:78[0m, in [0;36mvideorecon[0;34m(video_path, events_path, recon_model_name, device, n_frames, loglevel)[0m
+[1;32m     76[0m     recon_model [38;5;241m=[39m FAN(device[38;5;241m=[39mdevice, lm_type[38;5;241m=[39m[38;5;124m"[39m[38;5;124m3D[39m[38;5;124m"[39m)
+[1;32m     77[0m [38;5;28;01melif[39;00m recon_model_name [38;5;241m==[39m [38;5;124m"[39m[38;5;124mmediapipe[39m[38;5;124m"[39m:
+[0;32m---> 78[0m     recon_model [38;5;241m=[39m [43mMediapipe[49m[43m([49m[43m)[49m
+[1;32m     79[0m [38;5;28;01melse[39;00m:
+[1;32m     80[0m     [38;5;28;01mraise[39;00m [38;5;167;01mNotImplementedError[39;00m
 
 File [0;32m/opt/hostedtoolcache/Python/3.9.13/x64/lib/python3.9/site-packages/medusa/recon/mpipe/mpipe.py:39[0m, in [0;36mMediapipe.__init__[0;34m(self, static_image_mode, **kwargs)[0m
 [1;32m     36[0m [38;5;124;03m""" Initializes a Mediapipe recon model. """[39;00m
