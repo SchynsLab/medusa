@@ -5,32 +5,38 @@ from click.testing import CliRunner
 from medusa.cli import videorecon_cmd
 from medusa.data import get_example_video
 
+flame_models = ['emoca-coarse', 'deca-coarse', 'deca-dense', 'emoca-dense']
 
-@pytest.mark.parametrize("model", ['mediapipe', 'emoca'])
+@pytest.mark.parametrize("model", [*flame_models])#, 'mediapipe', 'fan'])
 @pytest.mark.parametrize("n_frames", [None, 5])
-@pytest.mark.parametrize("render", [True, False])
-def test_videorecon_cmd(model, n_frames, render):
+def test_videorecon_cmd(model, n_frames):
     """ Tests the videorecon command line interface. """
     
-    if model == 'emoca' and 'GITHUB_ACTIONS' in os.environ:
+    if model in flame_models and 'GITHUB_ACTIONS' in os.environ:
         # emoca is licensed, so cannot run on GH actions
         return 
+
+    if model in flame_models:
+        try:
+            from flame import FlameReconModel
+        except ImportError:
+            print(f"Package 'flame' is not installed; skipping test of {model}!")
+            return
 
     vid = get_example_video(as_path=False)
     runner = CliRunner()
     
     args = [vid, '-r', model, '-n', n_frames]
-    if render:
-        # Only test rendering locally, because doesn't work on GH actions
-        args.extend(['--render-recon'])
+    
+    if 'GITHUB_ACTIONS' in os.environ:
+        device = 'cpu'
+    else:
+        device = 'cuda'
+
+    args.extend(['--device', device])
 
     result = runner.invoke(videorecon_cmd, args)
     assert(result.exit_code == 0)
     expected_h5 = Path(vid.replace('.mp4', '.h5'))
     assert(expected_h5.is_file())
     expected_h5.unlink()
-    
-    if render:
-        expected_gif = Path(vid.replace('.mp4', '.gif'))
-        assert(expected_gif.is_file())
-        expected_gif.unlink()

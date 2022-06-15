@@ -103,6 +103,9 @@ class FAN:
 
         return image
 
+    def get_faces(self):
+        return None
+
     def prepare_for_emoca(self, image):
         """ Runs all steps of the cropping / preprocessing pipeline
         necessary for use with DECA/EMOCA. 

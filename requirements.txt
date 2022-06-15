@@ -1,3 +1,4 @@
 jupyter-book
 sphinx-autoapi
 pytest
+git+https://github.com/medusa-4D/flame@main#egg=flame

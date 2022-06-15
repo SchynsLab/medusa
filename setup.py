@@ -36,7 +36,6 @@ opts = dict(
         "pandas",
         "numpy",
         "tqdm",
-        "imageio",
         "imageio-ffmpeg",
         "opencv-python",
         "matplotlib",
@@ -51,11 +50,8 @@ opts = dict(
         "pyrender",
         "mediapipe",
         "mne",
-        "chumpy",  # for FLAME model .. really necessary?
+        "PyOpenGL-accelerate"
     ],
-    #extras_require = {
-    #    'full': ['mne']
-    #},
     entry_points={
         "console_scripts": [
             "medusa_videorecon = medusa.cli:videorecon_cmd",

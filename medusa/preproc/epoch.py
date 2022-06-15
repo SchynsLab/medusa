@@ -128,14 +128,15 @@ def epoch(
         else:
             raise NotImplementedError
 
-    print(epochs)
-
     frame_t = np.linspace(start, end, endpoint=True, num=T)
     v = epochs[..., :-12].reshape((N, T, data.v.shape[1], 3))
     params = epochs[..., -12:]
     epochs_arr = EpochsArray(v=v, params=params, frame_t=frame_t, events=data.events,
                              recon_model_name=data.recon_model_name)
     
+    data.v = v.mean(axis=0)
+    data.render_video('test_av.gif', scaling=0.5, smooth=False, overlay=None)
+
     return epochs_arr
 
     #mne_epochs_arr = epochs_arr.to_mne(data.frame_t)

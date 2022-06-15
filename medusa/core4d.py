@@ -24,7 +24,6 @@ import cv2
 import h5py
 import logging
 import imageio
-import trimesh
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -37,7 +36,6 @@ from trimesh.transformations import decompose_matrix, compose_matrix
 
 from .utils import get_logger
 from .render import Renderer
-from .data import get_template_flame, get_template_mediapipe
 
 
 class Base4D:
@@ -83,7 +81,7 @@ class Base4D:
     def __init__(
         self,
         v,
-        f=None,
+        f,
         mat=None,
         cam_mat=None,
         frame_t=None,
@@ -366,7 +364,8 @@ class Base4D:
         return img
 
     def render_video(
-        self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None
+        self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None,
+        overlay=None
     ):
         """ Renders the sequence of 3D meshes as a video. It is assumed that this
         method is only called from a child class (e.g., ``Mediapipe4D``).
@@ -389,6 +388,10 @@ class Base4D:
             Alpha (transparency) level of the rendered face; lower = more transparent;
             minimum = 0 (invisible), maximum = 1 (fully opaque)
         """
+
+        if overlay is not None:
+            if overlay.ndim > 2:
+                raise ValueError("Overlay should be at most 2 dimensional!")
 
         w, h = self.img_size
         if scaling is not None:
@@ -416,9 +419,17 @@ class Base4D:
                 if scaling is not None:
                     background = self._rescale(background, scaling)
             else:
-                background = np.zeros((h, w, 3)).astype(np.uint8)
+                background = np.ones((h, w, 3)).astype(np.uint8) * 255
 
-            img = renderer(self.v[i, :, :], self.f)
+            if overlay is not None:
+                if overlay.ndim == 2:
+                    this_overlay = overlay[i, :]
+                else:
+                    this_overlay = overlay
+            else:
+                this_overlay = None
+
+            img = renderer(self.v[i, :, :], self.f, this_overlay)
             if scaling is not None:
                 img = self._rescale(img, scaling)
 
@@ -562,7 +573,7 @@ class Flame4D(Base4D):
     """
     
     def __init__(self, *args, **kwargs):    
-        kwargs["f"] = get_template_flame()['f']
+
         if kwargs.get("cam_mat") is None:
             cam_mat = np.eye(4)
             cam_mat[2, 3] = 4  # zoom out 4 units in z direction
@@ -572,15 +583,55 @@ class Flame4D(Base4D):
 
     @classmethod
     def load(cls, path):
-        here = Path(__file__).parent.resolve()
+        """ Loads existing data (stored as an HDF5 file) from disk and uses it to
+        instantiate a ``Flame4D`` object. 
+        
+        Parameters
+        ----------
+        path : str, pathlib.Path
+            A path to an HDF5 file with data from a Flame-based reconstruction model
+        
+        Returns
+        -------
+        An ``Flame4D`` object
+        
+        Examples
+        --------
+        Load data from a ``mediapipe`` reconstruction:
+        
+        >>> from medusa.data import get_example_h5
+        >>> path_to_h5 = get_example_h5(load=False)
+        >>> data = Flame4D.load(path_to_h5)
+        >>> type(data)
+        <class 'medusa.core4d.Flame4D'>
+        """
+
+        # Note to self: cannot use the super().load method as a classmethod, because
+        # then we don't have access to the ``Flame4D`` cls
         init_kwargs = super().load(path)
-        init_kwargs["f"] = np.asarray(
-            trimesh.load(here / 'data/mediapipe_template.obj').faces
-        )
         return cls(**init_kwargs)
 
     def render_video(self, f_out, smooth=False, wireframe=False, **kwargs):
-
+        """ Renders a video from the 4D reconstruction.
+        
+        Parameters
+        ----------
+        f_out : str, pathlib.Path
+            Path to save the video to
+        smooth : bool
+            Whether to render a smooth face (using smooth shading) or not (using flat
+            shading)
+        wireframe : bool
+            Whether to render a wireframe instead of an opaque face (if ``True``, the
+            ``smooth`` parameter is ignored)
+        kwargs : dict
+            Additional keyword arguments passed to the ``Base4D.render_video`` method
+        
+        Examples
+        --------
+        Render a video 
+        
+        """ 
         renderer = Renderer(
             camera_type="orthographic",
             viewport=self.img_size,
@@ -613,7 +664,7 @@ class Mediapipe4D(Base4D):
     HDF5 file from disk (see ``load`` docstring). 
     """
     def __init__(self, *args, **kwargs):
-        kwargs["f"] = get_template_mediapipe()['f']
+        #kwargs["f"] = get_template_mediapipe()['f']
         if kwargs.get("cam_mat") is None:
             kwargs["cam_mat"] = np.eye(4)
 
@@ -757,7 +808,7 @@ class Fan4D(Base4D):
         init_kwargs = super().load(path)
         return cls(**init_kwargs)
 
-    def render_video(self, f_out, video=None):
+    def render_video(self, f_out, video=None, scaling=None, n_frames=None, **kwargs):
         """ Renders a video of the reconstructed vertices. 
         
         Note: the extension of the ``f_out`` parameter (e.g., ".gif" or ".mp4")
@@ -791,7 +842,10 @@ class Fan4D(Base4D):
             reader = imageio.get_reader(video)
         
         v = self.v
+
         w, h = self.img_size
+        if scaling is not None:
+            w, h = int(round(w * scaling)), int(round(h * scaling))
 
         writer = imageio.get_writer(f_out, mode="I", fps=self.sf)
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
@@ -803,19 +857,46 @@ class Fan4D(Base4D):
 
         for i in iter_:
 
+            if n_frames is not None:
+                if i == n_frames:
+                    break
+
             if video is not None:
                 background = reader.get_data(i)
+                if scaling is not None:
+                    background = self._rescale(background, scaling)    
             else:
                 background = np.zeros((w, h, 3)).astype(np.uint8)
+
+            this_v = v[i, ...]
+            if scaling is not None:
+                this_v = np.round(this_v * scaling).astype(int)
+            else:
+                this_v = np.round(this_v).astype(int)
 
             for ii in range(self.v.shape[1]):
                 cv2.circle(
                     background,
-                    np.round(v[i, ii, :2]).astype(int),
-                    radius=2,
+                    this_v[ii, :2],
+                    radius=1,
                     color=(255, 0, 0),
-                    thickness=3,
+                    thickness=1,
                 )
+
+            lines = [(i, i+1) for i in range(16)]  # face contour
+            lines.extend([[i, i+1] for i in range(17, 21)])  # right eyebrow
+            lines.extend([[i, i+1] for i in range(22, 26)])  # left eyebrow
+            lines.extend([[i, i+1] for i in range(27, 30)])  # nose ridge
+            lines.extend([[i, i+1] for i in range(31, 35)])  # nose arc
+            lines.extend([[i, i+1] for i in range(36, 41)] + [[41, 36]])  # right eye
+            lines.extend([[i, i+1] for i in range(42, 47)] + [[47, 42]])  # left eye
+            lines.extend([[i, i+1] for i in range(48, 59)] + [[59, 48]])  # lip outer
+            lines.extend([[i, i+1] for i in range(60, 67)] + [[67, 60]])  # lip inner
+            
+            for line in lines:
+                cv2.line(background,
+                         this_v[line[0], :2], this_v[line[1], :2], (255, 0, 0),
+                         thickness=1)
 
             writer.append_data(background)
 

@@ -7,6 +7,7 @@ excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 from trimesh import Trimesh
 from pyrender.constants import RenderFlags
 from pyrender import Scene, Mesh, Node, OffscreenRenderer
@@ -77,7 +78,7 @@ class Renderer:
             viewport_width=self.viewport[0], viewport_height=self.viewport[1]
         )
 
-    def __call__(self, v, f):
+    def __call__(self, v, f, overlay=None, cmap_name='bwr'):
         """Performs the actual rendering.
 
         Parameters
@@ -95,9 +96,13 @@ class Renderer:
             A 3D array (with np.uint8 integers) of shape `viewport[0]` x
             `viewport[1]` x 3 (RGB)
         """
-        mesh = Mesh.from_trimesh(
-            Trimesh(v, f), smooth=self.smooth, wireframe=self.wireframe
-        )
+
+        mesh = Trimesh(v, f)
+        if overlay is not None:
+            cmap = plt.get_cmap(cmap_name)
+            mesh.visual.vertex_colors = cmap(overlay)
+
+        mesh = Mesh.from_trimesh(mesh, smooth=self.smooth, wireframe=self.wireframe)
 
         if self.wireframe:
             # Set to red, because the default isn't very well visible

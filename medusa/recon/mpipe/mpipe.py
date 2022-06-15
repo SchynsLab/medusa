@@ -58,6 +58,9 @@ class Mediapipe:
             self._v_world_ref = obj["vertices"]
             self._f_world_ref = obj["faces"]
 
+    def get_faces(self):
+        return self._f_world_ref
+
     def __call__(self, image):
         """ Performs reconstruction of the face as a list of landmarks (vertices).
 

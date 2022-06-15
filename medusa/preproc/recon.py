@@ -1,7 +1,7 @@
 import numpy as np
 from collections import defaultdict
 
-from ..recon import EMOCA, FAN, Mediapipe
+from ..recon import FAN, Mediapipe
 from ..io import VideoData
 from ..utils import get_logger
 from ..core4d import Flame4D, Mediapipe4D, Fan4D
@@ -11,7 +11,6 @@ def videorecon(
     video_path,
     events_path=None,
     recon_model_name="mediapipe",
-    cfg=None,
     device="cuda",
     n_frames=None,
     loglevel='INFO'
@@ -30,8 +29,6 @@ def videorecon(
     recon_model_name : str
         Name of reconstruction model, options are: 'emoca', 'mediapipe',
         and 'fan'
-    cfg : str
-        Path to config file for EMOCA reconstruction; ignored if not using emoca
     device : str
         Either "cuda" (for GPU) or "cpu" (ignored when using mediapipe)
     n_frames : int
@@ -71,9 +68,10 @@ def videorecon(
     video = VideoData(video_path, events=events_path, loglevel=loglevel)
 
     # Initialize reconstruction model
-    if recon_model_name in ["emoca", "emoca-dense"]:
-        fan = FAN(device=device)  # for face detection / cropping
-        recon_model = EMOCA(cfg=cfg, device=device, img_size=video.img_size)
+    if recon_model_name in ["deca-coarse", "deca-dense", "emoca-coarse", "emoca-dense"]:
+        fan = FAN(lm_type='2D', device=device)  # for face detection / cropping
+        from flame import FlameReconModel
+        recon_model = FlameReconModel(recon_model_name, device=device, img_size=video.img_size)
     elif recon_model_name == "fan":
         recon_model = FAN(device=device, lm_type="3D")
     elif recon_model_name == "mediapipe":
@@ -85,7 +83,7 @@ def videorecon(
     recon_data = defaultdict(list)
     for i, frame in video.loop():
 
-        if recon_model_name in ["emoca"]:
+        if recon_model_name in ["deca-coarse", "deca-dense", "emoca-coarse", "emoca-dense"]:
 
             # Crop image, add tform to emoca (for adding rigid motion
             # due to cropping), and add crop plot to writer
@@ -111,9 +109,12 @@ def videorecon(
 
     # Create Data object using the class corresponding to
     # the model (e.g., FlameData for `emoca`, MediapipeData for `mediapipe`)
-    MODEL2CLS = {"emoca": Flame4D, "mediapipe": Mediapipe4D, "fan": Fan4D}
+    MODEL2CLS = {"emoca-coarse": Flame4D, "emoca-dense": Flame4D, "deca-coarse": Flame4D,
+                 "deca-dense": Flame4D, "mediapipe": Mediapipe4D, "fan": Fan4D}
+
     DataClass = MODEL2CLS[recon_model_name]
     kwargs = {**recon_data, **video.get_metadata()}
-    data = DataClass(recon_model_name=recon_model_name, **kwargs)
+    data = DataClass(recon_model_name=recon_model_name, f=recon_model.get_faces(),
+                     **kwargs)
 
     return data
