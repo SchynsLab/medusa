@@ -11,7 +11,7 @@ with open(ver_file) as f:
 
 # Long description will go up on the pypi page
 with open("README.md") as f:
-    LONG_DESCRIPTION = f.read()
+    LONG_DESCRIPTION = f.read() 
 
 
 opts = dict(
