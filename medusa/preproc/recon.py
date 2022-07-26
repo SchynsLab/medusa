@@ -70,8 +70,8 @@ def videorecon(
     # Initialize reconstruction model
     if recon_model_name in ["deca-coarse", "deca-dense", "emoca-coarse", "emoca-dense"]:
         fan = FAN(lm_type='2D', device=device)  # for face detection / cropping
-        from flame import FlameReconModel
-        recon_model = FlameReconModel(recon_model_name, device=device, img_size=video.img_size)
+        from flame import DecaReconModel
+        recon_model = DecaReconModel(recon_model_name, device=device, img_size=video.img_size)
     elif recon_model_name == "fan":
         recon_model = FAN(device=device, lm_type="3D")
     elif recon_model_name == "mediapipe":
@@ -82,7 +82,7 @@ def videorecon(
     # Loop across frames of video, store results in `recon_data`
     recon_data = defaultdict(list)
     for i, frame in video.loop():
-
+        
         if recon_model_name in ["deca-coarse", "deca-dense", "emoca-coarse", "emoca-dense"]:
 
             # Crop image, add tform to emoca (for adding rigid motion
@@ -101,6 +101,10 @@ def videorecon(
             # frames, stop if reached
             if i == (n_frames - 1):
                 video.stop_loop()
+
+    # Mediapipe (and maybe future models) need to be closed in order to avoid
+    # opening to many threads
+    recon_model.close()
 
     # Concatenate all reconstuctions across time
     # such that the first dim represents time

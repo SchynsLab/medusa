@@ -22,11 +22,12 @@ from face_alignment import LandmarksType, FaceAlignment
 from skimage.transform import estimate_transform, warp, resize
 
 from ..utils import get_logger
+from .core import BaseModel
 
 logger = get_logger()
 
 
-class FAN:
+class FAN(BaseModel):
     """ A wrapper around the FAN-3D landmark prediction model.
     
     Parameters

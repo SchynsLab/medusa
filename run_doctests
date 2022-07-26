@@ -1,1 +1,2 @@
 pytest --disable-warnings --doctest-modules medusa/
+rm example_vid_recon.mp4 example_vid_recon.gif

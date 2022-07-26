@@ -139,6 +139,23 @@ class Base4D:
         if self.space not in ["local", "world"]:
             raise ValueError("`space` should be either 'local' or 'world'!")
 
+    def project_to_68_landmarks(self):
+        """ Projects to 68 landmark set. """
+        
+        if self.recon_model_name not in ['mediapipe', 'deca-coarse', 'emoca-coarse']:
+            raise ValueError("Can only project to 68 landmarks for mediapipe and "
+                             "(coarse) FLAME-based topologies!")
+
+        if self.recon_model_name == 'mediapipe':
+            fname = 'mediapipe_lmk68_embedding.npz'
+        else:
+            fname = 'flame_lmk68_embedding.npz'
+
+        emb = np.load(Path(__file__).parents[1] / f'data/{fname}')
+        vf = self.v[:, self.f[emb['lmk_faces_idx']]]
+        v_proj = np.sum(vf * emb['lmk_bary_coords'][:, :, None], axis=1)
+        return v_proj
+
     def mats2params(self, to_df=True):
         """Transforms a time series (of length T) 4x4 affine matrices to a
         pandas DataFrame with a time series of T x 12 affine parameters
@@ -733,7 +750,7 @@ class Mediapipe4D(Base4D):
         >>> data.render_video(f_out, wireframe=True)
         >>> f_out.is_file()
         True
-        
+
         Rendering an MP4 video with a smooth mesh on top of the original video:
         
         >>> from medusa.data import get_example_video 

@@ -11,9 +11,10 @@ from pathlib import Path
 from trimesh.exchange.obj import load_obj
 
 from ._transforms import PCF, image2world
+from ..core import BaseModel
 
 
-class Mediapipe:
+class Mediapipe(BaseModel):
     """ A Mediapipe face mesh reconstruction model.
 
     Parameters
@@ -32,7 +33,7 @@ class Mediapipe:
 
     """ 
     
-    def __init__(self, static_image_mode=True, **kwargs):
+    def __init__(self, static_image_mode=False, **kwargs):
         """ Initializes a Mediapipe recon model. """
 
         # Importing here speeds up CLI
@@ -42,6 +43,8 @@ class Mediapipe:
             static_image_mode=static_image_mode,
             max_num_faces=1,
             refine_landmarks=True,
+            min_detection_confidence=0.1,
+            min_tracking_confidence=0.1,
             **kwargs
         )
         self.model.__enter__()  # enter context manually

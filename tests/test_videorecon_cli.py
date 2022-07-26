@@ -18,7 +18,7 @@ def test_videorecon_cmd(model, n_frames):
 
     if model in flame_models:
         try:
-            from flame import FlameReconModel
+            from flame import DecaReconModel
         except ImportError:
             print(f"Package 'flame' is not installed; skipping test of {model}!")
             return

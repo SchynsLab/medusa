@@ -49,6 +49,7 @@ opts = dict(
         "trimesh",
         "pyrender",
         "mediapipe",
+        "protobuf==3.20.*",
         "mne",
         "PyOpenGL-accelerate"
     ],

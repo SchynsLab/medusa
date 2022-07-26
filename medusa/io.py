@@ -48,7 +48,7 @@ class VideoData:
 
     def __init__(self, path, events=None, find_files=True, scaling=None, loglevel='INFO'):
         self.path = Path(path)
-        self.events = events
+        self.events = events if events is None else Path(events) 
         self.scaling = scaling
         self.logger = get_logger()
         self.logger.setLevel(loglevel)
@@ -64,23 +64,32 @@ class VideoData:
             raise ValueError(f"File {self.path} does not exist!")
 
         sfx = self.path.suffix
-        if sfx != ".mp4":
-            raise ValueError(f"Only mp4 videos are supported, not {sfx[1:]}!")
+        if sfx not in [".mp4", ".gif", ".avi"]:
+            raise ValueError(f"Only mp4/gif videos are supported, not {sfx[1:]}!")
 
     def _extract_metadata(self):
         """Extracts some metadata from the video needed for preprocessing
         functionality later on."""
 
-        reader = imageio.get_reader(self.path)
-        self.sf = reader.get_meta_data()["fps"]  # sf = sampling frequency
-        self.img_size = reader.get_meta_data()["size"]
+        # reader = imageio.get_reader(self.path)
+        # metadata = reader.get_meta_data()
+        # if 'fps' in metadata:
+        #     self.sf = metadata['fps']
+        # else:
+        #     self.logger.warn(f"Unknown FPS for {self.path}!")
+        #     self.sf = 30.
 
-        # Use cv2 to get n_frames (not possible with imageio ...)
+        # Use cv2 to get metadata (imageio doesn't work for gifs)
         cap = cv2.VideoCapture(str(self.path))
+        w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.sf = float(cap.get(cv2.CAP_PROP_FPS))
+        self.img_size = (w, h)#reader.get_meta_data()["size"]
+
         self.n_img = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
         cap.release()
-        reader.close()
+        #reader.close()
 
     def _find_events(self):
         """If not already supplied upon initialization of the Video object,
@@ -91,7 +100,7 @@ class VideoData:
 
         if self.events is None:
             # check for associated TSV path
-            self.events = Path(str(self.path).replace(".mp4", "_events.tsv"))
+            self.events = Path(str(self.path).replace(self.path.suffix, "_events.tsv"))
 
         if self.events.is_file():
             self.events = pd.read_csv(self.events, sep="\t")
@@ -106,7 +115,7 @@ class VideoData:
         the fps (frames per second)."""
 
         # Check if frame times (ft) and events (ev) files exist
-        ft_path = Path(str(self.path).replace(".mp4", "_frametimes.tsv"))
+        ft_path = Path(str(self.path).replace(self.path.suffix, "_frametimes.tsv"))
         if ft_path.is_file():
             # We're going to use the average number of frames
             # per second as FPS (and equivalently `sf`, sampling freq)
@@ -137,15 +146,18 @@ class VideoData:
         Parameters
         ----------
         return_index : bool
-            Whether to return the frame index and the image; if `False`,
+            Whether to return the frame index and the image; if ``False``,
             only the image is returned
 
         Yields
         ------
         img : np.ndarray
-            Numpy array (dtype: `np.uint8`) of shape width x height x 3 (RGB)
+            Numpy array (dtype: ``np.uint8``) of shape width x height x 3 (RGB)
+        idx : int
+            Optionally (when ``return_index`` is set to ``True``), returns the index of
+            the currently looped frame
         """
-        reader = imageio.get_reader(self.path)
+        reader = imageio.get_reader(self.path, mode='I')
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
         self.stop_loop_ = False
 
@@ -156,16 +168,31 @@ class VideoData:
 
         i = 0
         for img in iter_:
-
+            
+            if img.ndim == 2:
+                # If we have grayscale data, convert to RGB
+                if i == 0:
+                    # Only log the first time to avoid clutter
+                    self.logger.warn("Data seems grayscale; converting to RGB")
+                    img = cv2.cvtColor(img ,cv2.COLOR_GRAY2RGB)
+            elif img.ndim == 3 and img.shape[2] == 4:
+                # If we have an RGBA image, just trim off 4th dim
+                img = img[..., :3]
+            else:
+                if img.ndim == 3 and img.shape[2] != 3:
+                    self.logger.error(f"Data has the wrong shape {img.shape}, probably" 
+                                       "going to crash!")
+           
             if self.stop_loop_:
                 break
 
             if self.scaling is not None:
                 img = self._rescale(img)
-
+            
             i += 1
             if return_index:
-                yield i - 1, img
+                idx = i - 1
+                yield idx, img
             else:
                 yield img
 
