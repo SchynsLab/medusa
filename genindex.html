@@ -20,7 +20,7 @@
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
@@ -37,7 +37,7 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -367,6 +367,15 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="api/python/recon/core/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.core
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="api/python/recon/fan/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
@@ -382,6 +391,15 @@ const thebe_selector_output = ".output, .cell_output"
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
        medusa.render
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/python/transforms/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.transforms
       </span>
      </code>
     </a>
@@ -612,6 +630,8 @@ title="Open an issue"
         <li><a href="api/python/core3d/index.html#medusa.core3d.Mediapipe3D.animate">(medusa.core3d.Mediapipe3D method)</a>
 </li>
       </ul></li>
+      <li><a href="api/python/transforms/index.html#medusa.transforms.apply_perspective_projection">apply_perspective_projection() (in module medusa.transforms)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -624,15 +644,19 @@ title="Open an issue"
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/core4d/index.html#medusa.core4d.Base4D">Base4D (class in medusa.core4d)</a>
 </li>
+      <li><a href="api/python/recon/core/index.html#medusa.recon.core.BaseModel">BaseModel (class in medusa.recon.core)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/recon/mpipe/mpipe/index.html#medusa.recon.mpipe.mpipe.Mediapipe.close">close() (medusa.recon.mpipe.mpipe.Mediapipe method)</a>
+      <li><a href="api/python/recon/core/index.html#medusa.recon.core.BaseModel.close">close() (medusa.recon.core.BaseModel method)</a>
 
       <ul>
+        <li><a href="api/python/recon/mpipe/mpipe/index.html#medusa.recon.mpipe.mpipe.Mediapipe.close">(medusa.recon.mpipe.mpipe.Mediapipe method)</a>
+</li>
         <li><a href="api/python/render/index.html#medusa.render.Renderer.close">(medusa.render.Renderer method)</a>
 </li>
       </ul></li>
@@ -646,10 +670,12 @@ title="Open an issue"
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/preproc/epoch/index.html#medusa.preproc.epoch.epoch">epoch() (in module medusa.preproc.epoch)</a>
+      <li><a href="api/python/transforms/index.html#medusa.transforms.embed_points_in_mesh">embed_points_in_mesh() (in module medusa.transforms)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/preproc/epoch/index.html#medusa.preproc.epoch.epoch">epoch() (in module medusa.preproc.epoch)</a>
+</li>
       <li><a href="api/python/epochs/index.html#medusa.epochs.EpochsArray">EpochsArray (class in medusa.epochs)</a>
 </li>
   </ul></td>
@@ -850,8 +876,13 @@ title="Open an issue"
         <li><a href="api/python/recon/index.html#module-medusa.recon">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    medusa.recon.core
+
+      <ul>
+        <li><a href="api/python/recon/core/index.html#module-medusa.recon.core">module</a>
+</li>
+      </ul></li>
       <li>
     medusa.recon.fan
 
@@ -859,6 +890,8 @@ title="Open an issue"
         <li><a href="api/python/recon/fan/index.html#module-medusa.recon.fan">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     medusa.recon.mpipe
 
@@ -878,6 +911,13 @@ title="Open an issue"
 
       <ul>
         <li><a href="api/python/render/index.html#module-medusa.render">module</a>
+</li>
+      </ul></li>
+      <li>
+    medusa.transforms
+
+      <ul>
+        <li><a href="api/python/transforms/index.html#module-medusa.transforms">module</a>
 </li>
       </ul></li>
       <li>
@@ -925,6 +965,8 @@ title="Open an issue"
 </li>
         <li><a href="api/python/recon/index.html#module-medusa.recon">medusa.recon</a>
 </li>
+        <li><a href="api/python/recon/core/index.html#module-medusa.recon.core">medusa.recon.core</a>
+</li>
         <li><a href="api/python/recon/fan/index.html#module-medusa.recon.fan">medusa.recon.fan</a>
 </li>
         <li><a href="api/python/recon/mpipe/index.html#module-medusa.recon.mpipe">medusa.recon.mpipe</a>
@@ -932,6 +974,8 @@ title="Open an issue"
         <li><a href="api/python/recon/mpipe/mpipe/index.html#module-medusa.recon.mpipe.mpipe">medusa.recon.mpipe.mpipe</a>
 </li>
         <li><a href="api/python/render/index.html#module-medusa.render">medusa.render</a>
+</li>
+        <li><a href="api/python/transforms/index.html#module-medusa.transforms">medusa.transforms</a>
 </li>
         <li><a href="api/python/utils/index.html#module-medusa.utils">medusa.utils</a>
 </li>
@@ -952,11 +996,15 @@ title="Open an issue"
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/core4d/index.html#medusa.core4d.Base4D.params2mats">params2mats() (medusa.core4d.Base4D method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/core4d/index.html#medusa.core4d.Base4D.plot_data">plot_data() (medusa.core4d.Base4D method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/recon/fan/index.html#medusa.recon.fan.FAN.prepare_for_emoca">prepare_for_emoca() (medusa.recon.fan.FAN method)</a>
+</li>
+      <li><a href="api/python/transforms/index.html#medusa.transforms.project_points_from_embedding">project_points_from_embedding() (in module medusa.transforms)</a>
+</li>
+      <li><a href="api/python/core4d/index.html#medusa.core4d.Base4D.project_to_68_landmarks">project_to_68_landmarks() (medusa.core4d.Base4D method)</a>
 </li>
   </ul></td>
 </tr></table>

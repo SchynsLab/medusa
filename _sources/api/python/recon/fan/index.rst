@@ -29,6 +29,8 @@ Module Contents
 
 .. py:class:: FAN(device='cpu', target_size=224, face_detector='sfd', lm_type='2D', use_prev_fan_bbox=False, use_prev_bbox=False)
 
+   Bases: :py:obj:`medusa.recon.core.BaseModel`
+
    A wrapper around the FAN-3D landmark prediction model.
 
    :param device: Device to use, either 'cpu' or 'cuda' (for GPU)
@@ -68,10 +70,10 @@ Module Contents
 
    >>> recon_model = FAN(lm_type='2D')
 
-   .. py:method:: get_faces(self)
+   .. py:method:: get_faces()
 
 
-   .. py:method:: prepare_for_emoca(self, image)
+   .. py:method:: prepare_for_emoca(image)
 
       Runs all steps of the cropping / preprocessing pipeline
       necessary for use with DECA/EMOCA.
@@ -96,7 +98,7 @@ Module Contents
       (1, 3, 224, 224)
 
 
-   .. py:method:: __call__(self, image=None)
+   .. py:method:: __call__(image=None)
 
       Estimates landmarks (vertices) on the face.
 
@@ -121,7 +123,7 @@ Module Contents
       (68, 3)
 
 
-   .. py:method:: viz_qc(self, f_out=None, return_rgba=False)
+   .. py:method:: viz_qc(f_out=None, return_rgba=False)
 
       Visualizes the inferred 3D landmarks & bounding box, as well as the final
       cropped image.

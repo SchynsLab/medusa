@@ -35,7 +35,7 @@ Module Contents
                     (necessary for Flame-based reconstructions)
    :type zoom_out: int/float
 
-   .. py:method:: __call__(self, v, f, overlay=None, cmap_name='bwr')
+   .. py:method:: __call__(v, f, overlay=None, cmap_name='bwr')
 
       Performs the actual rendering.
 
@@ -51,7 +51,7 @@ Module Contents
       :rtype: np.ndarray
 
 
-   .. py:method:: alpha_blend(self, img, background, face_alpha=None)
+   .. py:method:: alpha_blend(img, background, face_alpha=None)
 
       Simple alpha blend of a rendered image and
       a background. The image (`img`) is assumed to be
@@ -66,7 +66,7 @@ Module Contents
       :type background: np.ndarray
 
 
-   .. py:method:: close(self)
+   .. py:method:: close()
 
       Closes the OffScreenRenderer object.
 

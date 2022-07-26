@@ -17,7 +17,9 @@
 Module Contents
 ---------------
 
-.. py:class:: Mediapipe(static_image_mode=True, **kwargs)
+.. py:class:: Mediapipe(static_image_mode=False, **kwargs)
+
+   Bases: :py:obj:`medusa.recon.core.BaseModel`
 
    A Mediapipe face mesh reconstruction model.
 
@@ -34,10 +36,10 @@ Module Contents
 
       :type: mediapipe.solutions.face_mesh.FaceMesh
 
-   .. py:method:: get_faces(self)
+   .. py:method:: get_faces()
 
 
-   .. py:method:: __call__(self, image)
+   .. py:method:: __call__(image)
 
       Performs reconstruction of the face as a list of landmarks (vertices).
 
@@ -69,7 +71,7 @@ Module Contents
       (4, 4)
 
 
-   .. py:method:: close(self)
+   .. py:method:: close()
 
       Closes context manager.
 

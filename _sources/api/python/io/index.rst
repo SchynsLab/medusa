@@ -54,35 +54,37 @@ Module Contents
 
       :type: np.ndarray
 
-   .. py:method:: loop(self, return_index=True)
+   .. py:method:: loop(return_index=True)
 
       Loops across frames of a video.
 
-      :param return_index: Whether to return the frame index and the image; if `False`,
+      :param return_index: Whether to return the frame index and the image; if ``False``,
                            only the image is returned
       :type return_index: bool
 
-      :Yields: **img** (*np.ndarray*) -- Numpy array (dtype: `np.uint8`) of shape width x height x 3 (RGB)
+      :Yields: * **img** (*np.ndarray*) -- Numpy array (dtype: ``np.uint8``) of shape width x height x 3 (RGB)
+               * **idx** (*int*) -- Optionally (when ``return_index`` is set to ``True``), returns the index of
+                 the currently looped frame
 
 
-   .. py:method:: stop_loop(self)
+   .. py:method:: stop_loop()
 
       Stops the loop over frames (in self.loop).
 
 
-   .. py:method:: create_writer(self, path, idf='crop', ext='gif')
+   .. py:method:: create_writer(path, idf='crop', ext='gif')
 
       Creates a imageio writer object, which can for example
       be used to save crop parameters on top of each frame of
       a video.
 
 
-   .. py:method:: write(self, img)
+   .. py:method:: write(img)
 
       Adds image to writer.
 
 
-   .. py:method:: get_metadata(self)
+   .. py:method:: get_metadata()
 
       Returns all (meta)data needed for initialization
       of a Data object.

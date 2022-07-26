@@ -66,7 +66,12 @@ Module Contents
    :param loglevel: Logging level of current logger
    :type loglevel: int
 
-   .. py:method:: mats2params(self, to_df=True)
+   .. py:method:: project_to_68_landmarks()
+
+      Projects to 68 landmark set.
+
+
+   .. py:method:: mats2params(to_df=True)
 
       Transforms a time series (of length T) 4x4 affine matrices to a
       pandas DataFrame with a time series of T x 12 affine parameters
@@ -90,7 +95,7 @@ Module Contents
       (232, 12)
 
 
-   .. py:method:: params2mats(self, params)
+   .. py:method:: params2mats(params)
 
       Converts a sequence of global (affine) motion parameters into a sequence
       of 4x4 affine matrices and updates the ``.mat`` attribute. Essentially
@@ -112,7 +117,7 @@ Module Contents
       >>> np.testing.assert_array_almost_equal(orig_mats, data.mat)  # passes!
 
 
-   .. py:method:: save(self, path, compression_level=9)
+   .. py:method:: save(path, compression_level=9)
 
       Saves (meta)data to disk as an HDF5 file.
 
@@ -162,7 +167,7 @@ Module Contents
       >>> data = Mediapipe4D(**init_kwargs)
 
 
-   .. py:method:: to_mne_rawarray(self)
+   .. py:method:: to_mne_rawarray()
 
       Creates an MNE `RawArray` object from the vertices (`v`).
 
@@ -173,7 +178,7 @@ Module Contents
       >>> rawarray = data.to_mne_rawarray()
 
 
-   .. py:method:: render_video(self, f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None, overlay=None)
+   .. py:method:: render_video(f_out, renderer, video=None, scaling=None, n_frames=None, alpha=None, overlay=None)
 
       Renders the sequence of 3D meshes as a video. It is assumed that this
       method is only called from a child class (e.g., ``Mediapipe4D``).
@@ -195,7 +200,7 @@ Module Contents
       :type alpha: float
 
 
-   .. py:method:: plot_data(self, f_out, plot_motion=True, plot_pca=True, n_pca=3)
+   .. py:method:: plot_data(f_out, plot_motion=True, plot_pca=True, n_pca=3)
 
       Creates a plot of the motion (rotation & translation) parameters
       over time and the first `n_pca` PCA components of the
@@ -221,13 +226,13 @@ Module Contents
       >>> os.remove('./example_plot.png')
 
 
-   .. py:method:: __len__(self)
+   .. py:method:: __len__()
 
       Returns the number of time points of the reconstructed vertices (i.e.,
       the number of reconstructed frames from the video.
 
 
-   .. py:method:: __getitem__(self, idx)
+   .. py:method:: __getitem__(idx)
 
       Returns the vertices at a particular time point (``idx``).
 
@@ -235,7 +240,7 @@ Module Contents
       :type idx: int
 
 
-   .. py:method:: __setitem__(self, idx, v)
+   .. py:method:: __setitem__(idx, v)
 
       Replace the vertices at time point ``idx`` with ``v``.
 
@@ -268,7 +273,7 @@ Module Contents
    We recommend creating ``Flame4D`` objects by loading the corresponding
    HDF5 file from disk (see ``load`` docstring).
 
-   .. py:method:: load(cls, path)
+   .. py:method:: load(path)
       :classmethod:
 
       Loads existing data (stored as an HDF5 file) from disk and uses it to
@@ -290,7 +295,7 @@ Module Contents
       <class 'medusa.core4d.Flame4D'>
 
 
-   .. py:method:: render_video(self, f_out, smooth=False, wireframe=False, **kwargs)
+   .. py:method:: render_video(f_out, smooth=False, wireframe=False, **kwargs)
 
       Renders a video from the 4D reconstruction.
 
@@ -332,7 +337,7 @@ Module Contents
    We recommend creating ``Mediapipe4D`` objects by loading the corresponding
    HDF5 file from disk (see ``load`` docstring).
 
-   .. py:method:: load(cls, path)
+   .. py:method:: load(path)
       :classmethod:
 
       Loads Mediapipe data from a HDF5 file and returns a ``Mediapipe4D``
@@ -361,7 +366,7 @@ Module Contents
       >>> mp_data = videorecon(path, recon_model_name='mediapipe')
 
 
-   .. py:method:: render_video(self, f_out, smooth=False, wireframe=False, **kwargs)
+   .. py:method:: render_video(f_out, smooth=False, wireframe=False, **kwargs)
 
       Renders a video of the reconstructed vertices.
 
@@ -423,7 +428,7 @@ Module Contents
    We recommend creating ``Fan4D`` objects by loading the corresponding
    HDF5 file from disk (see ``load`` docstring).
 
-   .. py:method:: load(cls, path)
+   .. py:method:: load(path)
       :classmethod:
 
       Loads FAN data from a HDF5 file and returns a ``Fan4D`` object.
@@ -444,7 +449,7 @@ Module Contents
       >>> fan_data = videorecon(path, recon_model_name='fan', device='cpu')
 
 
-   .. py:method:: render_video(self, f_out, video=None, scaling=None, n_frames=None, **kwargs)
+   .. py:method:: render_video(f_out, video=None, scaling=None, n_frames=None, **kwargs)
 
       Renders a video of the reconstructed vertices.
 

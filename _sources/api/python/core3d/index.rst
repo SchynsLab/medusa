@@ -9,13 +9,13 @@ Module Contents
 
 .. py:class:: Base3D
 
-   .. py:method:: save_obj(self)
+   .. py:method:: save_obj()
 
 
-   .. py:method:: render_image(self, f_out=None)
+   .. py:method:: render_image(f_out=None)
 
 
-   .. py:method:: animate(self)
+   .. py:method:: animate()
 
 
 
@@ -23,7 +23,7 @@ Module Contents
 
    Bases: :py:obj:`Base3D`
 
-   .. py:method:: from_4D(cls, data, index=0)
+   .. py:method:: from_4D(data, index=0)
       :classmethod:
 
 
@@ -32,11 +32,11 @@ Module Contents
 
    Bases: :py:obj:`Base3D`
 
-   .. py:method:: from_4D(cls, data, index=0)
+   .. py:method:: from_4D(data, index=0)
       :classmethod:
 
 
-   .. py:method:: animate(self, v, mat, sf, frame_t, is_deltas=True)
+   .. py:method:: animate(v, mat, sf, frame_t, is_deltas=True)
 
 
 

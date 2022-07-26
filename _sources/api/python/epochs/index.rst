@@ -25,7 +25,7 @@ Module Contents
                    the video that was reconstructed
    :type frame_t: np.ndarray
 
-   .. py:method:: save(self, path, compression_level=9)
+   .. py:method:: save(path, compression_level=9)
 
       Saves (meta)data to disk as an HDF5 file.
 
@@ -35,7 +35,7 @@ Module Contents
       :type compression_level: int
 
 
-   .. py:method:: to_mne(self, frame_t, include_global_motion=True)
+   .. py:method:: to_mne(frame_t, include_global_motion=True)
 
       Initalize a MNE EpochsArray.
 
