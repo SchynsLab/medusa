@@ -1,6 +1,6 @@
 import os
 import pytest
-from medusa.preproc import videorecon
+from medusa.recon import videorecon
 from medusa.data import get_example_video
 
 flame_models = ['emoca-coarse', 'deca-coarse', 'deca-dense', 'emoca-dense']

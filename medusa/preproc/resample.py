@@ -33,7 +33,7 @@ def resample(data, sampling_freq=None, kind="pchip"):
     
     >>> from medusa.data import get_example_h5
     >>> data = get_example_h5(load=True, model='mediapipe')
-    >>> data.sf  # sampling frequency
+    >>> np.round(data.sf, 2)  # sampling frequency
     23.98
     >>> data.v.shape[0]  # how many time points?
     232

@@ -13,7 +13,6 @@ The recommended order in which to run the preprocessing functions are:
 5. ``epoch``
 """
 
-from .recon import videorecon
 from .align import align
 from .epoch import epoch
 from .filter import filter

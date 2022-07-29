@@ -17,7 +17,7 @@ For more information, check out the
 import click
 
 from .io import load_h5
-from .preproc.recon import videorecon
+from .recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
 from .preproc.filter import filter

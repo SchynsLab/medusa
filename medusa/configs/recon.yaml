@@ -1,9 +1,0 @@
-FAN:
-    device: cuda
-    lm_type: 2D
-    face_detector: sfd
-
-EMOCA:
-    model_path: ext_data/EMOCA/emoca.ckpt
-    flame_model_path: ext_data/FLAME/generic_model.pkl
-    #tex_path: ext_data/FLAME/FLAME_albedo_from_BFM.npz

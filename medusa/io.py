@@ -258,6 +258,7 @@ def load_h5(path):
     with h5py.File(path, "r") as f_in:
         rmn = f_in.attrs["recon_model_name"]
 
-    MODEL2CLS = {"emoca": Flame4D, "mediapipe": Mediapipe4D, "fan": Fan4D}
+    MODEL2CLS = {"emoca-coarse": Flame4D, "emoca-dense": Flame4D, "deca-coarse": Flame4D,
+                 "deca-dense": Flame4D, "mediapipe": Mediapipe4D, "fan": Fan4D}
     data = MODEL2CLS[rmn].load(path)
     return data

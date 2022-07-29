@@ -151,9 +151,9 @@ class Base4D:
         else:
             fname = 'flame_lmk68_embedding.npz'
 
-        emb = np.load(Path(__file__).parents[1] / f'data/{fname}')
-        vf = self.v[:, self.f[emb['lmk_faces_idx']]]
-        v_proj = np.sum(vf * emb['lmk_bary_coords'][:, :, None], axis=1)
+        emb = np.load(Path(__file__).parents[0] / f'data/{fname}')
+        vf = self.v[:, self.f[emb['lmk_faces_idx']]]  # T x V x 3 (faces) x 3 (faces) x 3 (xyz)
+        v_proj = np.sum(vf * emb['lmk_bary_coords'][:, :, None], axis=2)
         return v_proj
 
     def mats2params(self, to_df=True):
@@ -713,7 +713,7 @@ class Mediapipe4D(Base4D):
         If the data is not reconstructed yet, use the ``videorecon`` function to create
         such an object:
         
-        >>> from medusa.preproc import videorecon
+        >>> from medusa.recon import videorecon
         >>> from medusa.data import get_example_video
         >>> path = get_example_video()
         >>> mp_data = videorecon(path, recon_model_name='mediapipe')
@@ -816,7 +816,7 @@ class Fan4D(Base4D):
         If the data is not reconstructed yet, use the ``videorecon`` function to create
         such an object:
         
-        >>> from medusa.preproc import videorecon
+        >>> from medusa.recon import videorecon
         >>> from medusa.data import get_example_video
         >>> path = get_example_video()
         >>> fan_data = videorecon(path, recon_model_name='fan', device='cpu')

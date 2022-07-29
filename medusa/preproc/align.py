@@ -63,7 +63,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     Do an initial alignment of EMOCA meshes using the existing transform, but also
     do additional alignment (probably not a good idea):
     
-    >>> data = get_example_h5(load=True, model='emoca')
+    >>> data = get_example_h5(load=True, model='emoca-coarse')
     >>> data = align(data, algorithm='icp', additive_alignment=True)
     """
 
@@ -92,10 +92,10 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
         v_idx = [389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377,  # contour
                  152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162,  # contour
                  94, 19, 1, 4, 5, 195, 197, 6]  # nose ridge
-    elif data.recon_model_name == "emoca":
+    elif data.recon_model_name in ["emoca-coarse", "deca-dense"]:
         v_idx = np.load(Path(__file__).parents[1] / 'data/scalp_flame.npy') 
-    else:
-        raise ValueError("Unknown reconstruction model!")
+    #else:
+    #    raise ValueError("Unknown reconstruction model!")
 
     if data.logger.level <= logging.INFO:
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Align frames")

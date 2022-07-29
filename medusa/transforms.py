@@ -2,6 +2,60 @@ import numpy as np
 from scipy.spatial import Delaunay
 
 
+# class Projector:
+    
+#     def __init__(projection, width, height, cam_mat=np.eye(4)):
+#         self.projection = projection
+#         self.width = width
+#         self.height = height
+#         self.cam_mat = cam_mat
+#         self._check()
+
+#     def _check(self):
+        
+#         PROJS = ['orthographic', 'perspective']
+#         if self.projection not in PROJS:
+#             raise ValueError(f"Arg `projection` should be one of {PROJS}!")
+        
+#         if self.cam_mat.shape != (4, 4):
+#             raise ValueError("Camera matrix must be a 4 x 4 numpy array!")
+    
+#     def to_ndc(self, v, clip=False):
+        
+        
+
+def create_viewport_matrix(nx, ny):
+    """Creates a viewport matrix that transforms vertices in NDC [-1, 1]
+    space to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
+    https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-transform/
+    except that I added the minus sign at [1, 1], which makes sure that the
+    viewport (screen) space origin is in the top left.
+
+    Parameters
+    ----------
+    nx : int
+        Number of pixels in the x dimension (width)
+    ny : int
+        Number of pixels in the y dimension (height)
+
+    Returns
+    -------
+    mat : np.ndarray
+        A 4x4 numpy array representing the viewport transform
+    """
+
+    mat = np.array(
+        [
+            [nx / 2, 0, 0, (nx - 1) / 2],
+            [0, -ny / 2, 0, (ny - 1) / 2],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
+        ]
+    )
+
+    return mat
+
+
 def apply_perspective_projection(v, mat):
     """" Applies a perspective projection of ``v`` into NDC space. 
     
