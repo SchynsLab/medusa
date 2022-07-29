@@ -30,7 +30,6 @@ Submodules
    align/index.rst
    epoch/index.rst
    filter/index.rst
-   recon/index.rst
    resample/index.rst
 
 

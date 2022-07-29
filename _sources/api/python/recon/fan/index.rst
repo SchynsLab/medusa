@@ -27,31 +27,16 @@ Module Contents
 
    
 
-.. py:class:: FAN(device='cpu', target_size=224, face_detector='sfd', lm_type='2D', use_prev_fan_bbox=False, use_prev_bbox=False)
+.. py:class:: FAN(device='cpu', use_prev_bbox=True, min_detection_threshold=0.5, **kwargs)
 
-   Bases: :py:obj:`medusa.recon.core.BaseModel`
+   Bases: :py:obj:`medusa.recon.base.BaseModel`
 
    A wrapper around the FAN-3D landmark prediction model.
 
    :param device: Device to use, either 'cpu' or 'cuda' (for GPU)
    :type device: str
-   :param target_size: Size to crop the image to, assuming a square crop; default (224)
-                       corresponds to image size that EMOCA expects (ignored if not calling
-                       ``prepare_for_emoca``)
-   :type target_size: int
-   :param face_detector: Face detector algorithm to use (default: 'sfd', as used in EMOCA)
-   :type face_detector: str
-   :param lm_type: Either '2D' (using 2D landmarks, necessary when using it for EMOCA) or
-                   '3D' (using 3D landmarks), necessary when using it as a reconstruction
-                   model
-   :type lm_type: str
-   :param use_prev_fan_bbox: Whether to use the previous bbox from FAN to do an initial crop (True)
-                             or whether to run the FAN face detection algorithm again (False)
-   :type use_prev_fan_bbox: bool
-   :param use_prev_bbox: Whether to use the previous DECA-style bbox (True) or whether to
-                         run FAN again to estimate landmarks from which to create a new
-                         bbox (False); this should only be used when there is very little
-                         rigid motion of the face!
+   :param use_prev_bbox: Whether to use the previous bbox from FAN to do an initial crop (True)
+                         or whether to run the FAN face detection algorithm again (False)
    :type use_prev_bbox: bool
 
    .. attribute:: model
@@ -64,38 +49,11 @@ Module Contents
 
    To create a FAN based reconstruction model:
 
-   >>> recon_model = FAN(lm_type='3D')
-
-   To create a FAN-2D model for cropping images (as expected by EMOCA):
-
-   >>> recon_model = FAN(lm_type='2D')
+   >>> recon_model = FAN(device='cpu')
 
    .. py:method:: get_faces()
 
-
-   .. py:method:: prepare_for_emoca(image)
-
-      Runs all steps of the cropping / preprocessing pipeline
-      necessary for use with DECA/EMOCA.
-
-      :param image: Either a string or ``pathlib.Path`` object to an image or a numpy array
-                    (width x height x 3) representing the already loaded RGB image
-      :type image: str, Path, np.ndarray
-
-      :returns: **img** -- The preprocessed (normalized) and cropped image as a ``torch.Tensor``
-                of shape (1, 3, 224, 224), as EMOCA expects (the 1 is the batch size)
-      :rtype: torch.Tensor
-
-      .. rubric:: Examples
-
-      To preprocess (which includes cropping) an image:
-
-      >>> from medusa.data import get_example_frame
-      >>> img = get_example_frame()
-      >>> model = FAN(lm_type='2D')
-      >>> cropped_img = model.prepare_for_emoca(img)
-      >>> tuple(cropped_img.size())  #
-      (1, 3, 224, 224)
+      FAN only returns landmarks, not a full mesh.
 
 
    .. py:method:: __call__(image=None)
@@ -116,38 +74,11 @@ Module Contents
       To reconstruct an example, simply call the ``FAN`` object:
 
       >>> from medusa.data import get_example_frame
-      >>> model = FAN(lm_type='3D')
+      >>> model = FAN(device='cpu')
       >>> img = get_example_frame()
       >>> out = model(img)  # reconstruct!
       >>> out['v'].shape    # vertices
       (68, 3)
-
-
-   .. py:method:: viz_qc(f_out=None, return_rgba=False)
-
-      Visualizes the inferred 3D landmarks & bounding box, as well as the final
-      cropped image.
-
-      :param f_out: Path to save viz to; if ``None``, returned as an RGBA image
-      :type f_out: str, Path
-      :param return_rgba: Whether to return a numpy image with the raw pixel RGBA intensities
-                          (True) or not (False; return nothing)
-      :type return_rgba: bool
-
-      :returns: **img** -- The rendered image as a numpy array (if ``f_out`` is ``None``)
-      :rtype: np.ndarray
-
-      .. rubric:: Examples
-
-      To visualize the landmark and (EMOCA-style) bounding box:
-
-      >>> from medusa.data import get_example_frame
-      >>> img = get_example_frame()
-      >>> fan = FAN(lm_type='2D')
-      >>> cropped_img = fan.prepare_for_emoca(img)
-      >>> viz_img = fan.viz_qc(return_rgba=True)
-      >>> viz_img.shape
-      (480, 640, 4)
 
 
 

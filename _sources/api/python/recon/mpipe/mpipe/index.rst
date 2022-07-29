@@ -17,9 +17,9 @@
 Module Contents
 ---------------
 
-.. py:class:: Mediapipe(static_image_mode=False, **kwargs)
+.. py:class:: Mediapipe(static_image_mode=False, max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.9, min_tracking_confidence=0.1)
 
-   Bases: :py:obj:`medusa.recon.core.BaseModel`
+   Bases: :py:obj:`medusa.recon.base.BaseModel`
 
    A Mediapipe face mesh reconstruction model.
 

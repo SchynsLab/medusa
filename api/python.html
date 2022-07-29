@@ -313,15 +313,6 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/recon/index.html">
-       <code class="xref py py-mod docutils literal notranslate">
-        <span class="pre">
-         medusa.preproc.recon
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="python/preproc/resample/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
@@ -372,10 +363,10 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/recon/core/index.html">
+      <a class="reference internal" href="python/recon/base/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
-         medusa.recon.core
+         medusa.recon.base
         </span>
        </code>
       </a>
@@ -385,6 +376,15 @@ const thebe_selector_output = ".output, .cell_output"
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.fan
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/recon/recon/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.recon
         </span>
        </code>
       </a>
@@ -515,7 +515,7 @@ title="Fullscreen mode"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://github.com/lukassnoek/medusa"
+        <a href="https://github.com/medusa-4D/medusa"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -532,7 +532,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -549,7 +549,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/edit/master/api/python.md"
+        <a href="https://github.com/medusa-4D/medusa/edit/master/api/python.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -1023,13 +1023,13 @@ submodules. As its name suggests, it contains code to preprocess time series of 
 face reconstructions.</p>
 <p>The submodules are summarized below.</p>
 <section id="medusa-preproc-recon">
-<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.recon</span></code></span></a><a class="headerlink" href="#medusa-preproc-recon" title="Permalink to this headline">#</a></h3>
+<h3><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.recon</span></code></span><a class="headerlink" href="#medusa-preproc-recon" title="Permalink to this headline">#</a></h3>
 <p>This submodule contains a single function, <code class="docutils literal notranslate"><span class="pre">videorecon</span></code>, that performs frame-by-frame 3D
 reconstruction of a video and returns the results as an object of the appropriate
 data class (e.g., <code class="docutils literal notranslate"><span class="pre">FlameData</span></code>).</p>
 </section>
 <section id="medusa-preproc-align">
-<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></span></a><a class="headerlink" href="#medusa-preproc-align" title="Permalink to this headline">#</a></h3>
+<h3><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></span><a class="headerlink" href="#medusa-preproc-align" title="Permalink to this headline">#</a></h3>
 <p>This submodule contains a single function, <code class="docutils literal notranslate"><span class="pre">align</span></code>, that performs alignment (“motion correction”)
 of a sequence of 3D meshes. It returns an instance of a data class of which the <code class="docutils literal notranslate"><span class="pre">v</span></code>
 attribute (i.e., the vertices) have been aligned (either to a canonical model, like for
@@ -1037,7 +1037,7 @@ EMOCA and Mediapipe, or the mesh of the first time point, like for FAN). Note th
 function changes the <code class="docutils literal notranslate"><span class="pre">.space</span></code> attribute from <code class="docutils literal notranslate"><span class="pre">&quot;world&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;local&quot;</span></code>.</p>
 </section>
 <section id="medusa-preproc-resample">
-<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.resample</span></code></span></a><a class="headerlink" href="#medusa-preproc-resample" title="Permalink to this headline">#</a></h3>
+<h3><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.resample</span></code></span><a class="headerlink" href="#medusa-preproc-resample" title="Permalink to this headline">#</a></h3>
 <p>This submodule contains a single function, <code class="docutils literal notranslate"><span class="pre">resample</span></code>, that performs temporal resampling
 of the 3D mesh time series by interpolating the data at a regular, evenly-spaced grid
 with a specific sampling frequency. It returns an instance of the data class of which
@@ -1045,13 +1045,13 @@ the data (<code class="docutils literal notranslate"><span class="pre">v</span><
 (<code class="docutils literal notranslate"><span class="pre">.sf</span></code> attribute) has been changed accordingly.</p>
 </section>
 <section id="medusa-preproc-filter">
-<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></span></a><a class="headerlink" href="#medusa-preproc-filter" title="Permalink to this headline">#</a></h3>
+<h3><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></span><a class="headerlink" href="#medusa-preproc-filter" title="Permalink to this headline">#</a></h3>
 <p>This submodule contains a single function, <code class="docutils literal notranslate"><span class="pre">filter</span></code>, that performs temporal filtering
 of the 3D mesh time series using a Butterworth filter. It returns an instance of the
 appropriate data class.</p>
 </section>
 <section id="medusa-preproc-epoch">
-<h3><a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.epoch</span></code></span></a><a class="headerlink" href="#medusa-preproc-epoch" title="Permalink to this headline">#</a></h3>
+<h3><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.epoch</span></code></span><a class="headerlink" href="#medusa-preproc-epoch" title="Permalink to this headline">#</a></h3>
 <p>This submodule performs “epoching” on the time series of the reconstructed 3D face
 meshes. Here, an “epoch” refers to an equal duration chunk of signal, usually time-locked
 to repeated experimental events (such as stimulus onsets or button presses; definition

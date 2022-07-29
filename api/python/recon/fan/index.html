@@ -53,8 +53,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../../../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="medusa.render" href="../../render/index.html" />
-    <link rel="prev" title="medusa.recon.core" href="../core/index.html" />
+    <link rel="next" title="medusa.recon.recon" href="../recon/index.html" />
+    <link rel="prev" title="medusa.recon.base" href="../base/index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -311,15 +311,6 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../../preproc/recon/index.html">
-       <code class="xref py py-mod docutils literal notranslate">
-        <span class="pre">
-         medusa.preproc.recon
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="../../preproc/resample/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
@@ -370,10 +361,10 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../core/index.html">
+      <a class="reference internal" href="../base/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
-         medusa.recon.core
+         medusa.recon.base
         </span>
        </code>
       </a>
@@ -383,6 +374,15 @@ const thebe_selector_output = ".output, .cell_output"
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.fan
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../recon/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.recon
         </span>
        </code>
       </a>
@@ -513,7 +513,7 @@ title="Fullscreen mode"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://github.com/lukassnoek/medusa"
+        <a href="https://github.com/medusa-4D/medusa"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -530,7 +530,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/recon/fan/index.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/recon/fan/index.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -547,7 +547,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/edit/master/api/python/recon/fan/index.rst"
+        <a href="https://github.com/medusa-4D/medusa/edit/master/api/python/recon/fan/index.rst"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -660,18 +660,8 @@ title="Print to PDF"
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.prepare_for_emoca">
-       prepare_for_emoca
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.__call__">
        __call__
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.viz_qc">
-       viz_qc
       </a>
      </li>
     </ul>
@@ -723,18 +713,8 @@ title="Print to PDF"
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.prepare_for_emoca">
-       prepare_for_emoca
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.__call__">
        __call__
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#medusa.recon.fan.FAN.viz_qc">
-       viz_qc
       </a>
      </li>
     </ul>
@@ -775,26 +755,15 @@ In <em>Proceedings of the IEEE International Conference on Computer Vision</em>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.fan.</span></span><span class="sig-name descname"><span class="pre">FAN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">224</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sfd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_prev_fan_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_prev_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../core/index.html#medusa.recon.core.BaseModel" title="medusa.recon.core.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">medusa.recon.core.BaseModel</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.fan.</span></span><span class="sig-name descname"><span class="pre">FAN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_prev_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_detection_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../base/index.html#medusa.recon.base.BaseModel" title="medusa.recon.base.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">medusa.recon.base.BaseModel</span></code></a></p>
 <p>A wrapper around the FAN-3D landmark prediction model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>device</strong> (<em>str</em>) – Device to use, either ‘cpu’ or ‘cuda’ (for GPU)</p></li>
-<li><p><strong>target_size</strong> (<em>int</em>) – Size to crop the image to, assuming a square crop; default (224)
-corresponds to image size that EMOCA expects (ignored if not calling
-<code class="docutils literal notranslate"><span class="pre">prepare_for_emoca</span></code>)</p></li>
-<li><p><strong>face_detector</strong> (<em>str</em>) – Face detector algorithm to use (default: ‘sfd’, as used in EMOCA)</p></li>
-<li><p><strong>lm_type</strong> (<em>str</em>) – Either ‘2D’ (using 2D landmarks, necessary when using it for EMOCA) or
-‘3D’ (using 3D landmarks), necessary when using it as a reconstruction
-model</p></li>
-<li><p><strong>use_prev_fan_bbox</strong> (<em>bool</em>) – Whether to use the previous bbox from FAN to do an initial crop (True)
+<li><p><strong>use_prev_bbox</strong> (<em>bool</em>) – Whether to use the previous bbox from FAN to do an initial crop (True)
 or whether to run the FAN face detection algorithm again (False)</p></li>
-<li><p><strong>use_prev_bbox</strong> (<em>bool</em>) – Whether to use the previous DECA-style bbox (True) or whether to
-run FAN again to estimate landmarks from which to create a new
-bbox (False); this should only be used when there is very little
-rigid motion of the face!</p></li>
 </ul>
 </dd>
 </dl>
@@ -811,46 +780,13 @@ rigid motion of the face!</p></li>
 
 <p class="rubric">Examples</p>
 <p>To create a FAN based reconstruction model:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">recon_model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;3D&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>To create a FAN-2D model for cropping images (as expected by EMOCA):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">recon_model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">recon_model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.fan.FAN.get_faces">
 <span class="sig-name descname"><span class="pre">get_faces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN.get_faces" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.recon.fan.FAN.prepare_for_emoca">
-<span class="sig-name descname"><span class="pre">prepare_for_emoca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN.prepare_for_emoca" title="Permalink to this definition">#</a></dt>
-<dd><p>Runs all steps of the cropping / preprocessing pipeline
-necessary for use with DECA/EMOCA.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>image</strong> (<em>str</em><em>, </em><em>Path</em><em>, </em><em>np.ndarray</em>) – Either a string or <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object to an image or a numpy array
-(width x height x 3) representing the already loaded RGB image</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img</strong> – The preprocessed (normalized) and cropped image as a <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code>
-of shape (1, 3, 224, 224), as EMOCA expects (the 1 is the batch size)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>torch.Tensor</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>To preprocess (which includes cropping) an image:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cropped_img</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">prepare_for_emoca</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">tuple</span><span class="p">(</span><span class="n">cropped_img</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>  <span class="c1">#</span>
-<span class="go">(1, 3, 224, 224)</span>
-</pre></div>
-</div>
+<dd><p>FAN only returns landmarks, not a full mesh.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -874,44 +810,11 @@ coordinates</p>
 <p class="rubric">Examples</p>
 <p>To reconstruct an example, simply call the <code class="docutils literal notranslate"><span class="pre">FAN</span></code> object:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;3D&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>  <span class="c1"># reconstruct!</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>    <span class="c1"># vertices</span>
 <span class="go">(68, 3)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.recon.fan.FAN.viz_qc">
-<span class="sig-name descname"><span class="pre">viz_qc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_rgba</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.fan.FAN.viz_qc" title="Permalink to this definition">#</a></dt>
-<dd><p>Visualizes the inferred 3D landmarks &amp; bounding box, as well as the final
-cropped image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>f_out</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to save viz to; if <code class="docutils literal notranslate"><span class="pre">None</span></code>, returned as an RGBA image</p></li>
-<li><p><strong>return_rgba</strong> (<em>bool</em>) – Whether to return a numpy image with the raw pixel RGBA intensities
-(True) or not (False; return nothing)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img</strong> – The rendered image as a numpy array (if <code class="docutils literal notranslate"><span class="pre">f_out</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>To visualize the landmark and (EMOCA-style) bounding box:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_frame</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fan</span> <span class="o">=</span> <span class="n">FAN</span><span class="p">(</span><span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cropped_img</span> <span class="o">=</span> <span class="n">fan</span><span class="o">.</span><span class="n">prepare_for_emoca</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">viz_img</span> <span class="o">=</span> <span class="n">fan</span><span class="o">.</span><span class="n">viz_qc</span><span class="p">(</span><span class="n">return_rgba</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">viz_img</span><span class="o">.</span><span class="n">shape</span>
-<span class="go">(480, 640, 4)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -948,17 +851,17 @@ cropped image.</p>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../core/index.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../base/index.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.core</span></code></p>
+            <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../../render/index.html" title="next page">
+    <a class='right-next' id="next-link" href="../recon/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

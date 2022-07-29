@@ -313,15 +313,6 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/preproc/recon/index.html">
-       <code class="xref py py-mod docutils literal notranslate">
-        <span class="pre">
-         medusa.preproc.recon
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="python/preproc/resample/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
@@ -372,10 +363,10 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="python/recon/core/index.html">
+      <a class="reference internal" href="python/recon/base/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
-         medusa.recon.core
+         medusa.recon.base
         </span>
        </code>
       </a>
@@ -385,6 +376,15 @@ const thebe_selector_output = ".output, .cell_output"
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.fan
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/recon/recon/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.recon
         </span>
        </code>
       </a>
@@ -515,7 +515,7 @@ title="Fullscreen mode"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://github.com/lukassnoek/medusa"
+        <a href="https://github.com/medusa-4D/medusa"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -532,7 +532,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/cli.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/cli.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -549,7 +549,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/edit/master/api/cli.md"
+        <a href="https://github.com/medusa-4D/medusa/edit/master/api/cli.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -795,7 +795,7 @@ to the command line, which can be used after installing the Python package. Alte
 you can use the <a class="reference internal" href="python.html"><span class="doc std std-doc">Python API</span></a>.</p>
 <p>All CLI commands start with <code class="docutils literal notranslate"><span class="pre">medusa_</span></code> followed by the operation that it exposes.
 For example, <code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code> is a command-line interface of the package’s Python
-function <a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">videorecon</span></code></span></a>. The arguments and options of each CLI
+function <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">videorecon</span></code></span>. The arguments and options of each CLI
 command can be inspected by running the command with a single option <code class="docutils literal notranslate"><span class="pre">--help</span></code>. For
 example:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>medusa_videorecon --help
@@ -855,7 +855,7 @@ each command’s options, run the command with the <code class="docutils literal
 video is in MP4 format and has the extension <code class="docutils literal notranslate"><span class="pre">.mp4</span></code>. It also assumes (for now) that
 there is one, and only one, face present in each frame of the video.</p>
 <p>This CLI command uses the Python function
-<a class="reference internal" href="python/preproc/recon/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.recon.videorecon</span></code></span></a> under the hood.</p>
+<span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.recon.videorecon</span></code></span> under the hood.</p>
 </section>
 <section id="medusa-align">
 <h3><code class="docutils literal notranslate"><span class="pre">medusa_align</span></code><a class="headerlink" href="#medusa-align" title="Permalink to this headline">#</a></h3>

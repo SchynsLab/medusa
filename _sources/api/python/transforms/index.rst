@@ -7,6 +7,23 @@
 Module Contents
 ---------------
 
+.. py:function:: create_viewport_matrix(nx, ny)
+
+   Creates a viewport matrix that transforms vertices in NDC [-1, 1]
+   space to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
+   https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-transform/
+   except that I added the minus sign at [1, 1], which makes sure that the
+   viewport (screen) space origin is in the top left.
+
+   :param nx: Number of pixels in the x dimension (width)
+   :type nx: int
+   :param ny: Number of pixels in the y dimension (height)
+   :type ny: int
+
+   :returns: **mat** -- A 4x4 numpy array representing the viewport transform
+   :rtype: np.ndarray
+
+
 .. py:function:: apply_perspective_projection(v, mat)
 
    " Applies a perspective projection of ``v`` into NDC space.

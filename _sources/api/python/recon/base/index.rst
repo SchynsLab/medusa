@@ -1,7 +1,7 @@
-:py:mod:`medusa.recon.core`
+:py:mod:`medusa.recon.base`
 ===========================
 
-.. py:module:: medusa.recon.core
+.. py:module:: medusa.recon.base
 
 
 Module Contents

@@ -19,7 +19,8 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   core/index.rst
+   base/index.rst
    fan/index.rst
+   recon/index.rst
 
 

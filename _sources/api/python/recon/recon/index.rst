@@ -1,7 +1,7 @@
-:py:mod:`medusa.preproc.recon`
-==============================
+:py:mod:`medusa.recon.recon`
+============================
 
-.. py:module:: medusa.preproc.recon
+.. py:module:: medusa.recon.recon
 
 
 Module Contents

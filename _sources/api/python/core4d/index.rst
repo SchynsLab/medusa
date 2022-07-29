@@ -360,7 +360,7 @@ Module Contents
       If the data is not reconstructed yet, use the ``videorecon`` function to create
       such an object:
 
-      >>> from medusa.preproc import videorecon
+      >>> from medusa.recon import videorecon
       >>> from medusa.data import get_example_video
       >>> path = get_example_video()
       >>> mp_data = videorecon(path, recon_model_name='mediapipe')
@@ -443,7 +443,7 @@ Module Contents
       If the data is not reconstructed yet, use the ``videorecon`` function to create
       such an object:
 
-      >>> from medusa.preproc import videorecon
+      >>> from medusa.recon import videorecon
       >>> from medusa.data import get_example_video
       >>> path = get_example_video()
       >>> fan_data = videorecon(path, recon_model_name='fan', device='cpu')

@@ -56,7 +56,7 @@ Module Contents
    Do an initial alignment of EMOCA meshes using the existing transform, but also
    do additional alignment (probably not a good idea):
 
-   >>> data = get_example_h5(load=True, model='emoca')
+   >>> data = get_example_h5(load=True, model='emoca-coarse')
    >>> data = align(data, algorithm='icp', additive_alignment=True)
 
 

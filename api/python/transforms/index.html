@@ -311,15 +311,6 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../preproc/recon/index.html">
-       <code class="xref py py-mod docutils literal notranslate">
-        <span class="pre">
-         medusa.preproc.recon
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="../preproc/resample/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
@@ -370,10 +361,10 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../recon/core/index.html">
+      <a class="reference internal" href="../recon/base/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
-         medusa.recon.core
+         medusa.recon.base
         </span>
        </code>
       </a>
@@ -383,6 +374,15 @@ const thebe_selector_output = ".output, .cell_output"
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.fan
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../recon/recon/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.recon
         </span>
        </code>
       </a>
@@ -513,7 +513,7 @@ title="Fullscreen mode"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://github.com/lukassnoek/medusa"
+        <a href="https://github.com/medusa-4D/medusa"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -530,7 +530,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/transforms/index.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/transforms/index.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -547,7 +547,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/edit/master/api/python/transforms/index.rst"
+        <a href="https://github.com/medusa-4D/medusa/edit/master/api/python/transforms/index.rst"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -640,6 +640,11 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.transforms.create_viewport_matrix">
+     create_viewport_matrix
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.transforms.apply_perspective_projection">
      apply_perspective_projection
     </a>
@@ -681,6 +686,11 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.transforms.create_viewport_matrix">
+     create_viewport_matrix
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#medusa.transforms.apply_perspective_projection">
      apply_perspective_projection
     </a>
@@ -711,6 +721,30 @@ title="Print to PDF"
 <span id="medusa-transforms"></span><h1><a class="reference internal" href="#module-medusa.transforms" title="medusa.transforms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.transforms</span></code></a><a class="headerlink" href="#module-medusa.transforms" title="Permalink to this headline">#</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="medusa.transforms.create_viewport_matrix">
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">create_viewport_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.create_viewport_matrix" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates a viewport matrix that transforms vertices in NDC [-1, 1]
+space to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
+<a class="reference external" href="https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-transform/">https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-transform/</a>
+except that I added the minus sign at [1, 1], which makes sure that the
+viewport (screen) space origin is in the top left.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nx</strong> (<em>int</em>) – Number of pixels in the x dimension (width)</p></li>
+<li><p><strong>ny</strong> (<em>int</em>) – Number of pixels in the y dimension (height)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mat</strong> – A 4x4 numpy array representing the viewport transform</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.apply_perspective_projection">
 <span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">apply_perspective_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.apply_perspective_projection" title="Permalink to this definition">#</a></dt>

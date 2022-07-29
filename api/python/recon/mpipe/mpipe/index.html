@@ -53,7 +53,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="medusa.recon.core" href="../../core/index.html" />
+    <link rel="next" title="medusa.recon.base" href="../../base/index.html" />
     <link rel="prev" title="medusa.recon.mpipe" href="../index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -311,15 +311,6 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../../../preproc/recon/index.html">
-       <code class="xref py py-mod docutils literal notranslate">
-        <span class="pre">
-         medusa.preproc.recon
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="../../../preproc/resample/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
@@ -370,10 +361,10 @@ const thebe_selector_output = ".output, .cell_output"
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../../core/index.html">
+      <a class="reference internal" href="../../base/index.html">
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
-         medusa.recon.core
+         medusa.recon.base
         </span>
        </code>
       </a>
@@ -383,6 +374,15 @@ const thebe_selector_output = ".output, .cell_output"
        <code class="xref py py-mod docutils literal notranslate">
         <span class="pre">
          medusa.recon.fan
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../recon/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.recon
         </span>
        </code>
       </a>
@@ -513,7 +513,7 @@ title="Fullscreen mode"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://github.com/lukassnoek/medusa"
+        <a href="https://github.com/medusa-4D/medusa"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -530,7 +530,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/recon/mpipe/mpipe/index.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/recon/mpipe/mpipe/index.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -547,7 +547,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/lukassnoek/medusa/edit/master/api/python/recon/mpipe/mpipe/index.rst"
+        <a href="https://github.com/medusa-4D/medusa/edit/master/api/python/recon/mpipe/mpipe/index.rst"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -746,8 +746,8 @@ preprint arXiv:1907.06724</em></p>
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.recon.mpipe.mpipe.Mediapipe">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.mpipe.mpipe.</span></span><span class="sig-name descname"><span class="pre">Mediapipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">static_image_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.mpipe.mpipe.Mediapipe" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../../core/index.html#medusa.recon.core.BaseModel" title="medusa.recon.core.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">medusa.recon.core.BaseModel</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.mpipe.mpipe.</span></span><span class="sig-name descname"><span class="pre">Mediapipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">static_image_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_faces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refine_landmarks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_detection_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_tracking_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.mpipe.mpipe.Mediapipe" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../base/index.html#medusa.recon.base.BaseModel" title="medusa.recon.base.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">medusa.recon.base.BaseModel</span></code></a></p>
 <p>A Mediapipe face mesh reconstruction model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -858,10 +858,10 @@ matter much if you only instantiate a single model).</p>
             <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../../core/index.html" title="next page">
+    <a class='right-next' id="next-link" href="../../base/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.core</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
