@@ -1,9 +1,8 @@
 # Medusa: 4D face reconstruction and analysis
 
-[![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://lukas-snoek.com/medusa)
-![CI](https://github.com/lukassnoek/medusa/workflows/CI/badge.svg)
-![docs](https://github.com/lukassnoek/medusa/workflows/publish/badge.svg)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://medusa.lukas-snoek.com)
+[![CI](https://github.com/medusa-4D/medusa/actions/workflows/CI.yml/badge.svg)](https://github.com/medusa-4D/medusa/actions/workflows/CI.yml)
+[![publish](https://github.com/medusa-4D/medusa/actions/workflows/publish.yml/badge.svg)](https://github.com/medusa-4D/medusa/actions/workflows/publish.yml)
 
 Medusa is a Python toolbox to perform 4D face reconstruction and analysis. You can use it
 to reconstruct a series of 3D meshes of (moving) faces from video files: one 3D mesh for
