@@ -68,7 +68,7 @@ def apply_perspective_projection(v, mat):
     """
     
     v_proj = np.c_[v, np.ones(v.shape[0])] @ mat.T
-    v_proj[:, :3] /= v_proj[:, 3, None]
+    v_proj /= v_proj[:, 3, None]
     
     return v_proj
 

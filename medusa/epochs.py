@@ -1,3 +1,6 @@
+""" Module with functionality to store epoch data and optionally convert it to an 
+MNE-friendly format. """
+
 import h5py
 import numpy as np
 from pathlib import Path  
@@ -23,11 +26,11 @@ class EpochsArray:
         the video that was reconstructed
     """
 
-    def __init__(self, v, params, frame_t, recon_model_name, events=None):        
+    def __init__(self, v, params, frame_t, recon_model, events=None):        
         self.v = v
         self.params = params
         self.frame_t = frame_t
-        self.recon_model_name = recon_model_name
+        self.recon_model = recon_model
         self.sf = np.diff(frame_t).mean()
         self.events = events
     
@@ -52,7 +55,7 @@ class EpochsArray:
                 data = data.astype(np.float32)
                 f_out.create_dataset(attr, data=data, compression=compression_level)
 
-            for attr in ["sf", "recon_model_name"]:
+            for attr in ["sf", "recon_model"]:
                 f_out.attrs[attr] = getattr(self, attr)
 
             f_out.attrs["path"] = path

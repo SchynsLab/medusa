@@ -43,14 +43,11 @@ opts = dict(
         "scikit-learn",
         "face_alignment",
         "pyyaml",
-        "mne",
         "h5py",
         "tables",  # to use hdf5 with pandas
         "trimesh",
         "pyrender",
         "mediapipe",
-        "protobuf==3.20.*",
-        "mne",
         "PyOpenGL-accelerate"
     ],
     entry_points={

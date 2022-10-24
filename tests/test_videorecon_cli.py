@@ -5,18 +5,19 @@ from click.testing import CliRunner
 from medusa.cli import videorecon_cmd
 from medusa.data import get_example_video
 
-flame_models = ['emoca-coarse', 'deca-coarse', 'deca-dense', 'emoca-dense']
 
-@pytest.mark.parametrize("model", [*flame_models])#, 'mediapipe', 'fan'])
+FLAME_MODELS = ['emoca-coarse', 'deca-coarse', 'deca-dense', 'emoca-dense']
+
+@pytest.mark.parametrize("model", [*FLAME_MODELS, 'mediapipe', 'fan'])
 @pytest.mark.parametrize("n_frames", [None, 5])
 def test_videorecon_cmd(model, n_frames):
     """ Tests the videorecon command line interface. """
     
-    if model in flame_models and 'GITHUB_ACTIONS' in os.environ:
+    if model in FLAME_MODELS and 'GITHUB_ACTIONS' in os.environ:
         # emoca is licensed, so cannot run on GH actions
         return 
 
-    if model in flame_models:
+    if model in FLAME_MODELS:
         try:
             from flame import DecaReconModel
         except ImportError:

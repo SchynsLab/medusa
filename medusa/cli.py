@@ -15,12 +15,13 @@ For more information, check out the
 """
 
 import click
+from pathlib import Path
 
 from .io import load_h5
 from .recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
-from .preproc.filter import filter
+from .preproc.filter import bw_filter
 from .preproc.epoch import epoch
 
 # fmt: off
@@ -30,15 +31,15 @@ from .preproc.epoch import epoch
               help='Path to events-file (a .tsv file)')
 @click.option("-o", "--out", default=None, type=click.Path(),
               help="File to save output to (shouldn't have an extension)")
-@click.option("-r", "--recon-model-name", default="emoca", type=click.Choice(["emoca-dense", "emoca-coarse", "deca-dense", "deca-coarse", "mediapipe", "fan"]),
+@click.option("-r", "--recon-model", default="emoca", type=click.Choice(["emoca-dense", "emoca-coarse", "deca-dense", "deca-coarse", "mediapipe", "fan"]),
               help='Name of the reconstruction model')
 @click.option("--device", default="cuda", type=click.Choice(["cpu", "cuda"]),
               help="Device to run the reconstruction on (only relevant for FAN/EMOCA")
 @click.option("-n", "--n-frames", default=None, type=click.INT,
               help="Number of frames to reconstruct (5 means 'reconstruct only the 5 first frames)")
-def videorecon_cmd(video_path, events_path, out, recon_model_name, device, n_frames):
+def videorecon_cmd(video_path, events_path, out, recon_model, device, n_frames):
     """ Performs frame-by-frame 3D face reconstruction of a video file."""
-    data = videorecon(video_path, events_path, recon_model_name, device, n_frames)
+    data = videorecon(video_path, events_path, recon_model, device, n_frames)
 
     if out is None:
         out = video_path.replace('.mp4', '')
@@ -105,7 +106,7 @@ def resample_cmd(data_file, out, sampling_freq, kind):
 def filter_cmd(data_file, out, low_pass, high_pass):
     """ Performs temporal filtering of a mesh time series. """
 
-    data = filter(data_file, low_pass, high_pass)
+    data = bw_filter(data_file, low_pass, high_pass)
 
     if out is None:
         out = data_file.replace('.h5', '')
@@ -162,25 +163,27 @@ def epoch_cmd(data_file, out, start, end, period, baseline_correct, add_back_gra
               help="Render wireframe instead of mesh")
 @click.option("--alpha", default=None, type=click.FLOAT,
               help="Alpha (transparency) of face")
-@click.option("--scaling", default=None, type=click.FLOAT,
+@click.option("--scale", default=None, type=click.FLOAT,
               help="Scale factor of rendered video (e.g., 0.25 = 25% of original size")
-@click.option("--render-format", default="gif",
-              help="Output format of rendered video (gif or mp4)")
-def videorender_cmd(data_file, out, video, n_frames, no_smooth, wireframe, alpha, scaling, render_format):
+def videorender_cmd(data_file, out, video, n_frames, no_smooth, wireframe, alpha, scale):
     """ Renders the reconstructed mesh time series as a video (gif or mp4)."""
 
     data = load_h5(data_file)
 
     if out is None:
-        out = data_file.replace('.h5', '')
+        out = data_file.replace('.h5', '.mp4')
+
+    out = Path(out)
+    if out.suffix not in ['.mp4', '.gif']:
+        raise ValueError("Output format should be '.mp4' or '.gif'!")
 
     smooth = not no_smooth
     data.render_video(
-        out + f'.{render_format}',
+        out,
         video=video,
         smooth=smooth,
         wireframe=wireframe,
-        scaling=scaling,
+        scale=scale,
         n_frames=n_frames,
         alpha=alpha,
     )

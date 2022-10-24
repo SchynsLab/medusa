@@ -50,8 +50,7 @@ class VideoData:
         self.path = Path(path)
         self.events = events if events is None else Path(events) 
         self.scaling = scaling
-        self.logger = get_logger()
-        self.logger.setLevel(loglevel)
+        self.logger = get_logger(loglevel)
         self._validate()
         self._extract_metadata()
 
@@ -65,31 +64,21 @@ class VideoData:
 
         sfx = self.path.suffix
         if sfx not in [".mp4", ".gif", ".avi"]:
+            # Other formats might actually work, but haven't been tested yet
             raise ValueError(f"Only mp4/gif videos are supported, not {sfx[1:]}!")
 
     def _extract_metadata(self):
         """Extracts some metadata from the video needed for preprocessing
         functionality later on."""
 
-        # reader = imageio.get_reader(self.path)
-        # metadata = reader.get_meta_data()
-        # if 'fps' in metadata:
-        #     self.sf = metadata['fps']
-        # else:
-        #     self.logger.warn(f"Unknown FPS for {self.path}!")
-        #     self.sf = 30.
-
-        # Use cv2 to get metadata (imageio doesn't work for gifs)
         cap = cv2.VideoCapture(str(self.path))
         w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.sf = float(cap.get(cv2.CAP_PROP_FPS))
-        self.img_size = (w, h)#reader.get_meta_data()["size"]
-
+        self.img_size = (w, h)
         self.n_img = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
         cap.release()
-        #reader.close()
 
     def _find_events(self):
         """If not already supplied upon initialization of the Video object,
@@ -126,10 +115,7 @@ class VideoData:
             end = self.n_img * (1 / self.sf)
             frame_t = np.linspace(0, end, endpoint=False, num=self.n_img)
 
-        self.logger.info(
-            f"Estimated sampling frequency of video: {self.sf:.2f})"
-        )
-
+        self.logger.info(f"Estimated sampling frequency of video: {self.sf:.2f})")
         self.frame_t = frame_t
 
     def _rescale(self, img):
@@ -239,8 +225,8 @@ def load_h5(path):
 
     Returns
     -------
-    data : ``data.BaseData`` subclass object
-        An object with a class derived from data.BaseData
+    data : ``data.BaseData`` subclass
+        An object with a class derived from ``data.BaseData``
         (like ``MediapipeData``, or ``FlameData``)
         
     Examples
@@ -252,13 +238,11 @@ def load_h5(path):
     >>> data = load_h5(path)    
     """
 
-    from .core4d import Flame4D, Mediapipe4D, Fan4D
+    from .core import MODEL2CLS
 
     # peek at recon model
     with h5py.File(path, "r") as f_in:
-        rmn = f_in.attrs["recon_model_name"]
+        rmn = f_in.attrs["recon_model"]
 
-    MODEL2CLS = {"emoca-coarse": Flame4D, "emoca-dense": Flame4D, "deca-coarse": Flame4D,
-                 "deca-dense": Flame4D, "mediapipe": Mediapipe4D, "fan": Fan4D}
     data = MODEL2CLS[rmn].load(path)
     return data

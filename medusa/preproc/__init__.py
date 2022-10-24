@@ -15,5 +15,5 @@ The recommended order in which to run the preprocessing functions are:
 
 from .align import align
 from .epoch import epoch
-from .filter import filter
+from .filter import bw_filter
 from .resample import resample

@@ -1,4 +1,4 @@
-class BaseModel:
+class BaseReconModel:
     
     def __init__(self):
         pass

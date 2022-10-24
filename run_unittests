@@ -1,1 +1,1 @@
-pytest --disable-warnings tests/
+pytest --disable-warnings --exitfirst tests/

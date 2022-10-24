@@ -2,10 +2,7 @@
 templates used by the different models. 
 """
 
-import yaml
-import pickle
 import trimesh
-import warnings
 from pathlib import Path
 
 
@@ -37,8 +34,16 @@ def get_template_mediapipe():
     return template
 
 
-def get_template_flame():
-    """ Returns the template (vertices and triangles) of the canonical Flame model. 
+def get_template_flame(dense=False):
+    """ Returns the template (vertices and triangles) of the canonical Flame model, in
+    either its dense or coarse version. Note that this does exactly the same as the
+    ``get_flame_template()`` function from the ``flame.data`` module.
+    
+    Parameters
+    ----------
+    dense : bool
+        Whether to load in the dense version of the template (``True``) or the coarse
+        version (``False``)
     
     Raises
     ------
@@ -52,34 +57,26 @@ def get_template_flame():
         
     Examples
     --------
-    Get the vertices and faces (triangles) of the standard Flame topology (template):
+    Get the vertices and faces (triangles) of the standard Flame topology (template) in
+    either the coarse version (``dense=False``) or dense version (``dense=True``)
 
-    >>> template = get_template_mediapipe()  # doctest: +SKIP
+    >>> template = get_template_flame(dense=False)  # doctest: +SKIP
     >>> template['v'].shape  # doctest: +SKIP
-    (468, 3)
+    (5023, 3)
     >>> template['f'].shape  # doctest: +SKIP
-    (898, 3)
+    (9976, 3)
+    >>> template = get_template_flame(dense=True)  # doctest: +SKIP
+    >>> template['v'].shape  # doctest: +SKIP
+    (59315, 3)
+    >>> template['f'].shape  # doctest: +SKIP
+    (117380, 3)
     """
 
     try:
-        import flame
+        from flame.data import get_template_flame
     except ImportError:
         raise ValueError("Package 'flame' is not installed; To install 'flame', check" 
                          "https://github.com/medusa-4D/flame")
 
-    cfg_file = Path(flame.__file__).parent / 'data/config.yaml'
-    with open(cfg_file, "r") as f_in:
-        cfg = yaml.safe_load(f_in)
-    
-    flame_path = Path(cfg['flame_path'])
-    if not flame_path.is_file():
-        raise ValueError(f"Something wrong with 'flame' config file {cfg_file}; "
-                         f"Could not find {flame_path}!")
-        
-    with open(flame_path, 'rb') as f_in:
-        with warnings.catch_warnings():
-            warnings.filterwarnings("ignore", category=DeprecationWarning)
-            data = pickle.load(f_in, encoding='latin1')
-
-    template = {'v': data['v_template'], 'f': data['f']}
-    return template
+    template = get_template_flame(dense)
+    return template 

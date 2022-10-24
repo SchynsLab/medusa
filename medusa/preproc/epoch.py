@@ -132,7 +132,7 @@ def epoch(
     v = epochs[..., :-12].reshape((N, T, data.v.shape[1], 3))
     params = epochs[..., -12:]
     epochs_arr = EpochsArray(v=v, params=params, frame_t=frame_t, events=data.events,
-                             recon_model_name=data.recon_model_name)
+                             recon_model=data.recon_model)
     
     data.v = v.mean(axis=0)
     data.render_video('test_av.gif', scaling=0.5, smooth=False, overlay=None)

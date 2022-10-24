@@ -81,7 +81,7 @@ def resample(data, sampling_freq=None, kind="pchip"):
     data.v = interpolator(new_ft).astype(np.float32)
 
     # Also interpolate motion
-    motion = data.mats2params()
+    motion = data.decompose_mats()
 
     if kind == "pchip":
         interpolator = PchipInterpolator(ft, motion)
@@ -89,7 +89,7 @@ def resample(data, sampling_freq=None, kind="pchip"):
         interpolator = interp1d(ft, motion, axis=0, kind=kind)
 
     motion = interpolator(new_ft).astype(np.float32)
-    data.params2mats(motion)  # updates .mat
+    data.compose_mats(motion)  # updates .mat
 
     data.frame_t = new_ft  # save new frame times!
 

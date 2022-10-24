@@ -8,18 +8,14 @@ preprocess and analyze the resulting 4D reconstructions.
 
 ## When (not) to use Medusa?
 
-Medusa allows you to reconstruct, preprocess, and analyze frame-by-frame time series
-of 3D faces from videos. The data that Medusa outputs is basically a set of 3D points
-("vertices"), which together represent face shape, that move over time. Medusa then
-processes these points in a similar way that fMRI or EEG/MEG software processes voxels
-or sensors, but instead of representing "brain activity", it represents face movement!
-Medusa makes relatively few assumptions as to how you want to (further) analyze the
-face and just returns the raw set of vertices. For some ideas on how to analyze such data,
-check out the [analysis tutorials](tutorials/analysis).
-
-If you just want to perform face detection, pose estimation, or want to extract
-high-level properties such as action units or categorical emotions, check out the
-awesome [Py-Feat](https://py-feat.org/) Python package.
+More specifically, Medusa allows you to reconstruct, preprocess, and analyze
+frame-by-frame time series of 3D faces from videos. The data that Medusa outputs is
+basically a set of 3D points ("vertices"), which together represent face shape,
+that move over time. Medusa then processes these points in a similar way that fMRI or
+EEG/MEG software processes voxels or sensors, but instead of representing "brain activity",
+it represents face movement! Medusa makes relatively few assumptions as to how you want
+to (further) analyze the face and just returns the raw set of vertices. For some ideas on
+how to analyze such data, check out the [analysis tutorials](tutorials/analysis).
 
 ## Documentation overview
 

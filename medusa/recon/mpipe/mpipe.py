@@ -11,10 +11,10 @@ from pathlib import Path
 from trimesh.exchange.obj import load_obj
 
 from ._transforms import PCF, image2world
-from ..base import BaseModel
+from ..base import BaseReconModel
 
 
-class Mediapipe(BaseModel):
+class Mediapipe(BaseReconModel):
     """ A Mediapipe face mesh reconstruction model.
 
     Parameters
@@ -34,12 +34,11 @@ class Mediapipe(BaseModel):
     """ 
     
     def __init__(self, static_image_mode=False, max_num_faces=1, refine_landmarks=True,
-                 min_detection_confidence=0.9, min_tracking_confidence=0.1):
+                 min_detection_confidence=0.5, min_tracking_confidence=0.1):
         """ Initializes a Mediapipe recon model. """
 
         # Importing here speeds up CLI
         import mediapipe as mp
-
         self.model = mp.solutions.face_mesh.FaceMesh(
             static_image_mode=static_image_mode,
             max_num_faces=max_num_faces,
@@ -47,6 +46,7 @@ class Mediapipe(BaseModel):
             min_detection_confidence=min_detection_confidence,
             min_tracking_confidence=min_tracking_confidence
         )
+
         self.model.__enter__()  # enter context manually
         self._pcf = None  # initialized later
         self._load_reference()  # sets self.{v,f}_world_ref
@@ -101,7 +101,8 @@ class Mediapipe(BaseModel):
         results = self.model.process(image)
 
         if not results.multi_face_landmarks:
-            raise ValueError("Could not reconstruct face! Try decreasing `min_detection_confidence`")
+            return None
+            #raise ValueError("Could not reconstruct face! Try decreasing `min_detection_confidence`")
         elif len(results.multi_face_landmarks) > 1:
             raise ValueError("Found more than 1 face!")
         else:

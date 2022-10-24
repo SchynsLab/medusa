@@ -85,14 +85,14 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     # vidx represents the index of the vertices that we'll use for
     # alignment (using *all* vertices is not a good idea, as it may
     # inadvertently try to align non-rigid motion)
-    if data.recon_model_name == "fan":
+    if data.recon_model == "fan":
         v_idx = range(17)  # contour only
-    elif data.recon_model_name == "mediapipe":
+    elif data.recon_model == "mediapipe":
         # Technically not necessary anymore, because we have the model parameters
         v_idx = [389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377,  # contour
                  152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162,  # contour
                  94, 19, 1, 4, 5, 195, 197, 6]  # nose ridge
-    elif data.recon_model_name in ["emoca-coarse", "deca-dense"]:
+    elif data.recon_model in ["emoca-coarse", "deca-dense"]:
         v_idx = np.load(Path(__file__).parents[1] / 'data/scalp_flame.npy') 
     #else:
     #    raise ValueError("Unknown reconstruction model!")
@@ -194,3 +194,48 @@ def _icp(source, target, scale=True, ignore_shear=True):
     return regmat
 
     
+import numpy as np
+
+def rigid_transform_3D(A, B):
+    # From https://github.com/nghiaho12/rigid_transform_3D
+    assert A.shape == B.shape
+
+    num_rows, num_cols = A.shape
+    if num_rows != 3:
+        raise Exception(f"matrix A is not 3xN, it is {num_rows}x{num_cols}")
+
+    num_rows, num_cols = B.shape
+    if num_rows != 3:
+        raise Exception(f"matrix B is not 3xN, it is {num_rows}x{num_cols}")
+
+    # find mean column wise
+    centroid_A = np.mean(A, axis=1)
+    centroid_B = np.mean(B, axis=1)
+
+    # ensure centroids are 3x1
+    centroid_A = centroid_A.reshape(-1, 1)
+    centroid_B = centroid_B.reshape(-1, 1)
+
+    # subtract mean
+    Am = A - centroid_A
+    Bm = B - centroid_B
+
+    H = Am @ np.transpose(Bm)
+
+    # sanity check
+    #if linalg.matrix_rank(H) < 3:
+    #    raise ValueError("rank of H = {}, expecting 3".format(linalg.matrix_rank(H)))
+
+    # find rotation
+    U, S, Vt = np.linalg.svd(H)
+    R = Vt.T @ U.T
+
+    # special reflection case
+    if np.linalg.det(R) < 0:
+        print("det(R) < R, reflection detected!, correcting for it ...")
+        Vt[2,:] *= -1
+        R = Vt.T @ U.T
+
+    t = -R @ centroid_A + centroid_B
+
+    return R, t

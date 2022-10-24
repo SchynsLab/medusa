@@ -1,2 +1,2 @@
-pytest --disable-warnings --doctest-modules medusa/
+pytest --disable-warnings --doctest-modules --exitfirst medusa/
 rm example_vid_recon.mp4 example_vid_recon.gif

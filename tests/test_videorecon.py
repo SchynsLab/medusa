@@ -28,4 +28,4 @@ def test_videorecon(model, n_frames):
             return
 
     vid = get_example_video(as_path=False)
-    data = videorecon(vid, recon_model_name=model, device=device, n_frames=n_frames)
+    data = videorecon(vid, recon_model=model, device=device, n_frames=n_frames)

@@ -5,7 +5,7 @@ from scipy.signal import butter, sosfilt
 from ..io import load_h5
 
 
-def filter(data, low_pass, high_pass):
+def bw_filter(data, low_pass, high_pass):
     """Applies a bandpass filter the vertex coordinate time series.
     Implementation based on
     `this StackOverflow post` <https://stackoverflow.com/questions/12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter>`_.
@@ -31,7 +31,7 @@ def filter(data, low_pass, high_pass):
     
     >>> from medusa.data import get_example_h5
     >>> data = get_example_h5(load=True, model='mediapipe')
-    >>> data = filter(data, low_pass=4., high_pass=0.005)
+    >>> data = bw_filter(data, low_pass=4., high_pass=0.005)
     """
 
     if isinstance(data, (str, Path)):
@@ -44,19 +44,66 @@ def filter(data, low_pass, high_pass):
     high = low_pass / nyq
     sos = butter(5, [low, high], analog=False, btype="band", output="sos")
 
-    to_filter = [data.v, data.mats2params().to_numpy()]
+    to_filter = [data.v, data.decompose_mats(to_df=False)]
     for i in range(len(to_filter)):
         d = to_filter[i]
         d_ = d.reshape((d.shape[0], -1))
         mu = d_.mean(axis=0)
         d_ = d_ - mu
-
         d_ = sosfilt(sos, d_, axis=0)
 
         # Undo normalization to get data back on original scale
         to_filter[i] = (d_ + mu).reshape(d.shape).astype(np.float32)
 
     data.v = to_filter[0]
-    data.params2mats(to_filter[1])
+    data.compose_mats(to_filter[1])
 
     return data
+
+
+class OneEuroFilter:
+    """ Based on https://github.com/jaantollander/OneEuroFilter. """
+    def __init__(self, t0, x0, dx0=0.0, min_cutoff=1.0, beta=0.0,
+                 d_cutoff=1.0):
+        """Initialize the one euro filter."""
+        # The parameters.
+        self.min_cutoff = float(min_cutoff)
+        self.beta = float(beta)
+        self.d_cutoff = float(d_cutoff)
+
+        # Previous values.
+        self.x_prev = x0.astype(np.float64)
+        self.dx_prev = float(dx0)
+        self.t_prev = float(t0)
+
+    @staticmethod
+    def smoothing_factor(t_e, cutoff):
+        r = 2 * np.pi * cutoff * t_e
+        return r / (r + 1)
+
+    @staticmethod
+    def exponential_smoothing(a, x, x_prev):
+        return a * x + (1 - a) * x_prev
+
+    def __call__(self, t, x):
+        """Compute the filtered signal."""
+        t_e = t - self.t_prev
+
+        # The filtered derivative of the signal.
+        a_d = self.smoothing_factor(t_e, self.d_cutoff)
+        dx = (x - self.x_prev) / t_e
+        if np.any(np.isnan(dx)):
+            dx = np.zeros_like(dx)
+        dx_hat = self.exponential_smoothing(a_d, dx, self.dx_prev)
+
+        # The filtered signal.
+        cutoff = self.min_cutoff + self.beta * abs(dx_hat)
+        a = self.smoothing_factor(t_e, cutoff)
+        x_hat = self.exponential_smoothing(a, x, self.x_prev)
+
+        # Memorize the previous values.
+        self.x_prev = x_hat
+        self.dx_prev = dx_hat
+        self.t_prev = t
+
+        return x_hat

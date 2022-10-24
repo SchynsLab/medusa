@@ -16,12 +16,12 @@ from pathlib import Path
 from skimage.io import imread
 
 from ..utils import get_logger
-from .base import BaseModel
+from .base import BaseReconModel
 
 logger = get_logger()
 
 
-class FAN(BaseModel):
+class FAN(BaseReconModel):
     """ A wrapper around the FAN-3D landmark prediction model.
     
     Parameters
