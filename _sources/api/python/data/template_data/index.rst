@@ -31,9 +31,15 @@ Module Contents
    (898, 3)
 
 
-.. py:function:: get_template_flame()
+.. py:function:: get_template_flame(dense=False)
 
-   Returns the template (vertices and triangles) of the canonical Flame model.
+   Returns the template (vertices and triangles) of the canonical Flame model, in
+   either its dense or coarse version. Note that this does exactly the same as the
+   ``get_flame_template()`` function from the ``flame.data`` module.
+
+   :param dense: Whether to load in the dense version of the template (``True``) or the coarse
+                 version (``False``)
+   :type dense: bool
 
    :raises ValueError: If the 'flame' package is not installed and/or the Flame file could not be found
 
@@ -42,12 +48,18 @@ Module Contents
 
    .. rubric:: Examples
 
-   Get the vertices and faces (triangles) of the standard Flame topology (template):
+   Get the vertices and faces (triangles) of the standard Flame topology (template) in
+   either the coarse version (``dense=False``) or dense version (``dense=True``)
 
-   >>> template = get_template_mediapipe()  # doctest: +SKIP
+   >>> template = get_template_flame(dense=False)  # doctest: +SKIP
    >>> template['v'].shape  # doctest: +SKIP
-   (468, 3)
+   (5023, 3)
    >>> template['f'].shape  # doctest: +SKIP
-   (898, 3)
+   (9976, 3)
+   >>> template = get_template_flame(dense=True)  # doctest: +SKIP
+   >>> template['v'].shape  # doctest: +SKIP
+   (59315, 3)
+   >>> template['f'].shape  # doctest: +SKIP
+   (117380, 3)
 
 

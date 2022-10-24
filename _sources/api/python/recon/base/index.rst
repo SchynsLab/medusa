@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:class:: BaseModel
+.. py:class:: BaseReconModel
 
    .. py:method:: close()
 

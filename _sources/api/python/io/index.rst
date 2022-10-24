@@ -99,9 +99,9 @@ Module Contents
    :param path: Path to an HDF5 file
    :type path: str
 
-   :returns: **data** -- An object with a class derived from data.BaseData
+   :returns: **data** -- An object with a class derived from ``data.BaseData``
              (like ``MediapipeData``, or ``FlameData``)
-   :rtype: ``data.BaseData`` subclass object
+   :rtype: ``data.BaseData`` subclass
 
    .. rubric:: Examples
 

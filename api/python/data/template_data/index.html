@@ -200,19 +200,10 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../../core3d/index.html">
+    <a class="reference internal" href="../../core/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.core3d
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../core4d/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.core4d
+       medusa.core
       </span>
      </code>
     </a>
@@ -728,26 +719,38 @@ templates used by the different models.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.data.template_data.get_template_flame">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.template_data.</span></span><span class="sig-name descname"><span class="pre">get_template_flame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.template_data.get_template_flame" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns the template (vertices and triangles) of the canonical Flame model.</p>
+<span class="sig-prename descclassname"><span class="pre">medusa.data.template_data.</span></span><span class="sig-name descname"><span class="pre">get_template_flame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dense</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.template_data.get_template_flame" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the template (vertices and triangles) of the canonical Flame model, in
+either its dense or coarse version. Note that this does exactly the same as the
+<code class="docutils literal notranslate"><span class="pre">get_flame_template()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">flame.data</span></code> module.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If the ‘flame’ package is not installed and/or the Flame file could not be found</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dense</strong> (<em>bool</em>) – Whether to load in the dense version of the template (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or the coarse
+version (<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>template</strong> – Dictionary with vertices (“v”) and faces (“f”)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the ‘flame’ package is not installed and/or the Flame file could not be found</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>template</strong> – Dictionary with vertices (“v”) and faces (“f”)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Get the vertices and faces (triangles) of the standard Flame topology (template):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">get_template_mediapipe</span><span class="p">()</span>  
+<p>Get the vertices and faces (triangles) of the standard Flame topology (template) in
+either the coarse version (<code class="docutils literal notranslate"><span class="pre">dense=False</span></code>) or dense version (<code class="docutils literal notranslate"><span class="pre">dense=True</span></code>)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">get_template_flame</span><span class="p">(</span><span class="n">dense</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  
-<span class="go">(468, 3)</span>
+<span class="go">(5023, 3)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  
-<span class="go">(898, 3)</span>
+<span class="go">(9976, 3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">get_template_flame</span><span class="p">(</span><span class="n">dense</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  
+<span class="go">(59315, 3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  
+<span class="go">(117380, 3)</span>
 </pre></div>
 </div>
 </dd></dl>

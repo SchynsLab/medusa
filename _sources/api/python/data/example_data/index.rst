@@ -78,7 +78,7 @@ Module Contents
 
    # Get hdf5 file already loaded in memory
    >>> data = get_example_h5(load=True, model='mediapipe')
-   >>> data.recon_model_name
+   >>> data.recon_model
    'mediapipe'
    >>> data.v.shape  # check out reconstructed vertices
    (232, 468, 3)

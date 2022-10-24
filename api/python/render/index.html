@@ -200,19 +200,10 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../core3d/index.html">
+    <a class="reference internal" href="../core/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.core3d
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../core4d/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.core4d
+       medusa.core
       </span>
      </code>
     </a>
@@ -735,7 +726,7 @@ excellent <a class="reference external" href="https://pyrender.readthedocs.io">p
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.render.Renderer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.render.</span></span><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">viewport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orthographic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.render.Renderer" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.render.</span></span><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">viewport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orthographic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wireframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focal_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.render.Renderer" title="Permalink to this definition">#</a></dt>
 <dd><p>A high-level wrapper around a pyrender-based renderer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -743,17 +734,15 @@ excellent <a class="reference external" href="https://pyrender.readthedocs.io">p
 <li><p><strong>viewport</strong> (<em>tuple</em><em>[</em><em>int</em><em>]</em>) – Desired output image size (width, height), in pixels; should match
 the original image (before cropping) that was reconstructed</p></li>
 <li><p><strong>camera_type</strong> (<em>str</em>) – Either ‘orthographic’ (for Flame-based reconstructions) or
-‘intrinsic’ (for mediapipe reconstruction)</p></li>
+‘intrinsic’ (for mediapipe reconstruction, i.e., a perspective camera)</p></li>
 <li><p><strong>smooth</strong> (<em>bool</em>) – Whether to render a smooth mesh (by normal interpolation) or not</p></li>
 <li><p><strong>wireframe</strong> (<em>bool</em>) – Whether to render a wireframe instead of a surface</p></li>
-<li><p><strong>zoom_out</strong> (<em>int/float</em>) – How much to translate the camera into the positive z direction
-(necessary for Flame-based reconstructions)</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.render.Renderer.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bwr'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.render.Renderer.__call__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bwr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.render.Renderer.__call__" title="Permalink to this definition">#</a></dt>
 <dd><p>Performs the actual rendering.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -762,11 +751,16 @@ the original image (before cropping) that was reconstructed</p></li>
 (X, Y, Z)</p></li>
 <li><p><strong>f</strong> (<em>np.ndarray</em>) – A 2D array with ‘faces’ (triangles) of shape F (nr of faces) x 3
 (nr of vertices); should be integers</p></li>
+<li><p><strong>overlay</strong> (<em>np.ndarray</em>) – A 1D array with overlay values (numpy floats between 0 and 1), one for each
+vertex or face</p></li>
+<li><p><strong>cmap_name</strong> (<em>str</em>) – Name of (matplotlib) colormap; only relevant if <code class="docutils literal notranslate"><span class="pre">overlay</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>is_colors</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, then <code class="docutils literal notranslate"><span class="pre">overlay</span></code> is a V (of F) x 4 (RGBA) array; if <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+<code class="docutils literal notranslate"><span class="pre">overlay</span></code> is assumed to be a 1D array with floats betwee 0 and 1</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img</strong> – A 3D array (with np.uint8 integers) of shape <cite>viewport[0]</cite> x
-<cite>viewport[1]</cite> x 3 (RGB)</p>
+<dd class="field-even"><p><strong>img</strong> – A 3D array (with np.uint8 integers) of shape <code class="docutils literal notranslate"><span class="pre">viewport[0]</span></code> x
+<code class="docutils literal notranslate"><span class="pre">viewport[1]</span></code> x 3 (RGB)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.ndarray</p>

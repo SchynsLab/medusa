@@ -60,3 +60,6 @@ Module Contents
    >>> data = align(data, algorithm='icp', additive_alignment=True)
 
 
+.. py:function:: rigid_transform_3D(A, B)
+
+

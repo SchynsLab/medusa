@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:function:: filter(data, low_pass, high_pass)
+.. py:function:: bw_filter(data, low_pass, high_pass)
 
    Applies a bandpass filter the vertex coordinate time series.
    Implementation based on
@@ -30,6 +30,24 @@ Module Contents
 
    >>> from medusa.data import get_example_h5
    >>> data = get_example_h5(load=True, model='mediapipe')
-   >>> data = filter(data, low_pass=4., high_pass=0.005)
+   >>> data = bw_filter(data, low_pass=4., high_pass=0.005)
+
+
+.. py:class:: OneEuroFilter(t0, x0, dx0=0.0, min_cutoff=1.0, beta=0.0, d_cutoff=1.0)
+
+   Based on https://github.com/jaantollander/OneEuroFilter.
+
+   .. py:method:: smoothing_factor(t_e, cutoff)
+      :staticmethod:
+
+
+   .. py:method:: exponential_smoothing(a, x, x_prev)
+      :staticmethod:
+
+
+   .. py:method:: __call__(t, x)
+
+      Compute the filtered signal.
+
 
 

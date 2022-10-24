@@ -200,19 +200,10 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../core3d/index.html">
+    <a class="reference internal" href="../core/index.html">
      <code class="xref py py-mod docutils literal notranslate">
       <span class="pre">
-       medusa.core3d
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../core4d/index.html">
-     <code class="xref py py-mod docutils literal notranslate">
-      <span class="pre">
-       medusa.core4d
+       medusa.core
       </span>
      </code>
     </a>
@@ -644,6 +635,28 @@ title="Print to PDF"
      get_logger
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.utils.rescale">
+     rescale
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.utils.hide_stdout">
+     hide_stdout
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.utils.hide_stdout.__enter__">
+       __enter__
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.utils.hide_stdout.__exit__">
+       __exit__
+      </a>
+     </li>
+    </ul>
+   </li>
   </ul>
  </li>
 </ul>
@@ -675,6 +688,28 @@ title="Print to PDF"
      get_logger
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.utils.rescale">
+     rescale
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa.utils.hide_stdout">
+     hide_stdout
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.utils.hide_stdout.__enter__">
+       __enter__
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#medusa.utils.hide_stdout.__exit__">
+       __exit__
+      </a>
+     </li>
+    </ul>
+   </li>
   </ul>
  </li>
 </ul>
@@ -693,11 +728,11 @@ title="Print to PDF"
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.utils.get_logger">
-<span class="sig-prename descclassname"><span class="pre">medusa.utils.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INFO'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.utils.get_logger" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.utils.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INFO'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.utils.get_logger" title="Permalink to this definition">#</a></dt>
 <dd><p>Create a Python logger.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>str</em>) – Logging level (“INFO”, “DEBUG”, “WARNING”)</p>
+<dd class="field-odd"><p><strong>level</strong> (<em>str</em>) – Logging level (“INFO”, “DEBUG”, “WARNING”)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>logger</strong> – A Python logger</p>
@@ -711,6 +746,26 @@ title="Print to PDF"
 <span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello!&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="medusa.utils.rescale">
+<span class="sig-prename descclassname"><span class="pre">medusa.utils.</span></span><span class="sig-name descname"><span class="pre">rescale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.utils.rescale" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="medusa.utils.hide_stdout">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.utils.</span></span><span class="sig-name descname"><span class="pre">hide_stdout</span></span><a class="headerlink" href="#medusa.utils.hide_stdout" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="medusa.utils.hide_stdout.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.utils.hide_stdout.__enter__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="medusa.utils.hide_stdout.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.utils.hide_stdout.__exit__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>

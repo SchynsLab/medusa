@@ -29,7 +29,7 @@ Module Contents
 
 .. py:class:: FAN(device='cpu', use_prev_bbox=True, min_detection_threshold=0.5, **kwargs)
 
-   Bases: :py:obj:`medusa.recon.base.BaseModel`
+   Bases: :py:obj:`medusa.recon.base.BaseReconModel`
 
    A wrapper around the FAN-3D landmark prediction model.
 

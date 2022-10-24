@@ -3,11 +3,17 @@
 
 .. py:module:: medusa.epochs
 
+.. autoapi-nested-parse::
+
+   Module with functionality to store epoch data and optionally convert it to an
+   MNE-friendly format.
+
+
 
 Module Contents
 ---------------
 
-.. py:class:: EpochsArray(v, params, frame_t, recon_model_name, events=None)
+.. py:class:: EpochsArray(v, params, frame_t, recon_model, events=None)
 
    Custom EpochsArray, with some extra functionality to interact with
    medusa.

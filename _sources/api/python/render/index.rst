@@ -17,7 +17,7 @@
 Module Contents
 ---------------
 
-.. py:class:: Renderer(viewport, camera_type='orthographic', smooth=True, wireframe=False, cam_mat=None)
+.. py:class:: Renderer(viewport, camera_type='orthographic', smooth=True, wireframe=False, cam_mat=None, focal_length=None)
 
    A high-level wrapper around a pyrender-based renderer.
 
@@ -25,17 +25,14 @@ Module Contents
                     the original image (before cropping) that was reconstructed
    :type viewport: tuple[int]
    :param camera_type: Either 'orthographic' (for Flame-based reconstructions) or
-                       'intrinsic' (for mediapipe reconstruction)
+                       'intrinsic' (for mediapipe reconstruction, i.e., a perspective camera)
    :type camera_type: str
    :param smooth: Whether to render a smooth mesh (by normal interpolation) or not
    :type smooth: bool
    :param wireframe: Whether to render a wireframe instead of a surface
    :type wireframe: bool
-   :param zoom_out: How much to translate the camera into the positive z direction
-                    (necessary for Flame-based reconstructions)
-   :type zoom_out: int/float
 
-   .. py:method:: __call__(v, f, overlay=None, cmap_name='bwr')
+   .. py:method:: __call__(v, f, overlay=None, cmap_name='bwr', is_colors=False)
 
       Performs the actual rendering.
 
@@ -45,9 +42,17 @@ Module Contents
       :param f: A 2D array with 'faces' (triangles) of shape F (nr of faces) x 3
                 (nr of vertices); should be integers
       :type f: np.ndarray
+      :param overlay: A 1D array with overlay values (numpy floats between 0 and 1), one for each
+                      vertex or face
+      :type overlay: np.ndarray
+      :param cmap_name: Name of (matplotlib) colormap; only relevant if ``overlay`` is not ``None``
+      :type cmap_name: str
+      :param is_colors: If ``True``, then ``overlay`` is a V (of F) x 4 (RGBA) array; if ``False``,
+                        ``overlay`` is assumed to be a 1D array with floats betwee 0 and 1
+      :type is_colors: bool
 
-      :returns: **img** -- A 3D array (with np.uint8 integers) of shape `viewport[0]` x
-                `viewport[1]` x 3 (RGB)
+      :returns: **img** -- A 3D array (with np.uint8 integers) of shape ``viewport[0]`` x
+                ``viewport[1]`` x 3 (RGB)
       :rtype: np.ndarray
 
 

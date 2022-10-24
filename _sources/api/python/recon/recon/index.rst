@@ -7,7 +7,7 @@
 Module Contents
 ---------------
 
-.. py:function:: videorecon(video_path, events_path=None, recon_model_name='mediapipe', device='cuda', n_frames=None, loglevel='INFO')
+.. py:function:: videorecon(video_path, events_path=None, recon_model='mediapipe', device='cuda', n_frames=None, loglevel='INFO')
 
    Reconstruction of all frames of a video.
 
@@ -18,9 +18,9 @@ Module Contents
                        columns 'onset' (in seconds) and 'trial_type'; optional
                        columns are 'duration' and 'modulation'
    :type events_path: str, Path
-   :param recon_model_name: Name of reconstruction model, options are: 'emoca', 'mediapipe',
-                            and 'fan'
-   :type recon_model_name: str
+   :param recon_model: Name of reconstruction model, options are: 'emoca', 'mediapipe',
+                       and 'fan'
+   :type recon_model: str
    :param device: Either "cuda" (for GPU) or "cpu" (ignored when using mediapipe)
    :type device: str
    :param n_frames: If not `None` (default), only reconstruct and render the first `n_frames`
@@ -39,11 +39,11 @@ Module Contents
 
    >>> from medusa.data import get_example_video
    >>> vid = get_example_video()
-   >>> data = videorecon(vid, recon_model_name='mediapipe')
+   >>> data = videorecon(vid, recon_model='mediapipe')
 
    Reconstruct a video using FAN, but only the first 50 frames of the video:
 
-   >>> data = videorecon(vid, recon_model_name='fan', n_frames=50, device='cpu')
+   >>> data = videorecon(vid, recon_model='fan', n_frames=50, device='cpu')
    >>> data.v.shape
    (50, 68, 3)
 
