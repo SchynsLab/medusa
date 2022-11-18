@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-  
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -22,10 +21,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install GLU
       run: sudo apt install -y freeglut3-dev
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        pip install .
+    - name: Install poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: ${{ matrix.poetry-version }}
+    - name: Install package
+      run: poetry install
     # Build the book
     - name: Build the book
       run: |
