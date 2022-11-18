@@ -1,23 +1,23 @@
 """ Module with functionality (mostly) for working with video data. 
-The `VideoData` class allows for easy looping over frames of a video file,
+The ``VideoLoader`` class allows for easy looping over frames of a video file,
 which is used in the reconstruction process (e.g., in the ``videorecon`` function).
 """
 
 import cv2
 import h5py
-import logging
-import imageio
+import torch
 import numpy as np
-import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
+from trimesh import Trimesh
 from datetime import datetime
-from skimage.transform import rescale
+from torchvision.transforms import Resize
+from torch.utils.data import Dataset, DataLoader
 
-from .utils import get_logger
+from .log import get_logger
 
 
-class VideoData:
+class VideoLoader(DataLoader):
     """ " Contains (meta)data and functionality associated
     with video files (mp4 files only currently).
 
@@ -25,193 +25,189 @@ class VideoData:
     ----------
     path : str, Path
         Path to mp4 file
-    events : str, Path
-        Path to a TSV file with event information (optional);
-        should contain at least the columns 'onset' and 'trial_type'
-    scaling : float
-        Scaling factor of video frames (e.g., 0.25 means scale to 25% of original)
+    rescale_factor : float
+        Rescale factor of video frames (e.g., 0.25 means scale each dimension to 25% of original);
+        if ``None`` (default), the image is not resized
+    n_preload : int
+        Number of video frames to preload before batching
     loglevel : str  
         Logging level (e.g., 'INFO' or 'WARNING')
 
-    Attributes
-    ----------
-    sf : int
-        Sampling frequency (= frames per second, fps) of video
-    n_img : int
-        Number of images (frames) in the video
-    img_size : tuple
-        Width and height (in pixels) of the video
-    frame_t : np.ndarray
-        An array of length `self.n_img` with the onset of each
-        frame of the video
+    Raises
+    ------
+    ValueError
+        If `n_preload` is not a multiple of `batch_size`
     """
 
-    def __init__(self, path, events=None, find_files=True, scaling=None, loglevel='INFO'):
-        self.path = Path(path)
-        self.events = events if events is None else Path(events) 
-        self.scaling = scaling
+    def __init__(self, path, rescale_factor=None, n_preload=512, device='cuda', batch_size=32,
+                 loglevel='INFO', **kwargs):
+
         self.logger = get_logger(loglevel)
-        self._validate()
-        self._extract_metadata()
+        self._validate(path, n_preload, batch_size)
+        dataset = VideoDataset(path, rescale_factor, n_preload, device)
 
-        if find_files:
-            self._find_events()
-            self._find_frame_t()
-
-    def _validate(self):
-        if not self.path.is_file():
-            raise ValueError(f"File {self.path} does not exist!")
-
-        sfx = self.path.suffix
-        if sfx not in [".mp4", ".gif", ".avi"]:
-            # Other formats might actually work, but haven't been tested yet
-            raise ValueError(f"Only mp4/gif videos are supported, not {sfx[1:]}!")
-
-    def _extract_metadata(self):
-        """Extracts some metadata from the video needed for preprocessing
-        functionality later on."""
-
-        cap = cv2.VideoCapture(str(self.path))
-        w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        self.sf = float(cap.get(cv2.CAP_PROP_FPS))
-        self.img_size = (w, h)
-        self.n_img = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-
-        cap.release()
-
-    def _find_events(self):
-        """If not already supplied upon initialization of the Video object,
-        this method trieds to find an event file associated with the video,
-        which is assumed to have the same name as the video but ending in
-        "_events.tsv" instead of ".mp4". If it's not found, it is simply
-        ignored."""
-
-        if self.events is None:
-            # check for associated TSV path
-            self.events = Path(str(self.path).replace(self.path.suffix, "_events.tsv"))
-
-        if self.events.is_file():
-            self.events = pd.read_csv(self.events, sep="\t")
-        else:
-            self.events = None
-
-    def _find_frame_t(self):
-        """Looks for a "frame times" file associated with the video,
-        which is assumed to have the same name as the video but ending
-        in "_frametimes.tsv" instead of ".mp4". If it's not found,
-        the frame times are assumed to be constant and a multiple of
-        the fps (frames per second)."""
-
-        # Check if frame times (ft) and events (ev) files exist
-        ft_path = Path(str(self.path).replace(self.path.suffix, "_frametimes.tsv"))
-        if ft_path.is_file():
-            # We're going to use the average number of frames
-            # per second as FPS (and equivalently `sf`, sampling freq)
-            frame_t = pd.read_csv(ft_path, sep="\t")["t"].to_numpy()
-            sampling_period = np.diff(frame_t)
-            self.sf = 1 / sampling_period.mean()
-        else:
-            end = self.n_img * (1 / self.sf)
-            frame_t = np.linspace(0, end, endpoint=False, num=self.n_img)
-
-        self.logger.info(f"Estimated sampling frequency of video: {self.sf:.2f})")
-        self.frame_t = frame_t
-
-    def _rescale(self, img):
-        """Rescales an image with a scaling factor `scaling`."""
-        img = rescale(
-            img, self.scaling, preserve_range=True, anti_aliasing=True, channel_axis=2
-        )
-        img = img.round().astype(np.uint8)
-        return img
-
-    def loop(self, return_index=True):
-        """Loops across frames of a video.
-
-        Parameters
-        ----------
-        return_index : bool
-            Whether to return the frame index and the image; if ``False``,
-            only the image is returned
-
-        Yields
-        ------
-        img : np.ndarray
-            Numpy array (dtype: ``np.uint8``) of shape width x height x 3 (RGB)
-        idx : int
-            Optionally (when ``return_index`` is set to ``True``), returns the index of
-            the currently looped frame
-        """
-        reader = imageio.get_reader(self.path, mode='I')
-        desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
-        self.stop_loop_ = False
-
-        if self.logger.level <= logging.INFO:
-            iter_ = tqdm(reader, desc=f"{desc} Recon frames", total=self.n_img)
-        else:
-            iter_ = reader
-
-        i = 0
-        for img in iter_:
-            
-            if img.ndim == 2:
-                # If we have grayscale data, convert to RGB
-                if i == 0:
-                    # Only log the first time to avoid clutter
-                    self.logger.warn("Data seems grayscale; converting to RGB")
-                    img = cv2.cvtColor(img ,cv2.COLOR_GRAY2RGB)
-            elif img.ndim == 3 and img.shape[2] == 4:
-                # If we have an RGBA image, just trim off 4th dim
-                img = img[..., :3]
-            else:
-                if img.ndim == 3 and img.shape[2] != 3:
-                    self.logger.error(f"Data has the wrong shape {img.shape}, probably" 
-                                       "going to crash!")
-           
-            if self.stop_loop_:
-                break
-
-            if self.scaling is not None:
-                img = self._rescale(img)
-            
-            i += 1
-            if return_index:
-                idx = i - 1
-                yield idx, img
-            else:
-                yield img
-
-        reader.close()
-
-        if hasattr(self, "writer"):
-            self.writer.close()
-
-    def stop_loop(self):
-        """Stops the loop over frames (in self.loop)."""
-        self.stop_loop_ = True
-
-    def create_writer(self, path, idf="crop", ext="gif"):
-        """Creates a imageio writer object, which can for example
-        be used to save crop parameters on top of each frame of
-        a video."""
-        self.writer = imageio.get_writer(path + f"_{idf}.{ext}", mode="I", fps=self.sf)
-
-    def write(self, img):
-        """Adds image to writer."""
-        self.writer.append_data(img)
+        super().__init__(dataset, batch_size, num_workers=0, **kwargs)
+        self._iterator = self._create_iterator()
+        self._metadata = self._extract_metadata()
 
     def get_metadata(self):
         """Returns all (meta)data needed for initialization
         of a Data object."""
 
+        return self._metadata
+    
+    def close(self):
+        """ Closes the opencv videoloader in the underlying pytorch Dataset. """
+        self.dataset.close()
+
+    def _validate(self, path, n_preload, batch_size):
+        """ Validates some of the init arguments. """
+
+        if not isinstance(path, Path):
+            path = Path(path)
+
+        if not path.is_file():
+            raise ValueError(f"File {path} does not exist!")
+
+        #if path.suffix not in [".mp4", ".gif", ".avi"]:
+            # Other formats might actually work, but haven't been tested yet
+        #    raise ValueError(f"Only mp4/gif videos are supported, not {path.suffix[1:]}!")
+
+        if n_preload % batch_size != 0:
+            raise ValueError("`n_preload` should be a multiple of `batch_size`!")
+
+    def _extract_metadata(self):
+        """ Extracts some metadata from Dataset and exposes it to the loader. """
+        
+        tmp = self.dataset.metadata
+        end = tmp['n'] / tmp['fps']
+        frame_t = np.linspace(0, end, endpoint=False, num=tmp['n'])
+
         return {
-            "frame_t": self.frame_t,
-            "img_size": self.img_size,
-            "events": self.events,
-            "sf": self.sf,
-            "loglevel": self.logger.level
+            'frame_t': frame_t,
+            'img_size': tmp['size'],
+            'sf': tmp['fps']
         }
+    
+    def __len__(self):
+        """ Utility function to easily access number of video frames. """
+        return len(self.dataset)
+
+    def _create_iterator(self):
+        """ Creates an iterator version of the loader so you can do `next(loader_obj)`. """
+        if self.logger.level <= 20:
+            desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
+            _iterator= tqdm(self, desc=f"{desc} Recon frames")    
+        else:
+            _iterator = self
+
+        return iter(_iterator)
+
+    def __next__(self):
+        """ Return the next batch of the dataloader. """ 
+        return next(self._iterator)
+
+
+class VideoDataset(Dataset):
+    """ A pytorch Dataset class based on loading frames from a single video. 
+    
+    Parameters
+    ----------
+    video : pathlib.Path, str
+        A video file (any format that cv2 can handle)
+    rescale_factor : float
+        Factor with which to rescale the input image (for speed)
+    n_preload : int
+        How many frames to preload before batching; higher values will
+        take up more RAM, but result in faster loading
+    device : str
+        Either 'cuda' (for GPU) or 'cpu'
+    """ 
+    def __init__(self, video, rescale_factor=None, n_preload=512, device='cuda'):
+
+        self.video = video
+        self.rescale_factor = rescale_factor
+        self.resize = None # to be set later
+        self.n_preload = n_preload
+        self.device = device
+        self.reader = cv2.VideoCapture(str(video))
+        self.metadata = self._get_metadata()
+        self.imgs = None
+        self.imgs = self._load()
+
+    def _get_metadata(self):
+        
+        fps = self.reader.get(cv2.CAP_PROP_FPS) 
+        n = int(self.reader.get(cv2.CAP_PROP_FRAME_COUNT))
+        w = int(self.reader.get(cv2.CAP_PROP_FRAME_WIDTH))
+        h = int(self.reader.get(cv2.CAP_PROP_FRAME_HEIGHT)) 
+        
+        if self.rescale_factor is not None:
+            w = round(self.rescale_factor * w)
+            h = round(self.rescale_factor * h)
+            self.resize = Resize(size=(h, w), antialias=True)
+
+        return {
+            'size': (w, h),
+            'n': n,
+            'fps': fps
+        }
+
+    def _load(self):
+
+        if self.imgs is not None:
+            del self.imgs
+            torch.cuda.empty_cache()
+        
+        n = self.metadata['n'] - int(self.reader.get(cv2.CAP_PROP_POS_FRAMES))
+        n_to_load = min(n, self.n_preload)
+
+        for i in range(n_to_load):
+            
+            success, img = self.reader.read()
+            if not success:
+                raise ValueError("Could not read videoframe; probably the format "
+                                f"({self.video.suffix}) is not supported!")
+
+            if i == 0:
+                imgs = np.zeros((n, *img.shape))
+
+            imgs[i, ...] = img[:, :, ::-1]
+
+        # Cast to torch, but explicitly CPU, so we don't overload the GPU
+        # but still can benefit from torch-based vectorized resizing
+        imgs = torch.from_numpy(imgs)
+        imgs = imgs.to(dtype=torch.float32, device='cpu')
+        if self.rescale_factor is not None:
+            imgs = self.resize(imgs.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
+
+        return imgs
+
+    def __len__(self):
+
+        return self.metadata['n']
+
+    def __getitem__(self, i):
+
+        if i == self.n_preload:
+            self.imgs = self._load()
+
+        if i >= self.n_preload:
+            i = i % self.n_preload
+
+        # Now, cast to cuda if desired and return
+        return self.imgs[i, ...].to(self.device)
+
+    def close(self):
+        """ Closes the cv2 videoreader and free up memory. """
+        
+        if self.imgs is not None:
+            del self.imgs
+
+            if self.device == 'cuda':
+                torch.cuda.empty_cache()
+
+        self.reader.release()
 
 
 def load_h5(path):
@@ -246,3 +242,134 @@ def load_h5(path):
 
     data = MODEL2CLS[rmn].load(path)
     return data
+
+
+def load_inputs(inputs, load_as='torch', to_bgr=True, channels_first=True,
+                with_batch_dim=True, dtype='float32', device='cuda'):
+    """ Generic image loader function, which also performs some basic
+    preprocessing and checks. Is used internally for crop models and
+    reconstruction models.
+    
+    Parameters
+    ----------
+    inputs : str, Path, iterable, array_like
+        String or Path to a single image or an iterable (list, tuple) with
+        multiple image paths, or a numpy array or torch Tensor with already
+        loaded images
+    load_as : str
+        Either 'torch' (returns torch Tensor) or 'numpy' (returns numpy ndarray)
+    to_bgr : bool
+        Whether the color channel is ordered BGR (True) or RGB (False); only
+        works when inputs are image path(s)
+    channels_first : bool
+        Whether the data is ordered as (batch_size, 3, h, w) (True) or
+        (batch_size, h, w, 3) (False)
+    with_batch_dim : bool
+        Whether a singleton batch dimension should be added if there's only
+        a single image
+    dtype : str
+        Data type to be used for loaded images (e.g., 'float32', 'float64', 'uint8')
+    device : str
+        Either 'cuda' (for GPU) or 'cpu'; ignored when ``load_as='numpy'``
+
+    Returns
+    -------
+    imgs : np.ndarray, torch.Tensor
+        Images loaded in memory; object depends on the ``load_as`` parameter
+
+    Examples
+    --------
+    Load a single image as a torch Tensor:
+    >>> from medusa.data import get_example_frame
+    >>> path = get_example_frame()
+    >>> img = load_inputs(path, device='cpu')
+    >>> img.shape
+    torch.Size([1, 3, 384, 480])
+
+    Or as a numpy array (without batch dimension):
+    
+    >>> img = load_inputs(path, load_as='numpy', with_batch_dim=False)
+    >>> img.shape
+    (3, 384, 480)
+
+    Putting the channel dimension last:
+
+    >>> img = load_inputs(path, load_as='numpy', channels_first=False)
+    >>> img.shape
+    (1, 384, 480, 3)
+    
+    Setting the data type to uint8 instead of float32:
+
+    >>> img = load_inputs(path, load_as='torch', dtype='uint8', device='cpu')
+    >>> img.dtype
+    torch.uint8
+
+    Loading in a list of images:
+
+    >>> img = load_inputs([path, path], load_as='numpy')
+    >>> img.shape
+    (2, 3, 384, 480)
+    """
+
+    if not load_as in ('torch', 'numpy'):
+        raise ValueError("'load_as' should be either 'torch' or 'numpy'!")
+
+    if not device in ('cuda', 'cpu'):
+        raise ValueError("'device' should be either 'cuda' or 'cpu'!")
+
+    if isinstance(inputs, (str, Path)):
+        inputs = [inputs]
+
+    if isinstance(inputs, (list, tuple)):
+        imgs = []
+        for inp in inputs:
+            img = cv2.imread(str(inp))
+            if not to_bgr:
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            imgs.append(img)
+        imgs = np.stack(imgs)
+    else:
+        imgs = inputs
+
+    if load_as == 'torch' and isinstance(imgs, np.ndarray):
+        imgs = torch.from_numpy(imgs.copy()).to(device)
+    elif load_as == 'numpy' and isinstance(imgs, torch.Tensor):
+        imgs = imgs.cpu().numpy()
+    
+    if imgs.ndim == 3:
+        # Adding batch dim for now
+        imgs = imgs[None, ...]
+
+    if imgs.shape[1] != 3 and channels_first:
+        if isinstance(imgs, np.ndarray):
+            imgs = imgs.transpose(0, 3, 1, 2)
+        else:  # assume torch
+            imgs = imgs.permute(0, 3, 1, 2)
+
+    if imgs.shape[1] == 3 and not channels_first:
+        if isinstance(imgs, np.ndarray):
+            imgs = imgs.transpose(0, 2, 3, 1)
+        else:  # assume torch
+            imgs = imgs.permute(0, 2, 3, 1)
+
+    if isinstance(imgs, np.ndarray):
+        imgs = imgs.astype(getattr(np, dtype))
+    else:
+        imgs = imgs.to(dtype=getattr(torch, dtype))
+
+    if not with_batch_dim:
+        imgs = imgs.squeeze()
+
+    return imgs
+
+
+def save_obj(v, f, f_out):
+
+    if not isinstance(f_out, Path):
+        f_out = Path(f_out)
+
+    if not f_out.suffix == '.obj':
+        raise ValueError("Filename should end in .obj!")
+
+    mesh = Trimesh(v, f)
+    mesh.export(f_out)

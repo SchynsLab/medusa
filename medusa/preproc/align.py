@@ -51,15 +51,6 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     >>> data.space  # after alignment, data is in 'local' space
     'local'
     
-    Align sequence of 3D FAN meshes using ICP:
-    
-    >>> data = get_example_h5(load=True, model='fan')
-    >>> data.mat is None  # no affine matrices yet
-    True
-    >>> data = align(data, algorithm='icp')
-    >>> data.mat.shape  # an affine matrix for each time point!
-    (232, 4, 4)
-    
     Do an initial alignment of EMOCA meshes using the existing transform, but also
     do additional alignment (probably not a good idea):
     
@@ -85,17 +76,15 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     # vidx represents the index of the vertices that we'll use for
     # alignment (using *all* vertices is not a good idea, as it may
     # inadvertently try to align non-rigid motion)
-    if data.recon_model == "fan":
-        v_idx = range(17)  # contour only
-    elif data.recon_model == "mediapipe":
+    if data.recon_model == "mediapipe":
         # Technically not necessary anymore, because we have the model parameters
         v_idx = [389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377,  # contour
                  152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162,  # contour
                  94, 19, 1, 4, 5, 195, 197, 6]  # nose ridge
     elif data.recon_model in ["emoca-coarse", "deca-dense"]:
-        v_idx = np.load(Path(__file__).parents[1] / 'data/scalp_flame.npy') 
-    #else:
-    #    raise ValueError("Unknown reconstruction model!")
+        v_idx = np.load(Path(__file__).parents[1] / 'data/flame/scalp_flame.npy') 
+    else:
+        raise ValueError("Unknown reconstruction model!")
 
     if data.logger.level <= logging.INFO:
         desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Align frames")

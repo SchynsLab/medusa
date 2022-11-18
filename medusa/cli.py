@@ -24,27 +24,37 @@ from .preproc.resample import resample
 from .preproc.filter import bw_filter
 from .preproc.epoch import epoch
 
+
+RECON_MODELS = ["spectre-coarse", "emoca-dense", "emoca-coarse", "deca-dense", "deca-coarse", "mediapipe"]
+
 # fmt: off
 @click.command()
 @click.argument("video_path", type=click.Path(exists=True, dir_okay=False))
-@click.option("--events-path", default=None, type=click.Path(exists=True, dir_okay=False),
-              help='Path to events-file (a .tsv file)')
 @click.option("-o", "--out", default=None, type=click.Path(),
               help="File to save output to (shouldn't have an extension)")
-@click.option("-r", "--recon-model", default="emoca", type=click.Choice(["emoca-dense", "emoca-coarse", "deca-dense", "deca-coarse", "mediapipe", "fan"]),
+@click.option("-r", "--recon-model", default="emoca-coarse", type=click.Choice(RECON_MODELS),
               help='Name of the reconstruction model')
 @click.option("--device", default="cuda", type=click.Choice(["cpu", "cuda"]),
-              help="Device to run the reconstruction on (only relevant for FAN/EMOCA")
-@click.option("-n", "--n-frames", default=None, type=click.INT,
-              help="Number of frames to reconstruct (5 means 'reconstruct only the 5 first frames)")
-def videorecon_cmd(video_path, events_path, out, recon_model, device, n_frames):
+              help="Device to run the reconstruction on (only relevant for EMOCA")
+@click.option('--n-frames', '-n', default=None, type=click.INT,
+              help='Number of frames to process')
+@click.option('--batch-size', '-b', default=32, type=click.INT,
+              help='Batch size of inputs to recon model')
+def videorecon_cmd(video_path, out, recon_model, device, n_frames, batch_size):
     """ Performs frame-by-frame 3D face reconstruction of a video file."""
-    data = videorecon(video_path, events_path, recon_model, device, n_frames)
+    
+    data = videorecon(video_path=video_path, recon_model=recon_model, device=device,
+                     n_frames=n_frames, batch_size=batch_size)
 
     if out is None:
-        out = video_path.replace('.mp4', '')
-            
-    data.save(out + '.h5')
+       ext = Path(video_path).suffix
+       out = video_path.replace(ext, '.h5')
+
+    out = Path(out)
+    if out.suffix != '.h5':
+       raise ValueError("Extension of output file should be '.h5'!")
+
+    data.save(out)
 
 
 @click.command()
@@ -57,11 +67,9 @@ def videorecon_cmd(video_path, events_path, out, recon_model, device, n_frames):
               help="Whether to perform alignment on top of existing transform")
 @click.option("--ignore-existing", is_flag=True,
               help="Whether to ignore existing alignment and run alignment")
-@click.option("--qc", is_flag=True,
-              help="Generate a QC figure with motion and PCA traces")
 @click.option("--reference-index", default=0, 
               help="Index of reference mesh to align other meshes to (default = 0 = first")
-def align_cmd(data_file, out, algorithm, additive_alignment, ignore_existing, qc,
+def align_cmd(data_file, out, algorithm, additive_alignment, ignore_existing,
               reference_index):
     """ Performs alignment ("motion correction") of a mesh time series. """
     data = align(data_file, algorithm, additive_alignment, ignore_existing,
@@ -71,9 +79,6 @@ def align_cmd(data_file, out, algorithm, additive_alignment, ignore_existing, qc
         out = data_file.replace('.h5', '')
 
     data.save(out + '.h5')
-
-    if qc:
-        data.plot_data(out + '.png', plot_motion=True, plot_pca=True, n_pca=3)
 
 
 @click.command()
@@ -157,15 +162,15 @@ def epoch_cmd(data_file, out, start, end, period, baseline_correct, add_back_gra
               help="Path to video file, when rendering on top of original video")
 @click.option("-n", "--n-frames", default=None, type=click.INT,
               help="Number of frames to render (default is all)")
-@click.option("--no-smooth", is_flag=True,
-              help="Do not render smooth surface")
+@click.option("--smooth", is_flag=True,
+              help="Render smooth surface")
 @click.option("--wireframe", is_flag=True,
               help="Render wireframe instead of mesh")
 @click.option("--alpha", default=None, type=click.FLOAT,
               help="Alpha (transparency) of face")
 @click.option("--scale", default=None, type=click.FLOAT,
               help="Scale factor of rendered video (e.g., 0.25 = 25% of original size")
-def videorender_cmd(data_file, out, video, n_frames, no_smooth, wireframe, alpha, scale):
+def videorender_cmd(data_file, out, video, n_frames, smooth, wireframe, alpha, scale):
     """ Renders the reconstructed mesh time series as a video (gif or mp4)."""
 
     data = load_h5(data_file)
@@ -174,10 +179,6 @@ def videorender_cmd(data_file, out, video, n_frames, no_smooth, wireframe, alpha
         out = data_file.replace('.h5', '.mp4')
 
     out = Path(out)
-    if out.suffix not in ['.mp4', '.gif']:
-        raise ValueError("Output format should be '.mp4' or '.gif'!")
-
-    smooth = not no_smooth
     data.render_video(
         out,
         video=video,

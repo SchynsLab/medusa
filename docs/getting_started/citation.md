@@ -21,10 +21,6 @@ Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
 
 > Lugaresi, C., Tang, J., Nash, H., McClanahan, C., Uboweja, E., Hays, M., ... & Grundmann, M. (2019). Mediapipe: A framework for building perception pipelines. *arXiv preprint arXiv:1906.08172*.
 
-### FAN
-
-> Bulat, A., & Tzimiropoulos, G. (2017). How far are we from solving the 2d & 3d face alignment problem?(and a dataset of 230,000 3d facial landmarks). In Proceedings of the IEEE International Conference on Computer Vision (pp. 1021-1030).
-
 ## Miscellaneous
 
 If you use [MNE-Python](https://mne.tools) to analyze data from Medusa, please cite it

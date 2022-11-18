@@ -11,12 +11,10 @@ transform, visualize, load, and save reconstruction data. The `BaseData` class s
 not be used by itself; instead, use one of the other data classes that inherit from
 the `BaseData` class:
 
-* `FlameData`: for data from reconstruction models that use the [FLAME](https://flame.is.tue.mpg.de/)
+* `Flame4D`: for data from reconstruction models that use the [FLAME](https://flame.is.tue.mpg.de/)
 topology (such as [EMOCA](./python/recon/emoca/index))
 
-* `MediapipeData`: for data from the [Mediapipe](./python/recon/mpipe/index) reconstruction model
-
-* `FANData`: for data from the [FAN](./python/recon/fan/index) reconstruction model
+* `Mediapipe4D`: for data from the [Mediapipe](./python/recon/mpipe/index) reconstruction model
 
 ## [`medusa.recon`](./python/recon/index)
 
@@ -44,7 +42,7 @@ The following model classes are available:
 ## [`medusa.io`](./python/io/index)
 
 The `io` module contains some code to make processing, reading, and writing videos
-easier, implemented in the `VideoData` class. It also contains the `EpochsArray` class,
+easier, implemented in the `VideoLoader` class. It also contains the `EpochsArray` class,
 a subclass of the [MNE EpochsArray](https://mne.tools/stable/generated/mne.EpochsArray.html),
 which allows you to read in epoched data from Medusa and save it as an MNE-compatible FIF
 file.

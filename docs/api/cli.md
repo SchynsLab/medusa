@@ -22,11 +22,11 @@ Options:
   --events-path FILE              Path to events-file (a .tsv file)
   -o, --out PATH                  File to save output to (shouldn't have an
                                   extension)
-  -r, --recon-model-name [emoca|mediapipe|FAN]
+  -r, --recon-model-name [emoca|mediapipe]
                                   Name of the reconstruction model
   -c, --cfg TEXT                  Path to a custom Medusa config file
   --device [cpu|cuda]             Device to run the reconstruction on (only
-                                  relevant for FAN/EMOCA
+                                  relevant for FLAME-based models
   --render-recon                  Render the reconstruction as a video
   --render-on-video               Render the reconstruction on top of the
                                   original video
@@ -37,18 +37,17 @@ Options:
 ```
 
 For example, the `medusa_videorecon` command has a single mandatory argument,
-`VIDEO_PATH`, and several (non-mandatory) options, like `--events-path` and 
-`--recon-model-name`. If the option accepts an argument, like `--recon-model-name` or
-`--out-dir`, then it also shows the available options (such as "emoca", "mediapipe", or
-"FAN-3D", in case of `--recon-model-name`) or the expected input type (like "PATH" in 
-case of `--out-dir`). 
+`VIDEO_PATH`, and several (non-mandatory) options, like `--recon-model`.
+If the option accepts an argument, like `--recon-model` or `--out-dir`, then it also
+shows the available options (such as "emoca", "mediapipe", in case of `--recon-model`)
+or the expected input type (like "PATH" in case of `--out-dir`). 
 
 If you, for example, would like to reconstruct your video, 
 `my_vid.mp4`, using the "mediapipe" model and store the output in the `recon/` directory,
 you'd run:
 
 ```console
-$ medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/
+$ medusa_videorecon my_vid.mp4 --recon-model mediapipe --out-dir recon/
 ```
 
 In addition, there may be some options which are not followed by an argument, like

@@ -53,9 +53,7 @@ python -c 'import medusa'  # to verify the Python API (shouldn't error)
 
 ## Additional reconstruction models
 
-The [Mediapipe](https://google.github.io/mediapipe/solutions/face_mesh) and
-[FAN-3D](https://github.com/1adrianb/face-alignment) models work out-of-the-box, but Medusa can work
-with any reconstruction model as long as it takes as input an image and outputs a set of vertices.
+The [Mediapipe](https://google.github.io/mediapipe/solutions/face_mesh) model works out-of-the-box, but Medusa can work with any reconstruction model as long as it takes as input an image and outputs a set of vertices.
 
 ### FLAME-based models
 

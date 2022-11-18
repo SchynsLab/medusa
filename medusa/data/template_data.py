@@ -1,7 +1,7 @@
 """ This module contains functions to load in "template data", i.e., the topological
 templates used by the different models. 
 """
-
+import h5py
 import trimesh
 from pathlib import Path
 
@@ -24,7 +24,7 @@ def get_template_mediapipe():
     >>> template['f'].shape
     (898, 3)
     """
-    path = Path(__file__).parents[1] / 'data/mediapipe_template.obj'
+    path = Path(__file__).parents[1] / 'data/mpipe/mediapipe_template.obj'
     # Note to self: maintain_order=True is important, otherwise the
     # face order is all messed up
     with open(path, 'r') as f_in:
@@ -72,11 +72,10 @@ def get_template_flame(dense=False):
     (117380, 3)
     """
 
-    try:
-        from flame.data import get_template_flame
-    except ImportError:
-        raise ValueError("Package 'flame' is not installed; To install 'flame', check" 
-                         "https://github.com/medusa-4D/flame")
+    file = Path(__file__).parent / 'flame_template.h5'
+    with h5py.File(file, 'r') as data:
 
-    template = get_template_flame(dense)
-    return template 
+        template_h5 = data['dense' if dense else 'coarse']
+        template = {'v': template_h5['v'][:], 'f': template_h5['f'][:]}
+    
+    return template

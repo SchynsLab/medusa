@@ -7,7 +7,6 @@ excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 from trimesh import Trimesh
 from pyrender.constants import RenderFlags
 from pyrender import Scene, Mesh, Node, OffscreenRenderer
@@ -125,9 +124,9 @@ class Renderer:
                 raise ValueError("Cannot infer whether overlay refers to vertices or "
                                  "faces (polygons)!")
 
-            if not is_colors:
-                cmap = plt.get_cmap(cmap_name)
-                
+            #if not is_colors:
+            #    cmap = plt.get_cmap(cmap_name)
+        
         mesh = Trimesh(v, f, **kwargs)
         mesh = Mesh.from_trimesh(mesh, smooth=self.smooth, wireframe=self.wireframe)
 

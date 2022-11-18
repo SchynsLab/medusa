@@ -7,62 +7,106 @@ The video was trimmed to 10 seconds and resized in order to reduce disk space.
 """
 
 import cv2
+import torch
 from pathlib import Path
 
+from ..io import VideoLoader
 
-def get_example_frame():
+
+def get_example_frame(load_numpy=False, load_torch=False, device='cuda'):
     """Loads an example frame from the example video.
     
     Parameters
     ----------
-    as_path : bool
-        Returns the path as a ``pathlib.Path`` object
+    load_numpy : bool
+        Whether to load it as a numpy array
+    load_torch : bool
+        Whether to load it as a torch array
+    device : str
+        Either 'cuda' or 'cpu'; ignored when ``load_torch`` is False
 
     Returns
     -------
-    img : np.ndarray
-        A 3D numpy array of shape frame width x height x 3 (RGB)
+    img : pathlib.Path, np.ndarray, torch.Tensor
+        A path or a 3D numpy array/torch Tensor of shape frame width x height x 3 (RGB)
+
+    Notes
+    -----
+    If both ``load_numpy`` and ``load_torch`` are False, then just
+    a ``pathlib.Path`` object is returned.
 
     Examples
     --------
+    >>> # Load path to example image frame
     >>> img = get_example_frame()
+    >>> img.is_file()
+    True
+    >>> # Load file as numpy array
+    >>> img = get_example_frame(load_numpy=True)
+    >>> img.shape
+    (384, 480, 3)
     """
 
+    if load_numpy and load_torch:
+        raise ValueError("Set either 'load_numpy' or 'load_torch' to True, not both!")
+
     here = Path(__file__).parent
-    vid_path = here / "example_vid.mp4"
-    _, img = cv2.VideoCapture(str(vid_path)).read()
+    img_path = here / "example_data/example_frame.png"
+    
+    if not load_torch and not load_numpy:
+        return img_path
+        
+    img = cv2.imread(str(img_path))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    if load_torch:
+        img = torch.from_numpy(img).to(device)
+
     return img
 
 
-def get_example_video(as_path=True):
+def get_example_video(return_videoloader=False, **kwargs):
     """Retrieves the path to an example video file.
 
     Parameters
     ----------
-    as_path : bool
-        Returns the path as a ``pathlib.Path`` object
+    return_videoloader : bool
+        Returns the video as a ``VideoLoader`` object
+    kwargs : dict
+        Extra parameters passed to the ``VideoLoader`` initialization;
+        ignored when ``return_videoloader`` is False
 
     Returns
     -------
-    path : str, pathlib.Path
-        A string or Path object pointing towards the example
-        video file
+    path : pathlib.Path, VideoLoader
+        A Path object pointing towards the example
+        video file or a ``VideoLoader`` object
 
     Examples
     --------
-    >>> path = get_example_video(as_path=True)
+    Get just the file path (as a ``pathlib.Path`` object)
+
+    >>> path = get_example_video()
     >>> path.is_file()
     True
+
+    Get it as a ``VideoLoader`` object to quickly get batches of images already
+    loaded on and formatted for GPU:
+
+    >>> vid = get_example_video(return_videoloader=True, batch_size=32)
+    >>> # We can loop over `vid` or just get a single batch, as below:
+    >>> img_batch = next(vid)
+    >>> img_batch.shape
+    torch.Size([32, 384, 480, 3])
     """
 
     here = Path(__file__).parent
-    path = here / "example_vid.mp4"
+    vid = here / "example_data/example_vid.mp4"
 
-    if not as_path:
-        path = str(path)
+    if return_videoloader:
+        vid = VideoLoader(vid, **kwargs)
 
-    return path
+    return vid
 
 
 def get_example_h5(load=False, model="mediapipe", as_path=True):
@@ -83,7 +127,7 @@ def get_example_h5(load=False, model="mediapipe", as_path=True):
 
     Returns
     -------
-    MediapipeData, FlameData, FANData, str, Path
+    MediapipeData, FlameData, str, Path
         When ``load`` is ``True``, returns either a ``MediapipeData``
         or a ``FlameData`` object, otherwise a string or ``pathlib.Path``
         object to the file
@@ -104,7 +148,7 @@ def get_example_h5(load=False, model="mediapipe", as_path=True):
     from ..io import load_h5
 
     here = Path(__file__).parent
-    path = here / f"example_vid_{model}.h5"
+    path = here / f"example_data/example_vid_{model}.h5"
 
     if not as_path:
         path = str(path)

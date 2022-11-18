@@ -1,30 +1,9 @@
+import torch
 import numpy as np
 from scipy.spatial import Delaunay
-
-
-# class Projector:
-    
-#     def __init__(projection, width, height, cam_mat=np.eye(4)):
-#         self.projection = projection
-#         self.width = width
-#         self.height = height
-#         self.cam_mat = cam_mat
-#         self._check()
-
-#     def _check(self):
-        
-#         PROJS = ['orthographic', 'perspective']
-#         if self.projection not in PROJS:
-#             raise ValueError(f"Arg `projection` should be one of {PROJS}!")
-        
-#         if self.cam_mat.shape != (4, 4):
-#             raise ValueError("Camera matrix must be a 4 x 4 numpy array!")
-    
-#     def to_ndc(self, v, clip=False):
-        
         
 
-def create_viewport_matrix(nx, ny):
+def create_viewport_matrix(nx, ny, device='cuda'):
     """Creates a viewport matrix that transforms vertices in NDC [-1, 1]
     space to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
     https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-transform/
@@ -44,16 +23,91 @@ def create_viewport_matrix(nx, ny):
         A 4x4 numpy array representing the viewport transform
     """
 
-    mat = np.array(
+    mat = torch.tensor(
         [
             [nx / 2, 0, 0, (nx - 1) / 2],
             [0, -ny / 2, 0, (ny - 1) / 2],
             [0, 0, 1, 0],
             [0, 0, 0, 1],
-        ]
+        ],
+        dtype=torch.float32,
+        device=device
     )
 
     return mat
+
+
+def create_ortho_matrix(nx, ny, znear=0.05, zfar=100.0, device='cuda'):
+    """Creates an orthographic projection matrix, as
+    used by EMOCA/DECA. Based on the pyrender implementaiton.
+    Assumes an xmag and ymag of 1.
+
+    Parameters
+    ----------
+    nx : int
+        Number of pixels in the x-dimension (width)
+    ny : int
+        Number of pixels in the y-dimension (height)
+    znear : float
+        Near clipping plane distance (from eye/camera)
+    zfar : float
+        Far clipping plane distance (from eye/camera)
+
+    Returns
+    -------
+    mat : np.ndarray
+        A 4x4 affine matrix
+    """
+    n = znear
+    f = zfar
+
+    mat = torch.tensor(
+        [
+            [1 / (nx / ny), 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 2.0 / (n - f), (f + n) / (n - f)],
+            [0, 0, 0, 1],
+        ],
+        dtype=torch.float32,
+        device=device
+    )
+    return mat
+
+
+def crop_matrix_to_3d(mat_33):
+    """Transforms a 3x3 matrix used for cropping (on 2D coordinates)
+    into a 4x4 matrix that can be used to transform 3D vertices.
+    It assumes that there is no rotation element.
+
+    Parameters
+    ----------
+    mat_33 : np.ndarray
+        A 3x3 affine matrix
+
+    Returns
+    -------
+    mat_44 : np.ndarray
+        A 4x4 affine matrix
+    """
+
+    # Infer device from input (should always be the same)
+    device = mat_33.device
+
+    # Define translation in x, y, & z (z = 0)
+    b = mat_33.shape[0]
+    t_xyz = torch.cat([mat_33[:, :2, 2], torch.zeros((b, 1), device=device)], dim=1)
+    
+    # Add column representing z at the diagonal
+    mat_33 = torch.cat([mat_33[:, :, :2],
+                        torch.tensor([0, 0, 1], device=device).repeat(b, 1)[:, :, None]], dim=2)
+
+    # Add back translation
+    mat_34 = torch.cat([mat_33, t_xyz.unsqueeze(2)], dim=2)
+
+    # Make it a proper 4x4 matrix
+    mat_44 = torch.cat([mat_34, torch.tensor([0, 0, 0, 1], device=device).repeat(b, 1, 1)], dim=1)
+    return mat_44
+
 
 
 def apply_perspective_projection(v, mat):
@@ -142,10 +196,11 @@ def project_points_from_embedding(v, f, triangles, bcoords):
     Parameters
     ----------
     v : np.ndarray
-        Points (vertices) to project
+        Points (vertices) to project (:math:`N \times 3`)
     f : np.ndarray
         Faces of original mesh
-    triangles : 
+    triangles : np.ndarray
+
     """
     vf = v[f[triangles]]  # V x 3 x [2 or 3]
     proj = (vf * bcoords[:, :, None]).sum(axis=1)  # V x [2 or 3]

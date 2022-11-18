@@ -137,6 +137,7 @@ ext_data
 demos/*.gif
 demos/*.mp4
 demos/*.h5
+tests/test_viz/*.png
 
 # Docs
 docs/_build

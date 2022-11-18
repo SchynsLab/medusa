@@ -14,7 +14,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 autoapi_dirs = ["../../medusa"]
 autoapi_options = ["members", "undoc-members", "show-inheritance", "special-members"]
-autoapi_ignore = ["*version.py", "*cli.py", "*_lbs.py", "*_transforms.py"]
+autoapi_ignore = ["*cli.py", "*lbs.py", "*_transforms.py"]
 autoapi_add_toctree_entry = False
 autoapi_python_class_content = 'class'
 

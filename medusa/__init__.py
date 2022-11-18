@@ -1,1 +1,3 @@
-from .version import __version__
+# Set pyopengl to 'egl' for headless rendering
+import os
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
