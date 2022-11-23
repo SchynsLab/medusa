@@ -1,46 +1,52 @@
 import os
-import cv2
 import pytest
 from pathlib import Path
 from medusa.data import get_example_frame
-from medusa.crop import FanCropModel, InsightfaceCropModel
+from medusa.crop import LandmarkAlignCropModel, LandmarkBboxCropModel
 
+from test_utils import _check_gha_compatible
 
-@pytest.mark.parametrize("device", ['cuda', 'cpu'])
-def test_fan_crop(device):
+imgs = ['no_face.jpg', 'one_face.jpg', 'two_faces.jpg', 'three_faces.jpg']
 
-    if 'GITHUB_ACTIONS' in os.environ and device == 'cuda':
+@pytest.mark.parametrize('Model', [LandmarkAlignCropModel, LandmarkBboxCropModel])
+@pytest.mark.parametrize('lm_name', ['2d106det', '1k3d68'])
+@pytest.mark.parametrize('output_size', [(112, 112), (224, 224)])
+@pytest.mark.parametrize('img_params', zip(imgs, [None, 1, 2, 3]))
+@pytest.mark.parametrize('batch_size', [1, 2])
+@pytest.mark.parametrize('device', ['cpu', 'cuda'])
+def test_align_crop_model(Model, lm_name, output_size, img_params, batch_size, device):
+
+    if not _check_gha_compatible(device):
         return
 
-    img = get_example_frame(load_numpy=True)
-    crop_model = FanCropModel(device=device, return_bbox=True)
-    img_crop, crop_mat, bbox = crop_model(img)
+    if Model == LandmarkBboxCropModel:
+        model = Model(lm_name, output_size, device=device, return_lmk=True)
+    else:
+        if lm_name == '2d106det':
+            return
+
+        model = Model(output_size, device=device, return_lmk=True)
     
-    assert(img_crop.shape == (1, 3, 224, 224))
-    assert(crop_mat.shape == (1, 3, 3))
-    assert(bbox.shape == (1, 4, 2))
+    img, exp_n_face = img_params
+    img_path = Path(__file__).parent / f'test_data/detection/{img}'
+    img_path = batch_size * [img_path]
     
-    img_crop = crop_model.to_numpy(img_crop)
-    f_out = Path(__file__).parent / 'test_viz/fan_crop_img.png'
-    cv2.imwrite(str(f_out), img_crop.squeeze())
+    img_crop, crop_mat, lmk = model(img_path)
+    assert(len(img_crop) == len(crop_mat) == batch_size)
 
-    f_out = Path(__file__).parent / 'test_viz/fan_crop_bbox.png'
-    crop_model.visualize_bbox(img, bbox, f_out)
+    if exp_n_face is None:
+        for output in (img_crop, crop_mat, lmk):
+            assert(all(outp is None for outp in output))
+        
+    else:
+        assert(img_crop[0].shape[0] == crop_mat[0].shape[0])
+        n_detected = img_crop[0].shape[0]
+        assert(n_detected == exp_n_face)
 
-
-def test_insightface_crop():
-
-    img = get_example_frame(load_numpy=True)
-    crop_model = InsightfaceCropModel(device='cpu', return_bbox=True)
-    img_crop, crop_mat, bbox = crop_model(img)    
+    if batch_size == 1:
+        if Model == LandmarkBboxCropModel:
+            f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_lm-{lm_name}_size-{output_size[0]}_{img}'    
+        else:
+            f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_size-{output_size[0]}_{img}'
     
-    assert(img_crop.shape == (1, 3, 112, 112))
-    assert(bbox.shape == (1, 4, 2))
-
-    img_crop = crop_model.to_numpy(img_crop)
-    f_out = Path(__file__).parent / 'test_viz/insightface_crop_img.png'
-    cv2.imwrite(str(f_out), img_crop.squeeze())
-
-    f_out = Path(__file__).parent / 'test_viz/insightface_crop_bbox.png'
-    crop_model.visualize_bbox(img, bbox, f_out)
-
+        model.visualize(img_crop, lmk, f_out=f_out)

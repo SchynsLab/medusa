@@ -60,7 +60,7 @@ def videorecon(video_path, recon_model="mediapipe", device="cuda", n_frames=None
     if recon_model in FLAME_MODELS:
         # Lazy imports
         from .flame import DecaReconModel
-        from ..crop.crop import FanCropModel
+        from .crop import FanCropModel
         fan = FanCropModel(device=device)  # for face detection / cropping
         reconstructor = DecaReconModel(recon_model, device=device, img_size=metadata['img_size'])
     elif recon_model == "mediapipe":

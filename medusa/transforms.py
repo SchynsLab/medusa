@@ -205,3 +205,90 @@ def project_points_from_embedding(v, f, triangles, bcoords):
     vf = v[f[triangles]]  # V x 3 x [2 or 3]
     proj = (vf * bcoords[:, :, None]).sum(axis=1)  # V x [2 or 3]
     return proj
+
+
+def estimate_similarity_transform(src, dst, estimate_scale=True):
+    """ Estimate a similarity transformation matrix for two batches
+    of points with N observations and M dimensions; reimplementation
+    of the ``_umeyama`` function of the scikit-image package. 
+
+    Parameters
+    ----------
+    src : torch.Tensor
+        A tensor with shape batch_size x N x M
+    dst : torch.Tensor
+        A tensor with shape batch_size x N x M
+    estimate_scale : bool
+        Whether to also estimate a scale parameter
+    
+    Raises
+    ------
+    ValueError
+        When N (number of points) < M (number of dimensions)
+    """
+    batch, num, dim = src.shape[:3]
+
+    if num < dim:
+        raise ValueError("Cannot compute (unique) transform with fewer "
+                         f"points ({num}) than dimensions ({dim})!")
+
+    device = src.device
+    if dst.device != device:
+        dst = dst.to(device)
+
+    if dst.ndim == 2:
+        dst = dst.repeat(batch, 1, 1)
+
+    # Compute mean of src and dst.
+    src_mean = src.mean(axis=1).unsqueeze(dim=1)
+    dst_mean = dst.mean(axis=1).unsqueeze(dim=1)
+
+    # Subtract mean from src and dst.
+    src_demean = src - src_mean
+    dst_demean = dst - dst_mean
+
+    # Eq. (38).
+    A = dst_demean.mT @ src_demean / num
+    
+    # # Eq. (39).
+    d = torch.ones((batch, dim), dtype=torch.float32, device=device)
+    d[torch.linalg.det(A) < 0, dim - 1] = -1
+    
+    T = torch.eye(dim + 1, dtype=torch.float32, device=device).repeat(batch, 1, 1)
+    U, S, V = torch.linalg.svd(A)
+    
+    # # Eq. (40) and (43).
+    rank = torch.linalg.matrix_rank(A)
+    T[rank == 0, ...] *= torch.nan
+
+    det_U = torch.linalg.det(U)
+    det_V = torch.linalg.det(V)
+
+    idx = torch.logical_and(rank == dim - 1, det_U * det_V > 0)
+    if idx.sum() > 0:
+        T[idx, :dim, :dim] = U[idx, ...] @ V[idx, ...]
+    
+    idx = torch.logical_and(rank == dim - 1, det_U * det_V < 0)
+    if idx.sum() > 0:
+        s = d[idx, dim - 1]
+        d[idx, dim - 1] = -1
+        T[idx, :dim, :dim] = U[idx, ...] @ torch.diag_embed(d[idx, :]) @ V[idx, ...]
+        d[idx, dim - 1] = s
+
+    idx = torch.logical_and(rank != 0, rank != (dim - 1))
+    if idx.sum() > 0:
+        T[idx, :dim, :dim] = U[idx, ...] @ torch.diag_embed(d[idx, ...]) @ V[idx, ...]
+
+    if estimate_scale:    
+        # Eq. (41) and (42).
+        src_var = src_demean.var(axis=1, unbiased=False)
+        scale = 1.0 / src_var.sum(axis=1) * (S * d).sum(axis=1)
+    else:
+        scale = torch.ones(batch, device=device)
+    
+    dst_mean = dst_mean.squeeze(dim=1)
+    src_mean = src_mean.squeeze(dim=1)
+    T[:, :dim, dim] = dst_mean - scale.unsqueeze(1) * (T[:, :dim, :dim] @ src_mean.unsqueeze(2)).squeeze(dim=2)
+    T[:, :dim, :dim] *= scale[:, None, None]
+    
+    return T

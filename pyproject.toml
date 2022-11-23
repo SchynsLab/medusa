@@ -7,6 +7,18 @@ license = "BSD-3-Clause"
 readme = "README.md"
 homepage = "https://medusa.lukas-snoek.com/medusa"
 repository = "https://github.com/medusa-4D/medusa"
+documentation = "https://medusa.lukas-snoek.com/medusa"
+keywords = ["face reconstruction", "face detection", "face movement"]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "License :: Free for non-commercial use",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+exclude = [
+    "medusa/data/models/antelopev2",
+    "medusa/data/models/buffalo_l"
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -21,12 +33,15 @@ PyYAML = "^6.0"
 h5py = "^3.7.0"
 trimesh = "^3.16.2"
 pyrender = "^0.1.45"
-torch = "^1.13.0"
 torchvision = "^0.14.0"
-mediapipe = "^0.8.11"
 matplotlib = "^3.6.2"
-onnxruntime = "^1.13.1"
 gdown = "^4.5.3"
+chumpy = "^0.70"
+kornia = "^0.6.8"
+mediapipe = { version = "^0.8.11", markers = "platform_system != 'Darwin' and platform_machine != 'arm64'" }
+mediapipe-silicon = { version = "^0.8.11", markers = "platform_system == 'Darwin' and platform_machine == 'arm64'" }
+torch = "^1.13.0"
+onnxruntime-gpu = "^1.13.1"
 
 [tool.poetry.group.dev.dependencies]
 jupyter-book = "^0.13.1"

@@ -330,7 +330,7 @@ class DecaReconModel(FlameReconModel):
                 self._warned_about_crop_mat = True
 
             # Setting crop matrix to identity matrix
-            self.crop_mat = torch.eye(3).repeat(b, 1, 1)
+            self.crop_mat = torch.eye(3).repeat(b, 1, 1).to(self.device)
 
         # Now we have to do something funky. EMOCA/DECA works on cropped images. This is a problem when
         # we want to quantify motion across frames of a video because a face might move a lot (e.g.,

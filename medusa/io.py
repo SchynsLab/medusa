@@ -14,6 +14,7 @@ from datetime import datetime
 from torchvision.transforms import Resize
 from torch.utils.data import Dataset, DataLoader
 
+from . import DEVICE
 from .log import get_logger
 
 
@@ -39,7 +40,7 @@ class VideoLoader(DataLoader):
         If `n_preload` is not a multiple of `batch_size`
     """
 
-    def __init__(self, path, rescale_factor=None, n_preload=512, device='cuda', batch_size=32,
+    def __init__(self, path, rescale_factor=None, n_preload=512, device=DEVICE, batch_size=32,
                  loglevel='INFO', **kwargs):
 
         self.logger = get_logger(loglevel)
@@ -244,8 +245,8 @@ def load_h5(path):
     return data
 
 
-def load_inputs(inputs, load_as='torch', to_bgr=True, channels_first=True,
-                with_batch_dim=True, dtype='float32', device='cuda'):
+def load_inputs(inputs, load_as='torch', channels_first=True,
+                with_batch_dim=True, dtype='float32', device=DEVICE):
     """ Generic image loader function, which also performs some basic
     preprocessing and checks. Is used internally for crop models and
     reconstruction models.
@@ -323,12 +324,31 @@ def load_inputs(inputs, load_as='torch', to_bgr=True, channels_first=True,
     if isinstance(inputs, (list, tuple)):
         imgs = []
         for inp in inputs:
+            
+            if isinstance(inp, (np.ndarray, torch.Tensor)):
+                if inp.ndim == 4 and inp.shape[0] == 1:
+                    inp = inp.squeeze()
+
+                imgs.append(inp)
+                continue
+            
+            if not isinstance(inp, Path):
+                inp = Path(inp)
+            
+            if not inp.is_file():
+                raise ValueError(f"Input '{inp}' does not exist!")
+
             img = cv2.imread(str(inp))
-            if not to_bgr:
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
             imgs.append(img)
-        imgs = np.stack(imgs)
+
+        if torch.is_tensor(imgs[0]):
+            imgs = torch.stack(imgs, dim=0).to(device)
+        else:
+            imgs = np.stack(imgs)
     else:
+        # If already torch or numpy, do nothing
         imgs = inputs
 
     if load_as == 'torch' and isinstance(imgs, np.ndarray):

@@ -26,5 +26,4 @@ jobs:
     - name: Install package
       run: poetry install
     - name: Test with pytest
-      run: |
-        ./run_tests
+      run: poetry run sh run_tests.sh

@@ -1,2 +1,2 @@
-from .fan import FanCropModel
-from .isf import InsightfaceCropModel
+from .align_crop import LandmarkAlignCropModel
+from .bbox_crop import LandmarkBboxCropModel
