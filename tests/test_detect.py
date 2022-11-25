@@ -1,4 +1,5 @@
 import os
+import torch
 import pytest
 from pathlib import Path
 from medusa.detect import YunetDetector, RetinanetDetector
@@ -20,19 +21,18 @@ def test_detector(Detector, img_params, batch_size, device):
     img, exp_n_face = img_params
     img_path = Path(__file__).parent / f'test_data/detection/{img}'
     img_path = batch_size * [img_path]
-    conf, bbox, lms = model(img_path)
+    out = model(img_path)
 
-    assert(len(conf) == len(bbox) == len(lms) == batch_size)
+    idx = out['idx']
+    n_detections = idx[~torch.isnan(idx)].numel()
 
     if exp_n_face is None:
-        for output in (conf, bbox, lms):
-            assert(all(outp is None for outp in output))
-        
+        for value in out.values():
+            assert(torch.all(torch.isnan(value)))
     else:
-        assert(conf[0].shape[0] == bbox[0].shape[0] == lms[0].shape[0])            
-        n_detected = conf[0].shape[0]
-        assert(n_detected == exp_n_face)
+        for key, value in out.items():
+            assert(n_detections == exp_n_face * batch_size)
+            assert(value.shape[0] == n_detections)
 
-    if batch_size == 1:
-        f_out = Path(__file__).parent / f'test_viz/detection/{str(model)}_{img}'
-        model.visualize(img_path, bbox, lms, conf, f_out=f_out)
+    f_out = Path(__file__).parent / f'test_viz/detection/{str(model)}_{img}'
+    model.visualize(img_path, out, f_out=f_out)

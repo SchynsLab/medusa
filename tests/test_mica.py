@@ -5,7 +5,7 @@ import numpy as np
 from pathlib import Path
 from medusa.recon.flame import MicaReconModel
 from medusa.data import get_example_frame
-from medusa.crop import InsightfaceCropModel
+from medusa.crop import LandmarkAlignCropModel
 from medusa.render import Renderer
 
 
@@ -16,7 +16,7 @@ def test_mica_recon():
         return
 
     img = get_example_frame(load_numpy=True, device='cpu')
-    crop_model = InsightfaceCropModel(device='cpu')
+    crop_model = LandmarkAlignCropModel()
     img_crop, crop_mat = crop_model(img)
     
     # Check single image recon

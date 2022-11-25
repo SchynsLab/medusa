@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from pathlib import Path
 from medusa.data import get_example_video
-from medusa.crop import FanCropModel
+from medusa.crop import LandmarkBboxCropModel
 from medusa.recon import DecaReconModel
 from medusa.render import Renderer
 from medusa.core import Flame4D
@@ -27,7 +27,7 @@ def test_deca_recon(name, type_, no_crop_mat):
     else:
         img_size = metadata['img_size']
 
-    crop_model = FanCropModel(device=device)
+    crop_model = LandmarkBboxCropModel(device=device)
     recon_model = DecaReconModel(name=model_name, img_size=img_size, device=device)
 
     img_batch = next(vid)
@@ -63,4 +63,3 @@ def test_deca_recon(name, type_, no_crop_mat):
         data = Flame4D(recon_model=recon_model, f=recon_model.get_tris(), **kwargs)
         f_out = str(f_out).replace('.png', '.mp4')
         data.render_video(f_out, smooth=False, video=get_example_video())
-

@@ -5,10 +5,10 @@ Please see the LICENSE file in the current directory for the license that
 is applicable to this implementation.
 """
 
-import cv2
 import torch
 import numpy as np
 from pathlib import Path
+from collections import defaultdict
 from kornia.geometry.transform import resize
 from onnxruntime import InferenceSession
 from onnxruntime import set_default_logger_severity
@@ -113,15 +113,15 @@ class RetinanetDetector(BaseDetectionModel):
         )
 
         self._det_model.run_with_iobinding(self.binding)
-        net_outs = self.binding.copy_outputs_to_cpu()
+        net_outputs = self.binding.copy_outputs_to_cpu()
         
         fmc = self.fmc
         for idx, stride in enumerate(self._feat_stride_fpn):
             
-            scores = net_outs[idx]
-            bbox_preds = net_outs[idx+fmc]
+            scores = net_outputs[idx]
+            bbox_preds = net_outputs[idx+fmc]
             bbox_preds = bbox_preds * stride
-            kps_preds = net_outs[idx+fmc*2] * stride
+            kps_preds = net_outputs[idx+fmc*2] * stride
             
             height = 224 // stride
             width = 224 // stride
@@ -175,8 +175,7 @@ class RetinanetDetector(BaseDetectionModel):
         det_imgs = ((det_imgs - self._mean) / self._scale)[:, [2, 1, 0], :, :]
         det_scale = float(new_h) / h
 
-        conf, bbox, lms = [], [], []
-
+        outputs = defaultdict(list)
         # Loop over batch, because this onnx model does not support batch
         # inference
         for i in range(b):
@@ -210,17 +209,23 @@ class RetinanetDetector(BaseDetectionModel):
                 bindex = bindex[0:max_num]
                 det = det[bindex, :]
                 kpss = kpss[bindex, :]
-            
-            if not len(det):
-                conf.append(None)
-                bbox.append(None)
-                lms.append(None)
-            else:
-                conf.append(det[:, 4])
-                bbox.append(det[:, :4])
-                lms.append(kpss)
 
-        return conf, bbox, lms
+            if not len(det):
+                outputs['idx'].append([np.nan])
+                outputs['conf'].append([np.nan])
+                outputs['bbox'].append(np.full((1, 4), np.nan))
+                outputs['lms'].append(np.full((1, 5, 2), np.nan))
+            else:
+                outputs['idx'].extend([[i] * det.shape[0]])
+                outputs['conf'].append(det[:, 4])
+                outputs['bbox'].append(det[:, :4])
+                outputs['lms'].append(kpss)
+                
+        for key, value in outputs.items():
+            value = np.concatenate(value)     
+            outputs[key] = torch.as_tensor(value, dtype=torch.float32, device=self.device)
+        
+        return outputs
 
     def _nms(self, dets):
         x1 = dets[:, 0]

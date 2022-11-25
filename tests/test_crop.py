@@ -1,7 +1,6 @@
-import os
+import torch
 import pytest
 from pathlib import Path
-from medusa.data import get_example_frame
 from medusa.crop import LandmarkAlignCropModel, LandmarkBboxCropModel
 
 from test_utils import _check_gha_compatible
@@ -14,7 +13,7 @@ imgs = ['no_face.jpg', 'one_face.jpg', 'two_faces.jpg', 'three_faces.jpg']
 @pytest.mark.parametrize('img_params', zip(imgs, [None, 1, 2, 3]))
 @pytest.mark.parametrize('batch_size', [1, 2])
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
-def test_align_crop_model(Model, lm_name, output_size, img_params, batch_size, device):
+def test_crop_model(Model, lm_name, output_size, img_params, batch_size, device):
 
     if not _check_gha_compatible(device):
         return
@@ -31,22 +30,21 @@ def test_align_crop_model(Model, lm_name, output_size, img_params, batch_size, d
     img_path = Path(__file__).parent / f'test_data/detection/{img}'
     img_path = batch_size * [img_path]
     
-    img_crop, crop_mat, lmk = model(img_path)
-    assert(len(img_crop) == len(crop_mat) == batch_size)
+    out = model(img_path)
+    idx = out['idx']
+    n_detections = idx[~torch.isnan(idx)].numel()
 
     if exp_n_face is None:
-        for output in (img_crop, crop_mat, lmk):
-            assert(all(outp is None for outp in output))
-        
+        for value in out.values():
+            assert(torch.all(torch.isnan(value)))
     else:
-        assert(img_crop[0].shape[0] == crop_mat[0].shape[0])
-        n_detected = img_crop[0].shape[0]
-        assert(n_detected == exp_n_face)
+        for key, value in out.items():
+            assert(n_detections == exp_n_face * batch_size)
+            assert(value.shape[0] == n_detections)
+        
+    if Model == LandmarkBboxCropModel:
+        f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_lm-{lm_name}_size-{output_size[0]}_{img}'    
+    else:
+        f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_size-{output_size[0]}_{img}'
 
-    if batch_size == 1:
-        if Model == LandmarkBboxCropModel:
-            f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_lm-{lm_name}_size-{output_size[0]}_{img}'    
-        else:
-            f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_size-{output_size[0]}_{img}'
-    
-        model.visualize(img_crop, lmk, f_out=f_out)
+    model.visualize(out, f_out=f_out)

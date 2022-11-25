@@ -1,6 +1,8 @@
 import cv2
+import torch
 import numpy as np
 from pathlib import Path
+from collections import defaultdict
 
 from .. import DEVICE
 from .base import BaseDetectionModel
@@ -38,24 +40,30 @@ class YunetDetector(BaseDetectionModel):
 
         b, h, w, c = imgs.shape
         self._model.setInputSize((w, h))
-        conf, bbox, lms = [], [], []
+        outputs = defaultdict(list)
 
         # Note to self: cv2 does not support batch prediction
         for i in range(b):
 
-            _, out = self._model.detect(imgs[i, ...])
+            _, det = self._model.detect(imgs[i, ...])
 
-            if out is not None:                
-                conf.append(out[:, -1])
+            if det is None:
+                outputs['idx'].append([[np.nan]])
+                outputs['conf'].append([[np.nan]])
+                outputs['bbox'].append(np.full((1, 4), np.nan))
+                outputs['lms'].append(np.full((1, 4), np.nan))
+            else:
+                outputs['conf'].append(det[:, -1])
+                bbox_ = det[:, :4]
                 # Convert offset to true vertex positions to keep consistent
                 # with retinanet bbox definition
-                bbox_ = out[:, :4]
                 bbox_[:, 2:] = bbox_[:, :2] + bbox_[:, 2:]
-                bbox.append(bbox_)
-                lms.append(out[:, 4:-1].reshape((out.shape[0], 5, 2)))
-            else:
-                conf.append(None)
-                bbox.append(None)
-                lms.append(None)
+                outputs['bbox'].append(bbox_)
+                outputs['lms'].append(det[:, 4:-1].reshape((det.shape[0], 5, 2)))
+                outputs['idx'].extend([[i] * det.shape[0]])
 
-        return conf, bbox, lms
+        for key, value in outputs.items():
+            value = np.concatenate(value)     
+            outputs[key] = torch.as_tensor(value, dtype=torch.float32, device=self.device)
+        
+        return outputs

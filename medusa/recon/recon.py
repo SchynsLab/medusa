@@ -1,12 +1,16 @@
 import numpy as np
 from collections import defaultdict
 
+from . import Mediapipe
+from .flame import DecaReconModel
+from .. import DEVICE
 from ..io import VideoLoader
 from ..log import get_logger
 from ..core import MODEL2CLS, FLAME_MODELS
+from ..crop import LandmarkBboxCropModel
+             
 
-
-def videorecon(video_path, recon_model="mediapipe", device="cuda", n_frames=None,
+def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None,
                batch_size=32, loglevel='INFO'):
     """Reconstruction of all frames of a video.
 
@@ -58,13 +62,9 @@ def videorecon(video_path, recon_model="mediapipe", device="cuda", n_frames=None
 
     # Initialize reconstruction model
     if recon_model in FLAME_MODELS:
-        # Lazy imports
-        from .flame import DecaReconModel
-        from .crop import FanCropModel
-        fan = FanCropModel(device=device)  # for face detection / cropping
+        crop_model = LandmarkBboxCropModel(device=device)  # for face detection / cropping
         reconstructor = DecaReconModel(recon_model, device=device, img_size=metadata['img_size'])
     elif recon_model == "mediapipe":
-        from . import Mediapipe
         reconstructor = Mediapipe()
     else:
         raise NotImplementedError
@@ -78,7 +78,7 @@ def videorecon(video_path, recon_model="mediapipe", device="cuda", n_frames=None
 
             # Crop image, add tform to emoca (for adding rigid motion
             # due to cropping), and add crop plot to writer
-            batch, crop_mat = fan(batch)
+            batch, crop_mat = crop_model(batch)
             reconstructor.crop_mat = crop_mat
 
         # Reconstruct and store whatever `recon_model`` returns

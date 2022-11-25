@@ -77,30 +77,22 @@ class LandmarkAlignCropModel(BaseCropModel):
         
         # Load images here instead of in detector to avoid loading them twice
         imgs = load_inputs(imgs, load_as='torch', channels_first=True, device=self.device)
-        _, _, lmks = self._det_model(imgs)
+        out_det = self._det_model(imgs)
 
-        # "Stack" landmarks so that the transform can be computed at once
-        imgs_stk, lmks_stacked, idx = self._stack_detections(imgs, lmks)
-        if imgs_stk is None:
-            none = [None] * imgs.shape[0]
-            if self.return_lmk:
-                return none, none, none
-            else:
-                return none, none
-        
         # Estimate transform landmarks -> template landmarks
-        crop_mat = estimate_similarity_transform(lmks_stacked, self.template, estimate_scale=True)
-        
-        # Warp image based on estimated transform
-        img_crop = warp_affine(imgs_stk, crop_mat[:, :2, :], dsize=self.output_size)
-        
-        # Transform landmarks to cropped image space, only for visualization
-        lmks_stacked = transform_points(crop_mat, lmks_stacked)
-        
-        # "Unstack" cropped images, replacing non-detections with None
-        img_crop, crop_mat, lmks = self._unstack_detections(idx, imgs.shape[0], img_crop, crop_mat, lmks_stacked)
+        non_nan = ~torch.isnan(out_det['idx'])
+        n_det = out_det['lms'].shape[0]
+        out = {
+            'crop_mat': torch.full((n_det, 3, 3), torch.nan, device=self.device),
+            'img_crop': torch.full((n_det, 3, *self.output_size), torch.nan, device=self.device),
+            'lms': torch.full((n_det, 5, 2), torch.nan, device=self.device), 
+            'idx': out_det['idx']
+        }
 
-        if self.return_lmk:
-            return img_crop, crop_mat, lmks
-        else:
-            return img_crop, crop_mat
+        if non_nan.sum() > 0:
+            out['crop_mat'][non_nan] = estimate_similarity_transform(out_det['lms'][non_nan], self.template, estimate_scale=True)
+            det_idx = out_det['idx'][non_nan].long()
+            out['img_crop'][non_nan] = warp_affine(imgs[det_idx], out['crop_mat'][non_nan, :2, :], dsize=self.output_size)
+            out['lms'][non_nan] = transform_points(out['crop_mat'][non_nan], out['lms'][non_nan])
+        
+        return out
