@@ -6,7 +6,7 @@ from kornia.geometry.linalg import transform_points
 from onnxruntime import set_default_logger_severity, InferenceSession
 
 from .. import DEVICE
-from .base import BaseCropModel
+from .base import BaseCropModel, CropResults
 from ..io import load_inputs
 from ..detect import RetinanetDetector
 from ..transforms import estimate_similarity_transform
@@ -21,9 +21,9 @@ class LandmarkBboxCropModel(BaseCropModel):
         self._detector = detector(device=device, **kwargs)
         self.return_lmk = return_lmk
         self.device = device
-        self._lmk_model = self._init_lmk_model()
+        self._lmk_model = self._init_lms_model()
 
-    def _init_lmk_model(self):
+    def _init_lms_model(self):
 
         set_default_logger_severity(3)
         
@@ -59,10 +59,13 @@ class LandmarkBboxCropModel(BaseCropModel):
         top = torch.min(lm[:, :, 1], dim=1)[0]
         bottom = torch.max(lm[:, :, 1], dim=1)[0]
 
+        # scale and 1.1 are DECA constants
         orig_size = (right - left + bottom - top) / 2 * 1.1
         size = (orig_size * scale)  # to int?
-        
+
+        # b x 2 (center coords)    
         center = torch.stack([right - (right - left) / 2.0, bottom - (bottom - top) / 2.0], dim=1)
+        
         b = lm.shape[0]
         bbox = torch.zeros((b, 4, 2), device=self.device)
         bbox[:, 0, :] = center - size[:, None] / 2
@@ -79,21 +82,13 @@ class LandmarkBboxCropModel(BaseCropModel):
 
         imgs = load_inputs(images, load_as='torch', channels_first=True, device=self.device)
         out_det = self._detector(imgs)
-        non_nan = ~torch.isnan(out_det['idx'])
-        n_det = out_det['lms'].shape[0]
         
-        out = {
-            'crop_mat': torch.full((n_det, 3, 3), torch.nan, device=self.device),
-            'img_crop': torch.full((n_det, 3, *self.output_size), torch.nan, device=self.device),
-            'idx': out_det['idx']
-        }
-
-        if non_nan.sum() == 0:
-            return out
-
-        bbox = out_det['bbox'][non_nan]
-        det_idx = out_det['idx'][non_nan].long()
-        imgs_stack = imgs[det_idx]
+        n_det = len(out_det)
+        if n_det == 0:
+            return CropResults(None, None, None, None, self.device)
+        
+        bbox = out_det.bbox
+        imgs_stack = imgs[out_det.idx]
 
         #b, c, w, h = imgs_stk.shape
         bw, bh = (bbox[:, 2] - bbox[:, 0]), (bbox[:, 3] - bbox[:, 1])
@@ -148,9 +143,10 @@ class LandmarkBboxCropModel(BaseCropModel):
         dst = torch.tensor([[0, 0], [0, w-1], [h-1, 0]], dtype=torch.float32, device=self.device)
         dst = dst.repeat(n_det, 1, 1)
 
-        crop_mat = estimate_similarity_transform(bbox[:, :3, :], dst, estimate_scale=True)
-        out['img_crop'][non_nan] = warp_affine(imgs_stack, crop_mat[:, :2, :], dsize=(h, w))
-        out['crop_mat'][non_nan] = crop_mat
-        out['lms'] = transform_points(crop_mat, lms)
+        crop_mats = estimate_similarity_transform(bbox[:, :3, :], dst, estimate_scale=True)
+        imgs_crop = warp_affine(imgs_stack, crop_mats[:, :2, :], dsize=(h, w))
+        lms = transform_points(crop_mats, lms)
 
-        return out
+        out_crop = CropResults(imgs_crop, crop_mats, lms, out_det.idx, device=self.device)
+
+        return out_crop

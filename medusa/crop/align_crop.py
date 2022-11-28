@@ -12,7 +12,7 @@ from kornia.geometry.linalg import transform_points
 
 from .. import DEVICE
 from ..io import load_inputs
-from .base import BaseCropModel
+from .base import BaseCropModel, CropResults
 from ..detect import RetinanetDetector
 from ..transforms import estimate_similarity_transform
 
@@ -79,20 +79,15 @@ class LandmarkAlignCropModel(BaseCropModel):
         imgs = load_inputs(imgs, load_as='torch', channels_first=True, device=self.device)
         out_det = self._det_model(imgs)
 
-        # Estimate transform landmarks -> template landmarks
-        non_nan = ~torch.isnan(out_det['idx'])
-        n_det = out_det['lms'].shape[0]
-        out = {
-            'crop_mat': torch.full((n_det, 3, 3), torch.nan, device=self.device),
-            'img_crop': torch.full((n_det, 3, *self.output_size), torch.nan, device=self.device),
-            'lms': torch.full((n_det, 5, 2), torch.nan, device=self.device), 
-            'idx': out_det['idx']
-        }
+        if len(out_det) == 0:
+            out_crop = CropResults(None, None, None, None, self.device)
+            return out_crop
 
-        if non_nan.sum() > 0:
-            out['crop_mat'][non_nan] = estimate_similarity_transform(out_det['lms'][non_nan], self.template, estimate_scale=True)
-            det_idx = out_det['idx'][non_nan].long()
-            out['img_crop'][non_nan] = warp_affine(imgs[det_idx], out['crop_mat'][non_nan, :2, :], dsize=self.output_size)
-            out['lms'][non_nan] = transform_points(out['crop_mat'][non_nan], out['lms'][non_nan])
-        
-        return out
+        # Estimate transform landmarks -> template landmarks
+        crop_mats = estimate_similarity_transform(out_det.lms, self.template, estimate_scale=True)
+        imgs_stacked = imgs[out_det.idx]
+        imgs_crop = warp_affine(imgs_stacked, crop_mats[:, :2, :], dsize=self.output_size)
+        lms = transform_points(crop_mats, out_det.lms)
+        out_crop = CropResults(imgs_crop, crop_mats, lms, out_det.idx, device=self.device)    
+
+        return out_crop

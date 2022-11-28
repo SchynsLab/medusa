@@ -5,7 +5,7 @@ from pathlib import Path
 from collections import defaultdict
 
 from .. import DEVICE
-from .base import BaseDetectionModel
+from .base import BaseDetectionModel, DetectionResults
 from ..io import load_inputs
 
 
@@ -47,12 +47,8 @@ class YunetDetector(BaseDetectionModel):
 
             _, det = self._model.detect(imgs[i, ...])
 
-            if det is None:
-                outputs['idx'].append([[np.nan]])
-                outputs['conf'].append([[np.nan]])
-                outputs['bbox'].append(np.full((1, 4), np.nan))
-                outputs['lms'].append(np.full((1, 4), np.nan))
-            else:
+            if det is not None:
+                outputs['img_idx'].extend([[i] * det.shape[0]])
                 outputs['conf'].append(det[:, -1])
                 bbox_ = det[:, :4]
                 # Convert offset to true vertex positions to keep consistent
@@ -60,10 +56,6 @@ class YunetDetector(BaseDetectionModel):
                 bbox_[:, 2:] = bbox_[:, :2] + bbox_[:, 2:]
                 outputs['bbox'].append(bbox_)
                 outputs['lms'].append(det[:, 4:-1].reshape((det.shape[0], 5, 2)))
-                outputs['idx'].extend([[i] * det.shape[0]])
 
-        for key, value in outputs.items():
-            value = np.concatenate(value)     
-            outputs[key] = torch.as_tensor(value, dtype=torch.float32, device=self.device)
-        
+        outputs = DetectionResults(imgs.shape[0], **outputs, device=self.device)
         return outputs

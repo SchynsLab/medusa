@@ -15,7 +15,7 @@ from onnxruntime import set_default_logger_severity
 
 from .. import DEVICE
 from ..io import load_inputs
-from .base import BaseDetectionModel
+from .base import BaseDetectionModel, DetectionResults
 
 
 class RetinanetDetector(BaseDetectionModel):
@@ -48,7 +48,7 @@ class RetinanetDetector(BaseDetectionModel):
     torch.Size([1, 3, 112, 112])
     """    
 
-    def __init__(self, det_threshold=0.5, nms_threshold=0.4, device=DEVICE):
+    def __init__(self, det_threshold=0.5, nms_threshold=0.3, device=DEVICE):
         
         self.det_threshold = det_threshold
         self.nms_threshold = nms_threshold
@@ -210,21 +210,13 @@ class RetinanetDetector(BaseDetectionModel):
                 det = det[bindex, :]
                 kpss = kpss[bindex, :]
 
-            if not len(det):
-                outputs['idx'].append([np.nan])
-                outputs['conf'].append([np.nan])
-                outputs['bbox'].append(np.full((1, 4), np.nan))
-                outputs['lms'].append(np.full((1, 5, 2), np.nan))
-            else:
-                outputs['idx'].extend([[i] * det.shape[0]])
+            if len(det):
+                outputs['img_idx'].extend([[i] * det.shape[0]])
                 outputs['conf'].append(det[:, 4])
                 outputs['bbox'].append(det[:, :4])
                 outputs['lms'].append(kpss)
-                
-        for key, value in outputs.items():
-            value = np.concatenate(value)     
-            outputs[key] = torch.as_tensor(value, dtype=torch.float32, device=self.device)
         
+        outputs = DetectionResults(imgs.shape[0], **outputs, device=self.device)
         return outputs
 
     def _nms(self, dets):
