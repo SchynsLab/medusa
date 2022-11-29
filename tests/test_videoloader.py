@@ -8,7 +8,7 @@ from medusa.data import get_example_video
 @pytest.mark.parametrize("ext", ['.mp4', '.avi'])
 def test_videoloader_ext(ext):
 
-    vid = Path(__file__).parents[1] / f'test_data/videoloader/example_vid{ext}'
+    vid = Path(__file__).parent / f'test_data/example_vid{ext}'
     loader = VideoLoader(vid, device='cpu', loglevel='WARNING')
 
 

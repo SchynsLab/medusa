@@ -10,7 +10,7 @@ import numpy as np
 from pathlib import Path
 from collections import defaultdict
 from kornia.geometry.transform import resize
-from onnxruntime import InferenceSession
+from onnxruntime import InferenceSession, SessionOptions
 from onnxruntime import set_default_logger_severity
 
 from .. import DEVICE
@@ -80,14 +80,15 @@ class RetinanetDetector(BaseDetectionModel):
 
         set_default_logger_severity(3)
         device = self.device.upper()
+
         sess = InferenceSession(str(f_in), providers=[f'{device}ExecutionProvider'])
         self._onnx_input_name = sess.get_inputs()[0].name
-        self._onnx_input_shape = (3, 224, 224)  # undefined in this onnx model
+        self._onnx_input_shape = (1, 3, 224, 224)  # undefined in this onnx model
         self._onnx_output_names = [o.name for o in sess.get_outputs()]
 
         self.binding = sess.io_binding()
-        for name in self._onnx_output_names:
-            self.binding.bind_output(name)
+        for name in zip(self._onnx_output_names):
+            self.binding.bind_output(name[0])
 
         return sess 
 
@@ -102,7 +103,7 @@ class RetinanetDetector(BaseDetectionModel):
         scores_list = []
         bboxes_list = []
         kpss_list = []
-        
+
         self.binding.bind_input(
             name=self._onnx_input_name,
             device_type=self.device,
@@ -159,7 +160,7 @@ class RetinanetDetector(BaseDetectionModel):
         im_ratio = float(h) / w
 
         # model_ratio = 1.
-        _, mh, mw = self._onnx_input_shape
+        _, _, mh, mw = self._onnx_input_shape
         model_ratio = float(mh) / mw
         
         if im_ratio > model_ratio:

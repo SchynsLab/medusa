@@ -14,12 +14,11 @@ from ..transforms import estimate_similarity_transform
 
 class LandmarkBboxCropModel(BaseCropModel):
     def __init__(self, name='2d106det', output_size=(224, 244), detector=RetinanetDetector,
-                 return_lmk=False, device=DEVICE, **kwargs):
+                 device=DEVICE, **kwargs):
         # alternative: 1k3d68, 2d106det
         self.name = name
         self.output_size = output_size  # h, w
         self._detector = detector(device=device, **kwargs)
-        self.return_lmk = return_lmk
         self.device = device
         self._lmk_model = self._init_lms_model()
 
@@ -36,8 +35,6 @@ class LandmarkBboxCropModel(BaseCropModel):
         self.output_shape = [o.shape for o in sess.get_outputs()]
         
         self.binding = sess.io_binding()
-        for name in self.output_names:
-            self.binding.bind_output(name)
 
         return sess
 
@@ -85,10 +82,10 @@ class LandmarkBboxCropModel(BaseCropModel):
         
         n_det = len(out_det)
         if n_det == 0:
-            return CropResults(None, None, None, None, self.device)
+            return CropResults(imgs.shape[0], device=self.device)
         
         bbox = out_det.bbox
-        imgs_stack = imgs[out_det.idx]
+        imgs_stack = imgs[out_det.img_idx]
 
         #b, c, w, h = imgs_stk.shape
         bw, bh = (bbox[:, 2] - bbox[:, 0]), (bbox[:, 3] - bbox[:, 1])
@@ -147,6 +144,6 @@ class LandmarkBboxCropModel(BaseCropModel):
         imgs_crop = warp_affine(imgs_stack, crop_mats[:, :2, :], dsize=(h, w))
         lms = transform_points(crop_mats, lms)
 
-        out_crop = CropResults(imgs_crop, crop_mats, lms, out_det.idx, device=self.device)
+        out_crop = CropResults(imgs.shape[0], imgs_crop, crop_mats, lms, out_det.img_idx, out_det.face_idx, device=self.device)
 
         return out_crop

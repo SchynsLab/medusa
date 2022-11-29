@@ -2,18 +2,13 @@ import torch
 import PIL
 import numpy as np
 from pathlib import Path
-from collections import defaultdict
+from matplotlib import cm
 from torchvision.ops import box_area
 from torchvision.utils import draw_bounding_boxes, draw_keypoints, save_image
 from torchvision.io import write_video
 
 from .. import DEVICE, FONT
 from ..io import load_inputs
-
-
-import random
-_colors = list(PIL.ImageColor.colormap.values())
-random.shuffle(_colors)
                 
 
 class BaseDetectionModel:
@@ -61,7 +56,7 @@ class DetectionResults:
             return len(self.conf)
 
     @classmethod
-    def from_batches(cls, batches, sort=True):
+    def from_batches(cls, batches):
         
         conf = torch.concatenate([b.conf for b in batches if b.conf is not None])
         bbox = torch.concatenate([b.bbox for b in batches if b.bbox is not None])
@@ -75,73 +70,95 @@ class DetectionResults:
 
         img_idx = torch.concatenate([b.img_idx for b in batches if b.img_idx is not None])
         device = batches[-1].device
-        out_det = cls(n_img, conf, bbox, lms, img_idx, device)
+        return cls(n_img, conf, bbox, lms, img_idx, device)
 
-        if sort:
-            out_det.face_idx = out_det.sort()
+    def sort(self, dist_threshold=200, present_threshold=0.1):
         
-        return out_det
-
-    def sort(self):
-        
-        face_idx = torch.zeros_like(self.img_idx, device=self.device).long()
+        face_idx = torch.zeros_like(self.img_idx, device=self.device, dtype=torch.int64)
         
         for i, i_img in enumerate(self.img_idx.unique()):
             # lms = all detected landmarks for this image
             det_idx = i_img == self.img_idx
             lms = self.lms[det_idx]
+
+            # flatten landmarks (5 x 2 -> 10)
             n_det = lms.shape[0]
-            # n_det x n_lms x 2 -> n_det x (n_lms x 2)
             lms = lms.reshape((n_det, -1))
-            
+
             if i == 0:
-                # First detection, initialize tracker
+                # First detection, initialize tracker with first landmarks
+                face_idx[det_idx] = torch.arange(0, n_det, device=self.device)
                 tracker = lms
-            else:
-                # Compute the distance between each detection (lms) and currently tracked faces (tracker)
-                dists = torch.cdist(lms.reshape((n_det, -1)), tracker)  # n_det x current_faces
+                continue
+            
+            # Compute the distance between each detection (lms) and currently tracked faces (tracker)
+            dists = torch.cdist(lms, tracker)  # n_det x current_faces
 
-                # Get minimum distance (min_dists) and corresponding index (min_idx)
-                # for each detection
-                min_dists, min_idx = dists.min(dim=1)  # n_det x 1
+            # face_assigned keeps track of which detection is assigned to which face from
+            # the tracker (-1 refers to "not assigned yet")
+            face_assigned = torch.ones(n_det, device=self.device, dtype=torch.int64) * -1
 
-                # new_idx will represent which faces in this frame are probably 'new'
-                # (not seen before)
-                new_idx = torch.zeros_like(min_dists, dtype=torch.bool)
+            # We'll keep track of which tracked faces we have not yet assigned
+            track_list = torch.arange(dists.shape[1], device=self.device)
 
-                # First, check whether multiple detections are assigned the
-                # same tracker index (min_idx), which by definition cannot be true
-                for min_ in min_idx.unique():
-                    doubles = min_ == min_idx
-                    if doubles.sum() == 1:
-                        # If there's only only 'double', there's no problem
-                        # so just continue
-                        continue
-                    
-                    # Otherwise, tell 'new_idx' that the largest distance
-                    # of the doubles is probably a new face
-                    doubles = torch.where(doubles, min_dists, 0)
-                    new_idx[doubles.argmax()] = True 
+            # Check the order of minimum distances across detections
+            # (which we'll use to loop over)               
+            order = dists.min(dim=1)[0].argsort()
+            det_list = torch.arange(dists.shape[0], device=self.device)
+
+            # Loop over detections, sorted from best match (lowest dist)
+            # to any face in the tracker to worst match
+            for i_det in det_list[order]:
                 
-                # Regardless of 'doubles', set detections with an unreasonably
-                # large distance to any of the tracked faces also to true
-                # (i.e., being a new face)
-                new_idx[min_dists > 100] = True  # n_det x 1
-                
-                # Update the tracked faces with the non-new detected faces
-                tracker[min_idx[~new_idx]] = lms[~new_idx]
+                if dists.shape[1] == 0:
+                    continue
 
-                # If there are new faces (> 0), add them to the tracker
-                n_new = new_idx.sum()
-                if n_new > 0:
-                    # Update the min_index for the new faces with a new integer
-                    min_idx[new_idx] = tracker.shape[0] + torch.arange(n_new, device=self.device)
-                    # Add new faces to the tracker
-                    tracker = torch.concatenate((tracker, lms[new_idx]))
+                # Extract face index with the minimal distance (`min_face`) ...
+                min_dist, min_face = dists[i_det, :].min(dim=0)
 
-                face_idx[det_idx] = min_idx
-        
-        return face_idx
+                # And check whether it is acceptably small
+                if min_dist < dist_threshold:
+
+                    # Assign to face_assigned; note that we cannot use `min_face`
+                    # directly, because we'll slice `dists` below
+                    face_assigned[i_det] = track_list[min_face]
+
+                    # Now, for some magic: remove the selected face
+                    # from dists (and track_list), which will make sure
+                    # that the next detection cannot be assigned the same
+                    # face                    
+                    keep = track_list != track_list[min_face]
+                    dists = dists[:, keep]
+                    track_list = track_list[keep]
+
+            # Update the tracker with the (assigned) detected faces
+            unassigned = face_assigned == -1
+            tracker[face_assigned[~unassigned]] = lms[~unassigned]
+
+            # If there are new faces, add them to the tracker
+            n_new = unassigned.sum()
+            if n_new > 0:
+                # Update the assigned face index for the new faces with a new integer
+                face_assigned[unassigned] = tracker.shape[0] + torch.arange(n_new, device=self.device)
+                # and add to tracker
+                tracker = torch.cat((tracker, lms[unassigned]))
+
+            # Add face selection to face_idx across images
+            face_idx[det_idx] = face_assigned
+
+        self.face_idx = face_idx
+
+        # Loop over unique faces tracked        
+        for f in face_idx.unique():
+            # Compute the proportion of images containing this face
+            f_idx = self.face_idx == f
+            prop = (f_idx).sum().div(len(face_idx))
+
+            # Remove this face from each attribute if not present for more than
+            # `present_threshold` proportion of images
+            if prop < present_threshold:
+                for attr in ['conf', 'bbox', 'lms', 'img_idx', 'face_idx']:
+                    setattr(self, attr, getattr(self, attr)[~f_idx])
 
     def visualize(self, imgs, f_out, video=False, **kwargs):
         """ Creates an image with the estimated bounding box (bbox) on top of it.
@@ -179,8 +196,9 @@ class DetectionResults:
             labels = [str(lab) for lab in self.conf[idx].cpu().numpy().round(3)]
 
             if self.face_idx is not None:
-                labels = [f"{lab}, id = {self.face_idx[idx][i].item()}" for i, lab in enumerate(labels)]
-                colors = [_colors[i_] for i_ in self.face_idx[idx].cpu().numpy().tolist()]
+                colors = []
+                for i_face in self.face_idx[idx].cpu().numpy().astype(int):
+                    colors.append(cm.Set1(i_face, bytes=True))
             else:
                 colors = (255, 0, 0)
 

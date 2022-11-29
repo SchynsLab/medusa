@@ -6,3 +6,5 @@ def _check_gha_compatible(device):
         return False
     else:
         return True
+
+

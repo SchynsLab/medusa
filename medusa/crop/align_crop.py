@@ -80,14 +80,15 @@ class LandmarkAlignCropModel(BaseCropModel):
         out_det = self._det_model(imgs)
 
         if len(out_det) == 0:
-            out_crop = CropResults(None, None, None, None, self.device)
+            out_crop = CropResults(imgs.shape[0], device=self.device)
             return out_crop
 
         # Estimate transform landmarks -> template landmarks
         crop_mats = estimate_similarity_transform(out_det.lms, self.template, estimate_scale=True)
-        imgs_stacked = imgs[out_det.idx]
+        imgs_stacked = imgs[out_det.img_idx]
         imgs_crop = warp_affine(imgs_stacked, crop_mats[:, :2, :], dsize=self.output_size)
         lms = transform_points(crop_mats, out_det.lms)
-        out_crop = CropResults(imgs_crop, crop_mats, lms, out_det.idx, device=self.device)    
+
+        out_crop = CropResults(imgs.shape[0], imgs_crop, crop_mats, lms, out_det.img_idx, out_det.face_idx, device=self.device)
 
         return out_crop
