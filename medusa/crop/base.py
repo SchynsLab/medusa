@@ -7,7 +7,7 @@ from matplotlib import cm
 
 from .. import DEVICE
 from ..io import load_inputs
-
+from ..tracking import sort_faces
 
 class BaseCropModel:
     pass
@@ -23,6 +23,22 @@ class CropResults:
         self.img_idx = img_idx
         self.face_idx = face_idx
         self.device = device
+
+    def sort(self, dist_threshold=200, present_threshold=0.1):
+        
+        self.face_idx = sort_faces(self.lms, self.img_idx, dist_threshold, self.device)
+        
+        # Loop over unique faces tracked        
+        for f in self.face_idx.unique():
+            # Compute the proportion of images containing this face
+            f_idx = self.face_idx == f
+            prop = (f_idx).sum().div(len(self.face_idx))
+
+            # Remove this face from each attribute if not present for more than
+            # `present_threshold` proportion of images
+            if prop < present_threshold:
+                for attr in ['imgs_crop', 'crop_mats', 'lms', 'img_idx', 'face_idx']:
+                    setattr(self, attr, getattr(self, attr)[~f_idx])
 
     def visualize(self, imgs, f_out, template=None, video=False, **kwargs):
 

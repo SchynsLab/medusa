@@ -75,5 +75,5 @@ def test_crop_model_vid(Model, video):
         crops.append(out_crop)
         imgs.append(batch)
 
-    #detections = DetectionResults.from_batches(detections)
+    crops = CropResults.from_batches(detections)
     #assert(torch.all(torch.diff(detections.img_idx) >= 0))

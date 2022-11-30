@@ -21,6 +21,7 @@ import shutil
 import logging
 import zipfile
 from pathlib import Path
+from datetime import datetime
 from collections import OrderedDict
 
 from . import DEVICE
@@ -201,44 +202,53 @@ def videorender_cmd(data_file, out, video, n_frames, smooth, wireframe, alpha, s
 
 @click.command()
 @click.option('--directory', default='./medusa_ext_data')
-@click.option('--no-validation', is_flag=True)
 @click.option('--overwrite', is_flag=True)
 @click.option('--username', default=None, type=click.STRING, help='Username for FLAME website')
 @click.option('--password', default=None, type=click.STRING, help='Password for FLAME website')
 @click.option('--device', default=DEVICE, type=click.STRING)
-def download_ext_data(directory, no_validation, overwrite, username, password, device):
+@click.option('--no-validation', is_flag=True)
+def download_ext_data(directory, overwrite, username, password, device, no_validation):
     """ Command-line utility to download external data. """
 
-    click.echo(
+    click.secho(
     """
     This command will download the external data and models necessary to run some of the models in Medusa,
     including all models based on the FLAME topology. To use this data and models, you need to register
     at the websites where the data/models are hosted and agree to their license terms *prior* to running
     this command. This command will prompt you to confirm that you've registered for each model separately.
-    In addition, to download the FLAME model itself, you need to pass your username (email) and password
-    of your account on their website (https://flame.is.tue.mpg.de).
-    """
+    In addition, to download the FLAME model itself (necessary for any FLAME-based reconstruction model),
+    you need to pass your username (--username arg) and password (--passwd arg) of your account on their
+    website (https://flame.is.tue.mpg.de) to this command, for example:
+    
+    medusa_download_ext_data --username test@gmail.com --password yourpassword
+    """, fg='red', bold=True, blink=True
     )
  
-    import gdown
+    logger = get_logger('INFO')
+    logger.info(f"Downloading models to {directory}, configuring to run on {device}")
+    
     directory = Path(directory)
-    directory.mkdir(parents=True, exist_ok=True)
+    if not directory.is_dir():
+        logger.info(f"Creating output directory {directory}")
+        directory.mkdir(parents=True, exist_ok=True)
 
     if username is not None and password is not None:
-        click.echo("FLAME: starting download ...")
+        logger.info("FLAME: starting download ...")
         url = "https://download.is.tue.mpg.de/download.php?domain=flame&sfile=FLAME2020.zip&resume=1"
         data = {'username': username, 'password': password}
         f_out = directory / 'FLAME2020.zip'
         download_file(url, f_out, data=data, verify=True, overwrite=overwrite)
     else:
-        click.echo("FLAME: cannot download, because no username and/or password!")
+        logger.warning("FLAME: cannot download, because no username and/or password!")
 
-    if click.confirm("DECA: I have registered and agreed to the license terms at https://deca.is.tue.mpg.de"):
+    desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
+    if click.confirm(f"{desc} DECA: I have registered and agreed to the license terms at https://deca.is.tue.mpg.de"):
         url = 'https://download.is.tue.mpg.de/download.php?domain=deca&resume=1&sfile=deca_model.tar'
         f_out = directory / 'deca_model.tar'
         download_file(url, f_out, overwrite=overwrite)
 
-    if click.confirm("EMOCA: I have registered and agreed to the license terms at https://emoca.is.tue.mpg.de"):
+    desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
+    if click.confirm(f"{desc} EMOCA: I have registered and agreed to the license terms at https://emoca.is.tue.mpg.de"):
         url = "https://download.is.tue.mpg.de/emoca/assets/EMOCA/models/EMOCA.zip"
         f_out = directory / 'EMOCA.zip'
         download_file(url, f_out, overwrite=overwrite)
@@ -249,36 +259,22 @@ def download_ext_data(directory, no_validation, overwrite, username, password, d
         #f_out = directory / 'DECA_for_EMOCA.zip'
         #download_file(url, f_out, overwrite=overwrite)
 
-    if click.confirm("MICA: I agree to the license terms at https://github.com/Zielon/MICA/blob/master/LICENSE"):
+    desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
+    if click.confirm(f"{desc} MICA: I agree to the license terms at https://github.com/Zielon/MICA/blob/master/LICENSE"):
         url = "https://keeper.mpdl.mpg.de/f/db172dc4bd4f4c0f96de/?dl=1"
         f_out = directory / 'mica.tar'
         download_file(url, f_out, overwrite=overwrite, cmd_type='get')
 
-    click.echo("SPECTRE: downloading spectre")
     f_out = directory / 'spectre_model.tar'
     if not f_out.is_file() or overwrite:
+        logger.info("SPECTRE: starting download ...")
+        import gdown
         url = 'https://drive.google.com/u/0/uc?id=1vmWX6QmXGPnXTXWFgj67oHzOoOmxBh6B&export=download'
         gdown.download(url, str(f_out), quiet=True)
 
-    if not no_validation:
-        from click.testing import CliRunner
-        runner = CliRunner()
-        result = runner.invoke(validate_ext_data, ['--directory', directory, '--device', device])
-        if result.exit_code != 0:
-            raise ValueError("Something went wrong with validation; run the following command manually "
-                            f"to see the error: medusa_validate_external_data --directory {directory} --device {device}")
+    if no_validation:
+        return
 
-
-@click.command()
-@click.option('--directory', default='./medusa_ext_data', help='Directory with downloaded data')
-@click.option('--device', default=DEVICE, type=click.Choice(['cpu', 'cuda']), help='Which device (cpu, cuda) will be used')
-def validate_ext_data(directory, device):
-    """ Command line utility to validate and configure external data (unzipping, fixing 
-    pytorch model weight names, etc). """
-
-    logger = get_logger('INFO')
-    logger.info(f"Configuring models to be run on device '{device}'!")
-    
     cfg = {}  # to be saved later
     
     data_dir = Path(directory).resolve()

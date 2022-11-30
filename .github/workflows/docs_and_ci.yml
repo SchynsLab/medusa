@@ -1,38 +1,48 @@
-name: publish
+name: CI
 
 on:
   push:
     branches:
       - master
 
-# This job installs dependencies, build the book, and pushes it to `gh-pages`
 jobs:
-  generate-and-deploy-docs:
+  test-package:
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.9]
-        poetry-version: ["1.2.2"]
+
     steps:
+    # Getting everything ready
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install GLU
       run: sudo apt install -y freeglut3-dev
     - name: Install poetry
       uses: abatilo/actions-poetry@v2
-      with:
-        poetry-version: ${{ matrix.poetry-version }}
+
+    # Install package + deps + download data
     - name: Install Medusa
       run: poetry install
-    # Build the book
-    - name: Generate the book
+    - name: Download external data
+      shell: bash
+      env:
+        passwd_flame: ${{ secrets.PASSWD_FLAME }}
+      run: poetry run bash ./ci/download_data.sh
+
+    # Generate + deploy documentation
+    - name: Build docs
       run: poetry run bash build_docs.sh
-    # Deploy the book's HTML to gh-pages branch
-    - name: GitHub Pages action
+    - name: Publish docs
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html
+
+    # Testing
+    #- name: Test with pytest
+    #  run: poetry run bash ci/run_tests.sh
