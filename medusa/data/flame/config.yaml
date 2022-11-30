@@ -1,5 +1,5 @@
-deca_path: /analyse/Project0257/lukas/projects/medusa/flame/ext_data/deca_model.tar
-emoca_path: /analyse/Project0257/lukas/projects/medusa/flame/ext_data/emoca.ckpt
-flame_path: /analyse/Project0257/lukas/projects/medusa/flame/ext_data/FLAME/generic_model.pkl
-mica_path: /analyse/Project0257/lukas/projects/medusa/flame/ext_data/mica.tar
-spectre_path: /analyse/Project0257/lukas/projects/medusa/flame/ext_data/spectre_model.tar
+deca_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/deca_model.tar
+emoca_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/emoca.ckpt
+flame_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/FLAME/generic_model.pkl
+mica_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/mica.tar
+spectre_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/spectre_model.tar

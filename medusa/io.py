@@ -6,6 +6,7 @@ which is used in the reconstruction process (e.g., in the ``videorecon`` functio
 import cv2
 import h5py
 import torch
+import requests
 import numpy as np
 from tqdm import tqdm
 from pathlib import Path
@@ -393,3 +394,14 @@ def save_obj(v, f, f_out):
 
     mesh = Trimesh(v, f)
     mesh.export(f_out)
+
+
+def download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type='post'):
+
+    if f_out.is_file() and not overwrite:
+        return 
+    
+    with getattr(requests, cmd_type)(url, stream=True, verify=True, data=data) as r:
+        r.raise_for_status()
+        with open(f_out, 'wb') as f:
+            f.write(r.content)

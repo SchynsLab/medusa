@@ -14,10 +14,18 @@ For more information, check out the
 `documentation <https://lukas-snoek.com/medusa/api/cli.html`_.
 """
 
+import yaml
+import torch
 import click
+import shutil
+import logging
+import zipfile
 from pathlib import Path
+from collections import OrderedDict
 
-from .io import load_h5
+from . import DEVICE
+from .log import get_logger
+from .io import load_h5, download_file
 from .recon import videorecon
 from .preproc.align import align
 from .preproc.resample import resample
@@ -189,3 +197,177 @@ def videorender_cmd(data_file, out, video, n_frames, smooth, wireframe, alpha, s
         alpha=alpha,
     )
 # fmt: on
+
+
+@click.command()
+@click.option('--directory', default='./medusa_ext_data')
+@click.option('--no-validation', is_flag=True)
+@click.option('--overwrite', is_flag=True)
+@click.option('--username', default=None, type=click.STRING, help='Username for FLAME website')
+@click.option('--password', default=None, type=click.STRING, help='Password for FLAME website')
+@click.option('--device', default=DEVICE, type=click.STRING)
+def download_ext_data(directory, no_validation, overwrite, username, password, device):
+    """ Command-line utility to download external data. """
+
+    click.echo(
+    """
+    This command will download the external data and models necessary to run some of the models in Medusa,
+    including all models based on the FLAME topology. To use this data and models, you need to register
+    at the websites where the data/models are hosted and agree to their license terms *prior* to running
+    this command. This command will prompt you to confirm that you've registered for each model separately.
+    In addition, to download the FLAME model itself, you need to pass your username (email) and password
+    of your account on their website (https://flame.is.tue.mpg.de).
+    """
+    )
+ 
+    import gdown
+    directory = Path(directory)
+    directory.mkdir(parents=True, exist_ok=True)
+
+    if username is not None and password is not None:
+        click.echo("FLAME: starting download ...")
+        url = "https://download.is.tue.mpg.de/download.php?domain=flame&sfile=FLAME2020.zip&resume=1"
+        data = {'username': username, 'password': password}
+        f_out = directory / 'FLAME2020.zip'
+        download_file(url, f_out, data=data, verify=True, overwrite=overwrite)
+    else:
+        click.echo("FLAME: cannot download, because no username and/or password!")
+
+    if click.confirm("DECA: I have registered and agreed to the license terms at https://deca.is.tue.mpg.de"):
+        url = 'https://download.is.tue.mpg.de/download.php?domain=deca&resume=1&sfile=deca_model.tar'
+        f_out = directory / 'deca_model.tar'
+        download_file(url, f_out, overwrite=overwrite)
+
+    if click.confirm("EMOCA: I have registered and agreed to the license terms at https://emoca.is.tue.mpg.de"):
+        url = "https://download.is.tue.mpg.de/emoca/assets/EMOCA/models/EMOCA.zip"
+        f_out = directory / 'EMOCA.zip'
+        download_file(url, f_out, overwrite=overwrite)
+
+        # Note to self: not sure whether the EMOCA.zip data contains the finetuned detail
+        # encoder or the DECA.zip file (below) ...
+        #url = "https://download.is.tue.mpg.de/emoca/assets/EMOCA/models/DECA.zip"
+        #f_out = directory / 'DECA_for_EMOCA.zip'
+        #download_file(url, f_out, overwrite=overwrite)
+
+    if click.confirm("MICA: I agree to the license terms at https://github.com/Zielon/MICA/blob/master/LICENSE"):
+        url = "https://keeper.mpdl.mpg.de/f/db172dc4bd4f4c0f96de/?dl=1"
+        f_out = directory / 'mica.tar'
+        download_file(url, f_out, overwrite=overwrite, cmd_type='get')
+
+    click.echo("SPECTRE: downloading spectre")
+    f_out = directory / 'spectre_model.tar'
+    if not f_out.is_file() or overwrite:
+        url = 'https://drive.google.com/u/0/uc?id=1vmWX6QmXGPnXTXWFgj67oHzOoOmxBh6B&export=download'
+        gdown.download(url, str(f_out), quiet=True)
+
+    if not no_validation:
+        from click.testing import CliRunner
+        runner = CliRunner()
+        result = runner.invoke(validate_ext_data, ['--directory', directory, '--device', device])
+        if result.exit_code != 0:
+            raise ValueError("Something went wrong with validation; run the following command manually "
+                            f"to see the error: medusa_validate_external_data --directory {directory} --device {device}")
+
+
+@click.command()
+@click.option('--directory', default='./medusa_ext_data', help='Directory with downloaded data')
+@click.option('--device', default=DEVICE, type=click.Choice(['cpu', 'cuda']), help='Which device (cpu, cuda) will be used')
+def validate_ext_data(directory, device):
+    """ Command line utility to validate and configure external data (unzipping, fixing 
+    pytorch model weight names, etc). """
+
+    logger = get_logger('INFO')
+    logger.info(f"Configuring models to be run on device '{device}'!")
+    
+    cfg = {}  # to be saved later
+    
+    data_dir = Path(directory).resolve()
+    if not data_dir.is_dir():
+        logger.exception(f"Directory '{directory}' does not exist!")
+        exit()
+
+    flame_model_path = data_dir / 'FLAME/generic_model.pkl'
+    if flame_model_path.is_file():
+        logger.info("FLAME model is ready to use!")
+        cfg['flame_path'] = str(flame_model_path)
+    else:
+        flame_zip = data_dir / 'FLAME2020.zip'
+        if not flame_zip.is_file():
+            logger.warning(f"File '{str(flame_zip)}' does not exist!")
+        else:
+            logger.info("Unzipping FLAME2020.zip file ...")
+            with zipfile.ZipFile(flame_zip, 'r') as zip_ref:
+                zip_ref.extractall(f'{directory}/FLAME/')
+
+            logger.info("FLAME is ready to use!")
+            cfg['flame_path'] = str(flame_model_path)
+
+    deca_model_path = data_dir / 'deca_model.tar'
+    if deca_model_path.is_file():
+        logger.info("DECA model is ready to use!")
+        cfg['deca_path'] = str(deca_model_path)
+    else:
+        logger.warning(f'File {deca_model_path} does not exist!')
+
+    ckpt_out = data_dir / 'emoca.ckpt'
+    if ckpt_out.is_file():
+        logger.info("EMOCA model is ready to use!")
+        cfg['emoca_path'] = str(ckpt_out)
+    else:
+        logger.info(f"Configuring EMOCA for device '{device}'!")
+        emoca_zip = data_dir / 'EMOCA.zip'
+        if not emoca_zip.is_file():
+            logger.warning(f"File '{str(emoca_zip)}' does not exist!")
+        else:
+            logger.info("Unzipping EMOCA.zip file ...")
+            with zipfile.ZipFile(emoca_zip, 'r') as zip_ref:
+                zip_ref.extractall(f'{directory}/')
+
+            cfg = data_dir / 'EMOCA/cfg.yaml'
+            if cfg.is_file():
+                cfg.unlink()
+
+            ckpt = list(data_dir.glob("**/*.ckpt"))
+            if len(ckpt) == 0:
+                logger.exception("Could not find EMOCA .ckpt file!", exc_info=False)
+                exit()
+
+            ckpt = ckpt[0]
+            shutil.move(ckpt, data_dir / "emoca.ckpt")
+            shutil.rmtree(data_dir / 'EMOCA')
+            
+            logger.info("Reorganizing EMOCA checkpoint file ... ")
+            sd = torch.load(data_dir / "emoca.ckpt")["state_dict"]
+            models = ["E_flame", "E_detail", "E_expression", "D_detail"]
+
+            state_dict = {}
+            for mod in models:
+                state_dict[mod] = OrderedDict()
+
+                for key, value in sd.items():
+                    if mod in key:
+                        k = key.split(mod + ".")[1]
+                        state_dict[mod][k] = value.to(device=device)
+
+            torch.save(state_dict, ckpt_out)
+            logger.info(f"EMOCA model is ready to use!")
+            cfg['emoca_path'] = str(ckpt_out)
+            
+    mica_model_path = data_dir / 'mica.tar'
+    if mica_model_path.is_file():
+        logger.info("MICA model is ready to use!")
+        cfg['mica_path'] = str(mica_model_path)
+    else:
+        logger.warning(f'File {mica_model_path} does not exist!')
+
+    spectre_model_path = data_dir / 'spectre_model.tar'
+    if spectre_model_path.is_file():
+        logging.info("Spectre model is ready to use!")
+        cfg['spectre_path'] = str(spectre_model_path)
+    else:
+        logger.warning(f'File {spectre_model_path} does not exist!')
+
+    cfg_path = Path(__file__).parent / 'data/flame/config.yaml'
+    with open(cfg_path, 'w') as f_out:
+        logger.info(f"Saving config file to {cfg_path}!")
+        yaml.dump(cfg, f_out, default_flow_style=False)

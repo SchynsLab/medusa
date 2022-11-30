@@ -133,7 +133,7 @@ dmypy.json
 exp/*/data
 exp/*/*.py
 test_data
-ext_data
+medusa_ext_data
 demos/*.gif
 demos/*.mp4
 demos/*.h5
@@ -147,3 +147,5 @@ docs/_build
 docs/autoapi/_build
 docs/getting_started/*.mp4
 docs/getting_started/*.gif
+docs/api/python/**/*.rst.txt
+

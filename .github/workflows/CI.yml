@@ -1,6 +1,9 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -23,7 +26,9 @@ jobs:
       uses: abatilo/actions-poetry@v2
       with:
         poetry-version: ${{ matrix.poetry-version }}
-    - name: Install package
+    - name: Install Medusa
       run: poetry install
-    - name: Test with pytest
-      run: poetry run sh run_tests.sh
+    - name: Download external data
+      run: poetry run yes 2>/dev/null | medusa_download_ext_data --username lukassnoek@gmail.com --password ${{ secrets.PASSWD_FLAME }}
+    #- name: Test with pytest
+    #  run: poetry run sh run_tests.sh
