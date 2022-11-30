@@ -1,0 +1,1 @@
+yes 2>/dev/null | medusa_download_ext_data --username lukassnoek@gmail.com --passwd $passwd_flame

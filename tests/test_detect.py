@@ -61,8 +61,7 @@ def test_detector_vid(Detector, video):
     loader = VideoLoader(video_path)
     model = Detector()
 
-    detections = []
-    imgs = []
+    detections, imgs = [], []
     for batch in loader:
         detections.append(model(batch))
         imgs.append(batch)
