@@ -1,0 +1,58 @@
+Traceback (most recent call last):
+  File "/home/runner/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.9/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
+    executenb(
+  File "/home/runner/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.9/lib/python3.9/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/runner/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.9/lib/python3.9/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/runner/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.9/lib/python3.9/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/asyncio/base_events.py", line 647, in run_until_complete
+    return future.result()
+  File "/home/runner/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.9/lib/python3.9/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.9/lib/python3.9/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.9/lib/python3.9/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+from medusa.recon import videorecon
+data = videorecon(vid, recon_model='mediapipe', loglevel='WARNING')
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[2], line 2[0m
+[1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mmedusa[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrecon[39;00m [38;5;28;01mimport[39;00m videorecon
+[0;32m----> 2[0m data [38;5;241m=[39m [43mvideorecon[49m[43m([49m[43mvid[49m[43m,[49m[43m [49m[43mrecon_model[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mmediapipe[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mloglevel[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mWARNING[39;49m[38;5;124;43m'[39;49m[43m)[49m
+
+File [0;32m~/work/medusa/medusa/medusa/recon/recon.py:86[0m, in [0;36mvideorecon[0;34m(video_path, recon_model, device, n_frames, batch_size, loglevel)[0m
+[1;32m     82[0m     reconstructor[38;5;241m.[39mcrop_mat [38;5;241m=[39m crop_mat
+[1;32m     84[0m [38;5;66;03m# Reconstruct and store whatever `recon_model`` returns[39;00m
+[1;32m     85[0m [38;5;66;03m# in `recon_data`[39;00m
+[0;32m---> 86[0m out [38;5;241m=[39m [43mreconstructor[49m[43m([49m[43mbatch[49m[43m)[49m
+[1;32m     87[0m [38;5;28;01mfor[39;00m attr, data [38;5;129;01min[39;00m out[38;5;241m.[39mitems():
+[1;32m     88[0m     recon_data[attr][38;5;241m.[39mappend(data)
+
+File [0;32m~/work/medusa/medusa/medusa/recon/mpipe/mpipe.py:99[0m, in [0;36mMediapipe.__call__[0;34m(self, images)[0m
+[1;32m     64[0m [38;5;28;01mdef[39;00m [38;5;21m__call__[39m([38;5;28mself[39m, images):
+[1;32m     65[0m     [38;5;124;03m""" Performs reconstruction of the face as a list of landmarks (vertices).[39;00m
+[1;32m     66[0m 
+[1;32m     67[0m [38;5;124;03m    Parameters[39;00m
+[0;32m   (...)[0m
+[1;32m     96[0m [38;5;124;03m    (1, 4, 4)[39;00m
+[1;32m     97[0m [38;5;124;03m    """[39;00m
+[0;32m---> 99[0m     images [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_load_inputs[49m[43m([49m[43mimages[49m[43m,[49m[43m [49m[43mload_as[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mnumpy[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mchannels_first[49m[38;5;241;43m=[39;49m[38;5;28;43;01mFalse[39;49;00m[43m,[49m[43m [49m[43mto_bgr[49m[38;5;241;43m=[39;49m[38;5;28;43;01mFalse[39;49;00m[43m,[49m
+[1;32m    100[0m [43m                               [49m[43mwith_batch_dim[49m[38;5;241;43m=[39;49m[38;5;28;43;01mTrue[39;49;00m[43m,[49m[43m [49m[43mdtype[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43muint8[39;49m[38;5;124;43m'[39;49m[43m)[49m
+[1;32m    102[0m     v [38;5;241m=[39m np[38;5;241m.[39mzeros((images[38;5;241m.[39mshape[[38;5;241m0[39m], [38;5;241m468[39m, [38;5;241m3[39m))
+[1;32m    103[0m     mat [38;5;241m=[39m np[38;5;241m.[39mzeros((images[38;5;241m.[39mshape[[38;5;241m0[39m], [38;5;241m4[39m, [38;5;241m4[39m))
+
+File [0;32m~/work/medusa/medusa/medusa/recon/base.py:19[0m, in [0;36mBaseReconModel._load_inputs[0;34m(self, inputs, *args, **kwargs)[0m
+[1;32m     17[0m [38;5;28;01mdef[39;00m [38;5;21m_load_inputs[39m([38;5;28mself[39m, inputs, [38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs):
+[1;32m     18[0m     [38;5;124;03m""" Loads and checks inputs. """[39;00m 
+[0;32m---> 19[0m     [38;5;28;01mreturn[39;00m [43mload_inputs[49m[43m([49m[43minputs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+[0;31mTypeError[0m: load_inputs() got an unexpected keyword argument 'to_bgr'
+TypeError: load_inputs() got an unexpected keyword argument 'to_bgr'
+

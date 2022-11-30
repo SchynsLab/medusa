@@ -1,0 +1,1195 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Command-line interface &#8212; Medusa</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Python interface" href="python.html" />
+    <link rel="prev" title="Designing experiments" href="../tutorials/experimentation.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Medusa</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Medusa: 4D face reconstruction and analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Getting started
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../getting_started/installation.html">
+   Medusa installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../getting_started/quickstart.html">
+   Quickstart
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../getting_started/citation.html">
+   Citation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../getting_started/license.html">
+   License
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/reconstruction.html">
+   Reconstruction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/data.html">
+   Data representation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/rendering.html">
+   Rendering
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/preprocessing.html">
+   Preprocessing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/analysis.html">
+   Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/experimentation.html">
+   Experimentation
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  API documentation
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Command-line interface
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="python.html">
+   Python interface
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/au/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.au
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="python/core/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.core
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/core/fourD/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.core.fourD
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/core/threeD/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.core.threeD
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="python/crop/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.crop
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/crop/align_crop/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.crop.align_crop
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/crop/base/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.crop.base
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/crop/bbox_crop/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.crop.bbox_crop
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="python/data/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.data
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/data/example_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.example_data
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/data/template_data/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.data.template_data
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="python/detect/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.detect
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+    <label for="toctree-checkbox-5">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/detect/base/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.detect.base
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/detect/retinanet/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.detect.retinanet
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/detect/yunet/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.detect.yunet
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/epochs/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.epochs
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/io/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.io
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/log/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.log
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="python/preproc/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.preproc
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/preproc/align/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.preproc.align
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/preproc/epoch/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.preproc.epoch
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/preproc/filter/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.preproc.filter
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/preproc/resample/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.preproc.resample
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="python/recon/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.recon
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="python/recon/flame/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.flame
+        </span>
+       </code>
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+      <label for="toctree-checkbox-8">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="python/recon/flame/data/index.html">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           medusa.recon.flame.data
+          </span>
+         </code>
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="python/recon/flame/deca/index.html">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           medusa.recon.flame.deca
+          </span>
+         </code>
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="python/recon/flame/mica/index.html">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           medusa.recon.flame.mica
+          </span>
+         </code>
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="python/recon/flame/base/index.html">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           medusa.recon.flame.base
+          </span>
+         </code>
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="python/recon/flame/decoders/index.html">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           medusa.recon.flame.decoders
+          </span>
+         </code>
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="python/recon/flame/utils/index.html">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           medusa.recon.flame.utils
+          </span>
+         </code>
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="python/recon/mpipe/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.mpipe
+        </span>
+       </code>
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+      <label for="toctree-checkbox-9">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="python/recon/mpipe/mpipe/index.html">
+         <code class="xref py py-mod docutils literal notranslate">
+          <span class="pre">
+           medusa.recon.mpipe.mpipe
+          </span>
+         </code>
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/recon/base/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.base
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="python/recon/recon/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         medusa.recon.recon
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/render/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.render
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/tracking/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.tracking
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="python/transforms/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       medusa.transforms
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Misc
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Bibliography
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/contributing.html">
+   Contributing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/conduct.html">
+   Code of Conduct
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/medusa-4D/medusa"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/cli.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/medusa-4D/medusa/edit/master/api/cli.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/api/cli.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#list-of-available-cli-commands">
+   List of available CLI commands
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-videorecon">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_videorecon
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-align">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_align
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-resample">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_resample
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-filter">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_filter
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-epoch">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_epoch
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-videorender">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_videorender
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Command-line interface</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#list-of-available-cli-commands">
+   List of available CLI commands
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-videorecon">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_videorecon
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-align">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_align
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-resample">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_resample
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-filter">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_filter
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-epoch">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_epoch
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#medusa-videorender">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       medusa_videorender
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="command-line-interface">
+<h1>Command-line interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">#</a></h1>
+<p>If you’re familiar with using terminals and command line interfaces (CLI), Medusa’s
+CLI might be useful for you. The CLI exposes Medusa’s most important functionality
+to the command line, which can be used after installing the Python package. Alternatively,
+you can use the <a class="reference internal" href="python.html"><span class="doc std std-doc">Python API</span></a>.</p>
+<p>All CLI commands start with <code class="docutils literal notranslate"><span class="pre">medusa_</span></code> followed by the operation that it exposes.
+For example, <code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code> is a command-line interface of the package’s Python
+function <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">videorecon</span></code></span>. The arguments and options of each CLI
+command can be inspected by running the command with a single option <code class="docutils literal notranslate"><span class="pre">--help</span></code>. For
+example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>medusa_videorecon --help
+
+<span class="go">Usage: medusa_videorecon [OPTIONS] VIDEO_PATH</span>
+
+<span class="go">  Performs frame-by-frame 3D face reconstruction of a video file.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --events-path FILE              Path to events-file (a .tsv file)</span>
+<span class="go">  -o, --out PATH                  File to save output to (shouldn&#39;t have an</span>
+<span class="go">                                  extension)</span>
+<span class="go">  -r, --recon-model-name [emoca|mediapipe]</span>
+<span class="go">                                  Name of the reconstruction model</span>
+<span class="go">  -c, --cfg TEXT                  Path to a custom Medusa config file</span>
+<span class="go">  --device [cpu|cuda]             Device to run the reconstruction on (only</span>
+<span class="go">                                  relevant for FLAME-based models</span>
+<span class="go">  --render-recon                  Render the reconstruction as a video</span>
+<span class="go">  --render-on-video               Render the reconstruction on top of the</span>
+<span class="go">                                  original video</span>
+<span class="go">  --render-format [gif|mp4]       Format of rendering output</span>
+<span class="go">  -n, --n-frames INTEGER          Number of frames to reconstruct (5 means</span>
+<span class="go">                                  &#39;reconstruct only the 5 first frames)</span>
+<span class="go">  --help                          Show this message and exit.</span>
+</pre></div>
+</div>
+<p>For example, the <code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code> command has a single mandatory argument,
+<code class="docutils literal notranslate"><span class="pre">VIDEO_PATH</span></code>, and several (non-mandatory) options, like <code class="docutils literal notranslate"><span class="pre">--recon-model</span></code>.
+If the option accepts an argument, like <code class="docutils literal notranslate"><span class="pre">--recon-model</span></code> or <code class="docutils literal notranslate"><span class="pre">--out-dir</span></code>, then it also
+shows the available options (such as “emoca”, “mediapipe”, in case of <code class="docutils literal notranslate"><span class="pre">--recon-model</span></code>)
+or the expected input type (like “PATH” in case of <code class="docutils literal notranslate"><span class="pre">--out-dir</span></code>).</p>
+<p>If you, for example, would like to reconstruct your video,
+<code class="docutils literal notranslate"><span class="pre">my_vid.mp4</span></code>, using the “mediapipe” model and store the output in the <code class="docutils literal notranslate"><span class="pre">recon/</span></code> directory,
+you’d run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>medusa_videorecon my_vid.mp4 --recon-model mediapipe --out-dir recon/
+</pre></div>
+</div>
+<p>In addition, there may be some options which are not followed by an argument, like
+<code class="docutils literal notranslate"><span class="pre">--render-recon</span></code> (which are not followed by available options or expected input type).
+So, if you’d want to run the same reconstruction as the previous command, but this time
+also render the reconstruction (<code class="docutils literal notranslate"><span class="pre">--render-recon</span></code>) on top of the input video
+(<code class="docutils literal notranslate"><span class="pre">--render-on-video</span></code>), you’d run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/ --render-recon --render-on-video
+</pre></div>
+</div>
+<p>Each CLI command follows its underlying Python function closely in terms of which
+arguments it expects and which options it accepts, and all CLI defaults are the same
+as the underlying Python function defaults.</p>
+<section id="list-of-available-cli-commands">
+<h2>List of available CLI commands<a class="headerlink" href="#list-of-available-cli-commands" title="Permalink to this headline">#</a></h2>
+<p>Below, we outline and summarize all available Medusa CLI commands. For more info about
+each command’s options, run the command with the <code class="docutils literal notranslate"><span class="pre">--help</span></code> flag.</p>
+<section id="medusa-videorecon">
+<h3><code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code><a class="headerlink" href="#medusa-videorecon" title="Permalink to this headline">#</a></h3>
+<p>This command reconstructs the 3D face in each frame of the video. It assumes that the
+video is in MP4 format and has the extension <code class="docutils literal notranslate"><span class="pre">.mp4</span></code>. It also assumes (for now) that
+there is one, and only one, face present in each frame of the video.</p>
+<p>This CLI command uses the Python function
+<span class="xref myst"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.recon.videorecon</span></code></span> under the hood.</p>
+</section>
+<section id="medusa-align">
+<h3><code class="docutils literal notranslate"><span class="pre">medusa_align</span></code><a class="headerlink" href="#medusa-align" title="Permalink to this headline">#</a></h3>
+<p>This command spatially aligns the reconstructed 3D meshes from different time points,
+which is also known as “motion correction” in the functional MRI literature. It expects
+as input an HDF5 file (extension: <code class="docutils literal notranslate"><span class="pre">.h5</span></code>) with reconstruction data, as created by running
+the <code class="docutils literal notranslate"><span class="pre">medusa_videorecon</span></code> command.</p>
+<p>If a “local-to-world” matrix is known for each time point (as provided by the EMOCA and
+Mediapipe reconstruction models), each mesh is aligned to the underlying canonical model
+by applying the inverse matrix (i.e., the “world-to-local” matrix) to the vertices.</p>
+<p>If these matrices are not known, each mesh (<span class="math notranslate nohighlight">\(V_{i}\)</span>) is aligned to the mesh of the first
+time point (<span class="math notranslate nohighlight">\(V_{1}\)</span>) using the ICP algorithm <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id3" title="K Somani Arun, Thomas S Huang, and Steven D Blostein. Least-squares fitting of two 3-d point sets. IEEE Transactions on pattern analysis and machine intelligence, pages 698–700, 1987.">Arun <em>et al.</em>, 1987</a>]</span> (from
+<a class="reference external" href="https://trimsh.org/trimesh.registration.html">trimesh</a>) or Umeyama algorithm
+<span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id2" title="Shinji Umeyama. Least-squares estimation of transformation parameters between two point patterns. IEEE Transactions on Pattern Analysis &amp; Machine Intelligence, 13(04):376–380, 1991.">Umeyama, 1991</a>]</span> (from
+<a class="reference external" href="https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/_geometric.py#L91">scikit-image</a>).</p>
+<p>This CLI command uses the Python function
+<a class="reference internal" href="python/preproc/align/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.align.align</span></code></span></a> under the hood.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to separate global face movements (translation and rotation) from local face
+movements (facial soft tissue movement due to muscle activations), you need to run this
+algorithm.</p>
+</div>
+</section>
+<section id="medusa-resample">
+<h3><code class="docutils literal notranslate"><span class="pre">medusa_resample</span></code><a class="headerlink" href="#medusa-resample" title="Permalink to this headline">#</a></h3>
+<p>This command temporally resamples the time series of reconstructed 3D face meshes. It
+expects as input an HDF5 file with reconstruction data. The command can be used to resamle
+the data to a regular period and/or to upsample the data (by setting the
+<code class="docutils literal notranslate"><span class="pre">--sampling-freq</span></code> higher the the video’s sampling frequency, or FPS).</p>
+<p>This CLI command uses the Python function
+<a class="reference internal" href="python/preproc/resample/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.resample.resample</span></code></span></a> under the hood.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For videos with a regular sampling frequency (i.e., the same time period between
+frames), running this command is not strictly necessary.</p>
+</div>
+</section>
+<section id="medusa-filter">
+<h3><code class="docutils literal notranslate"><span class="pre">medusa_filter</span></code><a class="headerlink" href="#medusa-filter" title="Permalink to this headline">#</a></h3>
+<p>This command performs temporal filtering on the time series of the reconstructed 3D face
+meshes. It expects as input an HDF5 file with reconstruction data. It uses a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Butterworth_filter">Butterworth filter</a> to perform low-
+and/or high-pass filtering. The cutoffs are expected to be given in hertz.</p>
+<p>It uses a <a class="reference external" href="https://en.wikipedia.org/wiki/Butterworth_filter">Butterworth filter</a>
+to perform low- and/or high-pass filtering. The cutoffs are expected to be given in
+hertz.</p>
+<p>This CLI command uses the Python function
+<a class="reference internal" href="python/preproc/filter/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.filter.filter</span></code></span></a> under the hood.</p>
+</section>
+<section id="medusa-epoch">
+<h3><code class="docutils literal notranslate"><span class="pre">medusa_epoch</span></code><a class="headerlink" href="#medusa-epoch" title="Permalink to this headline">#</a></h3>
+<p>This command performs “epoching” on the time series of the reconstructed 3D face
+meshes. It expects as input an HDF5 file with reconstruction data. Here, an “epoch” refers to
+an equal duration chunk of signal, usually time-locked to repeated experimental events
+(such as stimulus onsets or button presses; definition adapted from
+<a class="reference external" href="https://mne.tools/stable/auto_tutorials/epochs/10_epochs_overview.html">MNE</a>).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In Medusa, you can only use this functionality when you actually have an events-file with
+stimulus/response/trial onsets (see <a class="reference internal" href="../getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a> for more
+information).</p>
+</div>
+<p>The result of the epoching operation is a 4D numpy array of shape <span class="math notranslate nohighlight">\(N\)</span> (epochs) <span class="math notranslate nohighlight">\(\times\ T\)</span>
+(number of time points of epoch) <span class="math notranslate nohighlight">\(\times\ V\)</span> (number of vertices) <span class="math notranslate nohighlight">\(\times\ 3\)</span> (X, Y, Z).
+The CLI command actually converts this data into an MNE-compatible structure
+(an <a class="reference external" href="https://mne.tools/stable/generated/mne.EpochsArray.html"><code class="docutils literal notranslate"><span class="pre">EpochsArray</span></code></a>) and saves
+it as a FIF file (extension: <code class="docutils literal notranslate"><span class="pre">.fif</span></code>). This file can then be loaded using MNE
+(with <a class="reference external" href="https://mne.tools/stable/generated/mne.read_epochs.html#mne.read_epochs"><code class="docutils literal notranslate"><span class="pre">mne.read_epochs</span></code></a>)
+to be further analyzed.</p>
+<p>This CLI command uses the Python function
+<a class="reference internal" href="python/preproc/epoch/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.preproc.epoch.epoch</span></code></span></a> under the hood.</p>
+</section>
+<section id="medusa-videorender">
+<h3><code class="docutils literal notranslate"><span class="pre">medusa_videorender</span></code><a class="headerlink" href="#medusa-videorender" title="Permalink to this headline">#</a></h3>
+<p>This command renders the time series of the reconstructed 3D face meshes as an MP4 video
+or GIF (depending on the <code class="docutils literal notranslate"><span class="pre">--format</span></code> flag). It expects as input an HDF5 file with
+reconstruction data and, if you want to render the reconstruction on top of the original
+videon, a video file (e.g., <code class="docutils literal notranslate"><span class="pre">--video</span> <span class="pre">my_video.mp4</span></code>).</p>
+<p>This CLI command uses the <code class="docutils literal notranslate"><span class="pre">render_video</span></code> method from the
+<a class="reference internal" href="python/core/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.core.BaseData</span></code></span></a> class, which in turn uses the
+<a class="reference internal" href="python/render/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">medusa.render.Renderer</span></code></span></a> class (a wrapper around a
+<a class="reference external" href="https://pyrender.readthedocs.io/">pyrender</a> renderer).</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./api"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../tutorials/experimentation.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Designing experiments</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="python.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Python interface</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Lukas Snoek<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      Developed at the University of Glasgow
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
