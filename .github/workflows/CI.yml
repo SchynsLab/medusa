@@ -9,7 +9,7 @@ env:
   passwd_flame: ${{ secrets.PASSWD_FLAME }}
 
 jobs:
-  build:
+  test-package:
 
     runs-on: ubuntu-latest
     strategy:
@@ -32,6 +32,6 @@ jobs:
     - name: Install Medusa
       run: poetry install
     - name: Download external data
-      run: poetry run sh ./ci/download_data.sh
+      run: poetry run bash ./ci/download_data.sh
     #- name: Test with pytest
     #  run: poetry run sh run_tests.sh

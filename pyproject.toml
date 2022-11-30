@@ -42,6 +42,7 @@ mediapipe-silicon = { version = "^0.8.11", markers = "platform_system == 'Darwin
 onnxruntime-gpu = "^1.13.1"
 chumpy = {git = "https://github.com/lukassnoek/chumpy.git"}
 pytorch-lightning = "^1.8.3.post1"
+av = "^10.0.0"
 
 [tool.poetry.group.dev.dependencies]
 jupyter-book = "^0.13.1"
