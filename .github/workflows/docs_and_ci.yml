@@ -1,4 +1,4 @@
-name: CI
+name: Documentation and testing
 
 on:
   push:

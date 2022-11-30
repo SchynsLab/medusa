@@ -319,9 +319,9 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
             with zipfile.ZipFile(emoca_zip, 'r') as zip_ref:
                 zip_ref.extractall(f'{directory}/')
 
-            cfg = data_dir / 'EMOCA/cfg.yaml'
-            if cfg.is_file():
-                cfg.unlink()
+            cfg_ = data_dir / 'EMOCA/cfg.yaml'
+            if cfg_.is_file():
+                cfg_.unlink()
 
             ckpt = list(data_dir.glob("**/*.ckpt"))
             if len(ckpt) == 0:
