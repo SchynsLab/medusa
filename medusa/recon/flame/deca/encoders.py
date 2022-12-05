@@ -12,8 +12,8 @@
 #
 # For comments or questions, please email us at deca@tue.mpg.de
 # For commercial licensing contact, please contact ps-license@tuebingen.mpg.de
-import torch
 import numpy as np
+import torch
 from torch import nn
 from torch.nn import functional as F
 
@@ -119,7 +119,7 @@ class Bottleneck(nn.Module):
 
 
 def conv3x3(in_planes, out_planes, stride=1):
-    """3x3 convolution with padding"""
+    """3x3 convolution with padding."""
     return nn.Conv2d(
         in_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False
     )
@@ -183,7 +183,7 @@ class PerceptualEncoder(nn.Module):
         self.encoder = torch.hub.load('pytorch/vision:v0.8.1', 'mobilenet_v2', verbose=False,
                                       pretrained=True)
 #                                      weights='MobileNet_V2_Weights.IMAGENET1K_V1')
-        
+
         self.temporal = nn.Sequential(
             nn.Conv1d(in_channels=1280, out_channels=256, kernel_size=5, stride=1, padding=2),
             nn.BatchNorm1d(256),
@@ -195,7 +195,7 @@ class PerceptualEncoder(nn.Module):
         )
 
     def forward(self, inputs):
-        
+
         features = self.encoder.features(inputs)
         features = nn.functional.adaptive_avg_pool2d(features, (1, 1)).squeeze(-1).squeeze(-1)
 
@@ -203,6 +203,6 @@ class PerceptualEncoder(nn.Module):
         features = self.temporal(features)
         features = features.squeeze(0).permute(1,0)
         parameters = self.layers(features)
-        parameters[...,50] = F.relu(parameters[...,50]) 
+        parameters[...,50] = F.relu(parameters[...,50])
 
         return parameters[...,:50], parameters[...,50:]

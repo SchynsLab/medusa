@@ -1,14 +1,15 @@
-import numpy as np
 from collections import defaultdict
 
-from . import Mediapipe
-from .flame import DecaReconModel
+import numpy as np
+
 from .. import DEVICE
+from ..core import FLAME_MODELS, MODEL2CLS
+from ..crop import LandmarkBboxCropModel
 from ..io import VideoLoader
 from ..log import get_logger
-from ..core import MODEL2CLS, FLAME_MODELS
-from ..crop import LandmarkBboxCropModel
-             
+from . import Mediapipe
+from .flame import DecaReconModel
+
 
 def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None,
                batch_size=32, loglevel='INFO'):
@@ -41,11 +42,11 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
     -------
     data : medusa.core.*Data
         An object with a class inherited from ``medusa.core.BaseData``
-        
+
     Examples
     --------
     Reconstruct a video using Mediapipe:
-    
+
     >>> from medusa.data import get_example_video
     >>> vid = get_example_video()
     >>> data = videorecon(vid, recon_model='mediapipe')
@@ -73,7 +74,7 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
     recon_data = defaultdict(list)
     i_frame = 0
     for batch in video:
-        
+
         if recon_model in FLAME_MODELS:
 
             # Crop image, add tform to emoca (for adding rigid motion

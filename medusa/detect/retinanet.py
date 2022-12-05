@@ -1,17 +1,18 @@
-""" Face detection model adapted from the insightface implementation. By reimplementing
-it here, insightface does not have to be installed.
+"""Face detection model adapted from the insightface implementation. By
+reimplementing it here, insightface does not have to be installed.
 
-Please see the LICENSE file in the current directory for the license that
-is applicable to this implementation.
+Please see the LICENSE file in the current directory for the license
+that is applicable to this implementation.
 """
 
-import torch
-import numpy as np
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
+
+import numpy as np
+import torch
 from kornia.geometry.transform import resize
-from onnxruntime import InferenceSession, SessionOptions
-from onnxruntime import set_default_logger_severity
+from onnxruntime import (InferenceSession, SessionOptions,
+                         set_default_logger_severity)
 
 from .. import DEVICE
 from ..io import load_inputs
@@ -19,8 +20,8 @@ from .base import BaseDetectionModel, DetectionResults
 
 
 class RetinanetDetector(BaseDetectionModel):
-    """ Face detection model based on the ``insightface`` package, as used
-    by MICA (https://github.com/Zielon/MICA).
+    """Face detection model based on the ``insightface`` package, as used by
+    MICA (https://github.com/Zielon/MICA).
 
     Parameters
     ----------
@@ -46,14 +47,14 @@ class RetinanetDetector(BaseDetectionModel):
     >>> crop_img = crop_model(img)
     >>> crop_img.shape
     torch.Size([1, 3, 112, 112])
-    """    
+    """
 
     def __init__(self, det_threshold=0.5, nms_threshold=0.3, device=DEVICE):
-        
+
         self.det_threshold = det_threshold
         self.nms_threshold = nms_threshold
         self.device = device
-        self._det_model = self._init_det_model()        
+        self._det_model = self._init_det_model()
         self._center_cache = {}
         self._mean = 127.5
         self._scale = 128
@@ -63,10 +64,10 @@ class RetinanetDetector(BaseDetectionModel):
         return 'retinanet'
 
     def _init_det_model(self):
-        
+
         f_in = Path(__file__).parents[1] / 'data/models/buffalo_l/det_10g.onnx'
         #f_in = Path(__file__).parents[1] / 'data/models/antelopev2/scrfd_10g_bnkps.onnx'
-        
+
         if not f_in.is_file():
             f_out = f_in.parents[1] / 'buffalo_l.zip'
 
@@ -86,25 +87,25 @@ class RetinanetDetector(BaseDetectionModel):
         self._onnx_input_shape = (1, 3, 224, 224)  # undefined in this onnx model
         self._onnx_output_names = [o.name for o in sess.get_outputs()]
 
-        self.binding = sess.io_binding()
-        for name in zip(self._onnx_output_names):
-            self.binding.bind_output(name[0])
-
-        return sess 
+        return sess
 
     def _init_vars(self):
         self._anchor_ratio = 1.0
         self.fmc = 3
         self._feat_stride_fpn = [8, 16, 32]
         self._num_anchors = 2
-        
+
     def _forward(self, det_img):
 
         scores_list = []
         bboxes_list = []
         kpss_list = []
 
-        self.binding.bind_input(
+        binding = self._det_model.io_binding()
+        for name in zip(self._onnx_output_names):
+            binding.bind_output(name[0])
+
+        binding.bind_input(
             name=self._onnx_input_name,
             device_type=self.device,
             device_id=0,
@@ -113,17 +114,17 @@ class RetinanetDetector(BaseDetectionModel):
             buffer_ptr=det_img.data_ptr(),
         )
 
-        self._det_model.run_with_iobinding(self.binding)
-        net_outputs = self.binding.copy_outputs_to_cpu()
-        
+        self._det_model.run_with_iobinding(binding)
+        net_outputs = binding.copy_outputs_to_cpu()
+
         fmc = self.fmc
         for idx, stride in enumerate(self._feat_stride_fpn):
-            
+
             scores = net_outputs[idx]
             bbox_preds = net_outputs[idx+fmc]
             bbox_preds = bbox_preds * stride
             kps_preds = net_outputs[idx+fmc*2] * stride
-            
+
             height = 224 // stride
             width = 224 // stride
             K = height * width
@@ -144,7 +145,7 @@ class RetinanetDetector(BaseDetectionModel):
             pos_bboxes = bboxes[pos_inds]
             scores_list.append(pos_scores)
             bboxes_list.append(pos_bboxes)
-            
+
             kpss = self._distance2kps(anchor_centers, kps_preds)
             kpss = kpss.reshape( (kpss.shape[0], -1, 2) )
             pos_kpss = kpss[pos_inds]
@@ -153,8 +154,8 @@ class RetinanetDetector(BaseDetectionModel):
         return scores_list, bboxes_list, kpss_list
 
     def __call__(self, imgs, max_num=0):
-        
-        # B x C x H x W        
+
+        # B x C x H x W
         imgs = load_inputs(imgs, load_as='torch', channels_first=True, device=self.device)
         b, c, h, w = imgs.shape
         im_ratio = float(h) / w
@@ -162,14 +163,14 @@ class RetinanetDetector(BaseDetectionModel):
         # model_ratio = 1.
         _, _, mh, mw = self._onnx_input_shape
         model_ratio = float(mh) / mw
-        
+
         if im_ratio > model_ratio:
             new_h = mh
             new_w = int(new_h / im_ratio)
         else:
             new_w = mw
             new_h = int(new_w * im_ratio)
-                
+
         imgs = resize(imgs, (new_h, new_w))
         det_imgs = torch.zeros((b, c, mh, mw), device=imgs.device)
         det_imgs[:, :, :new_h, :new_w] = imgs
@@ -182,21 +183,21 @@ class RetinanetDetector(BaseDetectionModel):
         for i in range(b):
             det_img = det_imgs[i, ...].unsqueeze(0)  # 1 x 3 x 224 x 224
             scores_list, bboxes_list, kpss_list = self._forward(det_img)
-            
+
             scores = np.vstack(scores_list)
             scores_ravel = scores.ravel()
             order = scores_ravel.argsort()[::-1]
             bboxes = np.vstack(bboxes_list) / det_scale
             kpss = np.vstack(kpss_list) / det_scale
-            
+
             pre_det = np.hstack((bboxes, scores)).astype(np.float32, copy=False)
             pre_det = pre_det[order, :]
             keep = self._nms(pre_det)
             det = pre_det[keep, :]
-            
+
             kpss = kpss[order, :, :]
             kpss = kpss[keep, :, :]
-            
+
             if max_num > 0 and det.shape[0] > max_num:
                 area = (det[:, 2] - det[:, 0]) * (det[:, 3] - det[:, 1])
                 img_center = h // 2, w // 2
@@ -216,7 +217,7 @@ class RetinanetDetector(BaseDetectionModel):
                 outputs['conf'].append(det[:, 4])
                 outputs['bbox'].append(det[:, :4])
                 outputs['lms'].append(kpss)
-        
+
         outputs = DetectionResults(imgs.shape[0], **outputs, device=self.device)
         return outputs
 
@@ -251,6 +252,7 @@ class RetinanetDetector(BaseDetectionModel):
 
     def _distance2bbox(self, points, distance, max_shape=None):
         """Decode distance prediction to bounding box.
+
         Args:
             points (Tensor): Shape (n, 2), [x, y].
             distance (Tensor): Distance from the given point to 4
@@ -272,6 +274,7 @@ class RetinanetDetector(BaseDetectionModel):
 
     def _distance2kps(self, points, distance, max_shape=None):
         """Decode distance prediction to bounding box.
+
         Args:
             points (Tensor): Shape (n, 2), [x, y].
             distance (Tensor): Distance from the given point to 4

@@ -7,7 +7,7 @@ contains several submodules, of which the most important ones are:
 
 The `core` module contains the core data classes used in Medusa. The most important class
 is the `BaseData` class. This class contains most of the functionality to initialize,
-transform, visualize, load, and save reconstruction data. The `BaseData` class should 
+transform, visualize, load, and save reconstruction data. The `BaseData` class should
 not be used by itself; instead, use one of the other data classes that inherit from
 the `BaseData` class:
 
@@ -52,7 +52,7 @@ file.
 The `render` module contains code to render (sequences of) 3D meshes as 2D images
 (or videos). Under the hood, it makes heavy use of the awesome [pyrender](https://pyrender.readthedocs.io/)
 package, which may not be the fastest renderer available, but its versatility and easy-of-use
-makes it ideal for Medusa's purposes. 
+makes it ideal for Medusa's purposes.
 
 The main object in the `io` module is the `Renderer` class, which makes it easy to
 create scenes, add meshes, and subsequently render 3D face meshes.
@@ -64,7 +64,7 @@ command-line interface. Its functionality is documented [here](./cli).
 
 ## [`medusa.preproc`](./python/preproc/index)
 
-The bulk of Medusa's functionality in contained in the `preproc` module and its 
+The bulk of Medusa's functionality in contained in the `preproc` module and its
 submodules. As its name suggests, it contains code to preprocess time series of 3D
 face reconstructions.
 
@@ -88,7 +88,7 @@ function changes the `.space` attribute from `"world"` to `"local"`.
 
 This submodule contains a single function, `resample`, that performs temporal resampling
 of the 3D mesh time series by interpolating the data at a regular, evenly-spaced grid
-with a specific sampling frequency. It returns an instance of the data class of which 
+with a specific sampling frequency. It returns an instance of the data class of which
 the data (`v` and, optionally, `mat`) has been resampled and the sampling frequency
 (`.sf` attribute) has been changed accordingly.
 
@@ -112,7 +112,7 @@ $\times\ 3$ (X, Y, Z), or an MNE-compatible [`EpochsArray`](https://mne.tools/st
 ```{warning}
 In Medusa, you can only use this functionality when you actually have an events-file with
 stimulus/response/trial onsets (see [quickstart](../getting_started/quickstart) for more
-information). 
+information).
 ```
 
 ## [`medusa.transform`](./python/transform/index)

@@ -1,7 +1,7 @@
-""" Module with command-line interface functions, created using ``click``.
-Each function can be accessed on the command line as ``medusa_{operation}``,
-e.g. ``medusa_videorecon`` or ``medusa_align`` with arguments and options corresponding
-to the function arguments, e.g.
+"""Module with command-line interface functions, created using ``click``. Each
+function can be accessed on the command line as ``medusa_{operation}``, e.g.
+``medusa_videorecon`` or ``medusa_align`` with arguments and options
+corresponding to the function arguments, e.g.
 
 ``medusa_filter some_h5_file.h5 -l 3 -h 0.01``
 
@@ -14,25 +14,25 @@ For more information, check out the
 `documentation <https://lukas-snoek.com/medusa/api/cli.html`_.
 """
 
-import yaml
-import torch
-import click
-import shutil
 import logging
+import shutil
 import zipfile
-from pathlib import Path
-from datetime import datetime
 from collections import OrderedDict
+from datetime import datetime
+from pathlib import Path
+
+import click
+import torch
+import yaml
 
 from . import DEVICE
+from .io import download_file, load_h5
 from .log import get_logger
-from .io import load_h5, download_file
-from .recon import videorecon
 from .preproc.align import align
-from .preproc.resample import resample
-from .preproc.filter import bw_filter
 from .preproc.epoch import epoch
-
+from .preproc.filter import bw_filter
+from .preproc.resample import resample
+from .recon import videorecon
 
 RECON_MODELS = ["spectre-coarse", "emoca-dense", "emoca-coarse", "deca-dense", "deca-coarse", "mediapipe"]
 
@@ -50,8 +50,8 @@ RECON_MODELS = ["spectre-coarse", "emoca-dense", "emoca-coarse", "deca-dense", "
 @click.option('--batch-size', '-b', default=32, type=click.INT,
               help='Batch size of inputs to recon model')
 def videorecon_cmd(video_path, out, recon_model, device, n_frames, batch_size):
-    """ Performs frame-by-frame 3D face reconstruction of a video file."""
-    
+    """Performs frame-by-frame 3D face reconstruction of a video file."""
+
     data = videorecon(video_path=video_path, recon_model=recon_model, device=device,
                      n_frames=n_frames, batch_size=batch_size)
 
@@ -76,11 +76,11 @@ def videorecon_cmd(video_path, out, recon_model, device, n_frames, batch_size):
               help="Whether to perform alignment on top of existing transform")
 @click.option("--ignore-existing", is_flag=True,
               help="Whether to ignore existing alignment and run alignment")
-@click.option("--reference-index", default=0, 
+@click.option("--reference-index", default=0,
               help="Index of reference mesh to align other meshes to (default = 0 = first")
 def align_cmd(data_file, out, algorithm, additive_alignment, ignore_existing,
               reference_index):
-    """ Performs alignment ("motion correction") of a mesh time series. """
+    """Performs alignment ("motion correction") of a mesh time series."""
     data = align(data_file, algorithm, additive_alignment, ignore_existing,
                  reference_index)
 
@@ -99,8 +99,8 @@ def align_cmd(data_file, out, algorithm, additive_alignment, ignore_existing,
 @click.option("--kind", default="pchip", type=click.Choice(["pchip", "linear", "quadratic", "cubic"]),
               help="Kind of interpolation used")
 def resample_cmd(data_file, out, sampling_freq, kind):
-    """ Performs temporal resampling of a mesh time series. """
-    
+    """Performs temporal resampling of a mesh time series."""
+
     data = resample(data_file, sampling_freq, kind)
 
     if out is None:
@@ -118,7 +118,7 @@ def resample_cmd(data_file, out, sampling_freq, kind):
 @click.option("-h", "--high-pass", default=0.005,
               help="High-pass filter in hertz")
 def filter_cmd(data_file, out, low_pass, high_pass):
-    """ Performs temporal filtering of a mesh time series. """
+    """Performs temporal filtering of a mesh time series."""
 
     data = bw_filter(data_file, low_pass, high_pass)
 
@@ -146,7 +146,7 @@ def filter_cmd(data_file, out, low_pass, high_pass):
               help="Whether convert the output to an MNE EpochsArray object")
 def epoch_cmd(data_file, out, start, end, period, baseline_correct, add_back_grand_mean,
               to_mne):
-    """ Performs epoching of a mesh time series. """
+    """Performs epoching of a mesh time series."""
 
     data = load_h5(data_file)
     epochsarray = epoch(data, start, end, period, baseline_correct,
@@ -180,7 +180,7 @@ def epoch_cmd(data_file, out, start, end, period, baseline_correct, add_back_gra
 @click.option("--scale", default=None, type=click.FLOAT,
               help="Scale factor of rendered video (e.g., 0.25 = 25% of original size")
 def videorender_cmd(data_file, out, video, n_frames, smooth, wireframe, alpha, scale):
-    """ Renders the reconstructed mesh time series as a video (gif or mp4)."""
+    """Renders the reconstructed mesh time series as a video (gif or mp4)."""
 
     data = load_h5(data_file)
 
@@ -208,7 +208,7 @@ def videorender_cmd(data_file, out, video, n_frames, smooth, wireframe, alpha, s
 @click.option('--device', default=DEVICE, type=click.STRING)
 @click.option('--no-validation', is_flag=True)
 def download_ext_data(directory, overwrite, username, password, device, no_validation):
-    """ Command-line utility to download external data. """
+    """Command-line utility to download external data."""
 
     click.secho(
     """
@@ -219,14 +219,14 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
     In addition, to download the FLAME model itself (necessary for any FLAME-based reconstruction model),
     you need to pass your username (--username arg) and password (--passwd arg) of your account on their
     website (https://flame.is.tue.mpg.de) to this command, for example:
-    
+
     medusa_download_ext_data --username test@gmail.com --password yourpassword
     """, fg='red', bold=True, blink=True
     )
- 
+
     logger = get_logger('INFO')
     logger.info(f"Downloading models to {directory}, configuring to run on {device}")
-    
+
     directory = Path(directory)
     if not directory.is_dir():
         logger.info(f"Creating output directory {directory}")
@@ -276,7 +276,7 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         return
 
     cfg = {}  # to be saved later
-    
+
     data_dir = Path(directory).resolve()
     if not data_dir.is_dir():
         logger.exception(f"Directory '{directory}' does not exist!")
@@ -331,7 +331,7 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
             ckpt = ckpt[0]
             shutil.move(ckpt, data_dir / "emoca.ckpt")
             shutil.rmtree(data_dir / 'EMOCA')
-            
+
             logger.info("Reorganizing EMOCA checkpoint file ... ")
             sd = torch.load(data_dir / "emoca.ckpt")["state_dict"]
             models = ["E_flame", "E_detail", "E_expression", "D_detail"]
@@ -348,7 +348,7 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
             torch.save(state_dict, ckpt_out)
             logger.info(f"EMOCA model is ready to use!")
             cfg['emoca_path'] = str(ckpt_out)
-            
+
     mica_model_path = data_dir / 'mica.tar'
     if mica_model_path.is_file():
         logger.info("MICA model is ready to use!")

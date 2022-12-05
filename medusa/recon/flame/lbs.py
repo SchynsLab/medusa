@@ -38,7 +38,7 @@ def lbs(
     lbs_weights,
     pose2rot=True,
 ):
-    """Performs Linear Blend Skinning with the given shape and pose parameters
+    """Performs Linear Blend Skinning with the given shape and pose parameters.
 
     Parameters
     ----------
@@ -127,8 +127,7 @@ def lbs(
 
 
 def blend_shapes(betas, shape_disps):
-    """Calculates the per vertex displacement due to the blend shapes
-
+    """Calculates the per vertex displacement due to the blend shapes.
 
     Parameters
     ----------
@@ -200,8 +199,7 @@ def transform_mat(R, t):
 
 
 def batch_rigid_transform(rot_mats, joints, parents):
-    """
-    Applies a batch of rigid transformations to the joints
+    """Applies a batch of rigid transformations to the joints.
 
     Parameters
     ----------

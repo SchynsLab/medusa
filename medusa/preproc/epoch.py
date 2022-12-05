@@ -1,11 +1,12 @@
-import numpy as np
-from pathlib import Path
-from tqdm import tqdm
 from datetime import datetime
-from scipy.interpolate import interp1d
+from pathlib import Path
 
-from ..io import load_h5
+import numpy as np
+from scipy.interpolate import interp1d
+from tqdm import tqdm
+
 from ..epochs import EpochsArray
+from ..io import load_h5
 
 
 def epoch(
@@ -77,7 +78,7 @@ def epoch(
     epochs = np.zeros((N, T, *D.shape[1:]))
 
     # Loop over trials (onsets)
-    
+
     desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Epoch trials")
     for i, onset in tqdm(data.events["onset"].iteritems(), total=N, desc=desc):
 
@@ -133,7 +134,7 @@ def epoch(
     params = epochs[..., -12:]
     epochs_arr = EpochsArray(v=v, params=params, frame_t=frame_t, events=data.events,
                              recon_model=data.recon_model)
-    
+
     data.v = v.mean(axis=0)
     data.render_video('test_av.gif', scaling=0.5, smooth=False, overlay=None)
 

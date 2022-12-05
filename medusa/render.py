@@ -1,4 +1,4 @@
-""" Module with functionality to render 4D face mesh data. 
+"""Module with functionality to render 4D face mesh data.
 
 The ``Renderer`` class is a high-level wrapper around functionality from the
 excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
@@ -7,10 +7,10 @@ excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
 """
 
 import numpy as np
-from trimesh import Trimesh
+from pyrender import (DirectionalLight, IntrinsicsCamera, Mesh, Node,
+                      OffscreenRenderer, OrthographicCamera, Scene)
 from pyrender.constants import RenderFlags
-from pyrender import Scene, Mesh, Node, OffscreenRenderer
-from pyrender import DirectionalLight, IntrinsicsCamera, OrthographicCamera
+from trimesh import Trimesh
 
 
 class Renderer:
@@ -43,9 +43,10 @@ class Renderer:
         self._renderer = self._create_renderer()  # actual pyrender renderer
 
     def _create_scene(self):
-        """Creates a simple scene with a camera and a
-        directional light. The object (reconstructed face) is
-        added when calling __call__."""
+        """Creates a simple scene with a camera and a directional light.
+
+        The object (reconstructed face) is added when calling __call__.
+        """
         w, h = self.viewport
         scene = Scene(bg_color=[0, 0, 0, 0], ambient_light=(255, 255, 255))
 
@@ -102,14 +103,14 @@ class Renderer:
 
         # if overlay is not None:
         #     overlay = overlay.squeeze()
-            
+
         #     if overlay.ndim > 1:
-        #         raise ValueError("Overlay should be a 1D array!")                
-            
+        #         raise ValueError("Overlay should be a 1D array!")
+
         #     if overlay.size != v.shape[0]:
         #         raise ValueError("Overlay should have the same number as values as "
         #                          f"the vertex array (expected {v.shape[0]}, found {overlay.size})!")
-            
+
         #     cmap = plt.get_cmap(cmap_name)
         #     overlay = cmap(overlay)
         #     #mesh.visual.vertex_colors = cmap(overlay)
@@ -126,7 +127,7 @@ class Renderer:
 
             #if not is_colors:
             #    cmap = plt.get_cmap(cmap_name)
-        
+
         mesh = Trimesh(v, f, **kwargs)
         mesh = Mesh.from_trimesh(mesh, smooth=self.smooth, wireframe=self.wireframe)
 
@@ -143,11 +144,10 @@ class Renderer:
         return img.copy()
 
     def alpha_blend(self, img, background, face_alpha=None):
-        """ Simple alpha blend of a rendered image and
-        a background. The image (`img`) is assumed to be
-        an RGBA image and the background (`background`) is
-        assumed to be a RGB image. The alpha channel of the image
-        is used to blend them together. The optional `threshold`
+        """Simple alpha blend of a rendered image and a background. The image
+        (`img`) is assumed to be an RGBA image and the background
+        (`background`) is assumed to be a RGB image. The alpha channel of the
+        image is used to blend them together. The optional `threshold`
         parameter can be used to impose a sharp cutoff.
 
         Parameters

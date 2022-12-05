@@ -1,21 +1,23 @@
-""" This module contains functions to load in example data, which
-is used for examples and tests. The example data is the following video:
-https://www.pexels.com/video/close-up-of-a-woman-showing-different-facial-expressions-3063839/
-made freely available by Wolfgang Langer.
+"""This module contains functions to load in example data, which is used for
+examples and tests. The example data is the following video:
+https://www.pexels.com/video/close-up-of-a-woman-showing-different-facial-
+expressions-3063839/ made freely available by Wolfgang Langer.
 
-The video was trimmed to 10 seconds and resized in order to reduce disk space.
+The video was trimmed to 10 seconds and resized in order to reduce disk
+space.
 """
+
+from pathlib import Path
 
 import cv2
 import torch
-from pathlib import Path
 
 from ..io import VideoLoader
 
 
 def get_example_frame(load_numpy=False, load_torch=False, device='cuda'):
     """Loads an example frame from the example video.
-    
+
     Parameters
     ----------
     load_numpy : bool
@@ -52,10 +54,10 @@ def get_example_frame(load_numpy=False, load_torch=False, device='cuda'):
 
     here = Path(__file__).parent
     img_path = here / "example_data/example_frame.png"
-    
+
     if not load_torch and not load_numpy:
         return img_path
-        
+
     img = cv2.imread(str(img_path))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
@@ -110,8 +112,8 @@ def get_example_video(return_videoloader=False, **kwargs):
 
 
 def get_example_h5(load=False, model="mediapipe", as_path=True):
-    """Retrieves an example hdf5 file with reconstructed 4D
-    data from the example video.
+    """Retrieves an example hdf5 file with reconstructed 4D data from the
+    example video.
 
     Parameters
     ----------

@@ -148,4 +148,3 @@ docs/autoapi/_build
 docs/getting_started/*.mp4
 docs/getting_started/*.gif
 docs/api/python/**/*.rst.txt
-

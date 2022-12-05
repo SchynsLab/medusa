@@ -1,11 +1,12 @@
-import torch
-import pytest
 from pathlib import Path
-from medusa.detect import YunetDetector, RetinanetDetector
+
+import pytest
+import torch
+from test_utils import _check_gha_compatible
+
+from medusa.detect import RetinanetDetector, YunetDetector
 from medusa.detect.base import DetectionResults
 from medusa.io import VideoLoader
-
-from test_utils import _check_gha_compatible
 
 imgs = ['no_face', 'one_face', 'two_faces', 'three_faces',
         ['no_face', 'one_face'], ['no_face', 'two_faces'],
@@ -18,13 +19,12 @@ img_params = zip(imgs, n_exp)
 @pytest.mark.parametrize('img_params', img_params)
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 def test_detector_imgs(Detector, img_params, device):
-
     if not _check_gha_compatible(device):
         return
 
     model = Detector(device=device)
     imgs, n_exp = img_params
-    
+
     if not isinstance(imgs, list):
         imgs = [imgs]
 
@@ -55,7 +55,6 @@ videos = [
 @pytest.mark.parametrize('Detector', [RetinanetDetector, YunetDetector])
 @pytest.mark.parametrize('video', videos)
 def test_detector_vid(Detector, video):
-
     video, n_exp = video
     video_path = Path(__file__).parent / f'test_data/{video}'
     loader = VideoLoader(video_path)

@@ -1,15 +1,16 @@
-import torch
-import numpy as np
-import torch.nn.functional as F
 from collections import OrderedDict
+
+import numpy as np
+import torch
+import torch.nn.functional as F
 
 from ..base import FlameReconModel
 from ..decoders import FLAME
-from .encoders import MappingNetwork, Arcface
+from .encoders import Arcface, MappingNetwork
 
 
 class MicaReconModel(FlameReconModel):
-    """ A simplified implementation of the MICA 3D face reconstruction model
+    """A simplified implementation of the MICA 3D face reconstruction model
     (https://zielon.github.io/mica/), for inference only.
 
     Parameters
@@ -22,14 +23,15 @@ class MicaReconModel(FlameReconModel):
     torch.backends.cudnn.benchmark = True
 
     def __init__(self, device='cuda'):
-        """ Initializes a MicaReconModel object. """
+        """Initializes a MicaReconModel object."""
         self.device = device
         self._load_cfg()  # method inherited from parent
         self._create_submodels()
         self._load_submodels()
 
     def _create_submodels(self):
-        """ Loads the submodels associated with MICA. To summarizes:
+        """Loads the submodels associated with MICA. To summarizes:
+
         - `E_arcface`: predicts a 512-D embedding for a (cropped, 112x112) image
         - `E_flame`: predicts (coarse) FLAME parameters given a 512-D embedding
         - `D_flame`: outputs a ("coarse") mesh given shape FLAME parameters
@@ -43,11 +45,12 @@ class MicaReconModel(FlameReconModel):
         torch.set_grad_enabled(False)  # apparently speeds up forward pass, too
 
     def _load_submodels(self):
-        """ Loads the weights for the Arcface submodel as well as the MappingNetwork
-        that predicts FLAME shape parameters from the Arcface output. """
+        """Loads the weights for the Arcface submodel as well as the
+        MappingNetwork that predicts FLAME shape parameters from the Arcface
+        output."""
         checkpoint = torch.load(self.cfg['mica_path'])
         self.E_arcface.load_state_dict(checkpoint['arcface'])
-        
+
         # The original weights also included the data for the FLAME model (template
         # vertices, faces, etc), which we don't need here, because we use a common
         # FLAME decoder model (in decoders.py)
@@ -57,36 +60,36 @@ class MicaReconModel(FlameReconModel):
             # regressor.
             if 'regressor.' in key:
                 new_checkpoint[key.replace('regressor.', '')] = value
-        
+
         self.E_flame.load_state_dict(new_checkpoint)
 
     def _encode(self, image):
-        """ Encodes an image into a set of FLAME shape parameters. """ 
+        """Encodes an image into a set of FLAME shape parameters."""
         out_af = self.E_arcface(image)  # output of arcface
         out_af = F.normalize(out_af)
         shape_code = self.E_flame(out_af)
         return shape_code
 
     def _decode(self, shape_code):
-        """Decodes the shape code into a set of vertices following the (coarse) FLAME
-        topology. """
+        """Decodes the shape code into a set of vertices following the (coarse)
+        FLAME topology."""
         v, _ = self.D_flame(shape_code)
         return v
 
     def __call__(self, image):
-        """ Performs 3D reconstruction on the supplied image.
-        
+        """Performs 3D reconstruction on the supplied image.
+
         Parameters
         ----------
         image : np.ndarray, torch.Tensor
             Ideally, a numpy array or torch tensor of shape 1 x 3 x 112 x 112
             (1, C, W, H), representing a cropped image as done by the
             InsightFaceCroppingModel
-            
+
         Returns
         -------
         out : dict
-            A dictionary with two keys: ``"v"``, the reconstructed vertices (5023 in 
+            A dictionary with two keys: ``"v"``, the reconstructed vertices (5023 in
             total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
             matrix, which is in the case of MICA the identity matrix
         """

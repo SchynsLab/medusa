@@ -1,12 +1,13 @@
-import cv2
-import torch
-import numpy as np
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
+
+import cv2
+import numpy as np
+import torch
 
 from .. import DEVICE
-from .base import BaseDetectionModel, DetectionResults
 from ..io import load_inputs
+from .base import BaseDetectionModel, DetectionResults
 
 
 class YunetDetector(BaseDetectionModel):
@@ -17,7 +18,7 @@ class YunetDetector(BaseDetectionModel):
         self.nms_threshold = nms_threshold
         self.device = device
         self._model = self._init_model(**kwargs)
-    
+
     def __str__(self):
         return 'yunet'
 
@@ -31,7 +32,7 @@ class YunetDetector(BaseDetectionModel):
         )
 
         return model
-    
+
     def __call__(self, imgs):
 
         imgs = load_inputs(imgs, load_as='numpy', channels_first=False)

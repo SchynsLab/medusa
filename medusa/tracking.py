@@ -1,11 +1,11 @@
 import torch
+
 from . import DEVICE
 
 
 def sort_faces(lms_stack, img_idx, dist_threshold=200, device=DEVICE):
-    
     face_idx = torch.zeros_like(img_idx, device=device, dtype=torch.int64)
-    
+
     for i, i_img in enumerate(img_idx.unique()):
         # lms = all detected landmarks for this image
         det_idx = i_img == img_idx
@@ -20,7 +20,7 @@ def sort_faces(lms_stack, img_idx, dist_threshold=200, device=DEVICE):
             face_idx[det_idx] = torch.arange(0, n_det, device=device)
             tracker = lms
             continue
-        
+
         # Compute the distance between each detection (lms) and currently tracked faces (tracker)
         dists = torch.cdist(lms, tracker)  # n_det x current_faces
 
@@ -32,14 +32,14 @@ def sort_faces(lms_stack, img_idx, dist_threshold=200, device=DEVICE):
         track_list = torch.arange(dists.shape[1], device=device)
 
         # Check the order of minimum distances across detections
-        # (which we'll use to loop over)               
+        # (which we'll use to loop over)
         order = dists.min(dim=1)[0].argsort()
         det_list = torch.arange(dists.shape[0], device=device)
 
         # Loop over detections, sorted from best match (lowest dist)
         # to any face in the tracker to worst match
         for i_det in det_list[order]:
-            
+
             if dists.shape[1] == 0:
                 # All faces from tracker have been assigned!
                 # So this detection must be a new face
@@ -58,10 +58,14 @@ def sort_faces(lms_stack, img_idx, dist_threshold=200, device=DEVICE):
                 # Now, for some magic: remove the selected face
                 # from dists (and track_list), which will make sure
                 # that the next detection cannot be assigned the same
-                # face                    
+                # face
                 keep = track_list != track_list[min_face]
                 dists = dists[:, keep]
                 track_list = track_list[keep]
+            else:
+                # Detection cannot be assigned to any face in the tracker!
+                # Going to update tracker with this detection
+                pass
 
         # Update the tracker with the (assigned) detected faces
         unassigned = face_assigned == -1
@@ -79,16 +83,3 @@ def sort_faces(lms_stack, img_idx, dist_threshold=200, device=DEVICE):
         face_idx[det_idx] = face_assigned
 
     return face_idx
-    # self.face_idx = face_idx
-
-    # # Loop over unique faces tracked        
-    # for f in face_idx.unique():
-    #     # Compute the proportion of images containing this face
-    #     f_idx = self.face_idx == f
-    #     prop = (f_idx).sum().div(len(face_idx))
-
-    #     # Remove this face from each attribute if not present for more than
-    #     # `present_threshold` proportion of images
-    #     if prop < present_threshold:
-    #         for attr in ['conf', 'bbox', 'lms', 'img_idx', 'face_idx']:
-    #             setattr(self, attr, getattr(self, attr)[~f_idx])

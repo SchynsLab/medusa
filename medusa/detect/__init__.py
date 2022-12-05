@@ -1,2 +1,2 @@
-from .yunet import YunetDetector
 from .retinanet import RetinanetDetector
+from .yunet import YunetDetector

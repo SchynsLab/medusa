@@ -69,7 +69,7 @@ No need to install it yet; first, you need to download some data.
 
 If you want to use all functionality from the `flame` package, you need to download three files:
 `FLAME2020.zip` (the FLAME 3D morphable model files), `deca_model.tar` (the DECA reconstruction model weights),
-and `EMOCA.zip` (the EMOCA reconstruction model weights). 
+and `EMOCA.zip` (the EMOCA reconstruction model weights).
 
 The FLAME model is necessary to convert the shape predictions from DECA and EMOCA into a dense
 mesh. You can download the model [here](https://flame.is.tue.mpg.de/download.php). You
@@ -79,7 +79,7 @@ the "FLAME 2020 (fixed mouth, improved expressions, more data)" zip file (`FLAME
 The EMOCA model, i.e., the model that generates predictions of FLAME components from images,
 can be downloaded [here](https://emoca.is.tue.mpg.de/download.php). Again, you need to register an account
 before being able to do so. After logging in, download the "EMOCA" file (`EMOCA.zip`)
-lister under the "Face Reconstruction" header. 
+lister under the "Face Reconstruction" header.
 
 Finally, the DECA model (`deca_model.tar`) can be downloaded [here](https://drive.google.com/file/d/1rp8kdyLPvErw2dTmqtjISRVvQLj6Yzje/view).
 

@@ -1,12 +1,15 @@
 from abc import ABC, abstractmethod
+
 from ..io import load_inputs
 
 
 class BaseReconModel(ABC):
-    """ Base class for reconstrution models. Implements some
-    abstract methods that should be implemented by classes that
-    inherent from it (such as ``get_tris``) and some default
-    methods (such as ``close``). """
+    """Base class for reconstrution models.
+
+    Implements some abstract methods that should be implemented by
+    classes that inherent from it (such as ``get_tris``) and some
+    default methods (such as ``close``).
+    """
     @abstractmethod
     def get_tris(self):
         pass
@@ -15,7 +18,7 @@ class BaseReconModel(ABC):
         pass
 
     def _load_inputs(self, inputs, *args, **kwargs):
-        """ Loads and checks inputs. """ 
+        """Loads and checks inputs."""
         return load_inputs(inputs, *args, **kwargs)
 
     def _check_inputs(self, inputs, expected_size, channels_first=True):

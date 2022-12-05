@@ -1,10 +1,9 @@
-import torch
 import numpy as np
+import torch
 import torch.nn.functional as F
 
 
 def face_vertices(v, f):
-    
     bs, nv = v.shape[:2]
     bs = f.shape[0]
     device = v.device
@@ -42,7 +41,6 @@ def vertex_normals(v, f):
 
 
 def upsample_mesh(v, normals, disp_map, dense_template):
-    
     x_coords = dense_template['x_coords']
     y_coords = dense_template['y_coords']
     valid_pixel_ids = dense_template['valid_pixel_ids']
@@ -56,7 +54,7 @@ def upsample_mesh(v, normals, disp_map, dense_template):
     pixel_3d_normals = normals[valid_pixel_3d_faces[:, 0], :] * valid_pixel_b_coords[:, 0][:, np.newaxis] + \
                         normals[valid_pixel_3d_faces[:, 1], :] * valid_pixel_b_coords[:, 1][:, np.newaxis] + \
                         normals[valid_pixel_3d_faces[:, 2], :] * valid_pixel_b_coords[:, 2][:, np.newaxis]
-    
+
     pixel_3d_normals = pixel_3d_normals / np.linalg.norm(pixel_3d_normals, axis=-1)[:, np.newaxis]
     displacements = disp_map[y_coords[valid_pixel_ids].astype(int), x_coords[valid_pixel_ids].astype(int)]
     offsets = np.einsum('i,ij->ij', displacements, pixel_3d_normals)

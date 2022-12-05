@@ -1,10 +1,10 @@
 import torch
-from torch import nn
 import torch.nn.functional as F
+from torch import nn
 
 
 def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
-    """3x3 convolution with padding"""
+    """3x3 convolution with padding."""
     return nn.Conv2d(in_planes,
                      out_planes,
                      kernel_size=3,
@@ -16,7 +16,7 @@ def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
 
 
 def conv1x1(in_planes, out_planes, stride=1):
-    """1x1 convolution"""
+    """1x1 convolution."""
     return nn.Conv2d(in_planes,
                      out_planes,
                      kernel_size=1,
@@ -183,8 +183,8 @@ class Arcface(IResNet):
             x = self.dropout(x)
         x = self.fc(x.float() if self.fp16 else x)
         x = self.features(x)
-        return x    
-    
+        return x
+
 
 def kaiming_leaky_init(m):
     classname = m.__class__.__name__

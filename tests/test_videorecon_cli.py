@@ -1,19 +1,21 @@
 import os
-import pytest
 from pathlib import Path
+
+import pytest
 from click.testing import CliRunner
+
 from medusa.cli import videorecon_cmd
 from medusa.data import get_example_video
 
 
 def test_videorecon_cmd():
-    """ Tests the videorecon command line interface. """
-    
+    """Tests the videorecon command line interface."""
+
     vid = str(get_example_video())
     runner = CliRunner()
-    
+
     args = [vid, '-r', 'mediapipe', '-n', 5]
-    
+
     result = runner.invoke(videorecon_cmd, args)
     assert(result.exit_code == 0)
     expected_h5 = Path(vid.replace('.mp4', '.h5'))

@@ -1,27 +1,30 @@
-""" Module with functionality (mostly) for working with video data. 
-The ``VideoLoader`` class allows for easy looping over frames of a video file,
-which is used in the reconstruction process (e.g., in the ``videorecon`` function).
+"""Module with functionality (mostly) for working with video data.
+
+The ``VideoLoader`` class allows for easy looping over frames of a video
+file, which is used in the reconstruction process (e.g., in the
+``videorecon`` function).
 """
+
+from datetime import datetime
+from pathlib import Path
 
 import cv2
 import h5py
-import torch
-import requests
 import numpy as np
-from tqdm import tqdm
-from pathlib import Path
-from trimesh import Trimesh
-from datetime import datetime
+import requests
+import torch
+from torch.utils.data import DataLoader, Dataset
 from torchvision.transforms import Resize
-from torch.utils.data import Dataset, DataLoader
+from tqdm import tqdm
+from trimesh import Trimesh
 
 from . import DEVICE
 from .log import get_logger
 
 
 class VideoLoader(DataLoader):
-    """ " Contains (meta)data and functionality associated
-    with video files (mp4 files only currently).
+    """" Contains (meta)data and functionality associated with video files (mp4
+    files only currently).
 
     Parameters
     ----------
@@ -32,7 +35,7 @@ class VideoLoader(DataLoader):
         if ``None`` (default), the image is not resized
     n_preload : int
         Number of video frames to preload before batching
-    loglevel : str  
+    loglevel : str
         Logging level (e.g., 'INFO' or 'WARNING')
 
     Raises
@@ -53,17 +56,17 @@ class VideoLoader(DataLoader):
         self._metadata = self._extract_metadata()
 
     def get_metadata(self):
-        """Returns all (meta)data needed for initialization
-        of a Data object."""
+        """Returns all (meta)data needed for initialization of a Data
+        object."""
 
         return self._metadata
-    
+
     def close(self):
-        """ Closes the opencv videoloader in the underlying pytorch Dataset. """
+        """Closes the opencv videoloader in the underlying pytorch Dataset."""
         self.dataset.close()
 
     def _validate(self, path, n_preload, batch_size):
-        """ Validates some of the init arguments. """
+        """Validates some of the init arguments."""
 
         if not isinstance(path, Path):
             path = Path(path)
@@ -79,8 +82,8 @@ class VideoLoader(DataLoader):
             raise ValueError("`n_preload` should be a multiple of `batch_size`!")
 
     def _extract_metadata(self):
-        """ Extracts some metadata from Dataset and exposes it to the loader. """
-        
+        """Extracts some metadata from Dataset and exposes it to the loader."""
+
         tmp = self.dataset.metadata
         end = tmp['n'] / tmp['fps']
         frame_t = np.linspace(0, end, endpoint=False, num=tmp['n'])
@@ -90,29 +93,30 @@ class VideoLoader(DataLoader):
             'img_size': tmp['size'],
             'sf': tmp['fps']
         }
-    
+
     def __len__(self):
-        """ Utility function to easily access number of video frames. """
+        """Utility function to easily access number of video frames."""
         return len(self.dataset)
 
     def _create_iterator(self):
-        """ Creates an iterator version of the loader so you can do `next(loader_obj)`. """
+        """Creates an iterator version of the loader so you can do
+        `next(loader_obj)`."""
         if self.logger.level <= 20:
             desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
-            _iterator= tqdm(self, desc=f"{desc} Recon frames")    
+            _iterator= tqdm(self, desc=f"{desc} Recon frames")
         else:
             _iterator = self
 
         return iter(_iterator)
 
     def __next__(self):
-        """ Return the next batch of the dataloader. """ 
+        """Return the next batch of the dataloader."""
         return next(self._iterator)
 
 
 class VideoDataset(Dataset):
-    """ A pytorch Dataset class based on loading frames from a single video. 
-    
+    """A pytorch Dataset class based on loading frames from a single video.
+
     Parameters
     ----------
     video : pathlib.Path, str
@@ -124,7 +128,7 @@ class VideoDataset(Dataset):
         take up more RAM, but result in faster loading
     device : str
         Either 'cuda' (for GPU) or 'cpu'
-    """ 
+    """
     def __init__(self, video, rescale_factor=None, n_preload=512, device='cuda'):
 
         self.video = video
@@ -138,12 +142,12 @@ class VideoDataset(Dataset):
         self.imgs = self._load()
 
     def _get_metadata(self):
-        
-        fps = self.reader.get(cv2.CAP_PROP_FPS) 
+
+        fps = self.reader.get(cv2.CAP_PROP_FPS)
         n = int(self.reader.get(cv2.CAP_PROP_FRAME_COUNT))
         w = int(self.reader.get(cv2.CAP_PROP_FRAME_WIDTH))
-        h = int(self.reader.get(cv2.CAP_PROP_FRAME_HEIGHT)) 
-        
+        h = int(self.reader.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
         if self.rescale_factor is not None:
             w = round(self.rescale_factor * w)
             h = round(self.rescale_factor * h)
@@ -160,12 +164,12 @@ class VideoDataset(Dataset):
         if self.imgs is not None:
             del self.imgs
             torch.cuda.empty_cache()
-        
+
         n = self.metadata['n'] - int(self.reader.get(cv2.CAP_PROP_POS_FRAMES))
         n_to_load = min(n, self.n_preload)
 
         for i in range(n_to_load):
-            
+
             success, img = self.reader.read()
             if not success:
                 raise ValueError("Could not read videoframe; probably the format "
@@ -201,8 +205,8 @@ class VideoDataset(Dataset):
         return self.imgs[i, ...].to(self.device)
 
     def close(self):
-        """ Closes the cv2 videoreader and free up memory. """
-        
+        """Closes the cv2 videoreader and free up memory."""
+
         if self.imgs is not None:
             del self.imgs
 
@@ -213,8 +217,8 @@ class VideoDataset(Dataset):
 
 
 def load_h5(path):
-    """Convenience function to load a hdf5 file and immediately initialize the correct
-    data class.
+    """Convenience function to load a hdf5 file and immediately initialize the
+    correct data class.
 
     Parameters
     ----------
@@ -226,14 +230,14 @@ def load_h5(path):
     data : ``data.BaseData`` subclass
         An object with a class derived from ``data.BaseData``
         (like ``MediapipeData``, or ``FlameData``)
-        
+
     Examples
     --------
     Load in HDF5 data reconstructed by Mediapipe:
-    
+
     >>> from medusa.data import get_example_h5
     >>> path = get_example_h5(load=False)
-    >>> data = load_h5(path)    
+    >>> data = load_h5(path)
     """
 
     from .core import MODEL2CLS
@@ -248,10 +252,10 @@ def load_h5(path):
 
 def load_inputs(inputs, load_as='torch', channels_first=True,
                 with_batch_dim=True, dtype='float32', device=DEVICE):
-    """ Generic image loader function, which also performs some basic
+    """Generic image loader function, which also performs some basic
     preprocessing and checks. Is used internally for crop models and
     reconstruction models.
-    
+
     Parameters
     ----------
     inputs : str, Path, iterable, array_like
@@ -289,7 +293,7 @@ def load_inputs(inputs, load_as='torch', channels_first=True,
     torch.Size([1, 3, 384, 480])
 
     Or as a numpy array (without batch dimension):
-    
+
     >>> img = load_inputs(path, load_as='numpy', with_batch_dim=False)
     >>> img.shape
     (3, 384, 480)
@@ -299,7 +303,7 @@ def load_inputs(inputs, load_as='torch', channels_first=True,
     >>> img = load_inputs(path, load_as='numpy', channels_first=False)
     >>> img.shape
     (1, 384, 480, 3)
-    
+
     Setting the data type to uint8 instead of float32:
 
     >>> img = load_inputs(path, load_as='torch', dtype='uint8', device='cpu')
@@ -325,17 +329,17 @@ def load_inputs(inputs, load_as='torch', channels_first=True,
     if isinstance(inputs, (list, tuple)):
         imgs = []
         for inp in inputs:
-            
+
             if isinstance(inp, (np.ndarray, torch.Tensor)):
                 if inp.ndim == 4 and inp.shape[0] == 1:
                     inp = inp.squeeze()
 
                 imgs.append(inp)
                 continue
-            
+
             if not isinstance(inp, Path):
                 inp = Path(inp)
-            
+
             if not inp.is_file():
                 raise ValueError(f"Input '{inp}' does not exist!")
 
@@ -356,7 +360,7 @@ def load_inputs(inputs, load_as='torch', channels_first=True,
         imgs = torch.from_numpy(imgs.copy()).to(device)
     elif load_as == 'numpy' and isinstance(imgs, torch.Tensor):
         imgs = imgs.cpu().numpy()
-    
+
     if imgs.ndim == 3:
         # Adding batch dim for now
         imgs = imgs[None, ...]
@@ -385,7 +389,6 @@ def load_inputs(inputs, load_as='torch', channels_first=True,
 
 
 def save_obj(v, f, f_out):
-
     if not isinstance(f_out, Path):
         f_out = Path(f_out)
 
@@ -397,10 +400,9 @@ def save_obj(v, f, f_out):
 
 
 def download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type='post'):
-
     if f_out.is_file() and not overwrite:
-        return 
-    
+        return
+
     with getattr(requests, cmd_type)(url, stream=True, verify=True, data=data) as r:
         r.raise_for_status()
         with open(f_out, 'wb') as f:

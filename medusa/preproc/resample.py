@@ -1,14 +1,16 @@
-import numpy as np
 from pathlib import Path
-from scipy.interpolate import interp1d, PchipInterpolator
+
+import numpy as np
+from scipy.interpolate import PchipInterpolator, interp1d
 
 from ..io import load_h5
 
 
 def resample(data, sampling_freq=None, kind="pchip"):
-    """Resamples the data to a given sampling rate. This function can be used to
-    resample the time points to a higher temporal resolution and/or a constant
-    sampling period, which may not be the case for data that is acquired using a webcam.
+    """Resamples the data to a given sampling rate. This function can be used
+    to resample the time points to a higher temporal resolution and/or a
+    constant sampling period, which may not be the case for data that is
+    acquired using a webcam.
 
     Parameters
     ----------
@@ -26,11 +28,11 @@ def resample(data, sampling_freq=None, kind="pchip"):
     -------
     data : medusa.core.*Data
         An object with a class inherited from ``medusa.core.BaseData``
-        
+
     Examples
     --------
     Resample a time series of 3D meshes to a sampling frequency of 50 Hz
-    
+
     >>> from medusa.data import get_example_h5
     >>> data = get_example_h5(load=True, model='mediapipe')
     >>> np.round(data.sf, 2)  # sampling frequency

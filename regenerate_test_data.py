@@ -1,5 +1,5 @@
-from medusa.recon import videorecon
 from medusa.data import get_example_video
+from medusa.recon import videorecon
 
 vid = get_example_video()
 for model in ['mediapipe', 'emoca-coarse']:

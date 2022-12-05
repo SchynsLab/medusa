@@ -1,5 +1,6 @@
-import numpy as np
 from pathlib import Path
+
+import numpy as np
 from scipy.signal import butter, sosfilt
 
 from ..io import load_h5
@@ -7,8 +8,10 @@ from ..io import load_h5
 
 def bw_filter(data, low_pass, high_pass):
     """Applies a bandpass filter the vertex coordinate time series.
-    Implementation based on
-    `this StackOverflow post` <https://stackoverflow.com/questions/12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter>`_.
+    Implementation based on `this StackOverflow post`
+
+    <https://stackoverflow.com/questions/12093594/how-to-implement-band-pass-
+    butterworth-filter-with-scipy-signal-butter>`_.
 
     Parameters
     ----------
@@ -24,11 +27,11 @@ def bw_filter(data, low_pass, high_pass):
     -------
     data : medusa.core.*Data
         An object with a class inherited from ``medusa.core.BaseData``
-        
+
     Examples
     --------
     Filter the data wit a high-pass of 0.005 Hz and a low-pass of 4 Hz:
-    
+
     >>> from medusa.data import get_example_h5
     >>> data = get_example_h5(load=True, model='mediapipe')
     >>> data = bw_filter(data, low_pass=4., high_pass=0.005)
@@ -62,7 +65,7 @@ def bw_filter(data, low_pass, high_pass):
 
 
 class OneEuroFilter:
-    """ Based on https://github.com/jaantollander/OneEuroFilter. """
+    """Based on https://github.com/jaantollander/OneEuroFilter."""
     def __init__(self, t0, x0, dx0=0.0, min_cutoff=1.0, beta=0.0,
                  d_cutoff=1.0):
         """Initialize the one euro filter."""

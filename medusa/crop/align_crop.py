@@ -1,21 +1,20 @@
-""" Crop model adapted from the insightface implementation. By reimplementing
-it here, insightface does not have to be installed.
+"""Crop model adapted from the insightface implementation. By reimplementing it
+here, insightface does not have to be installed.
 
-Please see the LICENSE file in the current directory for the license that
-is applicable to this implementation.
+Please see the LICENSE file in the current directory for the license
+that is applicable to this implementation.
 """
 
-import torch
 import numpy as np
-from kornia.geometry.transform import warp_affine
+import torch
 from kornia.geometry.linalg import transform_points
+from kornia.geometry.transform import warp_affine
 
 from .. import DEVICE
-from ..io import load_inputs
-from .base import BaseCropModel, CropResults
 from ..detect import RetinanetDetector
+from ..io import load_inputs
 from ..transforms import estimate_similarity_transform
-
+from .base import BaseCropModel, CropResults
 
 # Arcface template as defined by Insightface
 TEMPLATE = torch.Tensor(np.array([
@@ -29,8 +28,8 @@ TEMPLATE = torch.Tensor(np.array([
 
 
 class LandmarkAlignCropModel(BaseCropModel):
-    """ Cropping model based on functionality from the ``insightface`` package, as used
-    by MICA (https://github.com/Zielon/MICA).
+    """Cropping model based on functionality from the ``insightface`` package,
+    as used by MICA (https://github.com/Zielon/MICA).
 
     Parameters
     ----------
@@ -56,7 +55,7 @@ class LandmarkAlignCropModel(BaseCropModel):
     >>> crop_img = crop_model(img)
     >>> crop_img.shape
     torch.Size([1, 3, 112, 112])
-    """    
+    """
 
     def __init__(self, output_size=(112, 112), template=TEMPLATE, detector=RetinanetDetector,
                  return_lmk=False, device=DEVICE, **kwargs):
@@ -74,7 +73,7 @@ class LandmarkAlignCropModel(BaseCropModel):
         return 'aligncrop'
 
     def __call__(self, imgs):
-        
+
         # Load images here instead of in detector to avoid loading them twice
         imgs = load_inputs(imgs, load_as='torch', channels_first=True, device=self.device)
         out_det = self._det_model(imgs)
@@ -87,8 +86,7 @@ class LandmarkAlignCropModel(BaseCropModel):
         crop_mats = estimate_similarity_transform(out_det.lms, self.template, estimate_scale=True)
         imgs_stacked = imgs[out_det.img_idx]
         imgs_crop = warp_affine(imgs_stacked, crop_mats[:, :2, :], dsize=self.output_size)
-        lms = transform_points(crop_mats, out_det.lms)
 
-        out_crop = CropResults(imgs.shape[0], imgs_crop, crop_mats, lms, out_det.img_idx, out_det.face_idx, device=self.device)
+        out_crop = CropResults(imgs.shape[0], imgs_crop, crop_mats, out_det.lms, out_det.img_idx, out_det.face_idx, device=self.device)
 
         return out_crop

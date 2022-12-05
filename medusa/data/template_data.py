@@ -1,23 +1,24 @@
-""" This module contains functions to load in "template data", i.e., the topological
-templates used by the different models. 
-"""
+"""This module contains functions to load in "template data", i.e., the
+topological templates used by the different models."""
+from pathlib import Path
+
 import h5py
 import trimesh
-from pathlib import Path
 
 
 def get_template_mediapipe():
-    """ Returns the template (vertices and triangles) of the canonical Mediapipe model. 
-    
+    """Returns the template (vertices and triangles) of the canonical Mediapipe
+    model.
+
     Returns
     -------
     template : dict
         Dictionary with vertices ("v") and faces ("f")
-        
+
     Examples
     --------
     Get the vertices and faces (triangles) of the standard Mediapipe topology (template):
-    
+
     >>> template = get_template_mediapipe()
     >>> template['v'].shape
     (468, 3)
@@ -35,16 +36,17 @@ def get_template_mediapipe():
 
 
 def get_template_flame(dense=False):
-    """ Returns the template (vertices and triangles) of the canonical Flame model, in
-    either its dense or coarse version. Note that this does exactly the same as the
-    ``get_flame_template()`` function from the ``flame.data`` module.
-    
+    """Returns the template (vertices and triangles) of the canonical Flame
+    model, in either its dense or coarse version. Note that this does exactly
+    the same as the ``get_flame_template()`` function from the ``flame.data``
+    module.
+
     Parameters
     ----------
     dense : bool
         Whether to load in the dense version of the template (``True``) or the coarse
         version (``False``)
-    
+
     Raises
     ------
     ValueError
@@ -53,8 +55,8 @@ def get_template_flame(dense=False):
     Returns
     -------
     template : dict
-        Dictionary with vertices ("v") and faces ("f")    
-        
+        Dictionary with vertices ("v") and faces ("f")
+
     Examples
     --------
     Get the vertices and faces (triangles) of the standard Flame topology (template) in
@@ -77,5 +79,5 @@ def get_template_flame(dense=False):
 
         template_h5 = data['dense' if dense else 'coarse']
         template = {'v': template_h5['v'][:], 'f': template_h5['f'][:]}
-    
+
     return template

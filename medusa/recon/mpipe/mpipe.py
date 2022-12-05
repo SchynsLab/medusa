@@ -1,20 +1,20 @@
-""" Module with a wrapper around a Mediapipe face mesh model [1]_ that can be
-used in Medusa. 
+"""Module with a wrapper around a Mediapipe face mesh model [1]_ that can be
+used in Medusa.
 
-.. [1] Kartynnik, Y., Ablavatski, A., Grishchenko, I., & Grundmann, M. (2019). 
-   Real-time facial surface geometry from monocular video on mobile GPUs. *arXiv
-   preprint arXiv:1907.06724*
-""" 
+.. [1] Kartynnik, Y., Ablavatski, A., Grishchenko, I., & Grundmann, M.
+(2019).    Real-time facial surface geometry from monocular video on
+mobile GPUs. *arXiv    preprint arXiv:1907.06724*
+"""
 
 import numpy as np
 
-from ._transforms import PCF, image2world
-from ..base import BaseReconModel
 from ...data import get_template_mediapipe
+from ..base import BaseReconModel
+from ._transforms import PCF, image2world
 
 
 class Mediapipe(BaseReconModel):
-    """ A Mediapipe face mesh reconstruction model.
+    """A Mediapipe face mesh reconstruction model.
 
     Parameters
     ----------
@@ -24,17 +24,16 @@ class Mediapipe(BaseReconModel):
     kwargs : dict
         Extra keyword arguments to be passed to
         the initialization of FaceMesh
-    
+
     Attributes
     ----------
     model : mediapipe.solutions.face_mesh.FaceMesh
         The actual Mediapipe model object
+    """
 
-    """ 
-    
     def __init__(self, static_image_mode=False, max_num_faces=1, refine_landmarks=True,
                  min_detection_confidence=0.01, min_tracking_confidence=0.1):
-        """ Initializes a Mediapipe recon model. """
+        """Initializes a Mediapipe recon model."""
 
         # Importing here speeds up CLI
         import mediapipe as mp
@@ -51,8 +50,8 @@ class Mediapipe(BaseReconModel):
         self._load_reference()  # sets self.{v,f}_world_ref
 
     def _load_reference(self):
-        """ Loads the vertices and faces of the references template
-        in world space. """
+        """Loads the vertices and faces of the references template in world
+        space."""
 
         out = get_template_mediapipe()
         self._v_world_ref = out['v']
@@ -62,7 +61,8 @@ class Mediapipe(BaseReconModel):
         return self._f_world_ref
 
     def __call__(self, images):
-        """ Performs reconstruction of the face as a list of landmarks (vertices).
+        """Performs reconstruction of the face as a list of landmarks
+        (vertices).
 
         Parameters
         ----------
@@ -72,20 +72,20 @@ class Mediapipe(BaseReconModel):
         Returns
         -------
         out : dict
-            A dictionary with two keys: ``"v"``, the reconstructed vertices (468 in 
+            A dictionary with two keys: ``"v"``, the reconstructed vertices (468 in
             total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
             matrix
-        
+
         Notes
         -----
         This implementation returns 468 vertices instead of the original 478, because
         the last 10 vertices (representing the irises) are not present in the canonical
-        model.       
-        
+        model.
+
         Examples
         --------
         To reconstruct an example, simply call the ``Mediapipe`` object:
-        
+
         >>> from medusa.data import get_example_frame
         >>> model = Mediapipe()
         >>> img = get_example_frame()
@@ -130,14 +130,14 @@ class Mediapipe(BaseReconModel):
             # Canonical (reference) model does not have iris landmarks (last ten),
             # so remove these before inputting it into function
             v_ = v_[:468, :]
-            
+
             # Project vertices back into world space using a Python implementation by
             # Rasmus Jones (https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py)
             v_, mat_ = image2world(v_.T.copy(), self._pcf, self._v_world_ref.T)
-            
+
             # Add back translation and rotation to the vertices
             v_ = np.c_[v_.T, np.ones(468)] @ mat_.T
-            
+
             v[i, ...] = v_[:, :3]
             mat[i, ...] = mat_
 
@@ -151,11 +151,12 @@ class Mediapipe(BaseReconModel):
         # so no need to set the camera pose matrix (extrinsic camera matrix)
 
     def close(self):
-        """ Closes context manager.
-        
-        Ideally, after you're doing with reconstructing each frame of the video,
-        you call this method to close the manually opened context (but shouldn't
-        matter much if you only instantiate a single model).       
+        """Closes context manager.
+
+        Ideally, after you're doing with reconstructing each frame of
+        the video, you call this method to close the manually opened
+        context (but shouldn't matter much if you only instantiate a
+        single model).
         """
         # Note: __exit__ just calls close()
         self.model.__exit__(None, None, None)

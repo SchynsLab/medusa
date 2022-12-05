@@ -14,8 +14,9 @@
 # For commercial licensing contact, please contact ps-license@tuebingen.mpg.de
 
 import pickle
-import torch
+
 import numpy as np
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -23,11 +24,10 @@ from .lbs import lbs
 
 
 class FLAME(nn.Module):
-    """
-    borrowed from https://github.com/soubhiksanyal/FLAME_PyTorch/blob/master/FLAME.py
-    Given flame parameters this class generates a differentiable FLAME function
-    which outputs the a mesh and 2D/3D facial landmarks
-    """
+    """borrowed from
+    https://github.com/soubhiksanyal/FLAME_PyTorch/blob/master/FLAME.py Given
+    flame parameters this class generates a differentiable FLAME function which
+    outputs the a mesh and 2D/3D facial landmarks."""
 
     def __init__(self, model_path, n_shape, n_exp):
         super().__init__()
@@ -97,10 +97,10 @@ class FLAME(nn.Module):
             betas = shape_params
         else:
             betas = torch.cat([shape_params, expression_params], dim=1)
-    
+
         if pose_params is None:
             pose_params = torch.zeros((batch_size, 6)).to(shape_params.device)
-    
+
         full_pose = torch.cat(
             [
                 pose_params[:, :3],
@@ -127,8 +127,8 @@ class FLAME(nn.Module):
 
 
 class FLAMETex(nn.Module):
-    """
-    FLAME texture:
+    """FLAME texture:
+
     https://github.com/TimoBolkart/TF_FLAME/blob/ade0ab152300ec5f0e8555d6765411555c5ed43d/sample_texture.py#L64
     FLAME texture converted from BFM:
     https://github.com/TimoBolkart/BFM_to_FLAME

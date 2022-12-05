@@ -1,11 +1,13 @@
 import logging
-import numpy as np
-from tqdm import tqdm
-from pathlib import Path
 from datetime import datetime
-from trimesh.registration import icp, procrustes
+from pathlib import Path
+
+import numpy as np
 from skimage.transform._geometric import _umeyama
-from trimesh.transformations import decompose_matrix, transform_points, compose_matrix
+from tqdm import tqdm
+from trimesh.registration import icp, procrustes
+from trimesh.transformations import (compose_matrix, decompose_matrix,
+                                     transform_points)
 
 from ..io import load_h5
 
@@ -42,7 +44,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     --------
     Align sequence of 3D Mediapipe meshes using its previously estimated local-to-world
     matrices (the default alignment option):
-    
+
     >>> from medusa.data import get_example_h5
     >>> data = get_example_h5(load=True, model='mediapipe')
     >>> data.space  # before alignment, data is is 'world' space
@@ -50,10 +52,10 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     >>> data = align(data)
     >>> data.space  # after alignment, data is in 'local' space
     'local'
-    
+
     Do an initial alignment of EMOCA meshes using the existing transform, but also
     do additional alignment (probably not a good idea):
-    
+
     >>> data = get_example_h5(load=True, model='emoca-coarse')
     >>> data = align(data, algorithm='icp', additive_alignment=True)
     """
@@ -82,7 +84,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
                  152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162,  # contour
                  94, 19, 1, 4, 5, 195, 197, 6]  # nose ridge
     elif data.recon_model in ["emoca-coarse", "deca-dense"]:
-        v_idx = np.load(Path(__file__).parents[1] / 'data/flame/scalp_flame.npy') 
+        v_idx = np.load(Path(__file__).parents[1] / 'data/flame/scalp_flame.npy')
     else:
         raise ValueError("Unknown reconstruction model!")
 
@@ -182,8 +184,9 @@ def _icp(source, target, scale=True, ignore_shear=True):
 
     return regmat
 
-    
+
 import numpy as np
+
 
 def rigid_transform_3D(A, B):
     # From https://github.com/nghiaho12/rigid_transform_3D

@@ -1,8 +1,10 @@
 import os
-import torch
-import pytest
+
 import numpy as np
+import pytest
+import torch
 from skimage.transform._geometric import _umeyama
+
 from medusa.transforms import estimate_similarity_transform
 
 
@@ -12,7 +14,6 @@ from medusa.transforms import estimate_similarity_transform
 @pytest.mark.parametrize('estimate_scale', [True, False])
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 def test_similarity_transform(batch_size, n_points, n_dim, estimate_scale, device):
-
     if 'GITHUB_ACTIONS' in os.environ and device == 'cuda':
         return
 
@@ -29,12 +30,10 @@ def test_similarity_transform(batch_size, n_points, n_dim, estimate_scale, devic
     src = torch.from_numpy(src).to(device)
     dst = torch.from_numpy(dst).to(device)
     mats_ = estimate_similarity_transform(src, dst, estimate_scale=estimate_scale)
-    
+
     if device == 'cuda':
         mats_ = mats_.cpu()
-    
+
     mats_ = mats_.numpy()
-    
+
     np.testing.assert_array_almost_equal(mats, mats_, decimal=4)
-
-

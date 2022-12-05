@@ -40,9 +40,9 @@ For example, the `medusa_videorecon` command has a single mandatory argument,
 `VIDEO_PATH`, and several (non-mandatory) options, like `--recon-model`.
 If the option accepts an argument, like `--recon-model` or `--out-dir`, then it also
 shows the available options (such as "emoca", "mediapipe", in case of `--recon-model`)
-or the expected input type (like "PATH" in case of `--out-dir`). 
+or the expected input type (like "PATH" in case of `--out-dir`).
 
-If you, for example, would like to reconstruct your video, 
+If you, for example, would like to reconstruct your video,
 `my_vid.mp4`, using the "mediapipe" model and store the output in the `recon/` directory,
 you'd run:
 
@@ -53,7 +53,7 @@ $ medusa_videorecon my_vid.mp4 --recon-model mediapipe --out-dir recon/
 In addition, there may be some options which are not followed by an argument, like
 `--render-recon` (which are not followed by available options or expected input type).
 So, if you'd want to run the same reconstruction as the previous command, but this time
-also render the reconstruction (`--render-recon`) on top of the input video 
+also render the reconstruction (`--render-recon`) on top of the input video
 (`--render-on-video`), you'd run:
 
 ```console
@@ -73,7 +73,7 @@ each command's options, run the command with the `--help` flag.
 
 This command reconstructs the 3D face in each frame of the video. It assumes that the
 video is in MP4 format and has the extension `.mp4`. It also assumes (for now) that
-there is one, and only one, face present in each frame of the video. 
+there is one, and only one, face present in each frame of the video.
 
 This CLI command uses the Python function
 [`medusa.preproc.recon.videorecon`](./python/preproc/recon/index) under the hood.
@@ -91,15 +91,15 @@ by applying the inverse matrix (i.e., the "world-to-local" matrix) to the vertic
 
 If these matrices are not known, each mesh ($V_{i}$) is aligned to the mesh of the first
 time point ($V_{1}$) using the ICP algorithm {cite:p}`arun1987least` (from
-[trimesh](https://trimsh.org/trimesh.registration.html)) or Umeyama algorithm 
-{cite:p}`umeyama1991least` (from 
+[trimesh](https://trimsh.org/trimesh.registration.html)) or Umeyama algorithm
+{cite:p}`umeyama1991least` (from
 [scikit-image](https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/_geometric.py#L91)).
 
 This CLI command uses the Python function
 [`medusa.preproc.align.align`](./python/preproc/align/index) under the hood.
 
 ```{note}
-If you want to separate global face movements (translation and rotation) from local face 
+If you want to separate global face movements (translation and rotation) from local face
 movements (facial soft tissue movement due to muscle activations), you need to run this
 algorithm.
 ```
@@ -144,14 +144,14 @@ an equal duration chunk of signal, usually time-locked to repeated experimental 
 ```{warning}
 In Medusa, you can only use this functionality when you actually have an events-file with
 stimulus/response/trial onsets (see [quickstart](../getting_started/quickstart) for more
-information). 
+information).
 ```
 
 The result of the epoching operation is a 4D numpy array of shape $N$ (epochs) $\times\ T$
 (number of time points of epoch) $\times\ V$ (number of vertices) $\times\ 3$ (X, Y, Z).
 The CLI command actually converts this data into an MNE-compatible structure
 (an [`EpochsArray`](https://mne.tools/stable/generated/mne.EpochsArray.html)) and saves
-it as a FIF file (extension: `.fif`). This file can then be loaded using MNE 
+it as a FIF file (extension: `.fif`). This file can then be loaded using MNE
 (with [`mne.read_epochs`](https://mne.tools/stable/generated/mne.read_epochs.html#mne.read_epochs))
 to be further analyzed.
 
@@ -166,6 +166,6 @@ reconstruction data and, if you want to render the reconstruction on top of the 
 videon, a video file (e.g., `--video my_video.mp4`).
 
 This CLI command uses the `render_video` method from the
-[`medusa.core.BaseData`](./python/core/index) class, which in turn uses the 
+[`medusa.core.BaseData`](./python/core/index) class, which in turn uses the
 [`medusa.render.Renderer`](./python/render/index) class (a wrapper around a
 [pyrender](https://pyrender.readthedocs.io/) renderer).

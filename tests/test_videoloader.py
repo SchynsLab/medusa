@@ -1,22 +1,22 @@
 import os
-import pytest
 from pathlib import Path
-from medusa.io import VideoLoader
+
+import pytest
+
 from medusa.data import get_example_video
+from medusa.io import VideoLoader
 
 
 @pytest.mark.parametrize("ext", ['.mp4', '.avi'])
 def test_videoloader_ext(ext):
-
     vid = Path(__file__).parent / f'test_data/example_vid{ext}'
     loader = VideoLoader(vid, device='cpu', loglevel='WARNING')
 
 
 def test_videoloader_full_iteration():
-
     vid = get_example_video(return_videoloader=False)
     loader = VideoLoader(vid, device='cpu', loglevel='WARNING')
-    
+
     n_expected = len(loader)
     n_actual = 0
     for img_batch in loader:
@@ -29,10 +29,9 @@ def test_videoloader_full_iteration():
 @pytest.mark.parametrize("batch_size", [1, 32])
 @pytest.mark.parametrize("device", ['cuda', 'cpu'])
 def test_videoloader_params(rescale_factor, batch_size, device):
-
     if 'GITHUB_ACTIONS' in os.environ and device == 'cuda':
         return
-    
+
     vid = get_example_video(return_videoloader=False)
     loader = VideoLoader(
         vid, rescale_factor=rescale_factor, n_preload=512,

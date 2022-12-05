@@ -1,20 +1,21 @@
 import os
-import cv2
-import pytest
-import numpy as np
 from pathlib import Path
-from medusa.data import get_example_video
+
+import cv2
+import numpy as np
+import pytest
+
+from medusa.core import Flame4D
 from medusa.crop import LandmarkBboxCropModel
+from medusa.data import get_example_video
 from medusa.recon import DecaReconModel
 from medusa.render import Renderer
-from medusa.core import Flame4D
 
 
 @pytest.mark.parametrize("name", ['deca', 'emoca', 'spectre'])
 @pytest.mark.parametrize("type_", ['coarse', 'dense'])
 @pytest.mark.parametrize("no_crop_mat", [False, True])
 def test_deca_recon(name, type_, no_crop_mat):
-
     device = 'cuda'
 
     model_name = f'{name}-{type_}'
@@ -32,7 +33,7 @@ def test_deca_recon(name, type_, no_crop_mat):
 
     img_batch = next(vid)
     img_crop, crop_mat = crop_model(img_batch)
-    
+
     if not no_crop_mat:
         recon_model.crop_mat = crop_mat
 
@@ -50,13 +51,13 @@ def test_deca_recon(name, type_, no_crop_mat):
     cam_mat[2, 3] = 4
     renderer = Renderer(viewport=img_size, smooth=False, cam_mat=cam_mat)
     img = renderer(out['v'][0, ...], recon_model.get_tris())
-    
+
     f_out = Path(__file__).parent / f'test_viz/test_{model_name}.png'
     cv2.imwrite(str(f_out), img)
 
     recon_model.close()
     vid.close()
-    
+
     if not no_crop_mat:
         # Only render when recon full image
         kwargs = {**out, **vid.get_metadata()}

@@ -1,22 +1,23 @@
-import h5py 
 from pathlib import Path
+
+import h5py
 
 
 def get_template_flame(dense=False):
-    """ Returns the template (vertices and triangles) of the canonical Flame model, in
-    either its dense or coarse version.
-    
+    """Returns the template (vertices and triangles) of the canonical Flame
+    model, in either its dense or coarse version.
+
     Parameters
     ----------
     dense : bool
         Whether to load in the dense version of the template (``True``) or the coarse
         version (``False``)
-    
+
     Returns
     -------
     template : dict
-        Dictionary with vertices ("v") and faces ("f")    
-        
+        Dictionary with vertices ("v") and faces ("f")
+
     Examples
     --------
     Get the vertices and faces (triangles) of the standard Flame topology (template) in
@@ -39,7 +40,7 @@ def get_template_flame(dense=False):
 
         template_h5 = data['dense' if dense else 'coarse']
         template = {'v': template_h5['v'][:], 'f': template_h5['f'][:]}
-    
+
     return template
 
 

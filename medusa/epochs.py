@@ -1,9 +1,10 @@
-""" Module with functionality to store epoch data and optionally convert it to an 
-MNE-friendly format. """
+"""Module with functionality to store epoch data and optionally convert it to
+an MNE-friendly format."""
+
+from pathlib import Path
 
 import h5py
 import numpy as np
-from pathlib import Path  
 
 
 class EpochsArray:
@@ -26,16 +27,16 @@ class EpochsArray:
         the video that was reconstructed
     """
 
-    def __init__(self, v, params, frame_t, recon_model, events=None):        
+    def __init__(self, v, params, frame_t, recon_model, events=None):
         self.v = v
         self.params = params
         self.frame_t = frame_t
         self.recon_model = recon_model
         self.sf = np.diff(frame_t).mean()
         self.events = events
-    
+
     def save(self, path, compression_level=9):
-        """ Saves (meta)data to disk as an HDF5 file.
+        """Saves (meta)data to disk as an HDF5 file.
 
         Parameters
         ----------
@@ -66,24 +67,24 @@ class EpochsArray:
             self.events.to_hdf(path, key="events", mode="a")
 
     def to_mne(self, frame_t, include_global_motion=True):
-        """ Initalize a MNE EpochsArray.
+        """Initalize a MNE EpochsArray.
 
         Parameters
         ----------
         include_global_motion : bool
             Whether to add global motion ('mat') to the data as if it were a separate
-            set of channels  
+            set of channels
 
         Returns
         -------
         An instance of the EpochsArray class
         """
-        
+
         try:
             import mne
         except ImportError:
-            raise ValueError("MNE is not installed!")    
-            
+            raise ValueError("MNE is not installed!")
+
         v = self.v.copy()
 
         # N (trails), T (time points), nV (number of vertices)
@@ -94,7 +95,7 @@ class EpochsArray:
         if include_global_motion:
             v = np.c_[v, self.params]
             nV = nV + 12
-        
+
         # N x T x (V x 3) --> N x (V x 3) x T
         # (as is expected by MNE)
         v = np.transpose(v, (0, 2, 1))
@@ -119,7 +120,7 @@ class EpochsArray:
             ]
         else:
             ch_names = [f"v{i}_{c}" for i in range(nV) for c in ["x", "y", "z"]]
-        
+
         info = mne.create_info(
             # vertex 0 (x), vertex 0 (y), vertex 0 (z), vertex 1 (x), etc
             ch_names=ch_names,
@@ -131,7 +132,7 @@ class EpochsArray:
             events_, event_id = self._events_to_mne(frame_t)
         else:
             events_, event_id = None, None
-        
+
         tmin = self.frame_t.min()
         return mne.epochs.EpochsArray(
             v, info, tmin=tmin, events=events_, event_id=event_id,
@@ -139,8 +140,7 @@ class EpochsArray:
         )
 
     def _events_to_mne(self, frame_t):
-        """Converts events DataFrame to (N x 3) array that
-        MNE expects.
+        """Converts events DataFrame to (N x 3) array that MNE expects.
 
         Returns
         -------

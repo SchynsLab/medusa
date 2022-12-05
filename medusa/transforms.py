@@ -1,14 +1,14 @@
-import torch
 import numpy as np
+import torch
 from scipy.spatial import Delaunay
-        
+
 
 def create_viewport_matrix(nx, ny, device='cuda'):
-    """Creates a viewport matrix that transforms vertices in NDC [-1, 1]
-    space to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
-    https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-transform/
-    except that I added the minus sign at [1, 1], which makes sure that the
-    viewport (screen) space origin is in the top left.
+    """Creates a viewport matrix that transforms vertices in NDC [-1, 1] space
+    to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
+    https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-
+    transform/ except that I added the minus sign at [1, 1], which makes sure
+    that the viewport (screen) space origin is in the top left.
 
     Parameters
     ----------
@@ -38,9 +38,8 @@ def create_viewport_matrix(nx, ny, device='cuda'):
 
 
 def create_ortho_matrix(nx, ny, znear=0.05, zfar=100.0, device='cuda'):
-    """Creates an orthographic projection matrix, as
-    used by EMOCA/DECA. Based on the pyrender implementaiton.
-    Assumes an xmag and ymag of 1.
+    """Creates an orthographic projection matrix, as used by EMOCA/DECA. Based
+    on the pyrender implementaiton. Assumes an xmag and ymag of 1.
 
     Parameters
     ----------
@@ -75,9 +74,9 @@ def create_ortho_matrix(nx, ny, znear=0.05, zfar=100.0, device='cuda'):
 
 
 def crop_matrix_to_3d(mat_33):
-    """Transforms a 3x3 matrix used for cropping (on 2D coordinates)
-    into a 4x4 matrix that can be used to transform 3D vertices.
-    It assumes that there is no rotation element.
+    """Transforms a 3x3 matrix used for cropping (on 2D coordinates) into a 4x4
+    matrix that can be used to transform 3D vertices. It assumes that there is
+    no rotation element.
 
     Parameters
     ----------
@@ -96,7 +95,7 @@ def crop_matrix_to_3d(mat_33):
     # Define translation in x, y, & z (z = 0)
     b = mat_33.shape[0]
     t_xyz = torch.cat([mat_33[:, :2, 2], torch.zeros((b, 1), device=device)], dim=1)
-    
+
     # Add column representing z at the diagonal
     mat_33 = torch.cat([mat_33[:, :, :2],
                         torch.tensor([0, 0, 1], device=device).repeat(b, 1)[:, :, None]], dim=2)
@@ -111,8 +110,8 @@ def crop_matrix_to_3d(mat_33):
 
 
 def apply_perspective_projection(v, mat):
-    """" Applies a perspective projection of ``v`` into NDC space. 
-    
+    """" Applies a perspective projection of ``v`` into NDC space.
+
     Parameters
     ----------
     v : np.ndarray
@@ -120,17 +119,17 @@ def apply_perspective_projection(v, mat):
     mat : np.ndarray
         A 4x4 perspective projection matrix
     """
-    
+
     v_proj = np.c_[v, np.ones(v.shape[0])] @ mat.T
     v_proj /= v_proj[:, 3, None]
-    
+
     return v_proj
 
 
 def embed_points_in_mesh(v, f, p, ):
-    """ Embed points in an existing mesh by finding the face it is contained in and
-    computing its barycentric coordinates. Works with either 2D or 3D data.
-    
+    """Embed points in an existing mesh by finding the face it is contained in
+    and computing its barycentric coordinates. Works with either 2D or 3D data.
+
     Parameters
     ----------
     v : np.ndarray
@@ -148,11 +147,11 @@ def embed_points_in_mesh(v, f, p, ):
         A 2D array (vertices x 3) array with barycentric coordinates
     """
 
-    # Replace existing Delaunay triangulation with faces (`f`) 
+    # Replace existing Delaunay triangulation with faces (`f`)
     dim = p.shape[1]
     tri = Delaunay(v[:, :dim])
     tri.simplices = f.astype(np.int32)
-    
+
     # `find_simplex` returns, for each vertex in `p`, the triangle it is contained in
     triangles = tri.find_simplex(p)
 
@@ -172,27 +171,28 @@ def embed_points_in_mesh(v, f, p, ):
     for i in outside:
         # Find the closest vertex (euclidean distance)
         v_closest = np.argmin(((p[i, :] - v) ** 2).sum(axis=1))
-        
+
         # alternative: nearest neighbors
         # (1 / dist) / (1 / dist).sum()
-        
+
         # Find the face(s) in which this vertex is contained
         f_idx, v_idx = np.where(f == v_closest)
 
         # Pick (for no specific reason) the first triangle to be one its contained in
         triangles[i] = f_idx[0]
-        
+
         # Set the barycentric coordinates such that it is 1 for the closest vertex and
         # zero elsewhere
         bcoords[i, :] = np.zeros(3)
         bcoords[i, v_idx[0]] = 1
-    
+
     return triangles, bcoords
 
 
 def project_points_from_embedding(v, f, triangles, bcoords):
-    """ Project points (vertices) from an existing embedding into a different space.
-    
+    """Project points (vertices) from an existing embedding into a different
+    space.
+
     Parameters
     ----------
     v : np.ndarray
@@ -200,7 +200,6 @@ def project_points_from_embedding(v, f, triangles, bcoords):
     f : np.ndarray
         Faces of original mesh
     triangles : np.ndarray
-
     """
     vf = v[f[triangles]]  # V x 3 x [2 or 3]
     proj = (vf * bcoords[:, :, None]).sum(axis=1)  # V x [2 or 3]
@@ -208,9 +207,9 @@ def project_points_from_embedding(v, f, triangles, bcoords):
 
 
 def estimate_similarity_transform(src, dst, estimate_scale=True):
-    """ Estimate a similarity transformation matrix for two batches
-    of points with N observations and M dimensions; reimplementation
-    of the ``_umeyama`` function of the scikit-image package. 
+    """Estimate a similarity transformation matrix for two batches of points
+    with N observations and M dimensions; reimplementation of the ``_umeyama``
+    function of the scikit-image package.
 
     Parameters
     ----------
@@ -220,7 +219,7 @@ def estimate_similarity_transform(src, dst, estimate_scale=True):
         A tensor with shape batch_size x N x M
     estimate_scale : bool
         Whether to also estimate a scale parameter
-    
+
     Raises
     ------
     ValueError
@@ -249,14 +248,14 @@ def estimate_similarity_transform(src, dst, estimate_scale=True):
 
     # Eq. (38).
     A = dst_demean.mT @ src_demean / num
-    
+
     # # Eq. (39).
     d = torch.ones((batch, dim), dtype=torch.float32, device=device)
     d[torch.linalg.det(A) < 0, dim - 1] = -1
-    
+
     T = torch.eye(dim + 1, dtype=torch.float32, device=device).repeat(batch, 1, 1)
     U, S, V = torch.linalg.svd(A)
-    
+
     # # Eq. (40) and (43).
     rank = torch.linalg.matrix_rank(A)
     T[rank == 0, ...] *= torch.nan
@@ -267,7 +266,7 @@ def estimate_similarity_transform(src, dst, estimate_scale=True):
     idx = torch.logical_and(rank == dim - 1, det_U * det_V > 0)
     if idx.sum() > 0:
         T[idx, :dim, :dim] = U[idx, ...] @ V[idx, ...]
-    
+
     idx = torch.logical_and(rank == dim - 1, det_U * det_V < 0)
     if idx.sum() > 0:
         s = d[idx, dim - 1]
@@ -279,16 +278,16 @@ def estimate_similarity_transform(src, dst, estimate_scale=True):
     if idx.sum() > 0:
         T[idx, :dim, :dim] = U[idx, ...] @ torch.diag_embed(d[idx, ...]) @ V[idx, ...]
 
-    if estimate_scale:    
+    if estimate_scale:
         # Eq. (41) and (42).
         src_var = src_demean.var(axis=1, unbiased=False)
         scale = 1.0 / src_var.sum(axis=1) * (S * d).sum(axis=1)
     else:
         scale = torch.ones(batch, device=device)
-    
+
     dst_mean = dst_mean.squeeze(dim=1)
     src_mean = src_mean.squeeze(dim=1)
     T[:, :dim, dim] = dst_mean - scale.unsqueeze(1) * (T[:, :dim, :dim] @ src_mean.unsqueeze(2)).squeeze(dim=2)
     T[:, :dim, :dim] *= scale[:, None, None]
-    
+
     return T

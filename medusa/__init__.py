@@ -1,8 +1,8 @@
 import os
-import cv2
-import torch
 from pathlib import Path
 
+import cv2
+import torch
 
 # Set pyopengl to 'egl' for headless rendering
 os.environ['PYOPENGL_PLATFORM'] = 'egl'

@@ -1,11 +1,12 @@
-import torch
-import PIL
-import numpy as np
 from pathlib import Path
+
+import numpy as np
+import PIL
+import torch
 from matplotlib import cm
+from torchvision.io import write_video
 from torchvision.ops import box_area
 from torchvision.utils import draw_bounding_boxes, draw_keypoints, save_image
-from torchvision.io import write_video
 
 from .. import DEVICE, FONT
 from ..io import load_inputs
@@ -20,8 +21,9 @@ class BaseDetectionModel:
 class DetectionResults:
 
     def __init__(self, n_img, conf=None, bbox=None, lms=None, img_idx=None, device=DEVICE):
-        """ Note to self: we need to know `n_img` (number of original images), because
-        otherwise we cannot make back from the 'stacked' format to the unstacked one. """
+        """Note to self: we need to know `n_img` (number of original images),
+        because otherwise we cannot make back from the 'stacked' format to the
+        unstacked one."""
         self.n_img = n_img
         self.conf = conf
         self.bbox = bbox
@@ -34,7 +36,7 @@ class DetectionResults:
     def _concat(self):
 
         for attr in ['conf', 'bbox', 'lms', 'img_idx']:
-            
+
             value = getattr(self, attr)
             if value is None:
                 continue
@@ -58,7 +60,7 @@ class DetectionResults:
 
     @classmethod
     def from_batches(cls, batches):
-        
+
         conf = torch.concatenate([b.conf for b in batches if b.conf is not None])
         bbox = torch.concatenate([b.bbox for b in batches if b.bbox is not None])
         lms = torch.concatenate([b.lms for b in batches if b.lms is not None])
@@ -74,10 +76,10 @@ class DetectionResults:
         return cls(n_img, conf, bbox, lms, img_idx, device)
 
     def sort(self, dist_threshold=200, present_threshold=0.1):
-        
+
         self.face_idx = sort_faces(self.lms, self.img_idx, dist_threshold, self.device)
-        
-        # Loop over unique faces tracked        
+
+        # Loop over unique faces tracked
         for f in self.face_idx.unique():
             # Compute the proportion of images containing this face
             f_idx = self.face_idx == f
@@ -90,8 +92,9 @@ class DetectionResults:
                     setattr(self, attr, getattr(self, attr)[~f_idx])
 
     def visualize(self, imgs, f_out, video=False, **kwargs):
-        """ Creates an image with the estimated bounding box (bbox) on top of it.
-        
+        """Creates an image with the estimated bounding box (bbox) on top of
+        it.
+
         Parameters
         ----------
         image : array_like
@@ -133,15 +136,15 @@ class DetectionResults:
 
             img = draw_bounding_boxes(img, bbox, labels, colors, width=2, font=FONT, font_size=font_size)
 
-            lms = self.lms[idx]            
+            lms = self.lms[idx]
             img = draw_keypoints(img, lms, colors=(0, 255, 0), radius=2)
             imgs[i_img] = img
-        
+
         if f_out.is_file():
             # Remove if exists already
             f_out.unlink()
 
         if video:
-            write_video(str(f_out), imgs.permute(0, 2, 3, 1).cpu(), fps=24)            
+            write_video(str(f_out), imgs.permute(0, 2, 3, 1).cpu(), fps=24)
         else:
             save_image(imgs.float(), fp=f_out, normalize=True, **kwargs)

@@ -50,6 +50,7 @@ sphinx-autoapi = "^2.0.0"
 pytest = "^7.2.0"
 nbval = "^0.9.6"
 coverage = "^6.5.0"
+pre-commit = "^2.20.0"
 
 [tool.poetry.scripts]
 medusa_download_ext_data = "medusa.cli:download_ext_data"

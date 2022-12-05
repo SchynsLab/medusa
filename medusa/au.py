@@ -1,16 +1,18 @@
-""" A module with functionality to perform Action Units (AU) decoding
-from 4D reconstructions. """
+"""A module with functionality to perform Action Units (AU) decoding from 4D
+reconstructions."""
+
+from pathlib import Path
 
 import numpy as np
-from pathlib import Path
 import onnxruntime as ort
+
 from medusa.preproc import align
 
 
 class ActionUnitDecoder:
 
     def __init__(self, recon_model=None, predict_amplitude=True):
-        
+
         self.recon_model = recon_model
         self.predict_amplitude = predict_amplitude
         self._detect_model = None
@@ -21,7 +23,7 @@ class ActionUnitDecoder:
 
         if self.recon_model is not None:
             self._setup_detect_model(self.recon_model)
-        
+
             if self.predict_amplitude:
                 self._setup_amp_model(self.recon_model)
 
@@ -35,12 +37,12 @@ class ActionUnitDecoder:
         pass
 
     def decode(self, data, neutral_frame=0):
-        
+
         if data.space == 'world':
             data = align(data)
 
         inp_name = self._detect_model.get_inputs()[0].name
-        
+
         neutral = data.v[neutral_frame, ...]
         neu_mu =  neutral.mean(axis=0)[None, None, :]
         neu_sd = neutral.std(axis=0)[None, None, :]

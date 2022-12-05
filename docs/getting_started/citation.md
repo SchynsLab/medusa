@@ -3,7 +3,7 @@
 If you use Medusa, please cite it as follows:
 
 > Snoek, L., Garrod, O., Knapen, T., Jack, R., & Schyns, P. (2022). Dynamic Face Imaging:
-a novel analysis framework for 3D face expression and perception. 
+a novel analysis framework for 3D face expression and perception.
 
 ## Citing reconstruction models
 

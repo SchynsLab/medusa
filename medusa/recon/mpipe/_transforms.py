@@ -1,7 +1,9 @@
-""" A Python implementation of the C++ transform module in mediapipe
-by Rasmus Jones (https://github.com/Rassibassi), adapted from
-`here <https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py>`_ and
-`here <https://github.com/Rassibassi/mediapipeDemos/blob/main/custom/face_geometry.py>`_.
+"""A Python implementation of the C++ transform module in mediapipe by Rasmus
+Jones (https://github.com/Rassibassi), adapted from `here.
+
+<https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py>`_ and
+`here <https://github.com/Rassibassi/mediapipeDemos/blob/main/custom/face_geome
+try.py>`_.
 
 The code in the module is used to estimate the local-to-world matrix of the ``Mediapipe``
 reconstruction, i.e., how the current reconstruction is transformed relative to the
@@ -77,7 +79,6 @@ for idx, weight in procrustes_landmark_basis:
 
 
 def image2world(screen_landmarks, pcf, v_world_ref):
-
     screen_landmarks = project_xy(screen_landmarks, pcf)
     depth_offset = np.mean(screen_landmarks[2, :])
 
@@ -166,7 +167,6 @@ def solve_weighted_orthogonal_problem(source_points, target_points, point_weight
 
 
 def internal_solve_weighted_orthogonal_problem(sources, targets, sqrt_weights):
-
     # tranposed(A_w).
     weighted_sources = sources * sqrt_weights[None, :]
     # tranposed(B_w).

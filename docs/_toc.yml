@@ -28,5 +28,3 @@ parts:
   - file: misc/bibliography
   - file: misc/contributing
   - file: misc/conduct
-
-
