@@ -25,22 +25,19 @@ def test_videoloader_full_iteration():
     assert(n_actual == n_expected)
 
 
-@pytest.mark.parametrize("rescale_factor", [None, 0.5])
 @pytest.mark.parametrize("batch_size", [1, 32])
 @pytest.mark.parametrize("device", ['cuda', 'cpu'])
-def test_videoloader_params(rescale_factor, batch_size, device):
+def test_videoloader_params(batch_size, device):
     if 'GITHUB_ACTIONS' in os.environ and device == 'cuda':
         return
 
     vid = get_example_video(return_videoloader=False)
     loader = VideoLoader(
-        vid, rescale_factor=rescale_factor, n_preload=512,
-        device=device, batch_size=batch_size,
-        loglevel='WARNING'
+        vid, device=device, batch_size=batch_size, loglevel='WARNING'
     )
 
     metadata = loader.get_metadata()
-    img_batch = next(loader)
+    img_batch = next(iter(loader))
 
     assert(img_batch.shape[0] == batch_size)
     assert(img_batch.device.type == device)

@@ -8,6 +8,7 @@ file, which is used in the reconstruction process (e.g., in the
 from datetime import datetime
 from pathlib import Path
 
+import av
 import cv2
 import h5py
 import numpy as np
@@ -44,15 +45,16 @@ class VideoLoader(DataLoader):
         If `n_preload` is not a multiple of `batch_size`
     """
 
-    def __init__(self, path, rescale_factor=None, n_preload=512, device=DEVICE, batch_size=32,
-                 loglevel='INFO', **kwargs):
+    def __init__(self, path, batch_size=32, device=DEVICE,
+                 channels_first=False, loglevel='INFO', **kwargs):
 
         self.logger = get_logger(loglevel)
-        self._validate(path, n_preload, batch_size)
-        dataset = VideoDataset(path, rescale_factor, n_preload, device)
+        self.channels_first = channels_first
+        self.device = device
+        self._validate(path)
+        dataset = VideoDataset(path, device)
 
-        super().__init__(dataset, batch_size, num_workers=0, **kwargs)
-        self._iterator = self._create_iterator()
+        super().__init__(dataset, batch_size, num_workers=0, pin_memory=True, **kwargs)
         self._metadata = self._extract_metadata()
 
     def get_metadata(self):
@@ -65,7 +67,7 @@ class VideoLoader(DataLoader):
         """Closes the opencv videoloader in the underlying pytorch Dataset."""
         self.dataset.close()
 
-    def _validate(self, path, n_preload, batch_size):
+    def _validate(self, path):
         """Validates some of the init arguments."""
 
         if not isinstance(path, Path):
@@ -73,13 +75,6 @@ class VideoLoader(DataLoader):
 
         if not path.is_file():
             raise ValueError(f"File {path} does not exist!")
-
-        #if path.suffix not in [".mp4", ".gif", ".avi"]:
-            # Other formats might actually work, but haven't been tested yet
-        #    raise ValueError(f"Only mp4/gif videos are supported, not {path.suffix[1:]}!")
-
-        if n_preload % batch_size != 0:
-            raise ValueError("`n_preload` should be a multiple of `batch_size`!")
 
     def _extract_metadata(self):
         """Extracts some metadata from Dataset and exposes it to the loader."""
@@ -98,20 +93,14 @@ class VideoLoader(DataLoader):
         """Utility function to easily access number of video frames."""
         return len(self.dataset)
 
-    def _create_iterator(self):
-        """Creates an iterator version of the loader so you can do
-        `next(loader_obj)`."""
-        if self.logger.level <= 20:
-            desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
-            _iterator= tqdm(self, desc=f"{desc} Recon frames")
-        else:
-            _iterator = self
+    def __iter__(self):
+        """Little hack to put data on device automatically."""
+        for batch in super().__iter__():
+            batch = batch.to(self.device, non_blocking=True)
+            if self.channels_first:
+                batch = batch.permute(0, 3, 1, 2)
 
-        return iter(_iterator)
-
-    def __next__(self):
-        """Return the next batch of the dataloader."""
-        return next(self._iterator)
+            yield batch
 
 
 class VideoDataset(Dataset):
@@ -129,29 +118,25 @@ class VideoDataset(Dataset):
     device : str
         Either 'cuda' (for GPU) or 'cpu'
     """
-    def __init__(self, video, rescale_factor=None, n_preload=512, device='cuda'):
+    def __init__(self, video, device='cuda'):
 
-        self.video = video
-        self.rescale_factor = rescale_factor
-        self.resize = None # to be set later
-        self.n_preload = n_preload
         self.device = device
-        self.reader = cv2.VideoCapture(str(video))
+        self._container = av.open(str(video), mode='r')
+        self._container.streams.video[0].thread_type = 'AUTO'#thread_type
+        self._reader = self._container.decode(video=0)
         self.metadata = self._get_metadata()
-        self.imgs = None
-        self.imgs = self._load()
 
     def _get_metadata(self):
 
-        fps = self.reader.get(cv2.CAP_PROP_FPS)
-        n = int(self.reader.get(cv2.CAP_PROP_FRAME_COUNT))
-        w = int(self.reader.get(cv2.CAP_PROP_FRAME_WIDTH))
-        h = int(self.reader.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        stream = self._container.streams.video[0]
+        fps = int(stream.average_rate)
+        n = stream.frames
+        w = stream.codec_context.width
+        h = stream.codec_context.height
 
-        if self.rescale_factor is not None:
-            w = round(self.rescale_factor * w)
-            h = round(self.rescale_factor * h)
-            self.resize = Resize(size=(h, w), antialias=True)
+        #if self.rescale_factor is not None:
+        #    w = round(self.rescale_factor * w)
+        #    h = round(self.rescale_factor * h)
 
         return {
             'size': (w, h),
@@ -159,61 +144,78 @@ class VideoDataset(Dataset):
             'fps': fps
         }
 
-    def _load(self):
-
-        if self.imgs is not None:
-            del self.imgs
-            torch.cuda.empty_cache()
-
-        n = self.metadata['n'] - int(self.reader.get(cv2.CAP_PROP_POS_FRAMES))
-        n_to_load = min(n, self.n_preload)
-
-        for i in range(n_to_load):
-
-            success, img = self.reader.read()
-            if not success:
-                raise ValueError("Could not read videoframe; probably the format "
-                                f"({self.video.suffix}) is not supported!")
-
-            if i == 0:
-                imgs = np.zeros((n, *img.shape))
-
-            imgs[i, ...] = img[:, :, ::-1]
-
-        # Cast to torch, but explicitly CPU, so we don't overload the GPU
-        # but still can benefit from torch-based vectorized resizing
-        imgs = torch.from_numpy(imgs)
-        imgs = imgs.to(dtype=torch.float32, device='cpu')
-        if self.rescale_factor is not None:
-            imgs = self.resize(imgs.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
-
-        return imgs
-
     def __len__(self):
 
         return self.metadata['n']
 
     def __getitem__(self, i):
 
-        if i == self.n_preload:
-            self.imgs = self._load()
-
-        if i >= self.n_preload:
-            i = i % self.n_preload
-
-        # Now, cast to cuda if desired and return
-        return self.imgs[i, ...].to(self.device)
+        img = next(self._reader).to_ndarray(format='rgb24')
+        return img
 
     def close(self):
         """Closes the cv2 videoreader and free up memory."""
+        self._container.close()
 
-        if self.imgs is not None:
-            del self.imgs
 
-            if self.device == 'cuda':
-                torch.cuda.empty_cache()
+class VideoWriter:
+    """A PyAV based images-to-video writer.
 
-        self.reader.release()
+    Parameters
+    ----------
+    path : str, Path
+        Output path (including extension)
+    fps : float, int
+        Frames per second of output video; if float, it's rounded
+        and cast to int
+    codec : str
+        Video codec to use (e.g., 'mpeg4', 'libx264', 'h264')
+    pix_fmt : str
+        Pixel format; should be compatible with codec
+    """
+    def __init__(self, path, fps, codec='mpeg4', pix_fmt='yuv420p'):
+
+        self._container = av.open(path, mode='w')
+        self._stream = self._container.add_stream(codec, int(round(fps)))
+        self._stream.pix_fmt = pix_fmt
+
+    def write(self, imgs):
+        """Writes one or more images to the video stream.
+
+        Parameters
+        ----------
+        imgs : array_like
+            A torch tensor or numpy array with image data; can be
+            a single image or batch of images
+        """
+        if imgs.ndim == 3:
+            imgs = imgs[None, ...]
+
+        if imgs.shape[1] in (3, 4):
+            imgs = imgs.permute(0, 2, 3, 1)
+
+        if torch.is_tensor(imgs):
+            imgs = imgs.cpu().numpy()
+
+        imgs = imgs.astype(np.uint8)
+
+        b, h, w, c = imgs.shape
+        if self._stream.width is None:
+            self._stream.width = w
+            self._stream.height = h
+
+        for i in range(b):
+            img = imgs[i]
+            img = av.VideoFrame.from_ndarray(img, format='rgb24')
+            for packet in self._stream.encode(img):
+                self._container.mux(packet)
+
+    def close(self):
+        """Closes the video stream."""
+        for packet in self._stream.encode():
+            self._container.mux(packet)
+
+        self._container.close()
 
 
 def load_h5(path):

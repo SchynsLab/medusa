@@ -6,11 +6,13 @@ excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
 .. [1] Matl, Matthew. *pyrender* [computer software]. https://github.com/mmatl/pyrender
 """
 
+import matplotlib.pyplot as plt
 import numpy as np
+from OpenGL.GL import glLineWidth
 from pyrender import (DirectionalLight, IntrinsicsCamera, Mesh, Node,
                       OffscreenRenderer, OrthographicCamera, Scene)
 from pyrender.constants import RenderFlags
-from trimesh import Trimesh
+from trimesh import Trimesh, visual
 
 
 class Renderer:
@@ -31,12 +33,15 @@ class Renderer:
     """
 
     def __init__(self, viewport, camera_type="orthographic", smooth=True,
-                 wireframe=False, cam_mat=None, focal_length=None):
+                 wireframe=False, wireframe_color=None, wireframe_width=None,
+                 cam_mat=None, focal_length=None):
 
         self.viewport = viewport
         self.camera_type = camera_type
         self.smooth = smooth
         self.wireframe = wireframe
+        self.wireframe_color = wireframe_color
+        self.wireframe_width = wireframe_width
         self.cam_mat = cam_mat
         self.focal_length = focal_length
         self.scene = self._create_scene()
@@ -74,7 +79,7 @@ class Renderer:
         return OffscreenRenderer(viewport_width=self.viewport[0],
                                  viewport_height=self.viewport[1])
 
-    def __call__(self, v, f, overlay=None, cmap_name='bwr', is_colors=False):
+    def __call__(self, v, f, overlay=None, cmap_name='bwr', is_colors=False, **kwargs):
         """Performs the actual rendering.
 
         Parameters
@@ -100,41 +105,59 @@ class Renderer:
             A 3D array (with np.uint8 integers) of shape ``viewport[0]`` x
             ``viewport[1]`` x 3 (RGB)
         """
+        mesh = Trimesh(v, f, **kwargs)
 
-        # if overlay is not None:
-        #     overlay = overlay.squeeze()
-
-        #     if overlay.ndim > 1:
-        #         raise ValueError("Overlay should be a 1D array!")
-
-        #     if overlay.size != v.shape[0]:
-        #         raise ValueError("Overlay should have the same number as values as "
-        #                          f"the vertex array (expected {v.shape[0]}, found {overlay.size})!")
-
-        #     cmap = plt.get_cmap(cmap_name)
-        #     overlay = cmap(overlay)
-        #     #mesh.visual.vertex_colors = cmap(overlay)
-
-        kwargs = {}
         if overlay is not None:
+            overlay = overlay.squeeze()
+            cmap = plt.get_cmap(cmap_name)
+
+            if overlay.shape[0] == v.shape[0]:
+                normals = mesh.vertex_normals
+            elif overlay.shape[0] == f.shape[0]:
+                normals = mesh.face_normals
+
+            if overlay.ndim == 2:
+                if overlay.shape[1] == 3:
+                    overlay = (overlay * normals).sum(axis=1)
+                else:
+                    raise ValueError(f"Don't know what to do with overlay of shape {overlay.shape}!")
+
+            from matplotlib.colors import TwoSlopeNorm
+            vmin = overlay.min()
+            vmax = overlay.max()
+            if vmin != 0 and vmax != 0:
+                tsn = TwoSlopeNorm(vmin=overlay.min(), vmax=overlay.max(), vcenter=0)
+                overlay = tsn(overlay)
+            overlay = cmap(overlay)
             if overlay.shape[0] == f.shape[0]:
-                kwargs['face_colors'] = overlay
+                face_colors = overlay
+                vertex_colors = None
             elif overlay.shape[0] == v.shape[0]:
-                kwargs['vertex_colors'] = overlay
+                face_colors = None
+                vertex_colors = overlay
             else:
                 raise ValueError("Cannot infer whether overlay refers to vertices or "
                                  "faces (polygons)!")
 
-            #if not is_colors:
-            #    cmap = plt.get_cmap(cmap_name)
+            mesh.visual = visual.create_visual(
+                face_colors=face_colors,
+                vertex_colors=vertex_colors,
+                mesh=mesh
+            )
 
-        mesh = Trimesh(v, f, **kwargs)
         mesh = Mesh.from_trimesh(mesh, smooth=self.smooth, wireframe=self.wireframe)
 
         if self.wireframe:
             # Set to red, because the default isn't very well visible
-            red = np.array([1.0, 0.0, 0.0, 1], dtype=np.float32)
-            mesh.primitives[0].material.baseColorFactor = red
+            if self.wireframe_color is None:
+                wf_color = np.array([1.0, 0.0, 0.0, 1], dtype=np.float32)
+            else:
+                wf_color = np.array(self.wireframe_color, dtype=np.float32)
+
+            if self.wireframe_width is not None:
+                glLineWidth(self.wireframe_width)
+
+            mesh.primitives[0].material.baseColorFactor = wf_color
 
         mesh_node = Node(mesh=mesh)
         self.scene.add_node(mesh_node)
