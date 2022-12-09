@@ -20,7 +20,7 @@ jobs:
 
       # Generate + deploy documentation
       - name: Setup Medusa
-        uses: actions/setup-medusa
+        uses: actions/setup-medusa@master
         with:
           python-version: ${{ matrix.python-version }}
       - name: Build docs
