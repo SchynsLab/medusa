@@ -18,8 +18,9 @@ runs:
       python-version: ${{ inputs.python-version }}
       cache: 'poetry'
   - name: Install GLU
+    shell: bash
     run: sudo apt install -y freeglut3-dev
-
   # Install package + deps + download data
   - name: Install Medusa
+    shell: bash
     run: poetry install
