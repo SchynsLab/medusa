@@ -1,9 +1,6 @@
 name: Setup Medusa
 
 on:
-  push:
-    branches:
-      - master
   workflow_call:
 
 jobs:
