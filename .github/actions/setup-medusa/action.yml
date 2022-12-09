@@ -1,4 +1,4 @@
-name: Setup Medusa
+name: setup-medusa
 description: "Sets up environment for Medusa"
 inputs:
   python-version:

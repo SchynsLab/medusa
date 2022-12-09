@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test-package:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Medusa
+        uses: ./.github/actions/setup-medusa
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Download external data
+        shell: bash
+        env:
+          passwd_flame: ${{ secrets.PASSWD_FLAME }}
+        run: poetry run bash ./ci/download_data.sh
+      - name: Test with pytest
+        shell: bash
+        run: poetry run bash ./ci/run_tests.sh
