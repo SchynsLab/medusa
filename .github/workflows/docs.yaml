@@ -6,9 +6,11 @@ on:
       - master
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup-medusa.yml
   build-docs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
     steps:
       # - name: Download external data
       #   shell: bash
@@ -17,7 +19,12 @@ jobs:
       #   run: poetry run bash ./ci/download_data.sh
 
       # Generate + deploy documentation
+      - name: Setup Medusa
+        uses: actions/setup-medusa
+        with:
+          python-version: ${{ matrix.python-version }}
       - name: Build docs
+        shell: bash
         run: poetry run bash docs/build_docs.sh
       - name: Publish docs
         uses: peaceiris/actions-gh-pages@v3
