@@ -29,6 +29,7 @@ from tqdm import tqdm
 from trimesh import Trimesh
 from trimesh.transformations import compose_matrix, decompose_matrix
 
+from ..io import VideoWriter, VideoLoader
 from ..log import get_logger
 from ..render import Renderer
 
@@ -71,12 +72,12 @@ class Base4D:
         Logging level of current logger
     """
 
-    def __init__(self, v, f, face_idx=None, img_idx=None, mat=None, cam_mat=None, frame_t=None, sf=None,
+    def __init__(self, v, tris, mat=None, cam_mat=None, frame_t=None, sf=None,
                  img_size=(512, 512), recon_model=None, space="world", path=None,
                  loglevel='INFO'):
 
         self.v = v
-        self.f = f
+        self.tris = tris
         self.mat = mat
         self.cam_mat = cam_mat
         self.frame_t = frame_t
@@ -214,7 +215,7 @@ class Base4D:
     def save_obj(self, idx, path):
 
         with open(path, 'w') as f_out:
-            Trimesh(self.v[idx, ...], self.f).export(f_out, file_type='obj')
+            Trimesh(self.v[idx, ...], self.tris).export(f_out, file_type='obj')
 
     def save(self, path, compression_level=9):
         """Saves (meta)data to disk as an HDF5 file.
@@ -245,11 +246,13 @@ class Base4D:
 
         with h5py.File(path, "w") as f_out:
 
-            for attr in ["v", "f", "frame_t", "mat", "cam_mat"]:
+            for attr in ["v", "tris", "frame_t", "mat", "cam_mat"]:
                 data = getattr(self, attr, None)
 
-                if attr != "f" and data is not None:
+                if attr != "tris":
                     data = data.astype(np.float32)
+                else:
+                    data = data.astype(np.int64)
 
                 if data is not None:
                     f_out.create_dataset(attr, data=data, compression=compression_level)
@@ -297,7 +300,7 @@ class Base4D:
         init_kwargs = dict()
         with h5py.File(path, "r") as f_in:
 
-            for attr in ["v", "f", "frame_t", "mat", "cam_mat"]:
+            for attr in ["v", "tris", "frame_t", "mat", "cam_mat"]:
                 if attr in f_in:
                     init_kwargs[attr] = f_in[attr][:]
                 else:
@@ -318,7 +321,7 @@ class Base4D:
         return img
 
     def render_video(self, f_out, renderer, video=None, scale=None, n_frames=None,
-                     alpha=None, overlay=None):
+                     alpha=None):
         """Renders the sequence of 3D meshes as a video. It is assumed that
         this method is only called from a child class (e.g., ``Mediapipe4D``).
 
@@ -341,18 +344,14 @@ class Base4D:
             minimum = 0 (invisible), maximum = 1 (fully opaque)
         """
 
-        if overlay is not None:
-            if overlay.ndim > 2:
-                raise ValueError("Overlay should be at most 2 dimensional!")
-
         w, h = self.img_size
         if scale is not None:
             w, h = int(round(w * scale)), int(round(h * scale))
 
         if video is not None:
-            reader = self._create_video_reader(video)
+            reader = VideoLoader(video, batch_size=1, device='cpu')
 
-        writer = self._create_video_writer(f_out)
+        writer = VideoWriter(str(f_out), fps=self.sf)
 
         if self.logger.level <= 20:
             desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
@@ -367,33 +366,24 @@ class Base4D:
                     break
 
             if video is not None:
-                background = cv2.cvtColor(reader.read(), cv2.COLOR_BGR2RGB)
+                background = next(iter(reader)).numpy()
                 if scale is not None:
                     background = self._rescale(background, scale)
             else:
                 background = np.ones((h, w, 3)).astype(np.uint8) * 255
 
-            if overlay is not None:
-                if overlay.ndim == 2:
-                    this_overlay = overlay[i, :]
-                else:
-                    this_overlay = overlay
-            else:
-                this_overlay = None
-
-            img = renderer(self.v[i, :, :], self.f, this_overlay)
+            img = renderer(self.v[i, :, :], self.tris)
             if scale is not None:
                 img = self._rescale(img, scale)
 
             img = renderer.alpha_blend(img, background, face_alpha=alpha)
-            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
             writer.write(img)
 
         renderer.close()
-        writer.release()
+        writer.close()
 
         if video is not None:
-            reader.release()
+            reader.close()
 
     def copy(self):
         return deepcopy(self)
@@ -424,22 +414,6 @@ class Base4D:
             Numpy array with vertices of shape ``nV`` (number of verts) x 3 (XYZ)
         """
         self.v[idx, ...] = v
-
-    def _create_video_writer(self, f_out):
-
-        if not isinstance(f_out, Path):
-            f_out = Path(f_out)
-
-        sfx = f_out.suffix
-        if sfx == '.mp4':
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        elif sfx == '.avi':
-            fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        else:
-            raise ValueError(f"Format {sfx} not supported! Maybe try .mp4?")
-
-        writer = cv2.VideoWriter(str(f_out), fourcc, float(self.sf), self.img_size)
-        return writer
 
     def _create_video_reader(self, f_in):
 
@@ -566,7 +540,7 @@ class Mediapipe4D(Base4D):
     HDF5 file from disk (see ``load`` docstring).
     """
     def __init__(self, *args, **kwargs):
-        #kwargs["f"] = get_template_mediapipe()['f']
+
         if kwargs.get("cam_mat") is None:
             kwargs["cam_mat"] = np.eye(4)
 

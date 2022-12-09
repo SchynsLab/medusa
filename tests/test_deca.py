@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import cv2
@@ -15,9 +14,8 @@ from medusa.render import Renderer
 @pytest.mark.parametrize("name", ['deca', 'emoca', 'spectre'])
 @pytest.mark.parametrize("type_", ['coarse', 'dense'])
 @pytest.mark.parametrize("no_crop_mat", [False, True])
-def test_deca_recon(name, type_, no_crop_mat):
-    device = 'cuda'
-
+@pytest.mark.parametrize("device", ['cpu', 'cuda'])
+def test_deca_recon(name, type_, no_crop_mat, device):
     model_name = f'{name}-{type_}'
 
     vid = get_example_video(return_videoloader=True, device=device)
@@ -31,13 +29,10 @@ def test_deca_recon(name, type_, no_crop_mat):
     crop_model = LandmarkBboxCropModel(device=device)
     recon_model = DecaReconModel(name=model_name, img_size=img_size, device=device)
 
-    img_batch = next(vid)
-    img_crop, crop_mat = crop_model(img_batch)
-
-    if not no_crop_mat:
-        recon_model.crop_mat = crop_mat
-
-    out = recon_model(img_crop)
+    img_batch = next(iter(vid))
+    out_crop = crop_model(img_batch)
+    crop_mats = None if no_crop_mat else out_crop.crop_mats
+    out = recon_model(out_crop.imgs_crop, crop_mats)
 
     if type_ == 'coarse':
         expected_shape = (img_batch.shape[0], 5023, 3)
@@ -61,6 +56,6 @@ def test_deca_recon(name, type_, no_crop_mat):
     if not no_crop_mat:
         # Only render when recon full image
         kwargs = {**out, **vid.get_metadata()}
-        data = Flame4D(recon_model=recon_model, f=recon_model.get_tris(), **kwargs)
+        data = Flame4D(recon_model=recon_model, tris=recon_model.get_tris(), **kwargs)
         f_out = str(f_out).replace('.png', '.mp4')
         data.render_video(f_out, smooth=False, video=get_example_video())

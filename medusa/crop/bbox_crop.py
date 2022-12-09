@@ -21,7 +21,7 @@ class LandmarkBboxCropModel(BaseCropModel):
         self.output_size = output_size  # h, w
         self._detector = detector(device=device, **kwargs)
         self.device = device
-        self._lmk_model = self._init_lms_model()
+        self._lms_model = self._init_lms_model()
 
     def _init_lms_model(self):
 
@@ -29,7 +29,8 @@ class LandmarkBboxCropModel(BaseCropModel):
 
         f_in = Path(__file__).parents[1] / f'data/models/buffalo_l/{self.name}.onnx'
         device = self.device.upper()
-        sess = InferenceSession(str(f_in), providers=[f'{device}ExecutionProvider'])
+        opts = {"cudnn_conv_algo_search": "HEURISTIC"}
+        sess = InferenceSession(str(f_in), providers=[(f'{device}ExecutionProvider', opts)])
         self.input_name = sess.get_inputs()[0].name
         self.input_shape = sess.get_inputs()[0].shape
         self.output_names = [o.name for o in sess.get_outputs()]
@@ -99,12 +100,7 @@ class LandmarkBboxCropModel(BaseCropModel):
         M[:, :2, 2] = -1 * center * scale[:, None] + self.input_shape[3] / 2
         imgs_crop = warp_affine(imgs_stack, M[:, :2, :], dsize=self.input_shape[2:]).contiguous()
 
-        if self.device == 'cuda':
-            # No clue why, but I need to reinitialize the InferenceSession when using cuda,
-            # because otherwise the output is the same for every (same-sized) batch ...
-            self._lmk_model._reset_session(self._lmk_model._providers, None)
-
-        binding = self._lmk_model.io_binding()
+        binding = self._lms_model.io_binding()
 
         binding.bind_input(
             name=self.input_name,
@@ -117,7 +113,7 @@ class LandmarkBboxCropModel(BaseCropModel):
 
         lms_shape = (n_det, self.output_shape[0][1])
         lms = torch.empty(lms_shape, dtype=torch.float32, device=self.device).contiguous()
-
+        binding.synchronize_outputs()  # idk why, but *need* to call this otherwise lms is not updated
         binding.bind_output(
             name=self.output_names[0],
             device_type=self.device,
@@ -126,7 +122,7 @@ class LandmarkBboxCropModel(BaseCropModel):
             shape=lms_shape,
             buffer_ptr=lms.data_ptr(),
         )
-        self._lmk_model.run_with_iobinding(binding)
+        self._lms_model.run_with_iobinding(binding)
 
         if lms.shape[1] == 3309:
             lms = lms.reshape((n_det, -1, 3))

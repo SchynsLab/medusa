@@ -69,7 +69,7 @@ class Renderer:
 
         camera_node = Node(camera=camera, matrix=self.cam_mat)
         scene.add_node(camera_node)
-        light = DirectionalLight(intensity=5)
+        light = DirectionalLight(intensity=7.5)
         scene.add_node(Node(light=light, matrix=self.cam_mat))
 
         return scene

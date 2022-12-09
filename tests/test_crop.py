@@ -57,13 +57,13 @@ videos = [
 #    ('four_faces.mp4', 4)    # occlusion, moving in and out of frame
 ]
 
-@pytest.mark.parametrize('Model', [LandmarkBboxCropModel, LandmarkAlignCropModel])
+@pytest.mark.parametrize('Model', [LandmarkBboxCropModel])#, LandmarkAlignCropModel])
 @pytest.mark.parametrize('video', videos)
 def test_crop_model_vid(Model, video):
     if Model == LandmarkBboxCropModel:
         model = Model('2d106det', (224, 224))
     else:
-        model = Model((112, 112))
+        model = Model((448, 448))
 
     video, n_exp = video
     video_path = Path(__file__).parent / f'test_data/{video}'
@@ -81,4 +81,4 @@ def test_crop_model_vid(Model, video):
     f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_{video}'
 
     template = getattr(model, 'template', None)
-    crops.visualize(imgs, f_out=f_out, template=template, video=True, show_crop=False)
+    crops.visualize(imgs, f_out=f_out, template=template, video=True, show_crop=True)

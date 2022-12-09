@@ -60,14 +60,14 @@ class Mediapipe(BaseReconModel):
     def get_tris(self):
         return self._f_world_ref
 
-    def __call__(self, images):
+    def __call__(self, imgs):
         """Performs reconstruction of the face as a list of landmarks
         (vertices).
 
         Parameters
         ----------
-        image : np.ndarray
-            A 3D (w x h x 3) numpy array representing a RGB image
+        imgs : np.ndarray
+            A 4D (b x w x h x 3) numpy array representing a batch of RGB images
 
         Returns
         -------
@@ -96,14 +96,14 @@ class Mediapipe(BaseReconModel):
         (1, 4, 4)
         """
 
-        images = self._load_inputs(images, load_as='numpy', channels_first=False, to_bgr=False,
-                                   with_batch_dim=True, dtype='uint8')
+        imgs = self._load_inputs(imgs, load_as='numpy', channels_first=False,
+                                 with_batch_dim=True, dtype='uint8')
 
-        v = np.zeros((images.shape[0], 468, 3))
-        mat = np.zeros((images.shape[0], 4, 4))
-        for i in range(images.shape[0]):
+        v = np.zeros((imgs.shape[0], 468, 3))
+        mat = np.zeros((imgs.shape[0], 4, 4))
+        for i in range(imgs.shape[0]):
 
-            results = self.model.process(images[i, ...])
+            results = self.model.process(imgs[i, ...])
             if not results.multi_face_landmarks:
                 return None
                 #raise ValueError("Could not reconstruct face! Try decreasing `min_detection_confidence`")
@@ -122,9 +122,9 @@ class Mediapipe(BaseReconModel):
                 # Because we need the image dimensions, we need to initialize the
                 # (pseudo)camera here (but we assume image dims are constant for video)
                 self._pcf = PCF(
-                    frame_height=images.shape[1],
-                    frame_width=images.shape[2],
-                    fy=images.shape[2],
+                    frame_height=imgs.shape[1],
+                    frame_width=imgs.shape[2],
+                    fy=imgs.shape[2],
                 )
 
             # Canonical (reference) model does not have iris landmarks (last ten),
@@ -148,7 +148,7 @@ class Mediapipe(BaseReconModel):
         # use the IntrinsicsCamera object with parameters:
         # fx=img.shape[1], fy=img.shape[1], cx=img.shape[1] / 2, cy=img.shape[0] / 2
         # Mediapipe assumes that the camera is located at the origin (and pointing in -z),
-        # so no need to set the camera pose matrix (extrinsic camera matrix)
+        # so no need to set the camera matrix (extrinsic camera matrix)
 
     def close(self):
         """Closes context manager.

@@ -82,7 +82,9 @@ class RetinanetDetector(BaseDetectionModel):
         set_default_logger_severity(3)
         device = self.device.upper()
 
-        sess = InferenceSession(str(f_in), providers=[f'{device}ExecutionProvider'])
+        # per: https://medium.com/neuml/debug-onnx-gpu-performance-c9290fe07459
+        opts = {"cudnn_conv_algo_search": "HEURISTIC"}
+        sess = InferenceSession(str(f_in), providers=[(f'{device}ExecutionProvider', opts)])
         self._onnx_input_name = sess.get_inputs()[0].name
         self._onnx_input_shape = (1, 3, 224, 224)  # undefined in this onnx model
         self._onnx_output_names = [o.name for o in sess.get_outputs()]

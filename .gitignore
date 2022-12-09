@@ -141,6 +141,7 @@ tests/test_viz/*/*.png
 tests/test_viz/*/*.mp4
 tests/test_viz/*/*.jpg
 medusa/data/models/*
+demos/*mp4
 
 # Docs
 docs/_build

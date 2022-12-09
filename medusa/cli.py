@@ -24,6 +24,7 @@ from pathlib import Path
 import click
 import torch
 import yaml
+import gdown
 
 from . import DEVICE
 from .io import download_file, load_h5
@@ -243,9 +244,11 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
 
     desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
     if click.confirm(f"{desc} DECA: I have registered and agreed to the license terms at https://deca.is.tue.mpg.de"):
-        url = 'https://download.is.tue.mpg.de/download.php?domain=deca&resume=1&sfile=deca_model.tar'
+        #url = 'https://download.is.tue.mpg.de/download.php?domain=deca&resume=1&sfile=deca_model.tar'
         f_out = directory / 'deca_model.tar'
-        download_file(url, f_out, overwrite=overwrite)
+        #download_file(url, f_out, overwrite=overwrite, cmd_type='get')
+        url = 'https://drive.google.com/u/0/uc?id=1rp8kdyLPvErw2dTmqtjISRVvQLj6Yzje'
+        gdown.download(url, str(f_out), quiet=True)
 
     desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
     if click.confirm(f"{desc} EMOCA: I have registered and agreed to the license terms at https://emoca.is.tue.mpg.de"):
@@ -268,7 +271,6 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
     f_out = directory / 'spectre_model.tar'
     if not f_out.is_file() or overwrite:
         logger.info("SPECTRE: starting download ...")
-        import gdown
         url = 'https://drive.google.com/u/0/uc?id=1vmWX6QmXGPnXTXWFgj67oHzOoOmxBh6B&export=download'
         gdown.download(url, str(f_out), quiet=True)
 

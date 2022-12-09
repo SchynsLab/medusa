@@ -2,6 +2,7 @@
 topological templates used by the different models."""
 from pathlib import Path
 
+import yaml
 import h5py
 import trimesh
 
@@ -25,7 +26,7 @@ def get_template_mediapipe():
     >>> template['f'].shape
     (898, 3)
     """
-    path = Path(__file__).parents[1] / 'data/mpipe/mediapipe_template.obj'
+    path = Path(__file__).parent / 'mpipe/mediapipe_template.obj'
     # Note to self: maintain_order=True is important, otherwise the
     # face order is all messed up
     with open(path, 'r') as f_in:
@@ -74,10 +75,39 @@ def get_template_flame(dense=False):
     (117380, 3)
     """
 
-    file = Path(__file__).parent / 'flame_template.h5'
+    file = Path(__file__).parent / 'flame/flame_template.h5'
     with h5py.File(file, 'r') as data:
 
         template_h5 = data['dense' if dense else 'coarse']
         template = {'v': template_h5['v'][:], 'f': template_h5['f'][:]}
 
     return template
+
+
+def get_flame_config(key=None):
+    """Loads the FLAME config file (i.e., the yaml with paths to the FLAME-
+    based models & data.
+
+    Parameters
+    ----------
+    key : str
+        If ``None`` (default), the config is returned as a dictionary;
+        if ``str``, then the value associated with the key is returned
+
+    Returns
+    -------
+    dict, str
+        The config file as a dictionary if ``key=None``, else a string
+        with the value associated with the key
+    """
+    cfg_path = Path(__file__).parent / 'flame/config.yaml'
+    with open(cfg_path, "r") as f_in:
+        cfg = yaml.safe_load(f_in)
+
+    if key is None:
+        return cfg
+    else:
+        if key not in cfg:
+            raise ValueError(f"Key {key} not in config!")
+        else:
+            return cfg[key]

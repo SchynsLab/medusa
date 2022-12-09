@@ -54,7 +54,6 @@ pre-commit = "^2.20.0"
 
 [tool.poetry.scripts]
 medusa_download_ext_data = "medusa.cli:download_ext_data"
-medusa_validate_ext_data = "medusa.cli:validate_ext_data"
 medusa_videorecon = "medusa.cli:videorecon_cmd"
 medusa_align = "medusa.cli:align_cmd"
 medusa_resample = "medusa.cli:resample_cmd"

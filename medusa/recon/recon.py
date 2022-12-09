@@ -73,22 +73,25 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
     # Loop across frames of video, store results in `recon_data`
     recon_data = defaultdict(list)
     i_frame = 0
+
     for batch in video:
+        inputs = {'imgs': batch}
 
         if recon_model in FLAME_MODELS:
 
             # Crop image, add tform to emoca (for adding rigid motion
             # due to cropping), and add crop plot to writer
-            batch, crop_mat = crop_model(batch)
-            reconstructor.crop_mat = crop_mat
+            out_crop = crop_model(batch)
+            inputs['imgs'] = out_crop.imgs_crop
+            inputs['crop_mats'] = out_crop.crop_mats
 
         # Reconstruct and store whatever `recon_model`` returns
         # in `recon_data`
-        out = reconstructor(batch)
-        for attr, data in out.items():
+        outputs = reconstructor(**inputs)
+        for attr, data in outputs.items():
             recon_data[attr].append(data)
 
-        i_frame += out['v'].shape[0]
+        i_frame += outputs['v'].shape[0]
         if n_frames is not None:
             if i_frame >= n_frames:
                 break
@@ -106,8 +109,8 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
             recon_data[attr] = recon_data[attr][:n_frames, ...]
 
     DataClass = MODEL2CLS[recon_model]
-    kwargs = {**recon_data, **video.get_metadata()}
-    data = DataClass(recon_model=recon_model, f=reconstructor.get_tris(),
-                     **kwargs)
+    init_kwargs = {**recon_data, **video.get_metadata()}
+    data = DataClass(recon_model=recon_model, tris=reconstructor.get_tris(),
+                     **init_kwargs)
 
     return data
