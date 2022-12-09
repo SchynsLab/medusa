@@ -19,6 +19,7 @@ jobs:
       #   run: poetry run bash ./ci/download_data.sh
 
       # Generate + deploy documentation
+      - uses: actions/checkout@v3
       - name: Setup Medusa
         uses: actions/setup-medusa@master
         with:
