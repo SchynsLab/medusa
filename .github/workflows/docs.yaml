@@ -1,0 +1,29 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-docs:
+    uses: ./.github/workflows/setup-medusa.yml
+    steps:
+    # - name: Download external data
+    #   shell: bash
+    #   env:
+    #     passwd_flame: ${{ secrets.PASSWD_FLAME }}
+    #   run: poetry run bash ./ci/download_data.sh
+
+    # Generate + deploy documentation
+    - name: Build docs
+      run: poetry run bash docs/build_docs.sh
+    - name: Publish docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html
+
+    # Testing
+    #- name: Test with pytest
+    #  run: poetry run bash ci/run_tests.sh

@@ -130,18 +130,19 @@ dmypy.json
 
 # Custom
 **/.DS_Store
-exp/*/data
-exp/*/*.py
-test_data
 medusa_ext_data
+medusa/data/models/*
+
+# demos
 demos/*.gif
 demos/*.mp4
 demos/*.h5
+
+# test output
 tests/test_viz/*/*.png
 tests/test_viz/*/*.mp4
 tests/test_viz/*/*.jpg
-medusa/data/models/*
-demos/*mp4
+tests/test_data
 
 # Docs
 docs/_build
