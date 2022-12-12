@@ -2,8 +2,6 @@ from collections import defaultdict
 from pathlib import Path
 
 import cv2
-import numpy as np
-import torch
 
 from .. import DEVICE
 from ..io import load_inputs
@@ -53,7 +51,7 @@ class YunetDetector(BaseDetectionModel):
                 outputs['conf'].append(det[:, -1])
                 bbox_ = det[:, :4]
                 # Convert offset to true vertex positions to keep consistent
-                # with retinanet bbox definition
+                # with scrfd bbox definition
                 bbox_[:, 2:] = bbox_[:, :2] + bbox_[:, 2:]
                 outputs['bbox'].append(bbox_)
                 outputs['lms'].append(det[:, 4:-1].reshape((det.shape[0], 5, 2)))

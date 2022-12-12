@@ -1,5 +1,5 @@
 # # Unit tests
-# pytest --disable-warnings --exitfirst tests/
+pytest --disable-warnings --exitfirst tests/
 
 # # Doctests
 # pytest --disable-warnings --doctest-modules --exitfirst medusa/

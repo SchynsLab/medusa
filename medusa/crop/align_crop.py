@@ -7,11 +7,10 @@ that is applicable to this implementation.
 
 import numpy as np
 import torch
-from kornia.geometry.linalg import transform_points
 from kornia.geometry.transform import warp_affine
 
 from .. import DEVICE
-from ..detect import RetinanetDetector
+from ..detect import SCRFDetector
 from ..io import load_inputs
 from ..transforms import estimate_similarity_transform
 from .base import BaseCropModel, CropResults
@@ -57,7 +56,7 @@ class LandmarkAlignCropModel(BaseCropModel):
     torch.Size([1, 3, 112, 112])
     """
 
-    def __init__(self, output_size=(112, 112), template=TEMPLATE, detector=RetinanetDetector,
+    def __init__(self, output_size=(112, 112), template=TEMPLATE, detector=SCRFDetector,
                  return_lmk=False, device=DEVICE, **kwargs):
 
         self.output_size = output_size  # h, w

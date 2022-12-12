@@ -52,9 +52,9 @@ from medusa.io import VideoLoader
 
 videos = [
     ('example_vid.mp4', 1),  # easy
-#    ('one_face.mp4', 1),    # also moves out of frame
-#    ('three_faces.mp4', 3),  # three faces, incl sunglasses
-#    ('four_faces.mp4', 4)    # occlusion, moving in and out of frame
+    ('one_face.mp4', 1),    # also moves out of frame
+    ('three_faces.mp4', 3),  # three faces, incl sunglasses
+    ('four_faces.mp4', 4)    # occlusion, moving in and out of frame
 ]
 
 @pytest.mark.parametrize('Model', [LandmarkBboxCropModel])#, LandmarkAlignCropModel])

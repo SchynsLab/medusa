@@ -13,4 +13,7 @@ if torch.cuda.is_available():
 else:
     DEVICE = 'cpu'
 
+torch.set_grad_enabled(False)
+torch.autograd.set_detect_anomaly(False)
+
 FONT = str(Path(cv2.__path__[0]) / 'qt/fonts/DejaVuSans.ttf')

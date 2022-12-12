@@ -5,6 +5,7 @@ import pytest
 
 from medusa.data import get_example_video
 from medusa.io import VideoLoader
+from test_utils import _check_gha_compatible
 
 
 @pytest.mark.parametrize("ext", ['.mp4', '.avi'])
@@ -28,7 +29,7 @@ def test_videoloader_full_iteration():
 @pytest.mark.parametrize("batch_size", [1, 32])
 @pytest.mark.parametrize("device", ['cuda', 'cpu'])
 def test_videoloader_params(batch_size, device):
-    if 'GITHUB_ACTIONS' in os.environ and device == 'cuda':
+    if not _check_gha_compatible(device):
         return
 
     vid = get_example_video(return_videoloader=False)

@@ -1,7 +1,4 @@
-import os
 from pathlib import Path
-
-import pytest
 from click.testing import CliRunner
 
 from medusa.cli import videorecon_cmd

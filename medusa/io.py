@@ -5,7 +5,6 @@ file, which is used in the reconstruction process (e.g., in the
 ``videorecon`` function).
 """
 
-from datetime import datetime
 from pathlib import Path
 
 import av
@@ -14,9 +13,7 @@ import h5py
 import numpy as np
 import requests
 import torch
-from torch.utils.data import DataLoader, Dataset
-from torchvision.transforms import Resize
-from tqdm import tqdm
+from torch.utils.data import DataLoader, IterableDataset
 from trimesh import Trimesh
 
 from . import DEVICE
@@ -103,7 +100,7 @@ class VideoLoader(DataLoader):
             yield batch
 
 
-class VideoDataset(Dataset):
+class VideoDataset(IterableDataset):
     """A pytorch Dataset class based on loading frames from a single video.
 
     Parameters
@@ -148,10 +145,9 @@ class VideoDataset(Dataset):
 
         return self.metadata['n']
 
-    def __getitem__(self, i):
-
-        img = next(self._reader).to_ndarray(format='rgb24')
-        return img
+    def __iter__(self):
+        for img in self._reader:
+            yield img.to_ndarray(format='rgb24')
 
     def close(self):
         """Closes the cv2 videoreader and free up memory."""

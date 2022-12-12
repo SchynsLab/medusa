@@ -4,7 +4,7 @@ import pytest
 import torch
 from test_utils import _check_gha_compatible
 
-from medusa.detect import RetinanetDetector, YunetDetector
+from medusa.detect import SCRFDetector, YunetDetector
 from medusa.detect.base import DetectionResults
 from medusa.io import VideoLoader
 
@@ -15,7 +15,7 @@ n_exp = [0, 1, 2, 3, 1, 2, 6]
 img_params = zip(imgs, n_exp)
 
 
-@pytest.mark.parametrize('Detector', [RetinanetDetector, YunetDetector])
+@pytest.mark.parametrize('Detector', [SCRFDetector, YunetDetector])
 @pytest.mark.parametrize('img_params', img_params)
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 def test_detector_imgs(Detector, img_params, device):
@@ -52,12 +52,12 @@ videos = [
     ('four_faces.mp4', 4)    # occlusion, moving in and out of frame
 ]
 
-@pytest.mark.parametrize('Detector', [RetinanetDetector, YunetDetector])
+@pytest.mark.parametrize('Detector', [SCRFDetector, YunetDetector])
 @pytest.mark.parametrize('video', videos)
 def test_detector_vid(Detector, video):
     video, n_exp = video
     video_path = Path(__file__).parent / f'test_data/{video}'
-    loader = VideoLoader(video_path)
+    loader = VideoLoader(video_path, batch_size=8)
     model = Detector()
 
     detections, imgs = [], []

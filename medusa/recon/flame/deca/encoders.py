@@ -16,6 +16,7 @@ import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
+from torchvision.models.mobilenetv2 import MobileNet_V2_Weights
 
 
 class ResNet(nn.Module):
@@ -181,8 +182,7 @@ class PerceptualEncoder(nn.Module):
     def __init__(self):
         super().__init__()
         self.encoder = torch.hub.load('pytorch/vision:v0.8.1', 'mobilenet_v2', verbose=False,
-                                      pretrained=True)
-#                                      weights='MobileNet_V2_Weights.IMAGENET1K_V1')
+                                      weights=MobileNet_V2_Weights.IMAGENET1K_V1)
 
         self.temporal = nn.Sequential(
             nn.Conv1d(in_channels=1280, out_channels=256, kernel_size=5, stride=1, padding=2),

@@ -7,14 +7,14 @@ from kornia.geometry.transform import warp_affine
 from onnxruntime import InferenceSession, set_default_logger_severity
 
 from .. import DEVICE
-from ..detect import RetinanetDetector
+from ..detect import SCRFDetector
 from ..io import load_inputs
 from ..transforms import estimate_similarity_transform
 from .base import BaseCropModel, CropResults
 
 
 class LandmarkBboxCropModel(BaseCropModel):
-    def __init__(self, name='2d106det', output_size=(224, 224), detector=RetinanetDetector,
+    def __init__(self, name='2d106det', output_size=(224, 224), detector=SCRFDetector,
                  device=DEVICE, **kwargs):
         # alternative: 1k3d68, 2d106det
         self.name = name
@@ -31,10 +31,10 @@ class LandmarkBboxCropModel(BaseCropModel):
         device = self.device.upper()
         opts = {"cudnn_conv_algo_search": "HEURISTIC"}
         sess = InferenceSession(str(f_in), providers=[(f'{device}ExecutionProvider', opts)])
-        self.input_name = sess.get_inputs()[0].name
-        self.input_shape = sess.get_inputs()[0].shape
-        self.output_names = [o.name for o in sess.get_outputs()]
-        self.output_shape = [o.shape for o in sess.get_outputs()]
+        self._onnx_input_name = sess.get_inputs()[0].name
+        self._onnx_input_shape = sess.get_inputs()[0].shape
+        self._onnx_output_names = [o.name for o in sess.get_outputs()]
+        self._onnx_output_shape = [o.shape for o in sess.get_outputs()]
 
         return sess
 
@@ -91,19 +91,19 @@ class LandmarkBboxCropModel(BaseCropModel):
         center = torch.stack([(bbox[:, 2] + bbox[:, 0]) / 2,
                               (bbox[:, 3] + bbox[:, 1]) / 2], dim=1)
 
-        scale = self.input_shape[3] / (torch.maximum(bw, bh) * 1.5)
+        scale = self._onnx_input_shape[3] / (torch.maximum(bw, bh) * 1.5)
 
         # Construct initial crop matrix based on rough bounding box,
         # then crop images to size 192 x 192
         M = torch.eye(3, device=self.device).repeat(n_det, 1, 1) * scale[:, None, None]
         M[:, 2, 2] = 1
-        M[:, :2, 2] = -1 * center * scale[:, None] + self.input_shape[3] / 2
-        imgs_crop = warp_affine(imgs_stack, M[:, :2, :], dsize=self.input_shape[2:]).contiguous()
+        M[:, :2, 2] = -1 * center * scale[:, None] + self._onnx_input_shape[3] / 2
+        imgs_crop = warp_affine(imgs_stack, M[:, :2, :], dsize=self._onnx_input_shape[2:]).contiguous()
 
+        # Note to self: not necessary to normalize data (as per insightface's implementation)
         binding = self._lms_model.io_binding()
-
         binding.bind_input(
-            name=self.input_name,
+            name=self._onnx_input_name,
             device_type=self.device,
             device_id=0,
             element_type=np.float32,
@@ -111,11 +111,11 @@ class LandmarkBboxCropModel(BaseCropModel):
             buffer_ptr=imgs_crop.data_ptr(),
         )
 
-        lms_shape = (n_det, self.output_shape[0][1])
+        lms_shape = (n_det, self._onnx_output_shape[0][1])
         lms = torch.empty(lms_shape, dtype=torch.float32, device=self.device).contiguous()
         binding.synchronize_outputs()  # idk why, but *need* to call this otherwise lms is not updated
         binding.bind_output(
-            name=self.output_names[0],
+            name=self._onnx_output_names[0],
             device_type=self.device,
             device_id=0,
             element_type=np.float32,
@@ -130,9 +130,9 @@ class LandmarkBboxCropModel(BaseCropModel):
         else:
             lms = lms.reshape((n_det, -1, 2))
 
-        lms[:, :, 0:2] = (lms[:, :, 0:2] + 1) * (self.input_shape[3] // 2)
+        lms[:, :, 0:2] = (lms[:, :, 0:2] + 1) * (self._onnx_input_shape[3] // 2)
         if lms.shape[2] == 3:
-            lms[:, :, 2] *= (self.input_shape[3] // 2)
+            lms[:, :, 2] *= (self._onnx_input_shape[3] // 2)
 
         lms = lms[:, :, :2]  # don't need 3rd dim
 

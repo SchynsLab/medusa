@@ -6,6 +6,7 @@ import torch
 from skimage.transform._geometric import _umeyama
 
 from medusa.transforms import estimate_similarity_transform
+from test_utils import _check_gha_compatible
 
 
 @pytest.mark.parametrize('batch_size', [1, 100])
@@ -14,7 +15,7 @@ from medusa.transforms import estimate_similarity_transform
 @pytest.mark.parametrize('estimate_scale', [True, False])
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 def test_similarity_transform(batch_size, n_points, n_dim, estimate_scale, device):
-    if 'GITHUB_ACTIONS' in os.environ and device == 'cuda':
+    if not _check_gha_compatible(device):
         return
 
     if n_points < n_dim:

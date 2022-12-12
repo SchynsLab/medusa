@@ -44,13 +44,18 @@ class DetectionResults:
             if isinstance(value, list):
                 if len(value) == 0:
                     setattr(self, attr, None)
+                    continue
+
+                if torch.is_tensor(value[0]):
+                    value = torch.concat(value).to(torch.float32)
                 else:
                     value = np.concatenate(value)
                     value = torch.as_tensor(value, dtype=torch.float32, device=self.device)
-                    setattr(self, attr, value)
 
-                    if attr == 'img_idx':
-                        self.img_idx = self.img_idx.long()
+                setattr(self, attr, value)
+
+                if attr == 'img_idx':
+                    self.img_idx = self.img_idx.long()
 
     def __len__(self):
         if self.conf is None:

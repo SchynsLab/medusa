@@ -168,9 +168,6 @@ class DecaReconModel(FlameReconModel):
             self.E_expression.to(self.device)
             self.E_expression.eval()
 
-        # Set everything to 'eval' (inference) mode
-        torch.set_grad_enabled(False)  # apparently speeds up forward pass, too
-
     def _encode(self, imgs):
         """"Encodes" the image into FLAME parameters, i.e., predict FLAME
         parameters for the given image. Note that, at the moment, it only works
@@ -414,6 +411,7 @@ class DecaReconModel(FlameReconModel):
 
         imgs = self._load_inputs(imgs, channels_first=True, with_batch_dim=True,
                                    load_as='torch', device=self.device)
+        imgs = self._preprocess(imgs)
 
         if 'spectre' in self.name:
             if imgs.shape[0] == 1:
@@ -425,7 +423,7 @@ class DecaReconModel(FlameReconModel):
 
             pre = imgs[None, 0, ...]
             post = imgs[None, -1, ...]
-            images = torch.cat([pre, pre, imgs, post, post])
+            imgs = torch.cat([pre, pre, imgs, post, post])
 
             if crop_mats is not None:
                 pre = crop_mats[None, 0, ...]

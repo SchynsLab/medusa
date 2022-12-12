@@ -42,13 +42,14 @@ def test_deca_recon(name, type_, no_crop_mat, device):
     assert(out['v'].shape == expected_shape)
     assert(out['mat'].shape == (img_batch.shape[0], 4, 4))
 
-    cam_mat = np.eye(4)
-    cam_mat[2, 3] = 4
-    renderer = Renderer(viewport=img_size, smooth=False, cam_mat=cam_mat)
-    img = renderer(out['v'][0, ...], recon_model.get_tris())
+    if not no_crop_mat:
+        cam_mat = np.eye(4)
+        cam_mat[2, 3] = 4
+        renderer = Renderer(viewport=img_size, smooth=False, cam_mat=cam_mat)
+        img = renderer(out['v'][0, ...], recon_model.get_tris())
 
-    f_out = Path(__file__).parent / f'test_viz/test_{model_name}.png'
-    cv2.imwrite(str(f_out), img)
+        f_out = Path(__file__).parent / f'test_viz/recon/test_{model_name}.png'
+        cv2.imwrite(str(f_out), img)
 
     recon_model.close()
     vid.close()

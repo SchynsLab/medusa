@@ -1,6 +1,5 @@
 from collections import OrderedDict
 
-import numpy as np
 import torch
 import torch.nn.functional as F
 
@@ -76,7 +75,7 @@ class MicaReconModel(FlameReconModel):
         v, _ = self.D_flame(shape_code)
         return v
 
-    def __call__(self, image):
+    def __call__(self, imgs):
         """Performs 3D reconstruction on the supplied image.
 
         Parameters
@@ -93,11 +92,11 @@ class MicaReconModel(FlameReconModel):
             total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
             matrix, which is in the case of MICA the identity matrix
         """
-        image = self._load_inputs(image, load_as='torch', channels_first=True, with_batch_dim=True,
-                                  device=self.device)
-        self._check_inputs(image, expected_size=(112, 112))
-
-        shape_code = self._encode(image)
+        imgs = self._load_inputs(imgs, load_as='torch', channels_first=True, with_batch_dim=True,
+                                 device=self.device)
+        imgs = self._preprocess(imgs)
+        shape_code = self._encode(imgs)
         v = self._decode(shape_code)
         out = {'v': v.cpu().numpy(), 'mat': None}
+
         return out

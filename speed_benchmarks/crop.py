@@ -6,16 +6,16 @@ from timer import FancyTimer
 
 timer_ = FancyTimer()
 params = {
-    'model_cls': [LandmarkAlignCropModel, LandmarkBboxCropModel],
+    'model_cls': [LandmarkBboxCropModel, LandmarkAlignCropModel],
     'device': ['cpu', 'cuda'],
-    'batch_size': [1, 2, 4, 8, 16, 32, 64, 128, 256]
+    'batch_size': [1, 2, 4, 8, 16, 32, 64, 128]
 }
 
 for p in timer_.iter(params):
     model = p['model_cls'](device=p['device'])
     img = get_example_frame(load_torch=True, device=p['device'])
     img = img.repeat(p['batch_size'], 1, 1, 1)
-    timer_.time(model, [img], n_warmup=2, repeats=10, params=p)
+    timer_.time(model, [img], n_warmup=2, repeats=20, params=p)
 
 df = timer_.to_df()
 print(df.groupby(list(params.keys())).mean())
