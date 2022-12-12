@@ -335,7 +335,7 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
             shutil.rmtree(data_dir / 'EMOCA')
 
             logger.info("Reorganizing EMOCA checkpoint file ... ")
-            sd = torch.load(data_dir / "emoca.ckpt")["state_dict"]
+            sd = torch.load(data_dir / "emoca.ckpt", map_location=device)["state_dict"]
             models = ["E_flame", "E_detail", "E_expression", "D_detail"]
 
             state_dict = {}

@@ -143,7 +143,7 @@ class DecaReconModel(FlameReconModel):
             ).to(self.device)
 
         # Load weights from checkpoint and apply to models
-        checkpoint = torch.load(self.cfg[self.name.split('-')[0] + '_path'])
+        checkpoint = torch.load(self.cfg[self.name.split('-')[0] + '_path'], map_location=self.device)
 
         self.E_flame.load_state_dict(checkpoint["E_flame"])
         self.E_flame.eval()
@@ -153,7 +153,7 @@ class DecaReconModel(FlameReconModel):
             if 'E_detail' not in checkpoint:
                 # For spectre, there are no specific E/D_detail
                 # weights
-                deca_ckpt = torch.load(self.cfg['deca_path'])
+                deca_ckpt = torch.load(self.cfg['deca_path'], map_location=self.device)
                 checkpoint['E_detail'] = deca_ckpt['E_detail']
                 checkpoint['D_detail'] = deca_ckpt['D_detail']
 
