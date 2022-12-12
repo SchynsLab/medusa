@@ -143,7 +143,6 @@ demos/*.h5
 tests/test_viz/*/*.png
 tests/test_viz/*/*.mp4
 tests/test_viz/*/*.jpg
-tests/test_data
 
 # Docs
 docs/_build
