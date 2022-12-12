@@ -10,13 +10,16 @@ from medusa.data import get_example_video
 from medusa.recon import DecaReconModel
 from medusa.render import Renderer
 
+from test_utils import _check_gha_compatible
+
 
 @pytest.mark.parametrize("name", ['deca', 'emoca', 'spectre'])
 @pytest.mark.parametrize("type_", ['coarse', 'dense'])
 @pytest.mark.parametrize("no_crop_mat", [False, True])
 @pytest.mark.parametrize("device", ['cpu', 'cuda'])
 def test_deca_recon(name, type_, no_crop_mat, device):
-    model_name = f'{name}-{type_}'
+    if not _check_gha_compatible(device):
+        return
 
     vid = get_example_video(return_videoloader=True, device=device)
     metadata = vid.get_metadata()
@@ -27,6 +30,7 @@ def test_deca_recon(name, type_, no_crop_mat, device):
         img_size = metadata['img_size']
 
     crop_model = LandmarkBboxCropModel(device=device)
+    model_name = f'{name}-{type_}'
     recon_model = DecaReconModel(name=model_name, img_size=img_size, device=device)
 
     img_batch = next(iter(vid))
