@@ -18,9 +18,6 @@ class MicaReconModel(FlameReconModel):
         Either 'cuda' (uses GPU) or 'cpu'
     """
 
-    # May have some speed benefits
-    torch.backends.cudnn.benchmark = True
-
     def __init__(self, device='cuda'):
         """Initializes a MicaReconModel object."""
         self.device = device
@@ -41,13 +38,12 @@ class MicaReconModel(FlameReconModel):
         self.E_flame.eval()
         self.D_flame = FLAME(self.cfg['flame_path'], n_shape=300, n_exp=0).to(self.device)
         self.D_flame.eval()
-        torch.set_grad_enabled(False)  # apparently speeds up forward pass, too
 
     def _load_submodels(self):
         """Loads the weights for the Arcface submodel as well as the
         MappingNetwork that predicts FLAME shape parameters from the Arcface
         output."""
-        checkpoint = torch.load(self.cfg['mica_path'])
+        checkpoint = torch.load(self.cfg['mica_path'], map_location=self.device)
         self.E_arcface.load_state_dict(checkpoint['arcface'])
 
         # The original weights also included the data for the FLAME model (template

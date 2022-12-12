@@ -19,11 +19,6 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
     ----------
     video_path : str, Path
         Path to video file to reconstruct
-    events_path : str, Path
-        Path to events file (a TSV or CSV file) containing
-        info about experimental events; must have at least the
-        columns 'onset' (in seconds) and 'trial_type'; optional
-        columns are 'duration' and 'modulation'
     recon_model : str
         Name of reconstruction model, options are: 'emoca', 'mediapipe',
     device : str
