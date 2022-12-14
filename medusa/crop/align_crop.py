@@ -13,7 +13,7 @@ from .. import DEVICE
 from ..detect import SCRFDetector
 from ..io import load_inputs
 from ..transforms import estimate_similarity_transform
-from .base import BaseCropModel, CropResults
+from .base import BaseCropModel
 
 # Arcface template as defined by Insightface
 TEMPLATE = torch.Tensor(np.array([
@@ -75,17 +75,17 @@ class LandmarkAlignCropModel(BaseCropModel):
 
         # Load images here instead of in detector to avoid loading them twice
         imgs = load_inputs(imgs, load_as='torch', channels_first=True, device=self.device)
+        b, c, h, w = imgs.shape
         out_det = self._det_model(imgs)
 
-        if len(out_det) == 0:
-            out_crop = CropResults(imgs.shape[0], device=self.device)
-            return out_crop
+        if out_det.get('conf', None) is None:
+            return {'imgs_crop': None, 'crop_mats': None, **out_det}
 
         # Estimate transform landmarks -> template landmarks
-        crop_mats = estimate_similarity_transform(out_det.lms, self.template, estimate_scale=True)
-        imgs_stacked = imgs[out_det.img_idx]
+        crop_mats = estimate_similarity_transform(out_det['lms'], self.template, estimate_scale=True)
+        imgs_stacked = imgs[out_det['img_idx']]
         imgs_crop = warp_affine(imgs_stacked, crop_mats[:, :2, :], dsize=self.output_size)
 
-        out_crop = CropResults(imgs.shape[0], imgs_crop, crop_mats, out_det.lms, out_det.img_idx, out_det.face_idx, device=self.device)
+        out_crop = {'imgs_crop': imgs_crop, 'crop_mats': crop_mats, **out_det}
 
         return out_crop

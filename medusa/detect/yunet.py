@@ -1,11 +1,12 @@
+import numpy as np
 from collections import defaultdict
 from pathlib import Path
-
+import torch
 import cv2
 
 from .. import DEVICE
 from ..io import load_inputs
-from .base import BaseDetectionModel, DetectionResults
+from .base import BaseDetectionModel
 
 
 class YunetDetector(BaseDetectionModel):
@@ -47,14 +48,23 @@ class YunetDetector(BaseDetectionModel):
             _, det = self._model.detect(imgs[i, ...])
 
             if det is not None:
-                outputs['img_idx'].extend([[i] * det.shape[0]])
-                outputs['conf'].append(det[:, -1])
+                outputs['img_idx'].extend([i] * det.shape[0])
+                outputs['conf'].append(det[:, [-1]].flatten())
                 bbox_ = det[:, :4]
                 # Convert offset to true vertex positions to keep consistent
-                # with scrfd bbox definition
+                # with scrfd/torchvision bbox definition
                 bbox_[:, 2:] = bbox_[:, :2] + bbox_[:, 2:]
                 outputs['bbox'].append(bbox_)
                 outputs['lms'].append(det[:, 4:-1].reshape((det.shape[0], 5, 2)))
 
-        outputs = DetectionResults(imgs.shape[0], **outputs, device=self.device)
+        if outputs.get('conf', None) is not None:
+            outputs['img_idx'] = np.array(outputs['img_idx'])
+            outputs['conf'] = np.concatenate(outputs['conf'])
+            outputs['bbox'] = np.vstack(outputs['bbox'])
+            outputs['lms'] = np.vstack(outputs['lms'])
+            for attr, data in outputs.items():
+                outputs[attr] = torch.as_tensor(data, device=self.device)
+
+        outputs['n_img'] = b
+
         return outputs

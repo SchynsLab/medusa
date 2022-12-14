@@ -83,12 +83,12 @@ class VideoLoader(DataLoader):
         return {
             'frame_t': frame_t,
             'img_size': tmp['size'],
-            'sf': tmp['fps']
+            'fps': tmp['fps']
         }
 
-    def __len__(self):
-        """Utility function to easily access number of video frames."""
-        return len(self.dataset)
+    #def __len__(self):
+    #    """Utility function to easily access number of video frames."""
+    #    return len(self.dataset)
 
     def __iter__(self):
         """Little hack to put data on device automatically."""
@@ -169,9 +169,9 @@ class VideoWriter:
     pix_fmt : str
         Pixel format; should be compatible with codec
     """
-    def __init__(self, path, fps, codec='mpeg4', pix_fmt='yuv420p'):
+    def __init__(self, path, fps, codec='libx264', pix_fmt='yuv420p'):
 
-        self._container = av.open(path, mode='w')
+        self._container = av.open(str(path), mode='w')
         self._stream = self._container.add_stream(codec, int(round(fps)))
         self._stream.pix_fmt = pix_fmt
 
@@ -238,7 +238,7 @@ def load_h5(path):
     >>> data = load_h5(path)
     """
 
-    from .core import MODEL2CLS
+    from .containers import MODEL2CLS
 
     # peek at recon model
     with h5py.File(path, "r") as f_in:

@@ -1,14 +1,14 @@
-from collections import defaultdict
-
-import numpy as np
+from tqdm import tqdm
 
 from .. import DEVICE
-from ..core import FLAME_MODELS, MODEL2CLS
+from ..containers import FLAME_MODELS
 from ..crop import LandmarkBboxCropModel
 from ..io import VideoLoader
-from ..log import get_logger
+from ..log import get_logger, tqdm_log
 from . import Mediapipe
 from .flame import DecaReconModel
+from ..containers.results import BatchResults
+from ..containers.fourD import Data4D
 
 
 def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None,
@@ -53,7 +53,7 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
 
     # Initialize VideoLoader object here to use metadata
     # in recon_model (like img_size)
-    video = VideoLoader(video_path, batch_size=batch_size, loglevel=loglevel)
+    video = VideoLoader(video_path, batch_size=32, loglevel=loglevel)
     metadata = video.get_metadata()
 
     # Initialize reconstruction model
@@ -66,10 +66,9 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
         raise NotImplementedError
 
     # Loop across frames of video, store results in `recon_data`
-    recon_data = defaultdict(list)
+    recon_results = BatchResults(device=device)
     i_frame = 0
-
-    for batch in video:
+    for batch in tqdm_log(video, logger, desc='Recon images'):
         inputs = {'imgs': batch}
 
         if recon_model in FLAME_MODELS:
@@ -77,14 +76,15 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
             # Crop image, add tform to emoca (for adding rigid motion
             # due to cropping), and add crop plot to writer
             out_crop = crop_model(batch)
-            inputs['imgs'] = out_crop.imgs_crop
-            inputs['crop_mats'] = out_crop.crop_mats
+            del batch
+            inputs['imgs'] = out_crop.pop('imgs_crop')
+            inputs['crop_mats'] = out_crop.pop('crop_mats')
+            recon_results.add(**out_crop)
 
         # Reconstruct and store whatever `recon_model`` returns
         # in `recon_data`
         outputs = reconstructor(**inputs)
-        for attr, data in outputs.items():
-            recon_data[attr].append(data)
+        recon_results.add(**outputs)
 
         i_frame += outputs['v'].shape[0]
         if n_frames is not None:
@@ -96,16 +96,12 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
     reconstructor.close()
     video.close()
 
-    # Concatenate all reconstuctions across time
-    # such that the first dim represents time
-    for attr, data in recon_data.items():
-        recon_data[attr] = np.concatenate(data, axis=0)
-        if recon_data[attr].shape[0] != n_frames:
-            recon_data[attr] = recon_data[attr][:n_frames, ...]
+    recon_results.concat(n_max=n_frames)
+    recon_results.sort_faces(attr='v')
 
-    DataClass = MODEL2CLS[recon_model]
-    init_kwargs = {**recon_data, **video.get_metadata()}
-    data = DataClass(recon_model=recon_model, tris=reconstructor.get_tris(),
-                     **init_kwargs)
+    metadata = video.get_metadata()
+    tris = reconstructor.get_tris()
+    init_kwargs = recon_results.to_dict(exclude=['lms', 'device', 'n_img', 'conf', 'bbox'])
+    data = Data4D(video_metadata=metadata, tris=tris, **init_kwargs)
 
     return data

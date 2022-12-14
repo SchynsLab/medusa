@@ -4,7 +4,7 @@ from ..io import load_inputs
 
 
 class BaseReconModel(ABC):
-    """Base class for reconstrution models.
+    """Base class for reconstruction models.
 
     Implements some abstract methods that should be implemented by
     classes that inherent from it (such as ``get_tris``) and some

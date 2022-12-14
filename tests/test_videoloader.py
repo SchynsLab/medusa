@@ -18,7 +18,7 @@ def test_videoloader_full_iteration():
     vid = get_example_video(return_videoloader=False)
     loader = VideoLoader(vid, device='cpu', loglevel='WARNING')
 
-    n_expected = len(loader)
+    n_expected = len(loader.dataset)
     n_actual = 0
     for img_batch in loader:
         n_actual += img_batch.shape[0]

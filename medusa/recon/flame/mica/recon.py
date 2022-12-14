@@ -93,6 +93,6 @@ class MicaReconModel(FlameReconModel):
         imgs = self._preprocess(imgs)
         shape_code = self._encode(imgs)
         v = self._decode(shape_code)
-        out = {'v': v.cpu().numpy(), 'mat': None}
+        out = {'v': v, 'mat': None}
 
         return out

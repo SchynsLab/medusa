@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from scipy.spatial import Delaunay
+from kornia.geometry.transform import resize
 
 
 def create_viewport_matrix(nx, ny, device='cuda'):
@@ -291,3 +292,48 @@ def estimate_similarity_transform(src, dst, estimate_scale=True):
     T[:, :dim, :dim] *= scale[:, None, None]
 
     return T
+
+
+def resize_with_pad(imgs, output_size=(224, 224), out_dtype=torch.uint8, **kwargs):
+    """Resizes image with right-bottom padding (with zeros), as used in
+    insightface's `SCRFD` detector.
+
+    Parameters
+    ----------
+    imgs : torch.tensor
+        Tensor of shape b x 3 x h x w (batch dimension is optional)
+    output_size : tuple
+        Desired output shape (width, heigth)
+    out_dtype : torch dtype
+        Output datatype
+    kwargs : dict
+        Keyword arguments passed to ``kornia.geometry.transform.resize``
+
+    Returns
+    -------
+    imgs : torch.tensor
+        Resized images of shape b x 3 x new_h x new_w
+    """
+    ih, iw = imgs.shape[-2:]
+    im_ratio = ih / iw
+
+    mw, mh = output_size
+    model_ratio = mh / mw
+
+    if im_ratio > model_ratio:
+        h = mh
+        w = h / im_ratio
+    else:
+        w = mw
+        h = w * im_ratio
+
+    out_shape = list(imgs.shape)
+    out_shape[-2:] = [mh, mw]
+
+    h, w = int(h), int(w)
+    imgs_resized = torch.zeros(out_shape, device=imgs.device, dtype=out_dtype)
+    imgs_resized[..., :h, :w] = resize(imgs, (h, w), **kwargs).to(out_dtype)
+    del imgs
+
+    scale = h / ih
+    return imgs_resized, scale

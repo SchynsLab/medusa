@@ -10,7 +10,7 @@ from .. import DEVICE
 from ..detect import SCRFDetector
 from ..io import load_inputs
 from ..transforms import estimate_similarity_transform
-from .base import BaseCropModel, CropResults
+from .base import BaseCropModel
 
 
 class LandmarkBboxCropModel(BaseCropModel):
@@ -78,14 +78,15 @@ class LandmarkBboxCropModel(BaseCropModel):
         # Load images here instead of in detector to avoid loading them twice
 
         imgs = load_inputs(images, load_as='torch', channels_first=True, device=self.device)
+        b, c, h, w = imgs.shape
         out_det = self._detector(imgs)
 
-        n_det = len(out_det)
-        if n_det == 0:
-            return CropResults(imgs.shape[0], device=self.device)
+        if out_det.get('conf', None) is None:
+            return {**out_det, 'imgs_crop': None, 'crop_mats': None}
 
-        bbox = out_det.bbox
-        imgs_stack = imgs[out_det.img_idx]
+        n_det = out_det['lms'].shape[0]
+        bbox = out_det['bbox']
+        imgs_stack = imgs[out_det['img_idx']]
 
         bw, bh = (bbox[:, 2] - bbox[:, 0]), (bbox[:, 3] - bbox[:, 1])
         center = torch.stack([(bbox[:, 2] + bbox[:, 0]) / 2,
@@ -144,14 +145,14 @@ class LandmarkBboxCropModel(BaseCropModel):
 
         # Estimate a transform from the new bbox to the final
         # cropped image space (probably 224 x 224 for DECA-based models)
-        w, h = self.output_size
-        dst = torch.tensor([[0, 0], [0, w-1], [h-1, 0]], dtype=torch.float32, device=self.device)
+        w_out, h_out = self.output_size
+        dst = torch.tensor([[0, 0], [0, w_out-1], [h_out-1, 0]], dtype=torch.float32, device=self.device)
         dst = dst.repeat(n_det, 1, 1)
         crop_mats = estimate_similarity_transform(bbox[:, :3, :], dst, estimate_scale=True)
 
         # Finally, warp the original images (uncropped) images to the final
         # cropped space
-        imgs_crop = warp_affine(imgs_stack, crop_mats[:, :2, :], dsize=(h, w))
-        out_crop = CropResults(imgs.shape[0], imgs_crop, crop_mats, lms, out_det.img_idx, out_det.face_idx, device=self.device)
+        imgs_crop = warp_affine(imgs_stack, crop_mats[:, :2, :], dsize=(h_out, w_out))
+        out_crop = {**out_det, 'imgs_crop': imgs_crop, 'crop_mats': crop_mats, 'lms': lms}
 
         return out_crop

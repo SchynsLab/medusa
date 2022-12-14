@@ -25,7 +25,7 @@ def test_mica_recon(device):
 
     # Check single image recon
     model = MicaReconModel(device=device)
-    out = model(out_crop.imgs_crop)
+    out = model(out_crop['imgs_crop'])
     assert(out['v'].shape == (1, 5023, 3))
     assert(out['mat'] is None)
 
@@ -34,10 +34,11 @@ def test_mica_recon(device):
     cam_mat[2, 3] = 1
     renderer = Renderer(viewport=(512, 512), smooth=False, cam_mat=cam_mat)
 
-    img = renderer(out['v'].squeeze() * 8, model.get_tris())
+    v = out['v'] * 8
+    img = renderer(v[0, ...], model.get_tris())
     f_out = Path(__file__).parent / 'test_viz/recon/test_mica.png'
     cv2.imwrite(str(f_out), img[:, :, [2, 1, 0]])
 
     # Check batch image recon
-    out = model(out_crop.imgs_crop.repeat(2, 1, 1, 1))
+    out = model(out_crop['imgs_crop'].repeat(2, 1, 1, 1))
     assert(out['v'].shape == (2, 5023, 3))

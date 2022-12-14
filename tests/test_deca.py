@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import pytest
 
-from medusa.core import Flame4D
+from medusa.containers import Data4D
 from medusa.crop import LandmarkBboxCropModel
 from medusa.data import get_example_video
 from medusa.recon import DecaReconModel
@@ -35,8 +35,11 @@ def test_deca_recon(name, type_, no_crop_mat, device):
 
     img_batch = next(iter(vid))
     out_crop = crop_model(img_batch)
-    crop_mats = None if no_crop_mat else out_crop.crop_mats
-    out = recon_model(out_crop.imgs_crop, crop_mats)
+
+    if no_crop_mat:
+        out_crop['crop_mats'] = None
+
+    out = recon_model(out_crop['imgs_crop'], out_crop['crop_mats'])
 
     if type_ == 'coarse':
         expected_shape = (img_batch.shape[0], 5023, 3)
@@ -50,7 +53,8 @@ def test_deca_recon(name, type_, no_crop_mat, device):
         cam_mat = np.eye(4)
         cam_mat[2, 3] = 4
         renderer = Renderer(viewport=img_size, smooth=False, cam_mat=cam_mat)
-        img = renderer(out['v'][0, ...], recon_model.get_tris())
+        v = out['v'][0, ...].cpu().numpy()
+        img = renderer(v, recon_model.get_tris())
 
         f_out = Path(__file__).parent / f'test_viz/recon/test_{model_name}.png'
         cv2.imwrite(str(f_out), img)
@@ -60,7 +64,7 @@ def test_deca_recon(name, type_, no_crop_mat, device):
 
     if not no_crop_mat:
         # Only render when recon full image
-        kwargs = {**out, **vid.get_metadata()}
-        data = Flame4D(recon_model=recon_model, tris=recon_model.get_tris(), **kwargs)
+        tris = recon_model.get_tris()
+        data = Data4D(video_metadata=metadata, tris=tris, **out)
         f_out = str(f_out).replace('.png', '.mp4')
         data.render_video(f_out, smooth=False, video=get_example_video())

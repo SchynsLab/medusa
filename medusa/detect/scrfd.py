@@ -12,14 +12,14 @@ from pathlib import Path
 
 import numpy as np
 import torch
-from kornia.geometry.transform import resize
 from onnxruntime import (InferenceSession,
                          set_default_logger_severity)
 from torchvision.ops import nms
 
 from .. import DEVICE
 from ..io import load_inputs
-from .base import BaseDetectionModel, DetectionResults
+from ..transforms import resize_with_pad
+from .base import BaseDetectionModel
 
 
 class SCRFDetector(BaseDetectionModel):
@@ -94,29 +94,15 @@ class SCRFDetector(BaseDetectionModel):
         # B x C x H x W
         imgs = load_inputs(imgs, load_as='torch', channels_first=True, device=self.device)
         b, c, h, w = imgs.shape
-        im_ratio = float(h) / w
 
-        # model_ratio = 1.
-        _, _, mh, mw = self._onnx_input_shape
-        model_ratio = float(mh) / mw
-
-        if im_ratio > model_ratio:
-            new_h = mh
-            new_w = int(new_h / im_ratio)
-        else:
-            new_w = mw
-            new_h = int(new_w * im_ratio)
-
-        imgs = resize(imgs, (new_h, new_w))
-        det_imgs = torch.zeros((b, c, mh, mw), device=self.device)
-        det_imgs[:, :, :new_h, :new_w] = imgs
-        det_imgs = (det_imgs.sub_(127.5)).div_(128)
-        det_scale = float(new_h) / h
+        new_size = self._onnx_input_shape[-2:]  # 224 x 224
+        imgs, det_scale = resize_with_pad(imgs, output_size=new_size, out_dtype=torch.float32)
+        imgs = (imgs.sub_(127.5)).div_(128)
 
         outputs = defaultdict(list)
         for i in range(b):
             # add batch dim
-            det_img = det_imgs[i, ...].unsqueeze(0)
+            img = imgs[i, ...].unsqueeze(0)
 
             binding = self._det_model.io_binding()
             binding.bind_input(
@@ -124,8 +110,8 @@ class SCRFDetector(BaseDetectionModel):
                 device_type=self.device,
                 device_id=0,
                 element_type=np.float32,
-                shape=tuple(det_img.shape),
-                buffer_ptr=det_img.data_ptr(),
+                shape=tuple(img.shape),
+                buffer_ptr=img.data_ptr(),
             )
 
             feat_stride_fpn = [8, 16, 32]
@@ -181,7 +167,6 @@ class SCRFDetector(BaseDetectionModel):
                     anchor_centers[:, [0, 1]] + bbox[:, [2, 3]]
                 ])
                 lms = anchor_centers[:, None, :] + lms.reshape((lms.shape[0], -1, 2))
-
                 outputs_['scores'].append(scores)
                 outputs_['bbox'].append(bbox)
                 outputs_['lms'].append(lms)
@@ -196,10 +181,14 @@ class SCRFDetector(BaseDetectionModel):
 
             n_keep = len(keep)
             if n_keep > 0:
-                outputs['img_idx'].extend([[i] * n_keep])
+                img_idx = torch.ones(n_keep, device=self.device, dtype=torch.int64) * i
+                outputs['img_idx'].append(img_idx)
                 outputs['conf'].append(scores[keep])
                 outputs['lms'].append(lms[keep])
                 outputs['bbox'].append(bbox[keep])
 
-        outputs = DetectionResults(imgs.shape[0], **outputs, device=self.device)
+        for attr, data in outputs.items():
+            outputs[attr] = torch.cat(data)
+
+        outputs['n_img'] = b
         return outputs

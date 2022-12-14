@@ -14,7 +14,7 @@
 # For commercial licensing contact, please contact ps-license@tuebingen.mpg.de
 
 import pickle
-
+import warnings
 import numpy as np
 import torch
 import torch.nn as nn
@@ -33,7 +33,11 @@ class FLAME(nn.Module):
         super().__init__()
         # print("creating the FLAME Decoder")
         with open(model_path, "rb") as f:
-            ss = pickle.load(f, encoding="latin1")
+            # Silence scipy DeprecationWarning
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", DeprecationWarning)
+                ss = pickle.load(f, encoding="latin1")
+
             flame_model = Struct(**ss)
 
         self.faces = to_np(flame_model.f, dtype=np.int64)

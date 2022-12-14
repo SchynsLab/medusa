@@ -5,8 +5,9 @@ import torch
 from test_utils import _check_gha_compatible
 
 from medusa.detect import SCRFDetector, YunetDetector
-from medusa.detect.base import DetectionResults
 from medusa.io import VideoLoader
+from medusa.containers.results import BatchResults
+
 
 imgs = ['no_face', 'one_face', 'two_faces', 'three_faces',
         ['no_face', 'one_face'], ['no_face', 'two_faces'],
@@ -16,14 +17,13 @@ img_params = zip(imgs, n_exp)
 
 
 @pytest.mark.parametrize('Detector', [SCRFDetector, YunetDetector])
-@pytest.mark.parametrize('img_params', img_params)
+@pytest.mark.parametrize('imgs,n_exp', img_params)
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
-def test_detector_imgs(Detector, img_params, device):
+def test_detector_imgs(Detector, imgs, n_exp, device):
     if not _check_gha_compatible(device):
         return
 
     model = Detector(device=device)
-    imgs, n_exp = img_params
 
     if not isinstance(imgs, list):
         imgs = [imgs]
@@ -31,18 +31,19 @@ def test_detector_imgs(Detector, img_params, device):
     imgs_path = [Path(__file__).parent / f'test_data/{img}.jpg'
                  for img in imgs]
     out_det = model(imgs_path)
+    out_det = BatchResults(device=device, **out_det)
 
-    n_det = len(out_det)
+    n_det = len(getattr(out_det, 'conf', []))
     assert(n_det == n_exp)
 
     for key in ['conf', 'bbox', 'lms']:
         if n_det == 0:
-            assert(getattr(out_det, key) is None)
+            assert(not hasattr(out_det, key))
         else:
             assert(getattr(out_det, key).shape[0] == n_det)
 
     f_out = Path(__file__).parent / f'test_viz/detection/{str(model)}_exp-{n_exp}.jpg'
-    out_det.visualize(imgs_path, f_out=f_out)
+    out_det.visualize(f_out, imgs_path)
 
 
 videos = [
@@ -53,24 +54,20 @@ videos = [
 ]
 
 @pytest.mark.parametrize('Detector', [SCRFDetector, YunetDetector])
-@pytest.mark.parametrize('video', videos)
-def test_detector_vid(Detector, video):
-    video, n_exp = video
+@pytest.mark.parametrize('video,n_exp', videos)
+def test_detector_vid(Detector, video, n_exp):
     video_path = Path(__file__).parent / f'test_data/{video}'
     loader = VideoLoader(video_path, batch_size=8)
     model = Detector()
 
-    detections, imgs = [], []
+    results = BatchResults()
     for batch in loader:
-        detections.append(model(batch))
-        imgs.append(batch)
+        out_det = model(batch)
+        results.add(imgs=batch, **out_det)
 
-    detections = DetectionResults.from_batches(detections)
-    assert(torch.all(torch.diff(detections.img_idx) >= 0))
+    results.concat()
+    assert(torch.all(torch.diff(results.img_idx) >= 0))
+    results.sort_faces('lms')
 
-    detections.sort(dist_threshold=200, present_threshold=0.1)
-    #assert(len(detections.face_idx.unique()) == n_exp)
-
-    imgs = torch.concatenate(imgs)
     f_out = Path(__file__).parent / f'test_viz/detection/{str(model)}_{video}'
-    detections.visualize(imgs, f_out=f_out, video=True)
+    results.visualize(f_out, results.imgs, video=True)

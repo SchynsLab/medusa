@@ -433,7 +433,7 @@ class DecaReconModel(FlameReconModel):
         enc_dict = self._encode(imgs)
         dec_dict = self._decode(enc_dict, crop_mats)
 
-        for key in dec_dict.keys():
-            dec_dict[key] = dec_dict[key].cpu().numpy()
+        #for key in dec_dict.keys():
+        #    dec_dict[key] = dec_dict[key].cpu().numpy()
 
         return dec_dict

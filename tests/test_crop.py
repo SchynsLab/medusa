@@ -1,11 +1,10 @@
 from pathlib import Path
 
 import pytest
-import torch
 from test_utils import _check_gha_compatible
 
 from medusa.crop import LandmarkAlignCropModel, LandmarkBboxCropModel
-from medusa.crop.base import CropResults
+from medusa.containers.results import BatchResults
 from medusa.io import VideoLoader
 
 imgs = ['no_face', 'one_face', 'two_faces', 'three_faces',
@@ -17,9 +16,9 @@ img_params = zip(imgs, n_exp)
 
 @pytest.mark.parametrize('Model', [LandmarkAlignCropModel, LandmarkBboxCropModel])
 @pytest.mark.parametrize('lm_name', ['2d106det', '1k3d68'])
-@pytest.mark.parametrize('img_params', img_params)
-@pytest.mark.parametrize('device', ['cpu', 'cuda'])
-def test_crop_model(Model, lm_name, img_params, device):
+@pytest.mark.parametrize('imgs,n_exp', img_params)
+@pytest.mark.parametrize('device', ['cuda', 'cpu'])
+def test_crop_model(Model, lm_name, imgs, n_exp, device):
     if not _check_gha_compatible(device):
         return
 
@@ -32,7 +31,6 @@ def test_crop_model(Model, lm_name, img_params, device):
 
         model = Model((112, 112), device=device)
 
-    imgs, n_exp = img_params
     if not isinstance(imgs, list):
         imgs = [imgs]
 
@@ -40,13 +38,15 @@ def test_crop_model(Model, lm_name, img_params, device):
                  for img in imgs]
 
     out_crop = model(imgs_path)
+    out_crop = BatchResults(device=device, **out_crop)
+
     template = getattr(model, 'template', None)
     if Model == LandmarkBboxCropModel:
         f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_lm-{lm_name}_exp-{n_exp}.jpg'
     else:
         f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_exp-{n_exp}.jpg'
 
-    out_crop.visualize(imgs_path, template=template, f_out=f_out)
+    out_crop.visualize(f_out, imgs_path, template=template)
 
 
 videos = [
@@ -56,28 +56,26 @@ videos = [
     ('four_faces.mp4', 4)    # occlusion, moving in and out of frame
 ]
 
-@pytest.mark.parametrize('Model', [LandmarkBboxCropModel])#, LandmarkAlignCropModel])
-@pytest.mark.parametrize('video', videos)
-def test_crop_model_vid(Model, video):
+@pytest.mark.parametrize('Model', [LandmarkAlignCropModel, LandmarkBboxCropModel])
+@pytest.mark.parametrize('video,n_exp', videos)
+def test_crop_model_vid(Model, video, n_exp):
     if Model == LandmarkBboxCropModel:
-        model = Model('2d106det', (224, 224))
+        crop_size = (224, 224)
+        model = Model('2d106det', crop_size)
     else:
-        model = Model((448, 448))
+        crop_size = (448, 448)
+        model = Model(crop_size)
 
-    video, n_exp = video
     video_path = Path(__file__).parent / f'test_data/{video}'
     loader = VideoLoader(video_path, batch_size=32, loglevel='WARNING')
 
-    crops, imgs = [], []
+    results = BatchResults()
     for batch in loader:
         out_crop = model(batch)
-        crops.append(out_crop)
-        imgs.append(batch)
+        results.add(imgs=batch, **out_crop)
 
-    crops = CropResults.from_batches(crops)
-    crops.sort(dist_threshold=250, present_threshold=0.1)
-    imgs = torch.concatenate(imgs)
+    results.concat()
+    results.sort_faces('lms', dist_threshold=300)
     f_out = Path(__file__).parent / f'test_viz/crop/{str(model)}_{video}'
-
     template = getattr(model, 'template', None)
-    crops.visualize(imgs, f_out=f_out, template=template, video=True, show_crop=True)
+    results.visualize(f_out, results.imgs, template=template, video=True, crop_size=crop_size, show_cropped=True)
