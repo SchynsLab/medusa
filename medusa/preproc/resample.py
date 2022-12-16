@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 from scipy.interpolate import PchipInterpolator, interp1d
 
-from ..io import load_h5
+from ..containers import Data4D
 
 
 def resample(data, sampling_freq=None, kind="pchip"):
@@ -49,7 +49,7 @@ def resample(data, sampling_freq=None, kind="pchip"):
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
         # (used by CLI)
-        data = load_h5(data)
+        data = Data4D.load(data)
 
     ft = data.frame_t
 

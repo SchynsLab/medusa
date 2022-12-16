@@ -1,17 +1,8 @@
-import os
-from pathlib import Path
-
 import pytest
 
 from medusa.data import get_example_video
 from medusa.io import VideoLoader
-from test_utils import _check_gha_compatible
-
-
-@pytest.mark.parametrize("ext", ['.mp4', '.avi'])
-def test_videoloader_ext(ext):
-    vid = Path(__file__).parent / f'test_data/example_vid{ext}'
-    loader = VideoLoader(vid, device='cpu', loglevel='WARNING')
+from conftest import _check_gha_compatible
 
 
 def test_videoloader_full_iteration():

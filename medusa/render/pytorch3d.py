@@ -38,9 +38,11 @@ class PytorchRenderer:
 
         return shader
 
-    def __call__(self, v, f):
+    def __call__(self, v, f, tex=None):
 
-        tex = TexturesVertex(torch.ones_like(v, device=self.device))
+        if tex is None:
+            tex = TexturesVertex(torch.ones_like(v, device=self.device))
+
         f = f.repeat(v.shape[0], 1, 1)
         meshes = Meshes(v, f, tex)
         imgs = self._renderer(meshes)

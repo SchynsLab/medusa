@@ -6,7 +6,7 @@ from scipy.interpolate import interp1d
 from tqdm import tqdm
 
 from ..epochs import EpochsArray
-from ..io import load_h5
+from ..containers import Data4D
 
 
 def epoch(
@@ -54,7 +54,7 @@ def epoch(
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
         # (used by CLI)
-        data = load_h5(data)
+        data = Data4D.load(data)
 
     if data.events is None:
         raise ValueError("Cannot epoch data without events!")

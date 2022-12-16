@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 from scipy.signal import butter, sosfilt
 
-from ..io import load_h5
+from ..containers import Data4D
 
 
 def bw_filter(data, low_pass, high_pass):
@@ -40,7 +40,7 @@ def bw_filter(data, low_pass, high_pass):
     if isinstance(data, (str, Path)):
         # if data is a path to a hdf5 file, load it
         # (used by CLI)
-        data = load_h5(data)
+        data = Data4D(data)
 
     nyq = 0.5 * data.sf  # sampling freq
     low = high_pass / nyq

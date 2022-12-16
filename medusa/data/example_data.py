@@ -12,6 +12,7 @@ from pathlib import Path
 import cv2
 import torch
 
+from ..containers import Data4D
 from ..io import VideoLoader
 
 
@@ -147,7 +148,6 @@ def get_example_h5(load=False, model="mediapipe", as_path=True):
     >>> data.v.shape  # check out reconstructed vertices
     (232, 468, 3)
     """
-    from ..io import load_h5
 
     here = Path(__file__).parent
     path = here / f"example_data/example_vid_{model}.h5"
@@ -156,6 +156,6 @@ def get_example_h5(load=False, model="mediapipe", as_path=True):
         path = str(path)
 
     if load:
-        return load_h5(path)
+        return Data4D.load(path)
     else:
         return path

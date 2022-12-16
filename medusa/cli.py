@@ -27,8 +27,9 @@ import yaml
 import gdown
 
 from . import DEVICE
-from .io import download_file, load_h5
+from .io import download_file
 from .log import get_logger
+from .containers import Data4D
 from .preproc.align import align
 from .preproc.epoch import epoch
 from .preproc.filter import bw_filter
@@ -149,7 +150,7 @@ def epoch_cmd(data_file, out, start, end, period, baseline_correct, add_back_gra
               to_mne):
     """Performs epoching of a mesh time series."""
 
-    data = load_h5(data_file)
+    data = Data4D.load(data_file)
     epochsarray = epoch(data, start, end, period, baseline_correct,
                         add_back_grand_mean=add_back_grand_mean)
 

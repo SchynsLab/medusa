@@ -10,7 +10,7 @@ from medusa.data import get_example_video
 from medusa.recon import DecaReconModel
 from medusa.render import Renderer
 
-from test_utils import _check_gha_compatible
+from conftest import _check_gha_compatible
 
 
 @pytest.mark.parametrize("name", ['deca', 'emoca', 'spectre'])
@@ -52,9 +52,8 @@ def test_deca_recon(name, type_, no_crop_mat, device):
     if not no_crop_mat:
         cam_mat = np.eye(4)
         cam_mat[2, 3] = 4
-        renderer = Renderer(viewport=img_size, smooth=False, cam_mat=cam_mat)
-        v = out['v'][0, ...].cpu().numpy()
-        img = renderer(v, recon_model.get_tris())
+        renderer = Renderer(viewport=img_size, shading='flat', cam_mat=cam_mat)
+        img = renderer(out['v'][0], recon_model.get_tris())
 
         f_out = Path(__file__).parent / f'test_viz/recon/test_{model_name}.png'
         cv2.imwrite(str(f_out), img)
@@ -67,4 +66,4 @@ def test_deca_recon(name, type_, no_crop_mat, device):
         tris = recon_model.get_tris()
         data = Data4D(video_metadata=metadata, tris=tris, **out)
         f_out = str(f_out).replace('.png', '.mp4')
-        data.render_video(f_out, smooth=False, video=get_example_video())
+        data.render_video(f_out, shading='flat', video=get_example_video())

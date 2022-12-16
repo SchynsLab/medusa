@@ -8,14 +8,16 @@ from torchvision.ops import box_area
 
 from .. import DEVICE, FONT
 from ..io import load_inputs, VideoWriter
+from ..log import get_logger
 
 
 class BatchResults:
 
-    def __init__(self, n_img=0, device=DEVICE, **kwargs):
+    def __init__(self, n_img=0, device=DEVICE, loglevel='INFO', **kwargs):
 
         self.device = device
         self.n_img = n_img
+        self._logger = get_logger(loglevel)
 
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -47,22 +49,31 @@ class BatchResults:
     def concat(self, n_max=None):
 
         for attr, data in self.__dict__.items():
+            if attr[0] == '_':
+                continue
 
             if attr in ('device', 'n_img'):
                 continue
 
-            data = torch.cat([d for d in data if d is not None])
-
-            if n_max is not None:
-                data = data[:n_max, ...]
+            data = [d for d in data if d is not None]
+            if len(data) == 0:
+                self._logger.warning(f"No data to concatenate for attribute {attr}!")
+                data = None
+            else:
+                data = torch.cat(data)
+                if n_max is not None:
+                    data = data[:n_max, ...]
 
             setattr(self, attr, data)
 
-    def sort_faces(self, attr='lms', dist_threshold=200, present_threshold=0.1):
+    def sort_faces(self, attr='lms', dist_threshold=250, present_threshold=0.1):
+
+        if not hasattr(self, attr):
+            raise ValueError(f"Cannot sort faces using attribute `{attr}`, which does not exist!")
 
         data = getattr(self, attr, None)
         if data is None:
-            raise ValueError(f"Cannot sort faces using attribute `{attr}`, which does not exist!")
+            raise ValueError(f"Cannot sort faces using attribut `{attr}`, because it's empty!")
 
         img_idx = getattr(self, 'img_idx', None)
         if img_idx is None:
@@ -80,6 +91,9 @@ class BatchResults:
     def to_dict(self, exclude=None):
 
         to_return = self.__dict__.copy()
+        for attr in to_return.copy():
+            if attr[0] == '_':
+                del to_return[attr]
 
         if exclude is not None:
             if isinstance(exclude, str):

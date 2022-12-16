@@ -78,10 +78,10 @@ class VideoLoader(DataLoader):
 
         tmp = self.dataset.metadata
         end = tmp['n'] / tmp['fps']
-        frame_t = np.linspace(0, end, endpoint=False, num=tmp['n'])
+        #frame_t = np.linspace(0, end, endpoint=False, num=tmp['n'])
 
         return {
-            'frame_t': frame_t,
+            #'frame_t': frame_t,
             'img_size': tmp['size'],
             'fps': tmp['fps']
         }
@@ -212,40 +212,6 @@ class VideoWriter:
             self._container.mux(packet)
 
         self._container.close()
-
-
-def load_h5(path):
-    """Convenience function to load a hdf5 file and immediately initialize the
-    correct data class.
-
-    Parameters
-    ----------
-    path : str
-        Path to an HDF5 file
-
-    Returns
-    -------
-    data : ``data.BaseData`` subclass
-        An object with a class derived from ``data.BaseData``
-        (like ``MediapipeData``, or ``FlameData``)
-
-    Examples
-    --------
-    Load in HDF5 data reconstructed by Mediapipe:
-
-    >>> from medusa.data import get_example_h5
-    >>> path = get_example_h5(load=False)
-    >>> data = load_h5(path)
-    """
-
-    from .containers import MODEL2CLS
-
-    # peek at recon model
-    with h5py.File(path, "r") as f_in:
-        rmn = f_in.attrs["recon_model"]
-
-    data = MODEL2CLS[rmn].load(path)
-    return data
 
 
 def load_inputs(inputs, load_as='torch', channels_first=True,

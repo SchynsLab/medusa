@@ -297,7 +297,7 @@ class Data4D:
 
             for attr, data in f_in.items():
                 if isinstance(data, h5py.Group):
-                    data = dict(data)
+                    data = dict(data.attrs)
                 elif isinstance(data, h5py.Dataset):
                     data = torch.as_tensor(data[:], device=device)
 
@@ -348,7 +348,7 @@ class Data4D:
 
         w, h = self.video_metadata['img_size']
         renderer = Renderer(viewport=(w, h), cam_mat=cam_mat,
-                            camera_type=cam_type, **kwargs)
+                            cam_type=cam_type, **kwargs)
 
         if video is not None:
             reader = VideoLoader(video, batch_size=1, device='cpu')

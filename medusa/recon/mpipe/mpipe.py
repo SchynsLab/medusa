@@ -45,7 +45,7 @@ class Mediapipe(BaseReconModel):
             refine_landmarks=refine_landmarks,
             min_detection_confidence=min_detection_confidence,
             min_tracking_confidence=min_tracking_confidence,
-            max_num_faces=10
+            max_num_faces=5
         )
 
         self.model.__enter__()  # enter context manually

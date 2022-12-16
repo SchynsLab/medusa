@@ -9,7 +9,7 @@ from trimesh.registration import icp, procrustes
 from trimesh.transformations import (compose_matrix, decompose_matrix,
                                      transform_points)
 
-from ..io import load_h5
+from ..containers import Data4D
 
 
 def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False,
@@ -61,7 +61,7 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     """
 
     if isinstance(data, (str, Path)):
-        data = load_h5(data)
+        data = Data4D.load(data)
 
     if additive_alignment and ignore_existing:
         raise ValueError("Cannot do additive alignment and ignore existing!")

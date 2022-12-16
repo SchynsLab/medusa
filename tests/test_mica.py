@@ -9,7 +9,7 @@ from medusa.data import get_example_frame
 from medusa.recon.flame import MicaReconModel
 from medusa.render import Renderer
 
-from test_utils import _check_gha_compatible
+from conftest import _check_gha_compatible
 
 
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
