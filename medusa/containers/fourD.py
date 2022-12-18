@@ -16,7 +16,6 @@ file (using `h5py <http://www.h5py.org/>`_) with the ``save`` method and loaded 
 disk using the ``load`` (static)method.
 """
 import torch
-from datetime import datetime
 from pathlib import Path
 
 import h5py
@@ -257,7 +256,7 @@ class Data4D:
                     f_out.attrs[attr] = data
 
     @classmethod
-    def load(cls, path):
+    def load(cls, path, device=None):
         """Loads an HDF5 file from disk, parses its contents, and creates the
         initialization parameters necessary to initialize a ``*Data`` object.
         It does not return a ``*Data`` object itself; only a dictionary with
@@ -293,7 +292,8 @@ class Data4D:
         init_kwargs = dict()
         with h5py.File(path, "r") as f_in:
 
-            device = f_in.attrs.get('device', DEVICE)
+            if device is None:
+                device = f_in.attrs.get('device', DEVICE)
 
             for attr, data in f_in.items():
                 if isinstance(data, h5py.Group):

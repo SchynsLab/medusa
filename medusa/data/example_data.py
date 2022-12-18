@@ -12,11 +12,12 @@ from pathlib import Path
 import cv2
 import torch
 
+from .. import DEVICE
 from ..containers import Data4D
 from ..io import VideoLoader
 
 
-def get_example_frame(load_numpy=False, load_torch=False, device='cuda'):
+def get_example_frame(load_numpy=False, load_torch=False, device=DEVICE):
     """Loads an example frame from the example video.
 
     Parameters
@@ -112,7 +113,7 @@ def get_example_video(return_videoloader=False, **kwargs):
     return vid
 
 
-def get_example_h5(load=False, model="mediapipe", as_path=True):
+def get_example_h5(load=False, model="mediapipe", device=DEVICE):
     """Retrieves an example hdf5 file with reconstructed 4D data from the
     example video.
 
@@ -124,9 +125,6 @@ def get_example_h5(load=False, model="mediapipe", as_path=True):
     model : str
         Model used to reconstruct the data; either 'mediapipe' or
         'emoca'
-    as_path : bool
-        Whether to return the path as a ``pathlib.Path`` object (``True``)
-        or just a string (``False``); ignored when ``load`` is ``True``
 
     Returns
     -------
@@ -152,10 +150,7 @@ def get_example_h5(load=False, model="mediapipe", as_path=True):
     here = Path(__file__).parent
     path = here / f"example_data/example_vid_{model}.h5"
 
-    if not as_path:
-        path = str(path)
-
     if load:
-        return Data4D.load(path)
+        return Data4D.load(path, device=device)
     else:
         return path

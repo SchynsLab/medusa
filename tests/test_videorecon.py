@@ -10,7 +10,7 @@ from medusa.recon import videorecon
 def test_videorecon(n_frames):
     """Tests the videorecon Python interface."""
 
-    vid = get_example_video(as_path=False)
+    vid = get_example_video()
     data = videorecon(vid, recon_model='mediapipe', device='cpu', n_frames=n_frames)
 
     with tempfile.NamedTemporaryFile() as f_out:

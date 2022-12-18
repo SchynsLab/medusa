@@ -4,11 +4,12 @@ import pytest
 from pathlib import Path
 from medusa.render import Renderer
 from medusa.data import get_example_h5, get_example_frame
+from medusa import DEVICE
 
 
 @pytest.mark.parametrize('shading', ['flat', 'wireframe', 'smooth'])
 def test_pyrender_shading(shading):
-    data = get_example_h5(load=True, model='mediapipe')
+    data = get_example_h5(load=True, model='mediapipe', device=DEVICE)
     viewport = data.video_metadata['img_size']
     renderer = Renderer(viewport, cam_type='intrinsic', shading=shading)
     img = renderer(data.v[0], data.tris)
@@ -25,7 +26,7 @@ def test_pyrender_shading(shading):
 @pytest.mark.parametrize('color', [None, (0, 0, 1, 1)])
 @pytest.mark.parametrize('width', [None, 3])
 def test_pyrender_wireframe(color, width):
-    data = get_example_h5(load=True, model='mediapipe')
+    data = get_example_h5(load=True, model='mediapipe', device=DEVICE)
     viewport = data.video_metadata['img_size']
     renderer = Renderer(viewport, cam_type='intrinsic', shading='wireframe',
                         wireframe_opts={'color': color, 'width': width})
@@ -35,7 +36,7 @@ def test_pyrender_wireframe(color, width):
 
 
 def test_pyrender_two_faces():
-    data = get_example_h5(load=True, model='mediapipe')
+    data = get_example_h5(load=True, model='mediapipe', device=DEVICE)
     viewport = data.video_metadata['img_size']
     renderer = Renderer(viewport, cam_type='intrinsic', shading='flat')
 
