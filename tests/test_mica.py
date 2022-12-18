@@ -32,7 +32,7 @@ def test_mica_recon(device):
     # Check visually
     cam_mat = np.eye(4)
     cam_mat[2, 3] = 1
-    renderer = Renderer(viewport=(512, 512), smooth=False, cam_mat=cam_mat)
+    renderer = Renderer(viewport=(512, 512), shading='flat', cam_mat=cam_mat)
 
     v = out['v'] * 8
     img = renderer(v[0, ...], model.get_tris())

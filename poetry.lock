@@ -776,6 +776,9 @@ files = [
     {file = "coverage-6.5.0.tar.gz", hash = "sha256:f642e90754ee3e06b0e7e51bce3379590e76b7f76b708e1a71ff043f87025c84"},
 ]
 
+[package.dependencies]
+tomli = {version = "*", optional = true, markers = "python_full_version <= \"3.11.0a6\" and extra == \"toml\""}
+
 [package.extras]
 toml = ["tomli"]
 
@@ -3522,6 +3525,25 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
 
 [[package]]
+name = "pytest-cov"
+version = "4.0.0"
+description = "Pytest plugin for measuring coverage."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pytest-cov-4.0.0.tar.gz", hash = "sha256:996b79efde6433cdbd0088872dbc5fb3ed7fe1578b68cdbba634f14bb8dd0470"},
+    {file = "pytest_cov-4.0.0-py3-none-any.whl", hash = "sha256:2feb1b751d66a8bd934e5edfa2e961d11309dc37b73b0eabe73b5945fee20f6b"},
+]
+
+[package.dependencies]
+coverage = {version = ">=5.2.1", extras = ["toml"]}
+pytest = ">=4.6"
+
+[package.extras]
+testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -3608,6 +3630,7 @@ implicitron = ["accelerate", "hydra-core (>=1.1)", "lpips", "matplotlib", "tqdm 
 [package.source]
 type = "url"
 url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu113_pyt1121/pytorch3d-0.7.1-cp39-cp39-linux_x86_64.whl"
+
 [[package]]
 name = "pytz"
 version = "2022.6"
@@ -4684,6 +4707,7 @@ typing-extensions = "*"
 [package.source]
 type = "url"
 url = "https://download.pytorch.org/whl/cu113/torch-1.12.1%2Bcu113-cp39-cp39-linux_x86_64.whl"
+
 [[package]]
 name = "torch"
 version = "1.12.1+cu113"
@@ -4701,6 +4725,7 @@ typing-extensions = "*"
 [package.source]
 type = "url"
 url = "https://download.pytorch.org/whl/cu113/torch-1.12.1%2Bcu113-cp39-cp39-win_amd64.whl"
+
 [[package]]
 name = "torchmetrics"
 version = "0.11.0"
@@ -4753,6 +4778,7 @@ scipy = ["scipy"]
 [package.source]
 type = "url"
 url = "https://download.pytorch.org/whl/cu113/torchvision-0.13.1%2Bcu113-cp39-cp39-linux_x86_64.whl"
+
 [[package]]
 name = "torchvision"
 version = "0.13.1+cu113"
@@ -4777,6 +4803,7 @@ scipy = ["scipy"]
 [package.source]
 type = "url"
 url = "https://download.pytorch.org/whl/cu113/torchvision-0.13.1%2Bcu113-cp39-cp39-win_amd64.whl"
+
 [[package]]
 name = "tornado"
 version = "6.2"
@@ -5205,4 +5232,4 @@ pytorch3d = ["pytorch3d"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "d1a99389facec07e4ec8b371e8e5feb3b2827ef769c9ce01dadc84e9cc465eba"
+content-hash = "20485ed7dfb4d1a3716e1ae0f8ad1215c2291affbf31c7f0b78672740f5e6ae6"
