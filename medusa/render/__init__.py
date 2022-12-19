@@ -1,4 +1,4 @@
-from .pyrender import Renderer
+from .pyrender import PyRenderer
 
 try:
     from .pytorch3d import PytorchRenderer

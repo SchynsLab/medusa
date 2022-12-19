@@ -9,7 +9,7 @@ from skimage.transform import rescale
 from tqdm import tqdm
 
 from medusa.io import load_h5
-from medusa.render import Renderer
+from medusa.render import PyRenderer as Renderer
 
 logging.basicConfig(
     format="%(asctime)s [%(levelname)-7.7s]  %(message)s",

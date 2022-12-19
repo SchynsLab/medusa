@@ -1,5 +1,6 @@
 deca_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/deca_model.tar
 emoca_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/emoca.ckpt
+flame_masks_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/FLAME/FLAME_masks.pkl
 flame_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/FLAME/generic_model.pkl
 mica_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/mica.tar
 spectre_path: /analyse/Project0257/lukas/projects/medusa/medusa/medusa_ext_data/spectre_model.tar

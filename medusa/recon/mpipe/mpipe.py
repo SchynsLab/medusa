@@ -62,7 +62,8 @@ class Mediapipe(BaseReconModel):
         self._f_world_ref = out['f']
 
     def get_tris(self):
-        return self._f_world_ref
+
+        return torch.as_tensor(self._f_world_ref, device=self.device)
 
     def __call__(self, imgs):
         """Performs reconstruction of the face as a list of landmarks
@@ -146,8 +147,8 @@ class Mediapipe(BaseReconModel):
 
         outputs['n_img'] = imgs.shape[0]
         if outputs.get('v', None) is not None:
-            outputs['v'] = np.stack(outputs['v'])
-            outputs['mat'] = np.stack(outputs['mat'])
+            outputs['v'] = np.stack(outputs['v']).astype(np.float32)
+            outputs['mat'] = np.stack(outputs['mat']).astype(np.float32)
             outputs['img_idx'] = np.array(outputs['img_idx'])
 
             for attr, data in outputs.items():

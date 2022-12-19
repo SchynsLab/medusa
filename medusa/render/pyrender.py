@@ -6,18 +6,20 @@ excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
 .. [1] Matl, Matthew. *pyrender* [computer software]. https://github.com/mmatl/pyrender
 """
 
-import torch
 import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 from OpenGL.GL import glLineWidth
-from pyrender import (DirectionalLight, IntrinsicsCamera, Mesh, Node,
-                      OffscreenRenderer, OrthographicCamera, Scene)
+from pyrender import (DirectionalLight, Mesh, Node, PerspectiveCamera,
+                      OffscreenRenderer, OrthographicCamera, Scene, )
 from pyrender.constants import RenderFlags
 from trimesh import Trimesh, visual
 
+from .. import DEVICE
+from .base import BaseRenderer
 
-class Renderer:
+
+class PyRenderer(BaseRenderer):
     """A high-level wrapper around a pyrender-based renderer.
 
     Parameters
@@ -35,16 +37,20 @@ class Renderer:
     """
 
     def __init__(self, viewport, cam_mat=None, cam_type="orthographic", shading='flat',
-                 wireframe_opts=None):
+                 wireframe_opts=None, device=DEVICE):
 
         self.viewport = viewport
         self.cam_mat = cam_mat
         self.cam_type = cam_type
         self.shading = shading
         self.wireframe_opts = wireframe_opts
+        self.device = device  # for compatibility only
         self._scene = self._create_scene()
         self._renderer = OffscreenRenderer(*self.viewport)  # actual pyrender renderer
         self._misc_config()
+
+    def __str__(self):
+        return 'pyrender'
 
     def _create_scene(self):
         """Creates a simple scene with a camera and a directional light.
@@ -55,12 +61,12 @@ class Renderer:
         scene = Scene(bg_color=[0, 0, 0, 0], ambient_light=(255, 255, 255))
 
         if self.cam_type == "orthographic":
-            camera = OrthographicCamera(xmag=1, ymag=1)
-        elif self.cam_type == "intrinsic":
-            # Note to self: zfar might have to be increased if the face is
-            # very small; will increase rendering time though
-            fx, fy = w, w
-            camera = IntrinsicsCamera(fx=fx, fy=fy, cx=w / 2, cy=h / 2, zfar=300)
+            camera = OrthographicCamera(xmag=1, ymag=1, znear=0.01)
+        elif self.cam_type == "perspective":
+            fov = 2 * np.arctan(self.viewport[1] / (2 * self.viewport[0]))  # in rad!
+            camera = PerspectiveCamera(yfov=fov, znear=1., zfar=10000.)
+        else:
+            raise ValueError(f"Unknown camera type {self.cam_type}")
 
         if self.cam_mat is None:
             cam_mat = np.eye(4)
@@ -118,11 +124,7 @@ class Renderer:
             ``viewport[1]`` x 3 (RGB)
         """
 
-        if torch.is_tensor(v):
-            v = v.cpu().numpy()
-
-        if torch.is_tensor(tris):
-            tris = tris.cpu().numpy()
+        v, tris = self._preprocess(v, tris, format='numpy')
 
         # if overlay is not None:
         #     overlay = overlay.squeeze()
@@ -162,10 +164,8 @@ class Renderer:
         #         mesh=mesh
         #     )
 
-        if v.ndim == 2:
-            v = v[None, ...]
-
         for i in range(v.shape[0]):
+
             mesh = Trimesh(v[i], tris)
             mesh = Mesh.from_trimesh(mesh, smooth=self.shading == 'smooth',
                                      wireframe=self.shading == 'wireframe')
@@ -183,30 +183,6 @@ class Renderer:
 
         self._scene.mesh_nodes.clear()
         return img.copy()
-
-    def alpha_blend(self, img, background, face_alpha=None):
-        """Simple alpha blend of a rendered image and a background. The image
-        (`img`) is assumed to be an RGBA image and the background
-        (`background`) is assumed to be a RGB image. The alpha channel of the
-        image is used to blend them together. The optional `threshold`
-        parameter can be used to impose a sharp cutoff.
-
-        Parameters
-        ----------
-        img : np.ndarray
-            A 3D numpy array of shape height x width x 4 (RGBA)
-        background : np.ndarray
-            A 3D numpy array of shape height x width x 3 (RGB)
-        """
-        alpha = img[:, :, 3, None] / 255.0
-
-        if face_alpha is not None:
-            alpha[alpha > face_alpha] = face_alpha
-
-        img = img[:, :, :3] * alpha + (1 - alpha) * background
-
-        # TODO: add global alpha level for face
-        return img.astype(np.uint8)
 
     def close(self):
         """Closes the OffScreenRenderer object."""

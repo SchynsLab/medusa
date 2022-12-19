@@ -22,14 +22,12 @@ import h5py
 import numpy as np
 import pandas as pd
 from skimage.transform import rescale
-from tqdm import tqdm
 from trimesh import Trimesh
 from trimesh.transformations import compose_matrix, decompose_matrix
 
 from .. import DEVICE
 from ..io import VideoWriter, VideoLoader
 from ..log import get_logger, tqdm_log
-from ..render import Renderer
 
 
 class Data4D:
@@ -316,7 +314,7 @@ class Data4D:
         img = img.round().astype(np.uint8)
         return img
 
-    def render_video(self, f_out, video=None, alpha=1, **kwargs):
+    def render_video(self, f_out, renderer='pyrender', video=None, alpha=1, **kwargs):
         """Renders the sequence of 3D meshes as a video. It is assumed that
         this method is only called from a child class (e.g., ``Mediapipe4D``).
 
@@ -339,6 +337,14 @@ class Data4D:
             minimum = 0 (invisible), maximum = 1 (fully opaque)
         """
 
+        if renderer == 'pyrender':
+            from ..render import PyRenderer as Renderer
+        elif renderer == 'pytorch3d':
+            try:
+                from ..render import PytorchRenderer as Renderer
+            except ImportError:
+                raise ValueError("Cannot use pytorch3d renderer, as pytorch3d is not installed!")
+
         cam_mat = np.eye(4)
         if self.v.shape[1] == 468:
             cam_type = 'intrinsic'
@@ -347,6 +353,7 @@ class Data4D:
             cam_mat[2, 3] = 4  # zoom out 4 units in z direction
 
         w, h = self.video_metadata['img_size']
+
         renderer = Renderer(viewport=(w, h), cam_mat=cam_mat,
                             cam_type=cam_type, **kwargs)
 

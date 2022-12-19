@@ -240,6 +240,9 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         data = {'username': username, 'password': password}
         f_out = directory / 'FLAME2020.zip'
         download_file(url, f_out, data=data, verify=True, overwrite=overwrite)
+        url = "https://files.is.tue.mpg.de/tbolkart/FLAME/FLAME_masks.zip"
+        f_out = directory / 'FLAME_masks.zip'
+        download_file(url, f_out, overwrite=overwrite, cmd_type='get')
     else:
         logger.warning("FLAME: cannot download, because no username and/or password!")
 
@@ -247,9 +250,10 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
     if click.confirm(f"{desc} DECA: I have registered and agreed to the license terms at https://deca.is.tue.mpg.de"):
         #url = 'https://download.is.tue.mpg.de/download.php?domain=deca&resume=1&sfile=deca_model.tar'
         f_out = directory / 'deca_model.tar'
-        #download_file(url, f_out, overwrite=overwrite, cmd_type='get')
-        url = 'https://drive.google.com/u/0/uc?id=1rp8kdyLPvErw2dTmqtjISRVvQLj6Yzje'
-        gdown.download(url, str(f_out), quiet=True)
+        if not f_out.is_file() or overwrite:
+            #download_file(url, f_out, overwrite=overwrite, cmd_type='get')
+            url = 'https://drive.google.com/u/0/uc?id=1rp8kdyLPvErw2dTmqtjISRVvQLj6Yzje'
+            gdown.download(url, str(f_out), quiet=True)
 
     desc = datetime.now().strftime('%Y-%m-%d %H:%M [INFO   ] ')
     if click.confirm(f"{desc} EMOCA: I have registered and agreed to the license terms at https://emoca.is.tue.mpg.de"):
@@ -294,12 +298,28 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         if not flame_zip.is_file():
             logger.warning(f"File '{str(flame_zip)}' does not exist!")
         else:
-            logger.info("Unzipping FLAME2020.zip file ...")
             with zipfile.ZipFile(flame_zip, 'r') as zip_ref:
-                zip_ref.extractall(f'{directory}/FLAME/')
+                zip_ref.extractall(directory / 'FLAME/')
 
-            logger.info("FLAME is ready to use!")
+            logger.info("FLAME model is ready to use!")
             cfg['flame_path'] = str(flame_model_path)
+            flame_zip.unlink()
+
+    flame_masks_path = data_dir / 'FLAME/FLAME_masks.pkl'
+    if flame_masks_path.is_file():
+        logger.info("FLAME masks are ready to use!")
+        cfg['flame_masks_path'] = str(flame_masks_path)
+    else:
+        flame_masks_zip = data_dir / 'FLAME_masks.zip'
+        if not flame_masks_zip.is_file():
+            logger.warning(f"File '{str(flame_masks_zip)}' does not exist!")
+        else:
+            with zipfile.ZipFile(flame_masks_zip, 'r') as zip_ref:
+                zip_ref.extractall(directory / 'FLAME/')
+
+            logger.info("FLAME masks are ready to use!")
+            flame_masks_zip.unlink()
+            cfg['flame_masks_path'] = str(flame_masks_path)
 
     deca_model_path = data_dir / 'deca_model.tar'
     if deca_model_path.is_file():

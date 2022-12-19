@@ -21,14 +21,14 @@ jobs:
         id: cache-downloads
         uses: actions/cache@v3
         with:
-          path: $HOME/.medusa_ext_data
+          path: ~/.medusa_ext_data
           key: ${{ runner.os }}
       - name: Download external data
         shell: bash
         env:
           passwd_flame: ${{ secrets.PASSWD_FLAME }}
-        run: poetry run bash ./ci/download_data.sh
         if: steps.cache-downloads.outputs.cache-hit != 'true'
+        run: poetry run bash ./ci/download_data.sh
       - name: Test with pytest
         shell: bash
         run: poetry run bash ./ci/run_tests.sh

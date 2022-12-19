@@ -19,6 +19,7 @@ from torchvision.ops import nms
 from .. import DEVICE
 from ..io import load_inputs
 from ..transforms import resize_with_pad
+from ..onnx import OnnxModel
 from .base import BaseDetectionModel
 
 
@@ -77,17 +78,12 @@ class SCRFDetector(BaseDetectionModel):
             gdown.extractall(str(f_out))
             f_out.unlink()
 
-        set_default_logger_severity(3)
-        device = self.device.upper()
+        output_shapes = []
+        for n_feat in [1, 4, 10]:  # score, bbox, lms
+            for stride in [8, 16, 32]:
+                output_shapes.append(((224 // stride) ** 2 * 2, n_feat))
 
-        # per: https://medium.com/neuml/debug-onnx-gpu-performance-c9290fe07459
-        opts = {"cudnn_conv_algo_search": "HEURISTIC"}
-        sess = InferenceSession(str(f_in), providers=[(f'{device}ExecutionProvider', opts)])
-        self._onnx_input_name = sess.get_inputs()[0].name
-        self._onnx_input_shape = (1, 3, 224, 224)  # undefined in this onnx model
-        self._onnx_output_names = [o.name for o in sess.get_outputs()]
-
-        return sess
+        return OnnxModel(f_in, device=self.device, in_shapes=[[1, 3, 224, 224]], out_shapes=output_shapes)
 
     def __call__(self, imgs):
 
@@ -95,56 +91,23 @@ class SCRFDetector(BaseDetectionModel):
         imgs = load_inputs(imgs, load_as='torch', channels_first=True, device=self.device)
         b, c, h, w = imgs.shape
 
-        new_size = self._onnx_input_shape[-2:]  # 224 x 224
+        new_size = (224, 224)
         imgs, det_scale = resize_with_pad(imgs, output_size=new_size, out_dtype=torch.float32)
-        imgs = (imgs.sub_(127.5)).div_(128)
+        imgs = (imgs.sub_(127.5)).div_(128)  # normalize for onnx model
 
         outputs = defaultdict(list)
         for i in range(b):
             # add batch dim
             img = imgs[i, ...].unsqueeze(0)
+            det_outputs = self._det_model.run(img, outputs_as_list=True)
 
-            binding = self._det_model.io_binding()
-            binding.bind_input(
-                name=self._onnx_input_name,
-                device_type=self.device,
-                device_id=0,
-                element_type=np.float32,
-                shape=tuple(img.shape),
-                buffer_ptr=img.data_ptr(),
-            )
-
+            fmc, num_anchors = 3, 2
             feat_stride_fpn = [8, 16, 32]
-            net_outputs = []
-            for n_feat in [1, 4, 10]:  # score, bbox, lms
-                for stride in feat_stride_fpn:
-                    out_shape = ((224 // stride) ** 2 * 2, n_feat)
-                    out = torch.empty(out_shape, dtype=torch.float32, device=self.device).contiguous()
-                    net_outputs.append(out)
-
-            for i_out, out_name in enumerate(self._onnx_output_names):
-
-                binding.bind_output(
-                    name=out_name,
-                    device_type=self.device,
-                    device_id=0,
-                    element_type=np.float32,
-                    shape=tuple(net_outputs[i_out].shape),
-                    buffer_ptr=net_outputs[i_out].data_ptr(),
-                )
-
-            binding.synchronize_inputs
-            binding.synchronize_outputs()
-            self._det_model.run_with_iobinding(binding)
-
-            fmc = 3
-            num_anchors = 2
-
             outputs_ = defaultdict(list)
             for idx, stride in enumerate(feat_stride_fpn):
-                scores = net_outputs[idx].flatten()  # (n_det,)
-                bbox = net_outputs[idx+fmc] * stride  # (n_det, 4)
-                lms = net_outputs[idx+fmc*2] * stride  # (n_det, 10)
+                scores = det_outputs[idx].flatten()  # (n_det,)
+                bbox = det_outputs[idx+fmc] * stride  # (n_det, 4)
+                lms = det_outputs[idx+fmc*2] * stride  # (n_det, 10)
                 keep = torch.where(scores >= self.det_threshold)[0]
 
                 if len(keep) == 0:
