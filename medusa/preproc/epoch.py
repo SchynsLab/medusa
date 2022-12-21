@@ -17,7 +17,7 @@ def epoch(
     baseline_correct=False,
     baseline_window=(None, None),
     baseline_mode="mean",
-    add_back_grand_mean=False
+    add_back_grand_mean=False,
 ):
     """Creates epochs of the data.
 
@@ -132,18 +132,23 @@ def epoch(
     frame_t = np.linspace(start, end, endpoint=True, num=T)
     v = epochs[..., :-12].reshape((N, T, data.v.shape[1], 3))
     params = epochs[..., -12:]
-    epochs_arr = EpochsArray(v=v, params=params, frame_t=frame_t, events=data.events,
-                             recon_model=data.recon_model)
+    epochs_arr = EpochsArray(
+        v=v,
+        params=params,
+        frame_t=frame_t,
+        events=data.events,
+        recon_model=data.recon_model,
+    )
 
     data.v = v.mean(axis=0)
-    data.render_video('test_av.gif', scaling=0.5, smooth=False, overlay=None)
+    data.render_video("test_av.gif", scaling=0.5, smooth=False, overlay=None)
 
     return epochs_arr
 
-    #mne_epochs_arr = epochs_arr.to_mne(data.frame_t)
-    #evoked = mne_epochs_arr.average(picks='misc')
-    #fig = evoked.plot(picks='misc')
-    #fig.savefig('test.png')
+    # mne_epochs_arr = epochs_arr.to_mne(data.frame_t)
+    # evoked = mne_epochs_arr.average(picks='misc')
+    # fig = evoked.plot(picks='misc')
+    # fig.savefig('test.png')
     # av = np.nanmean(epochs, axis=0)
     # data.v = av[:, :-12].reshape((av.shape[0], -1, 3))
     # data.params2mats(av[:, -12:])
@@ -163,7 +168,7 @@ def epoch(
     # data.sf = 1 / period
     # data.render_video('test.gif', video=None)
 
-    #epochsarray = EpochsArray()
+    # epochsarray = EpochsArray()
     # Create (custom) EpochsArray and save
     # epochs_array = EpochsArray.from_medusa(
     #     epochs,

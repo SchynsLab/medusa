@@ -9,28 +9,26 @@ from pathlib import Path
 
 import av
 import cv2
-import h5py
 import numpy as np
 import requests
 import torch
 from torch.utils.data import DataLoader, IterableDataset
 from trimesh import Trimesh
 
-from . import DEVICE
+from .constants import DEVICE
 from .log import get_logger
 
 
 class VideoLoader(DataLoader):
-    """" Contains (meta)data and functionality associated with video files (mp4
+    """Contains (meta)data and functionality associated with video files (mp4
     files only currently).
+
+    .. `
 
     Parameters
     ----------
     path : str, Path
         Path to mp4 file
-    rescale_factor : float
-        Rescale factor of video frames (e.g., 0.25 means scale each dimension to 25% of original);
-        if ``None`` (default), the image is not resized
     n_preload : int
         Number of video frames to preload before batching
     loglevel : str
@@ -42,8 +40,15 @@ class VideoLoader(DataLoader):
         If `n_preload` is not a multiple of `batch_size`
     """
 
-    def __init__(self, path, batch_size=32, device=DEVICE,
-                 channels_first=False, loglevel='INFO', **kwargs):
+    def __init__(
+        self,
+        path,
+        batch_size=32,
+        device=DEVICE,
+        channels_first=False,
+        loglevel="INFO",
+        **kwargs,
+    ):
 
         self.logger = get_logger(loglevel)
         self.channels_first = channels_first
@@ -76,19 +81,11 @@ class VideoLoader(DataLoader):
     def _extract_metadata(self):
         """Extracts some metadata from Dataset and exposes it to the loader."""
 
-        tmp = self.dataset.metadata
-        end = tmp['n'] / tmp['fps']
-        #frame_t = np.linspace(0, end, endpoint=False, num=tmp['n'])
+        # tmp = self.dataset.metadata
+        # end = tmp['n'] / tmp['fps']
+        # frame_t = np.linspace(0, end, endpoint=False, num=tmp['n'])
 
-        return {
-            #'frame_t': frame_t,
-            'img_size': tmp['size'],
-            'fps': tmp['fps']
-        }
-
-    #def __len__(self):
-    #    """Utility function to easily access number of video frames."""
-    #    return len(self.dataset)
+        return self.dataset.metadata
 
     def __iter__(self):
         """Little hack to put data on device automatically."""
@@ -115,11 +112,12 @@ class VideoDataset(IterableDataset):
     device : str
         Either 'cuda' (for GPU) or 'cpu'
     """
-    def __init__(self, video, device='cuda'):
+
+    def __init__(self, video, device="cuda"):
 
         self.device = device
-        self._container = av.open(str(video), mode='r')
-        self._container.streams.video[0].thread_type = 'AUTO'#thread_type
+        self._container = av.open(str(video), mode="r")
+        self._container.streams.video[0].thread_type = "AUTO"  # thread_type
         self._reader = self._container.decode(video=0)
         self.metadata = self._get_metadata()
 
@@ -131,23 +129,19 @@ class VideoDataset(IterableDataset):
         w = stream.codec_context.width
         h = stream.codec_context.height
 
-        #if self.rescale_factor is not None:
+        # if self.rescale_factor is not None:
         #    w = round(self.rescale_factor * w)
         #    h = round(self.rescale_factor * h)
 
-        return {
-            'size': (w, h),
-            'n': n,
-            'fps': fps
-        }
+        return {"img_size": (w, h), "n_img": n, "fps": fps}
 
     def __len__(self):
 
-        return self.metadata['n']
+        return self.metadata["n_img"]
 
     def __iter__(self):
         for img in self._reader:
-            yield img.to_ndarray(format='rgb24')
+            yield img.to_ndarray(format="rgb24")
 
     def close(self):
         """Closes the cv2 videoreader and free up memory."""
@@ -169,9 +163,10 @@ class VideoWriter:
     pix_fmt : str
         Pixel format; should be compatible with codec
     """
-    def __init__(self, path, fps, codec='libx264', pix_fmt='yuv420p'):
 
-        self._container = av.open(str(path), mode='w')
+    def __init__(self, path, fps, codec="libx264", pix_fmt="yuv420p"):
+
+        self._container = av.open(str(path), mode="w")
         self._stream = self._container.add_stream(codec, int(round(fps)))
         self._stream.pix_fmt = pix_fmt
 
@@ -202,7 +197,7 @@ class VideoWriter:
 
         for i in range(b):
             img = imgs[i]
-            img = av.VideoFrame.from_ndarray(img, format='rgb24')
+            img = av.VideoFrame.from_ndarray(img, format="rgb24")
             for packet in self._stream.encode(img):
                 self._container.mux(packet)
 
@@ -214,8 +209,14 @@ class VideoWriter:
         self._container.close()
 
 
-def load_inputs(inputs, load_as='torch', channels_first=True,
-                with_batch_dim=True, dtype='float32', device=DEVICE):
+def load_inputs(
+    inputs,
+    load_as="torch",
+    channels_first=True,
+    with_batch_dim=True,
+    dtype="float32",
+    device=DEVICE,
+):
     """Generic image loader function, which also performs some basic
     preprocessing and checks. Is used internally for crop models and
     reconstruction models.
@@ -281,10 +282,10 @@ def load_inputs(inputs, load_as='torch', channels_first=True,
     (2, 3, 384, 480)
     """
 
-    if not load_as in ('torch', 'numpy'):
+    if not load_as in ("torch", "numpy"):
         raise ValueError("'load_as' should be either 'torch' or 'numpy'!")
 
-    if not device in ('cuda', 'cpu'):
+    if not device in ("cuda", "cpu"):
         raise ValueError("'device' should be either 'cuda' or 'cpu'!")
 
     if isinstance(inputs, (str, Path)):
@@ -320,9 +321,9 @@ def load_inputs(inputs, load_as='torch', channels_first=True,
         # If already torch or numpy, do nothing
         imgs = inputs
 
-    if load_as == 'torch' and isinstance(imgs, np.ndarray):
+    if load_as == "torch" and isinstance(imgs, np.ndarray):
         imgs = torch.from_numpy(imgs.copy()).to(device)
-    elif load_as == 'numpy' and isinstance(imgs, torch.Tensor):
+    elif load_as == "numpy" and isinstance(imgs, torch.Tensor):
         imgs = imgs.cpu().numpy()
 
     if imgs.ndim == 3:
@@ -356,18 +357,18 @@ def save_obj(v, f, f_out):
     if not isinstance(f_out, Path):
         f_out = Path(f_out)
 
-    if not f_out.suffix == '.obj':
+    if not f_out.suffix == ".obj":
         raise ValueError("Filename should end in .obj!")
 
     mesh = Trimesh(v, f)
     mesh.export(f_out)
 
 
-def download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type='post'):
+def download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type="post"):
     if f_out.is_file() and not overwrite:
         return
 
     with getattr(requests, cmd_type)(url, stream=True, verify=True, data=data) as r:
         r.raise_for_status()
-        with open(f_out, 'wb') as f:
+        with open(f_out, "wb") as f:
             f.write(r.content)

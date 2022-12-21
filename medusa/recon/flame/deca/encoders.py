@@ -181,13 +181,19 @@ class PerceptualEncoder(nn.Module):
     # For spectre
     def __init__(self):
         super().__init__()
-        self.encoder = torch.hub.load('pytorch/vision:v0.8.1', 'mobilenet_v2', verbose=False,
-                                      weights=MobileNet_V2_Weights.IMAGENET1K_V1)
+        self.encoder = torch.hub.load(
+            "pytorch/vision:v0.8.1",
+            "mobilenet_v2",
+            verbose=False,
+            weights=MobileNet_V2_Weights.IMAGENET1K_V1,
+        )
 
         self.temporal = nn.Sequential(
-            nn.Conv1d(in_channels=1280, out_channels=256, kernel_size=5, stride=1, padding=2),
+            nn.Conv1d(
+                in_channels=1280, out_channels=256, kernel_size=5, stride=1, padding=2
+            ),
             nn.BatchNorm1d(256),
-            nn.ReLU()
+            nn.ReLU(),
         )
 
         self.layers = nn.Sequential(
@@ -197,12 +203,14 @@ class PerceptualEncoder(nn.Module):
     def forward(self, inputs):
 
         features = self.encoder.features(inputs)
-        features = nn.functional.adaptive_avg_pool2d(features, (1, 1)).squeeze(-1).squeeze(-1)
+        features = (
+            nn.functional.adaptive_avg_pool2d(features, (1, 1)).squeeze(-1).squeeze(-1)
+        )
 
-        features = features.permute(1,0).unsqueeze(0)
+        features = features.permute(1, 0).unsqueeze(0)
         features = self.temporal(features)
-        features = features.squeeze(0).permute(1,0)
+        features = features.squeeze(0).permute(1, 0)
         parameters = self.layers(features)
-        parameters[...,50] = F.relu(parameters[...,50])
+        parameters[..., 50] = F.relu(parameters[..., 50])
 
-        return parameters[...,:50], parameters[...,50:]
+        return parameters[..., :50], parameters[..., 50:]

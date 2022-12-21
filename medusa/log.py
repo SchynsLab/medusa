@@ -36,7 +36,7 @@ def get_logger(level="INFO"):
     return logger
 
 
-def tqdm_log(iter_, logger, desc='Render shape'):
+def tqdm_log(iter_, logger, desc="Render shape"):
     """Creates an iterator with optional tqdm progressbar that plays nicely
     with an existing Medusa logger.
 

@@ -7,7 +7,7 @@ you can use the [Python API](./python).
 
 All CLI commands start with `medusa_` followed by the operation that it exposes.
 For example, `medusa_videorecon` is a command-line interface of the package's Python
-function [`videorecon`](./python/preproc/recon/index). The arguments and options of each CLI
+function [`videorecon`](./python/recon/recon/index). The arguments and options of each CLI
 command can be inspected by running the command with a single option `--help`. For
 example:
 
@@ -76,7 +76,7 @@ video is in MP4 format and has the extension `.mp4`. It also assumes (for now) t
 there is one, and only one, face present in each frame of the video.
 
 This CLI command uses the Python function
-[`medusa.preproc.recon.videorecon`](./python/preproc/recon/index) under the hood.
+[`medusa.recon.videorecon`](./python/recon/recon/index) under the hood.
 
 ### `medusa_align`
 
@@ -156,7 +156,7 @@ it as a FIF file (extension: `.fif`). This file can then be loaded using MNE
 to be further analyzed.
 
 This CLI command uses the Python function
-[`medusa.preproc.epoch.epoch`](./python/preproc/epoch/index) under the hood.
+[`medusa.epochs`](./python/epochs/index) under the hood.
 
 ### `medusa_videorender`
 
@@ -166,6 +166,6 @@ reconstruction data and, if you want to render the reconstruction on top of the 
 videon, a video file (e.g., `--video my_video.mp4`).
 
 This CLI command uses the `render_video` method from the
-[`medusa.core.BaseData`](./python/core/index) class, which in turn uses the
-[`medusa.render.Renderer`](./python/render/index) class (a wrapper around a
+[`medusa.core.Data4D`](./python/containers/fourD/index) class, which in turn uses the
+[`medusa.render.PyRenderer`](./python/render/index) class (a wrapper around a
 [pyrender](https://pyrender.readthedocs.io/) renderer).

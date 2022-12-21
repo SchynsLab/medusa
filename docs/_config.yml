@@ -68,6 +68,7 @@ launch_buttons:
 sphinx:
   extra_extensions          : # A list of extra extensions to load by Sphinx (added to those already used by JB).
     - 'autoapi.extension'     # Need to enable autoapi in JB too, otherwise it errors with a specific autoapi directive
+    - 'IPython.sphinxext.ipython_console_highlighting'
   local_extensions          : # A list of local extensions to load by sphinx specified by "name: path" items
   recursive_update          : false # A boolean indicating whether to overwrite the Sphinx config (true) or recursively update (false)
   config                    :

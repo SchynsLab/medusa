@@ -3,18 +3,17 @@ import numpy as np
 from trimesh import Trimesh
 
 from ..data import get_flame_config
-from .fourD import Flame4D, Mediapipe4D
+from .fourD import Data4D
 from ..recon.flame.decoders import FLAME
 
-flame_path = get_flame_config('flame_path')
+flame_path = get_flame_config("flame_path")
 flame_generator = FLAME(flame_path, 300, 100)
 
 
 class Base3D:
-
-    def save(self, path, file_type='obj', **kwargs):
+    def save(self, path, file_type="obj", **kwargs):
         mesh = Trimesh(self.v, self.f)
-        with open(path, 'w') as f_out:
+        with open(path, "w") as f_out:
             mesh.export(f_out, file_type=file_type, **kwargs)
 
     def animate(self, v, mat, is_deltas=True):
@@ -31,12 +30,12 @@ class Base3D:
 
 
 class Flame3D(Base3D):
-
     def __init__(self, v=None, mat=None, dense=False):
         from ..data import get_template_flame
+
         data = get_template_flame(dense=dense)
-        self.v = data['v'] if v is None else v
-        self.f = data['f']
+        self.v = data["v"] if v is None else v
+        self.f = data["f"]
         self.mat = np.eye(4) if mat is None else mat
 
     @classmethod
@@ -46,7 +45,16 @@ class Flame3D(Base3D):
         return cls(v, mat)
 
     @classmethod
-    def random(cls, shape=None, exp=None, pose=None, rot_x=None, rot_y=None, rot_z=None, no_exp=True):
+    def random(
+        cls,
+        shape=None,
+        exp=None,
+        pose=None,
+        rot_x=None,
+        rot_y=None,
+        rot_z=None,
+        no_exp=True,
+    ):
 
         if shape is None:
             shape = torch.randn(1, 300) * 0.6
@@ -93,18 +101,19 @@ class Flame3D(Base3D):
     def animate(self, v, mat, sf, frame_t, is_deltas=True):
 
         v = super().animate(v, mat, is_deltas)
-        animated = Flame4D(v=v, mat=mat, cam_mat=np.eye(4), space='world', sf=sf,
-                               frame_t=frame_t)
+        animated = Data4D(
+            v=v, mat=mat, cam_mat=np.eye(4), space="world", sf=sf, frame_t=frame_t
+        )
         return animated
 
 
 class Mediapipe3D(Base3D):
-
     def __init__(self, v=None, mat=None):
         from ..data import get_template_mediapipe
+
         data = get_template_mediapipe()
-        self.v = data['v'] if v is None else v
-        self.f = data['f']
+        self.v = data["v"] if v is None else v
+        self.f = data["f"]
         self.mat = np.eye(4) if mat is None else mat
 
     @classmethod
@@ -116,6 +125,7 @@ class Mediapipe3D(Base3D):
     def animate(self, v, mat, sf, frame_t, is_deltas=True):
 
         v = super().animate(v, mat, is_deltas)
-        animated = Mediapipe4D(v=v, mat=mat, cam_mat=np.eye(4), space='world', sf=sf,
-                               frame_t=frame_t)
+        animated = Data4D(
+            v=v, mat=mat, cam_mat=np.eye(4), space="world", sf=sf, frame_t=frame_t
+        )
         return animated

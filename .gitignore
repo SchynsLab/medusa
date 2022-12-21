@@ -143,6 +143,8 @@ demos/*.h5
 tests/test_viz/*/*.png
 tests/test_viz/*/*.mp4
 tests/test_viz/*/*.jpg
+tests/test_viz/*/*.tsv
+tests/test_viz/*/*.csv
 
 # Docs
 docs/_build

@@ -6,14 +6,29 @@ from matplotlib import cm
 from torchvision.utils import draw_bounding_boxes, draw_keypoints, save_image
 from torchvision.ops import box_area
 
-from .. import DEVICE, FONT
+from ..constants import DEVICE, FONT
 from ..io import load_inputs, VideoWriter
 from ..log import get_logger
+from ..tracking import sort_faces, filter_faces, _ensure_consecutive_face_idx
 
 
 class BatchResults:
+    """A container to store and process results from processing multiple
+    batches of inputs/images.
 
-    def __init__(self, n_img=0, device=DEVICE, loglevel='INFO', **kwargs):
+    Parameters
+    ----------
+    n_img : int
+        Number of images processed thus far
+    device : str
+        Device to store/process the data on (either 'cpu' or 'cuda')
+    loglevel : str
+        Loglevel to use for logger
+    **kwargs
+        Other data that will be set as attributes
+    """
+
+    def __init__(self, n_img=0, device=DEVICE, loglevel="INFO", **kwargs):
 
         self.device = device
         self.n_img = n_img
@@ -23,15 +38,21 @@ class BatchResults:
             setattr(self, key, value)
 
     def add(self, **kwargs):
+        """Add data to the container.
 
+        Parameters
+        ----------
+        **kwargs
+            Any data that will be added to the
+        """
         for key, value in kwargs.items():
 
             # Don't update n_img yet
-            if key == 'n_img':
+            if key == "n_img":
                 continue
 
             existing = getattr(self, key, None)
-            if key == 'img_idx':
+            if key == "img_idx":
                 # e.g., [0, 0, 1, 2, 2, 3] -> [32, 32, 33, 34, 34, 35]
                 # (assuming this is the second batch of 32 images)
                 value = value + self.n_img
@@ -43,16 +64,16 @@ class BatchResults:
             setattr(self, key, existing)
 
         # n_img must always be updated last!
-        if 'n_img' in kwargs:
-            self.n_img += kwargs['n_img']
+        if "n_img" in kwargs:
+            self.n_img += kwargs["n_img"]
 
     def concat(self, n_max=None):
 
         for attr, data in self.__dict__.items():
-            if attr[0] == '_':
+            if attr[0] == "_":
                 continue
 
-            if attr in ('device', 'n_img'):
+            if attr in ("device", "n_img"):
                 continue
 
             data = [d for d in data if d is not None]
@@ -66,33 +87,43 @@ class BatchResults:
 
             setattr(self, attr, data)
 
-    def sort_faces(self, attr='lms', dist_threshold=250, present_threshold=0.1):
+    def sort_faces(self, attr="lms", dist_threshold=250):
 
         if not hasattr(self, attr):
-            raise ValueError(f"Cannot sort faces using attribute `{attr}`, which does not exist!")
+            self._logger.warning(f"No attribute `{attr}`, maybe no detections?")
+            return
 
         data = getattr(self, attr, None)
         if data is None:
-            raise ValueError(f"Cannot sort faces using attribut `{attr}`, because it's empty!")
+            raise ValueError(
+                f"Cannot sort faces using attribut `{attr}`, because it's empty!"
+            )
 
-        img_idx = getattr(self, 'img_idx', None)
+        img_idx = getattr(self, "img_idx", None)
         if img_idx is None:
             raise ValueError(f"Cannot sort faces because `img_idx` is not known!")
 
-        if getattr(self, 'face_idx', None) is not None:
+        if getattr(self, "face_idx", None) is not None:
             raise ValueError("`face_idx` already computed!")
 
-        self.face_idx, keep = sort_faces(data, img_idx, dist_threshold, present_threshold)
+        self.face_idx = sort_faces(data, img_idx, dist_threshold)
+
+    def filter_faces(self, present_threshold=0.1):
+
+        keep = filter_faces(self.face_idx, self.n_img, present_threshold)
+
         if not torch.all(keep):
-            for attr, data in self.to_dict(exclude=['n_img', 'device']).items():
+            for attr, data in self.to_dict(exclude=["n_img", "device"]).items():
                 if data.shape[0] == keep.shape[0]:
                     setattr(self, attr, data[keep])
+
+        self.face_idx = _ensure_consecutive_face_idx(self.face_idx)
 
     def to_dict(self, exclude=None):
 
         to_return = self.__dict__.copy()
         for attr in to_return.copy():
-            if attr[0] == '_':
+            if attr[0] == "_":
                 del to_return[attr]
 
         if exclude is not None:
@@ -105,7 +136,18 @@ class BatchResults:
 
         return to_return
 
-    def visualize(self, f_out, imgs, video=False, show_cropped=False, face_id=None, fps=24, crop_size=(224, 224), template=None, **kwargs):
+    def visualize(
+        self,
+        f_out,
+        imgs,
+        video=False,
+        show_cropped=False,
+        face_id=None,
+        fps=24,
+        crop_size=(224, 224),
+        template=None,
+        **kwargs,
+    ):
         """Creates an image with the estimated bounding box (bbox) on top of
         it.
 
@@ -130,7 +172,13 @@ class BatchResults:
             f_out.unlink()
 
         # batch_size x h x w x 3
-        imgs = load_inputs(imgs, load_as='torch', channels_first=True, device=self.device, dtype='uint8')
+        imgs = load_inputs(
+            imgs,
+            load_as="torch",
+            channels_first=True,
+            device=self.device,
+            dtype="uint8",
+        )
 
         if show_cropped and face_id is None:
             # Going into recursive loop, looping over each unique face in the
@@ -140,11 +188,13 @@ class BatchResults:
                 # If there's just one face, use the original filename;
                 # otherwise, append a unique identifier (_face-xx)
                 if n_face > 1:
-                    recursive_kwargs['f_out'] = Path(str(f_out.with_suffix('')) + f'_face-{face_id+1}.mp4')
+                    recursive_kwargs["f_out"] = Path(
+                        str(f_out.with_suffix("")) + f"_face-{face_id+1}.mp4"
+                    )
 
                 # Set current face id in inputs
-                recursive_kwargs['face_id'] = face_id
-                recursive_kwargs.pop('self', None)  # don't need this
+                recursive_kwargs["face_id"] = face_id
+                recursive_kwargs.pop("self", None)  # don't need this
 
                 # Recursive call, but set face_id
                 self.visualize(**recursive_kwargs)
@@ -162,7 +212,7 @@ class BatchResults:
 
             # If we don't know the `img_idx`, just save the
             # original image
-            if getattr(self, 'img_idx', None) is None:
+            if getattr(self, "img_idx", None) is None:
                 imgs_out.append(img.unsqueeze(0))
                 continue
 
@@ -195,12 +245,12 @@ class BatchResults:
 
             # We only want to show the bounding box for uncropped images
             # (because for cropped images, borders = bbox)
-            if hasattr(self, 'bbox') and not show_cropped:
+            if hasattr(self, "bbox") and not show_cropped:
                 bbox = self.bbox[det_idx]
 
                 # Check for confidence of detection, which
                 # we'll draw if available
-                if hasattr(self, 'conf'):
+                if hasattr(self, "conf"):
                     # Heuristic for scaling font size
                     font_size = int((box_area(bbox).min().sqrt() / 8).item())
                     labels = [str(round(lab.item(), 3)) for lab in self.conf[det_idx]]
@@ -209,7 +259,7 @@ class BatchResults:
 
                 # If `face_idx` is available, give each unique face a bounding
                 # box with a separate color
-                if getattr(self, 'face_idx', None) is not None:
+                if getattr(self, "face_idx", None) is not None:
                     colors = []
                     for i_face in self.face_idx[det_idx]:
                         colors.append(cm.Set1(i_face.item(), bytes=True))
@@ -217,7 +267,9 @@ class BatchResults:
                     colors = (255, 0, 0)
 
                 # TODO: scale width
-                img = draw_bounding_boxes(img, bbox, labels, colors, width=2, font=FONT, font_size=font_size)
+                img = draw_bounding_boxes(
+                    img, bbox, labels, colors, width=2, font=FONT, font_size=font_size
+                )
                 img = img.to(self.device)
 
             # BELOW: OLD CODE TO CREATE BOUNDING BOX FROM CROPPED IMAGES
@@ -227,13 +279,15 @@ class BatchResults:
             # bbox = transform_points(crop_mats, bbox_crop)
 
             # Check for landmarks (`lms`), which we'll draw if available
-            if hasattr(self, 'lms'):
+            if hasattr(self, "lms"):
                 lms = self.lms[det_idx]
 
                 if show_cropped:
                     # Need to crop the original images!
                     crop_mats = self.crop_mats[det_idx]
-                    img = warp_affine(img.unsqueeze(0).float(), crop_mats[:, :2, :], crop_size)
+                    img = warp_affine(
+                        img.unsqueeze(0).float(), crop_mats[:, :2, :], crop_size
+                    )
                     img = img.to(torch.uint8).squeeze(0)
 
                     # And warp the landmarks to the cropped image space
@@ -248,7 +302,9 @@ class BatchResults:
                         template_ = template.unsqueeze(0)
                     else:
                         crop_mats = torch.inverse(self.crop_mats[det_idx])
-                        template_ = template.repeat(lms.shape[0], 1, 1).to(crop_mats.device)
+                        template_ = template.repeat(lms.shape[0], 1, 1).to(
+                            crop_mats.device
+                        )
                         template_ = transform_points(crop_mats, template_)
 
                     img = draw_keypoints(img, template_, colors=(0, 0, 255), radius=1.5)
@@ -266,95 +322,3 @@ class BatchResults:
             writer.close()
         else:
             save_image(imgs_out.float(), fp=f_out, normalize=True, **kwargs)
-
-
-def sort_faces(lms, img_idx, dist_threshold=250, present_threshold=0.1):
-    device = lms.device
-    face_idx = torch.zeros_like(img_idx, device=device, dtype=torch.int64)
-
-    for i, i_img in enumerate(img_idx.unique()):
-        # lms = all detected landmarks/vertices for this image
-        det_idx = i_img == img_idx
-        lms_img = lms[det_idx]
-
-        # flatten landmarks (5 x 2 -> 10)
-        n_det = lms_img.shape[0]
-        lms_img = lms_img.reshape((n_det, -1))
-
-        if i == 0:
-            # First detection, initialize tracker with first landmarks
-            face_idx[det_idx] = torch.arange(0, n_det, device=device)
-            tracker = lms_img.clone()
-            continue
-
-        # Compute the distance between each detection (lms) and currently tracked faces (tracker)
-        dists = torch.cdist(lms_img, tracker)  # n_det x current_faces
-
-        # face_assigned keeps track of which detection is assigned to which face from
-        # the tracker (-1 refers to "not assigned yet")
-        face_assigned = torch.ones(n_det, device=device, dtype=torch.int64) * -1
-
-        # We'll keep track of which tracked faces we have not yet assigned
-        track_list = torch.arange(dists.shape[1], device=device)
-
-        # Check the order of minimum distances across detections
-        # (which we'll use to loop over)
-        order = dists.min(dim=1)[0].argsort()
-        det_list = torch.arange(dists.shape[0], device=device)
-
-        # Loop over detections, sorted from best match (lowest dist)
-        # to any face in the tracker to worst match
-        for i_det in det_list[order]:
-
-            if dists.shape[1] == 0:
-                # All faces from tracker have been assigned!
-                # So this detection must be a new face
-                continue
-
-            # Extract face index with the minimal distance (`min_face`) ...
-            min_dist, min_face = dists[i_det, :].min(dim=0)
-
-            # And check whether it is acceptably small
-            if min_dist < dist_threshold:
-
-                # Assign to face_assigned; note that we cannot use `min_face`
-                # directly, because we'll slice `dists` below
-                face_assigned[i_det] = track_list[min_face]
-
-                # Now, for some magic: remove the selected face
-                # from dists (and track_list), which will make sure
-                # that the next detection cannot be assigned the same
-                # face
-                keep = track_list != track_list[min_face]
-                dists = dists[:, keep]
-                track_list = track_list[keep]
-            else:
-                # Detection cannot be assigned to any face in the tracker!
-                # Going to update tracker with this detection
-                pass
-
-        # Update the tracker with the (assigned) detected faces
-        unassigned = face_assigned == -1
-        tracker[face_assigned[~unassigned]] = lms_img[~unassigned]
-
-        # If there are new faces, add them to the tracker
-        n_new = unassigned.sum()
-        if n_new > 0:
-            # Update the assigned face index for the new faces with a new integer
-            face_assigned[unassigned] = tracker.shape[0] + torch.arange(n_new, device=device)
-            # and add to tracker
-            tracker = torch.cat((tracker, lms_img[unassigned]))
-
-        # Add face selection to face_idx across images
-        face_idx[det_idx] = face_assigned
-
-    # Loop over unique faces tracked
-    keep = torch.full_like(face_idx, fill_value=True, dtype=torch.bool)
-    for f in face_idx.unique():
-        # Compute the proportion of images containing this face
-        f_idx = face_idx == f
-        prop = (f_idx).sum().div(len(face_idx))
-        if prop < present_threshold:
-            keep[f_idx] = False
-
-    return face_idx, keep

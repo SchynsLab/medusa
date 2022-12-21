@@ -18,7 +18,7 @@ def get_example_img(load=False):
         Image or path to image, depending on the ``load`` parameter
     """
 
-    img = Path(__file__).parent / 'example_img.jpg'
+    img = Path(__file__).parent / "example_img.jpg"
     if load:
         img = io.imread(img)
 

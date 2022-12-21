@@ -3,7 +3,7 @@
 Medusa's Python interface allows you to use its functionality in Python. The package
 contains several submodules, of which the most important ones are:
 
-## [`medusa.core`](./python/core/index)
+## [`medusa.containers`](./python/containers/index)
 
 The `core` module contains the core data classes used in Medusa. The most important class
 is the `BaseData` class. This class contains most of the functionality to initialize,
@@ -12,7 +12,7 @@ not be used by itself; instead, use one of the other data classes that inherit f
 the `BaseData` class:
 
 * `Flame4D`: for data from reconstruction models that use the [FLAME](https://flame.is.tue.mpg.de/)
-topology (such as [EMOCA](./python/recon/emoca/index))
+topology (such as [DECA](./python/recon/flame/deca/index))
 
 * `Mediapipe4D`: for data from the [Mediapipe](./python/recon/mpipe/index) reconstruction model
 
@@ -35,9 +35,8 @@ results = model(img)
 
 The following model classes are available:
 
-* [`FAN`](./python/recon/fan/index)
 * [`Mediapipe`](./python/recon/mpipe/index)
-* [`EMOCA`](./python/recon/emoca/index)
+* [`DECA/EMOCA/Spectre`](./python/recon/flame/deca/index)
 
 ## [`medusa.io`](./python/io/index)
 
@@ -70,13 +69,7 @@ face reconstructions.
 
 The submodules are summarized below.
 
-### [`medusa.preproc.recon`](./python/preproc/recon/index)
-
-This submodule contains a single function, `videorecon`, that performs frame-by-frame 3D
-reconstruction of a video and returns the results as an object of the appropriate
-data class (e.g., `FlameData`).
-
-### [`medusa.preproc.align`](./python/preproc/recon/index)
+### [`medusa.preproc.align`](./python/preproc/align/index)
 
 This submodule contains a single function, `align`, that performs alignment ("motion correction")
 of a sequence of 3D meshes. It returns an instance of a data class of which the `v`
@@ -84,7 +77,7 @@ attribute (i.e., the vertices) have been aligned (either to a canonical model, l
 EMOCA and Mediapipe, or the mesh of the first time point, like for FAN). Note that this
 function changes the `.space` attribute from `"world"` to `"local"`.
 
-### [`medusa.preproc.resample`](./python/preproc/recon/index)
+### [`medusa.preproc.resample`](./python/preproc/resample/index)
 
 This submodule contains a single function, `resample`, that performs temporal resampling
 of the 3D mesh time series by interpolating the data at a regular, evenly-spaced grid
@@ -92,13 +85,13 @@ with a specific sampling frequency. It returns an instance of the data class of 
 the data (`v` and, optionally, `mat`) has been resampled and the sampling frequency
 (`.sf` attribute) has been changed accordingly.
 
-### [`medusa.preproc.filter`](./python/preproc/recon/index)
+### [`medusa.preproc.filter`](./python/preproc/filter/index)
 
 This submodule contains a single function, `filter`, that performs temporal filtering
 of the 3D mesh time series using a Butterworth filter. It returns an instance of the
 appropriate data class.
 
-### [`medusa.preproc.epoch`](./python/preproc/recon/index)
+### [`medusa.epochs`](./python/epochs/index)
 
 This submodule performs "epoching" on the time series of the reconstructed 3D face
 meshes. Here, an "epoch" refers to an equal duration chunk of signal, usually time-locked
@@ -115,13 +108,8 @@ stimulus/response/trial onsets (see [quickstart](../getting_started/quickstart) 
 information).
 ```
 
-## [`medusa.transform`](./python/transform/index)
+## [`medusa.transforms`](./python/transforms/index)
 
 The `transform` module contains several functions to transform vertices between
 different spaces (e.g., world space, NDC space, and raster space). This module is probably
 not relevant for most users.
-
-## [`medusa.utils`](./python/utils/index)
-
-The `utils` module contains some utility functions, for example to create a nice
-logger.

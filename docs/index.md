@@ -20,7 +20,7 @@ how to analyze such data, check out the [analysis tutorials](tutorials/analysis)
 ## Documentation overview
 
 On this website, you can find general information about Medusa (such as how to [install](getting_started/installation)
-and [cite](getting_started/citation) it), as well as several [tutorials](tutorials/info)
+and [cite](getting_started/citation) it), as well as several tutorials
 and details on Medusa's [command-line interface](api/cli) and [Python interface](api/python).
 
 A great way to get more familiar with the package is to check out the [quickstart](getting_started/quickstart)!

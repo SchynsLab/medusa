@@ -4,7 +4,7 @@ from collections import OrderedDict
 from onnxruntime import InferenceSession
 from onnxruntime import set_default_logger_severity
 
-from . import DEVICE
+from .constants import DEVICE
 
 
 class OnnxModel:
@@ -18,6 +18,7 @@ class OnnxModel:
     device : str
         Device to run model on ('cpu' or 'cuda')
     """
+
     def __init__(self, onnx_file, device=DEVICE, **kwargs):
 
         self.device = device
@@ -32,7 +33,7 @@ class OnnxModel:
 
         # per: https://medium.com/neuml/debug-onnx-gpu-performance-c9290fe07459
         opts = {"cudnn_conv_algo_search": "HEURISTIC"}
-        provider = [(f'{device}ExecutionProvider', opts)]
+        provider = [(f"{device}ExecutionProvider", opts)]
         return InferenceSession(str(onnx_file), providers=provider)
 
     def _extract_params(self, **kwargs):
@@ -40,10 +41,10 @@ class OnnxModel:
         initialization extra parameters were passed (and if they have the
         correct keys), they will override the onnx parameters."""
         params = {
-            'in_names': [i_.name for i_ in self._session.get_inputs()],
-            'in_shapes': [i_.shape for i_ in self._session.get_inputs()],
-            'out_names': [o_.name for o_ in self._session.get_outputs()],
-            'out_shapes': [o_.shape for o_ in self._session.get_outputs()]
+            "in_names": [i_.name for i_ in self._session.get_inputs()],
+            "in_shapes": [i_.shape for i_ in self._session.get_inputs()],
+            "out_names": [o_.name for o_ in self._session.get_outputs()],
+            "out_shapes": [o_.shape for o_ in self._session.get_outputs()],
         }
 
         for key, value in kwargs.items():
@@ -75,12 +76,14 @@ class OnnxModel:
         if not isinstance(inputs, list):
             inputs = [inputs]
 
-        to_iter = zip(inputs, self._params['in_names'], self._params['in_shapes'])
+        to_iter = zip(inputs, self._params["in_names"], self._params["in_shapes"])
         for inp, name, shape in to_iter:
 
             if len(inp.shape) != len(shape):
-                raise ValueError(f"Wrong number of dims for input {name}; expected {shape} "
-                                 f"but got {list(inp.shape)}!")
+                raise ValueError(
+                    f"Wrong number of dims for input {name}; expected {shape} "
+                    f"but got {list(inp.shape)}!"
+                )
 
             self._binding.bind_input(
                 name=name,
@@ -88,20 +91,22 @@ class OnnxModel:
                 device_id=0,
                 element_type=np.float32,
                 shape=tuple(inp.shape),
-                buffer_ptr=inp.data_ptr()
+                buffer_ptr=inp.data_ptr(),
             )
 
         outputs = OrderedDict()
-        to_iter = zip(self._params['out_names'], self._params['out_shapes'])
+        to_iter = zip(self._params["out_names"], self._params["out_shapes"])
         for name, shape in to_iter:
-            outp = torch.empty(shape, dtype=torch.float32, device=self.device).contiguous()
+            outp = torch.empty(
+                shape, dtype=torch.float32, device=self.device
+            ).contiguous()
             self._binding.bind_output(
                 name=name,
                 device_type=self.device,
                 device_id=0,
                 element_type=np.float32,
                 shape=shape,
-                buffer_ptr=outp.data_ptr()
+                buffer_ptr=outp.data_ptr(),
             )
             outputs[name] = outp
 

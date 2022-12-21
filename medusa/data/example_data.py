@@ -12,7 +12,7 @@ from pathlib import Path
 import cv2
 import torch
 
-from .. import DEVICE
+from ..constants import DEVICE
 from ..containers import Data4D
 from ..io import VideoLoader
 

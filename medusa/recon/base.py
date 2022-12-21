@@ -10,16 +10,22 @@ class BaseReconModel(ABC):
     classes that inherent from it (such as ``get_tris``) and some
     default methods (such as ``close``).
     """
+
     @abstractmethod
     def get_tris(self):
         pass
 
+    @abstractmethod
     def close(self):
         pass
 
-    def _load_inputs(self, inputs, *args, **kwargs):
-        """Loads and checks inputs."""
-        return load_inputs(inputs, *args, **kwargs)
+    @abstractmethod
+    def __str__(self):
+        pass
+
+    @abstractmethod
+    def get_cam_mat(self):
+        pass
 
     def _check_inputs(self, inputs, expected_size, channels_first=True):
 
@@ -31,4 +37,6 @@ class BaseReconModel(ABC):
         actual_size = tuple(actual_size)
 
         if actual_size != expected_size:
-            raise ValueError(f"Found image(s) of size {actual_size}, but expected {expected_size}")
+            raise ValueError(
+                f"Found image(s) of size {actual_size}, but expected {expected_size}"
+            )

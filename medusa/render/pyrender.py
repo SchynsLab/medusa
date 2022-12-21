@@ -6,16 +6,24 @@ excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
 .. [1] Matl, Matthew. *pyrender* [computer software]. https://github.com/mmatl/pyrender
 """
 
+import torch
 import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 from OpenGL.GL import glLineWidth
-from pyrender import (DirectionalLight, Mesh, Node, PerspectiveCamera,
-                      OffscreenRenderer, OrthographicCamera, Scene, )
+from pyrender import (
+    DirectionalLight,
+    Mesh,
+    Node,
+    PerspectiveCamera,
+    OffscreenRenderer,
+    OrthographicCamera,
+    Scene,
+)
 from pyrender.constants import RenderFlags
 from trimesh import Trimesh, visual
 
-from .. import DEVICE
+from ..constants import DEVICE
 from .base import BaseRenderer
 
 
@@ -36,8 +44,15 @@ class PyRenderer(BaseRenderer):
         Whether to render a wireframe instead of a surface
     """
 
-    def __init__(self, viewport, cam_mat=None, cam_type="orthographic", shading='flat',
-                 wireframe_opts=None, device=DEVICE):
+    def __init__(
+        self,
+        viewport,
+        cam_mat=None,
+        cam_type="orthographic",
+        shading="flat",
+        wireframe_opts=None,
+        device=DEVICE,
+    ):
 
         self.viewport = viewport
         self.cam_mat = cam_mat
@@ -50,7 +65,7 @@ class PyRenderer(BaseRenderer):
         self._misc_config()
 
     def __str__(self):
-        return 'pyrender'
+        return "pyrender"
 
     def _create_scene(self):
         """Creates a simple scene with a camera and a directional light.
@@ -64,7 +79,7 @@ class PyRenderer(BaseRenderer):
             camera = OrthographicCamera(xmag=1, ymag=1, znear=0.01)
         elif self.cam_type == "perspective":
             fov = 2 * np.arctan(self.viewport[1] / (2 * self.viewport[0]))  # in rad!
-            camera = PerspectiveCamera(yfov=fov, znear=1., zfar=10000.)
+            camera = PerspectiveCamera(yfov=fov, znear=1.0, zfar=10000.0)
         else:
             raise ValueError(f"Unknown camera type {self.cam_type}")
 
@@ -75,29 +90,31 @@ class PyRenderer(BaseRenderer):
 
         camera_node = Node(camera=camera, matrix=cam_mat)
         scene.add_node(camera_node)
-        light = DirectionalLight(intensity=7.5)
+        light = DirectionalLight(intensity=5.0)
         scene.add_node(Node(light=light, matrix=cam_mat))
 
         return scene
 
     def _misc_config(self):
 
-        if self.shading == 'wireframe':
+        if self.shading == "wireframe":
 
             if self.wireframe_opts is None:
                 self.wireframe_opts = {}
 
-            width = self.wireframe_opts.get('width', None)
+            width = self.wireframe_opts.get("width", None)
             if width is not None:
                 glLineWidth(width)
 
-            color = self.wireframe_opts.get('color', None)
+            color = self.wireframe_opts.get("color", None)
             if color is not None:
-                self.wireframe_opts['color'] = np.array(color, dtype=np.float32)
+                self.wireframe_opts["color"] = np.array(color, dtype=np.float32)
             else:
-                self.wireframe_opts['color'] = np.array([1.0, 0.0, 0.0, 1], dtype=np.float32)
+                self.wireframe_opts["color"] = np.array(
+                    [1.0, 0.0, 0.0, 1], dtype=np.float32
+                )
 
-    def __call__(self, v, tris, overlay=None, cmap_name='bwr'):
+    def __call__(self, v, tris, overlay=None, cmap_name="bwr"):
         """Performs the actual rendering.
 
         Parameters
@@ -124,7 +141,7 @@ class PyRenderer(BaseRenderer):
             ``viewport[1]`` x 3 (RGB)
         """
 
-        v, tris = self._preprocess(v, tris, format='numpy')
+        v, tris = self._preprocess(v, tris, format="numpy")
 
         # if overlay is not None:
         #     overlay = overlay.squeeze()
@@ -167,11 +184,16 @@ class PyRenderer(BaseRenderer):
         for i in range(v.shape[0]):
 
             mesh = Trimesh(v[i], tris)
-            mesh = Mesh.from_trimesh(mesh, smooth=self.shading == 'smooth',
-                                     wireframe=self.shading == 'wireframe')
+            mesh = Mesh.from_trimesh(
+                mesh,
+                smooth=self.shading == "smooth",
+                wireframe=self.shading == "wireframe",
+            )
 
-            if self.shading == 'wireframe':
-                mesh.primitives[0].material.baseColorFactor = self.wireframe_opts['color']
+            if self.shading == "wireframe":
+                mesh.primitives[0].material.baseColorFactor = self.wireframe_opts[
+                    "color"
+                ]
 
             mesh_node = Node(mesh=mesh)
             self._scene.add_node(mesh_node)
@@ -182,7 +204,8 @@ class PyRenderer(BaseRenderer):
             img, _ = self._renderer.render(self._scene, flags=RenderFlags.RGBA)
 
         self._scene.mesh_nodes.clear()
-        return img.copy()
+        img = torch.as_tensor(img.copy(), device=self.device)
+        return img
 
     def close(self):
         """Closes the OffScreenRenderer object."""

@@ -13,10 +13,11 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 autoapi_dirs = ["../../medusa"]
-autoapi_options = ["members", "undoc-members", "show-inheritance", "special-members"]
-autoapi_ignore = ["*cli.py", "*lbs.py", "*_transforms.py"]
+autoapi_options = ["members", "undoc-members"]
+autoapi_ignore = ["*cli.py"]  # , "*lbs.py", "*_transforms.py"]
 autoapi_add_toctree_entry = False
-autoapi_python_class_content = 'class'
+autoapi_add_objects_to_toctree = False
+autoapi_python_class_content = "class"
 
 # -- Project information -----------------------------------------------------
 
@@ -30,7 +31,20 @@ author = "Lukas Snoek"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["autoapi.extension", "sphinx.ext.napoleon", "sphinx.ext.viewcode"]
+extensions = ["autoapi.extension", "sphinx.ext.napoleon", "sphinx.ext.linkcode"]
+
+
+def linkcode_resolve(domain, info):
+    """Used by linkcode extension; adds a link to the source code on github."""
+    if domain != "py":
+        return None
+
+    if not info["module"]:
+        return None
+
+    filename = info["module"].replace(".", "/")
+    return f"https://github.com/medusa-4D/medusa/blob/master/{filename}.py"
+
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']

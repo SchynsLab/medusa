@@ -1,18 +1,22 @@
-from tqdm import tqdm
-
-from .. import DEVICE
-from ..containers import FLAME_MODELS
+from ..constants import DEVICE, FLAME_MODELS
 from ..crop import LandmarkBboxCropModel
 from ..io import VideoLoader
 from ..log import get_logger, tqdm_log
-from . import Mediapipe
+from .mpipe import Mediapipe
 from .flame import DecaReconModel
 from ..containers.results import BatchResults
 from ..containers.fourD import Data4D
 
 
-def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None,
-               batch_size=32, loglevel='INFO'):
+def videorecon(
+    video_path,
+    recon_model="mediapipe",
+    device=DEVICE,
+    n_frames=None,
+    batch_size=32,
+    loglevel="INFO",
+    **kwargs,
+):
     """Reconstruction of all frames of a video.
 
     Parameters
@@ -53,55 +57,65 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
 
     # Initialize VideoLoader object here to use metadata
     # in recon_model (like img_size)
-    video = VideoLoader(video_path, batch_size=32, loglevel=loglevel)
+    video = VideoLoader(
+        video_path, batch_size=batch_size, loglevel=loglevel, device=device
+    )
     metadata = video.get_metadata()
 
     # Initialize reconstruction model
     if recon_model in FLAME_MODELS:
-        crop_model = LandmarkBboxCropModel(device=device)  # for face detection / cropping
-        reconstructor = DecaReconModel(recon_model, device=device, img_size=metadata['img_size'])
+        crop_model = LandmarkBboxCropModel(
+            device=device
+        )  # for face detection / cropping
+        reconstructor = DecaReconModel(
+            recon_model, device=device, img_size=metadata["img_size"], **kwargs
+        )
     elif recon_model == "mediapipe":
-        reconstructor = Mediapipe()
+        reconstructor = Mediapipe(static_image_mode=False, device=device, **kwargs)
     else:
         raise NotImplementedError
 
     # Loop across frames of video, store results in `recon_data`
     recon_results = BatchResults(device=device)
-    i_frame = 0
-    for batch in tqdm_log(video, logger, desc='Recon images'):
-        inputs = {'imgs': batch}
+    for batch in tqdm_log(video, logger, desc="Recon images"):
+        inputs = {"imgs": batch}
 
         if recon_model in FLAME_MODELS:
 
-            # Crop image, add tform to emoca (for adding rigid motion
-            # due to cropping), and add crop plot to writer
             out_crop = crop_model(batch)
             del batch
-            inputs['imgs'] = out_crop.pop('imgs_crop')
-            inputs['crop_mats'] = out_crop.pop('crop_mats')
+            inputs["imgs"] = out_crop.pop("imgs_crop")
+            inputs["crop_mats"] = out_crop.pop("crop_mats")
             recon_results.add(**out_crop)
 
         # Reconstruct and store whatever `recon_model`` returns
         # in `recon_data`
-        outputs = reconstructor(**inputs)
-        recon_results.add(**outputs)
+        if inputs["imgs"] is not None:
+            outputs = reconstructor(**inputs)
+            recon_results.add(**outputs)
 
-        i_frame += outputs['v'].shape[0]
         if n_frames is not None:
-            if i_frame >= n_frames:
+            if recon_results.n_img >= n_frames:
                 break
+
+    recon_results.concat(n_max=n_frames)
+    recon_results.sort_faces(attr="v")
+    recon_results.filter_faces(present_threshold=0.1)
+
+    if getattr(recon_results, "v", None) is None:
+        raise ValueError("No faces in entire video!")
+
+    metadata = video.get_metadata()
+    tris = reconstructor.get_tris()
+    cam_mat = reconstructor.get_cam_mat()
+    init_kwargs = recon_results.to_dict(
+        exclude=["lms", "device", "n_img", "conf", "bbox"]
+    )
+    data = Data4D(video_metadata=metadata, tris=tris, cam_mat=cam_mat, **init_kwargs)
 
     # Mediapipe (and maybe future models) need to be closed in order to avoid
     # opening too many threads
     reconstructor.close()
     video.close()
-
-    recon_results.concat(n_max=n_frames)
-    recon_results.sort_faces(attr='v')
-
-    metadata = video.get_metadata()
-    tris = reconstructor.get_tris()
-    init_kwargs = recon_results.to_dict(exclude=['lms', 'device', 'n_img', 'conf', 'bbox'])
-    data = Data4D(video_metadata=metadata, tris=tris, **init_kwargs)
 
     return data

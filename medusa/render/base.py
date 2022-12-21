@@ -5,17 +5,16 @@ from abc import ABC, abstractmethod
 
 
 class BaseRenderer(ABC):
-
     @abstractmethod
     def close(self):
         pass
 
-    def _preprocess(self, v, tris, format='numpy'):
+    def _preprocess(self, v, tris, format="numpy"):
 
         if v.ndim == 2:
             v = v[None, ...]
 
-        if format == 'numpy':
+        if format == "numpy":
             if torch.is_tensor(v):
                 v = v.cpu().numpy()
 
@@ -39,7 +38,7 @@ class BaseRenderer(ABC):
             A 3D numpy array of shape height x width x 3 (RGB)
         """
 
-        alpha = img[..., 3, None] / 255.
+        alpha = img[..., 3, None] / 255.0
 
         if face_alpha is not None:
             alpha[alpha > face_alpha] = face_alpha

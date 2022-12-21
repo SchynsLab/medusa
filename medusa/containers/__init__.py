@@ -8,6 +8,4 @@ stored in an object of the ``Mediapipe4D`` class.
 """
 
 from .fourD import Data4D
-
-FLAME_MODELS = ['deca-coarse', 'deca-dense', 'emoca-coarse', 'emoca-dense',
-                'spectre-coarse', 'spectre-dense']
+from .results import BatchResults

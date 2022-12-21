@@ -7,11 +7,11 @@ from medusa.transforms import estimate_similarity_transform
 from conftest import _check_gha_compatible
 
 
-@pytest.mark.parametrize('batch_size', [1, 100])
-@pytest.mark.parametrize('n_points', [2, 3, 100])
-@pytest.mark.parametrize('n_dim', [2, 3])
-@pytest.mark.parametrize('estimate_scale', [True, False])
-@pytest.mark.parametrize('device', ['cpu', 'cuda'])
+@pytest.mark.parametrize("batch_size", [1, 100])
+@pytest.mark.parametrize("n_points", [2, 3, 100])
+@pytest.mark.parametrize("n_dim", [2, 3])
+@pytest.mark.parametrize("estimate_scale", [True, False])
+@pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_similarity_transform(batch_size, n_points, n_dim, estimate_scale, device):
     if not _check_gha_compatible(device):
         return
@@ -30,7 +30,7 @@ def test_similarity_transform(batch_size, n_points, n_dim, estimate_scale, devic
     dst = torch.from_numpy(dst).to(device)
     mats_ = estimate_similarity_transform(src, dst, estimate_scale=estimate_scale)
 
-    if device == 'cuda':
+    if device == "cuda":
         mats_ = mats_.cpu()
 
     mats_ = mats_.numpy()

@@ -1,33 +1,22 @@
 """Module with core 4D functionality of the ``medusa`` package, most
-importantly the ``*4D`` classes. The ``Base4D`` class defines a template class
-from which model-specific classes (such as ``Flame4D``) inherit. Objects
-initialized from these classes store reconstructed data from videos and other
-(meta)data needed to further process, analyze, and visualize it.
+importantly the ``Data4D`` class, which stores reconstructed data from videos
+and other (meta)data needed to further process, analyze, and visualize it.
 
-The reconstructed data from each model supported by ``medusa`` is stored in an object from
-a specific class which inherits from ``Base4D``. For example, reconstructed data from
-`mediapipe <https://google.github.io/mediapipe/solutions/face_mesh.html>`_ is stored
-in using the ``Mediapipe4D`` class. Other classes include the ``Flame4D`` for reconstructions
-from models using the `FLAME topology <https://flame.is.tue.mpg.de/>`_ (such as
-`EMOCA <https://emoca.is.tue.mpg.de/>`_).
-
-The data can be saved to disk as a `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_
-file (using `h5py <http://www.h5py.org/>`_) with the ``save`` method and loaded from
-disk using the ``load`` (static)method.
+The data can be saved to disk as a `HDF5
+<https://www.hdfgroup.org/solutions/hdf5/>`_ file (using `h5py
+<http://www.h5py.org/>`_) with the ``save`` method and loaded from disk
+using the ``load`` classmethod.
 """
 import torch
-from pathlib import Path
-
 import h5py
 import numpy as np
 import pandas as pd
-from skimage.transform import rescale
-from trimesh import Trimesh
+from pathlib import Path
 from trimesh.transformations import compose_matrix, decompose_matrix
 
-from .. import DEVICE
+from ..constants import DEVICE, LOGGER
 from ..io import VideoWriter, VideoLoader
-from ..log import get_logger, tqdm_log
+from ..log import tqdm_log
 
 
 class Data4D:
@@ -64,149 +53,64 @@ class Data4D:
     path : str
         Path where the data is saved; if initializing a new object (rather than
         loading one from disk), this should be `None`
-    loglevel : int
-        Logging level of current logger
     """
 
+    # fmt: off
     def __init__(self, v, mat, tris, img_idx=None, face_idx=None, video_metadata=None,
-                 space="world", device=DEVICE, loglevel='INFO'):
-
+                 cam_mat=None, space="world", device=DEVICE):
+    # fmt: on
         self.v = v
         self.mat = mat
         self.tris = tris
         self.img_idx = img_idx
         self.face_idx = face_idx
         self.video_metadata = video_metadata
+        self.cam_mat = cam_mat
         self.space = space
         self.device = device
-        self.logger = get_logger(loglevel)
         self._check()
 
     def _check(self):
         """Does some checks to make sure the data works with the renderer and
         other stuff."""
 
-        # Renderer expects torch floats (float32), not double (float64)
         if self.v.dtype != torch.float32:
-            self.v = self.v.float()
+            self.v = self.v.to(torch.float32)
 
+        if self.tris.dtype != torch.int64:
+            self.tris = self.tris.to(torch.int64)
+
+        nv = self.v.shape[0]
         if self.img_idx is None:
-            self.img_idx = torch.arange(self.v.shape[0], device=self.device)
+            self.img_idx = torch.arange(nv, dtype=torch.int64, device=self.device)
 
         if self.face_idx is None:
-            self.face_idx = torch.zeros(self.v.shape[0], device=self.device)
+            self.face_idx = torch.zeros(nv, dtype=torch.int64, device=self.device)
 
-        T = self.v.shape[0]
-        if self.mat.shape[0] != T:
-            mT = self.mat.shape[0]
-            self.logger.warning(f"More mats ({mT}) than vertex time points ({T}); "
-                                 "trimming ...")
-            self.mat = self.mat[:T, :, :]
+        if self.video_metadata is None:
+            self.video_metadata = {
+                'img_size': None,
+                'n_img': None,
+                'fps': None
+            }
+
+        if self.cam_mat is None:
+            self.cam_mat = torch.eye(4, device=self.device)
 
         if self.space not in ["local", "world"]:
             raise ValueError("`space` should be either 'local' or 'world'!")
 
-    def project_to_68_landmarks(self):
-        """Projects to 68 landmark set."""
+    def _infer_topo(self):
 
-        if self.v.shape[1:] == (468, 3):
-            fname = 'mediapipe_lmk68_embedding.npz'
+        nv = self.v.shape[1]
+        if nv == 468:
+            return 'mediapipe'
+        elif nv == 5023:
+            return 'flame-coarse'
+        elif nv == 59315:
+            return 'flame-dense'
         else:
-            fname = 'flame_lmk68_embedding.npz'
-
-        emb = np.load(Path(__file__).parents[1] / f'data/{fname}')
-        vf = self.v[:, self.f[emb['lmk_faces_idx']]]  # T x V x 3 (faces) x 3 (faces) x 3 (xyz)
-        v_proj = np.sum(vf * emb['lmk_bary_coords'][:, :, None], axis=2)
-
-        return v_proj
-
-    def decompose_mats(self, to_df=True):
-        """Decomponses a time series (of length T) 4x4 affine matrices to a
-        numpy array (or pandas ``DataFrame``) with a time series of T x 12
-        affine parameters (translation XYZ, rotation XYZ, scale XYZ, shear
-        XYZ).
-
-        Parameters
-        ----------
-        to_df : bool
-            Whether to return the parameters as a pandas ``DataFrame`` or
-            not (in which case it's returned as a numpy array)
-
-        Returns
-        -------
-        params : pd.DataFrame, np.ndarray
-            Either a ``DataFrame`` or numpy array, depending on the ``to_df`` parameter
-
-        Examples
-        --------
-        Convert the sequences of affine matrices to a 2D numpy array:
-
-        >>> from medusa.data import get_example_h5
-        >>> data = get_example_h5(load=True, model="mediapipe")
-        >>> params = data.decompose_mats(to_df=False)
-        >>> params.shape
-        (232, 12)
-        """
-
-        if self.mat is None:
-            raise ValueError("Cannot convert matrices to parameters because "
-                             "there are no matrices (self.mat is None)!")
-
-        T = self.mat.shape[0]
-        params = np.zeros((T, 12))
-        for i in range(T):
-            scale, shear, angles, trans, _ = decompose_matrix(self.mat[i, :, :])
-            params[i, :3] = trans
-            params[i, 3:6] = np.rad2deg(angles)
-            params[i, 6:9] = scale
-            params[i, 9:12] = shear
-
-        if to_df:
-            cols = ["Trans. X", "Trans. Y", "Trans. Z",
-                    "Rot. X (deg)", "Rot. Y (deg)", "Rot. Z (deg)",
-                    "Scale X (A.U.)", "Scale Y (A.U.)", "Scale Z. (A.U.)",
-                    "Shear X (A.U.)", "Shear Y (A.U.)", "Shear Z (A.U.)"]
-
-            params = pd.DataFrame(params, columns=cols)
-
-        return params
-
-    def compose_mats(self, params):
-        """Converts a sequence of global (affine) motion parameters into a
-        sequence of 4x4 affine matrices and updates the ``.mat`` attribute.
-        Essentially does the opposite of the ``decompose_mats`` method.
-
-        Parameters
-        ----------
-        params : np.ndarray
-            A 2D numpy array of shape T (time points) x 12
-
-        Examples
-        --------
-        Convert the sequences of affine matrices to a 2D numpy array and uses the
-        ``compose_mats`` function to reverse it.
-
-        >>> from medusa.data import get_example_h5
-        >>> data = get_example_h5(load=True, model="mediapipe")
-        >>> orig_mats = data.mat.copy()
-        >>> params = data.decompose_mats(to_df=False)
-        >>> data.compose_mats(params)
-        >>> np.testing.assert_array_almost_equal(orig_mats, data.mat)  # passes!
-        """
-        T = params.shape[0]
-        mats = np.zeros((T, 4, 4))
-        for i in range(T):
-            p = params[i, :]
-            trans, rots, scale, shear = p[:3], p[3:6], p[6:9], p[9:]
-            rots = np.deg2rad(rots)
-            mats[i, :, :] = compose_matrix(scale, shear, rots, trans)
-
-        self.mat = mats
-
-    def save_obj(self, idx, path):
-
-        with open(path, 'w') as f_out:
-            Trimesh(self.v[idx, ...], self.tris).export(f_out, file_type='obj')
+            raise ValueError(f"Unknown topology with {nv} vertices ...")
 
     def save(self, path, compression_level=9):
         """Saves (meta)data to disk as an HDF5 file.
@@ -239,8 +143,8 @@ class Data4D:
 
             for attr, data in self.__dict__.items():
 
-                if attr == 'logger':
-                    data = data.getEffectiveLevel()
+                if attr[0] == '_':
+                    continue
 
                 if torch.is_tensor(data):
                     data = data.cpu().numpy()
@@ -291,7 +195,7 @@ class Data4D:
         with h5py.File(path, "r") as f_in:
 
             if device is None:
-                device = f_in.attrs.get('device', DEVICE)
+                device = f_in.attrs.get("device", DEVICE)
 
             for attr, data in f_in.items():
                 if isinstance(data, h5py.Group):
@@ -304,17 +208,176 @@ class Data4D:
             for attr, value in f_in.attrs.items():
                 init_kwargs[attr] = value
 
-        init_kwargs['loglevel'] = init_kwargs.pop('logger')
-
         return cls(**init_kwargs)
 
-    def _rescale(self, img, scale):
-        """Rescales an image with a scaling factor `scaling`."""
-        img = rescale(img, scale, preserve_range=True, anti_aliasing=True, channel_axis=2)
-        img = img.round().astype(np.uint8)
-        return img
+    def project_to_68_landmarks(self):
+        """Projects to 68 landmark set.
 
-    def render_video(self, f_out, renderer='pyrender', video=None, alpha=1, **kwargs):
+        Returns
+        -------
+        v_proj :
+        """
+
+        topo = self._infer_topo()
+        if topo == 'mediapipe':
+            fname = "mpipe/mediapipe_lmk68_embedding.npz"
+        elif topo == 'flame-coarse':
+            fname = "flame/flame_lmk68_embedding.npz"
+        else:
+            raise ValueError(f"No known embedding for {topo}")
+
+        emb = np.load(Path(__file__).parents[1] / f"data/{fname}")
+        face_idx = torch.as_tensor(
+            emb['lmk_faces_idx'], dtype=torch.int64, device=self.device
+        )
+
+        # n_face x V x 3 (faces) x 3 (faces) x 3 (xyz)
+        vf = self.v[:, self.tris[face_idx]]
+        bcoords = torch.as_tensor(emb["lmk_bary_coords"], device=self.device)
+        # n_face x 68 x 3
+        v_proj = torch.sum(vf * bcoords[:, :, None], dim=2)
+
+        return v_proj
+
+    def get_face(self, index, pad_missing=True):
+
+        available = self.face_idx.unique()
+        if index not in available:
+            raise ValueError(f"Face not available; choose from {available.tolist()}")
+
+        f_idx = self.face_idx == index
+        T = self.video_metadata['n_img']
+
+        if pad_missing:
+            shape = (T, *self.v.shape[1:])
+            v = torch.full(shape, torch.nan, device=self.device)
+            img_idx = self.img_idx[f_idx]
+            v[img_idx] = self.v[f_idx]
+            mat = torch.full((T, 4, 4), torch.nan, device=self.device)
+            mat[img_idx] = self.mat[f_idx]
+            img_idx = torch.arange(T, device=self.device)
+            face_idx = torch.full((T,), index, device=self.device)
+        else:
+            v = self.v[f_idx]
+            mat = self.mat[f_idx]
+            img_idx = self.img_idx[f_idx]
+            face_idx = self.face_idx[f_idx]
+
+        init_kwargs = {
+            'v': v,
+            'mat': mat,
+            'face_idx': face_idx,
+            'img_idx': img_idx
+        }
+        init_kwargs = {**self.__dict__, **init_kwargs}
+        return self.__class__(**init_kwargs)
+
+    def decompose_mats(self, to_df=True):
+        """Decomponses a time series (of length T) 4x4 affine matrices to a
+        numpy array (or pandas ``DataFrame``) with a time series of T x 12
+        affine parameters (translation XYZ, rotation XYZ, scale XYZ, shear
+        XYZ).
+
+        Parameters
+        ----------
+        to_df : bool
+            Whether to return the parameters as a pandas ``DataFrame`` or
+            not (in which case it's returned as a numpy array)
+
+        Returns
+        -------
+        params : pd.DataFrame, np.ndarray
+            Either a ``DataFrame`` or numpy array, depending on the ``to_df`` parameter
+
+        Examples
+        --------
+        Convert the sequences of affine matrices to a 2D numpy array:
+
+        >>> from medusa.data import get_example_h5
+        >>> data = get_example_h5(load=True, model="mediapipe")
+        >>> params = data.decompose_mats(to_df=False)
+        >>> params.shape
+        (232, 12)
+        """
+
+        out = []  # maybe dict?
+        for face_id in self.face_idx.unique():
+            data = self.get_face(face_id)
+
+            T = data.mat.shape[0]
+            params = np.zeros((T, 12))
+            for i in range(T):
+
+                if torch.isnan(data.mat[i]).all():
+                    params[i, :] = np.nan
+                    continue
+
+                mat = data.mat[i].cpu().numpy()
+                scale, shear, angles, trans, _ = decompose_matrix(mat)
+                params[i, :3] = trans
+                params[i, 3:6] = np.rad2deg(angles)
+                params[i, 6:9] = scale
+                params[i, 9:12] = shear
+
+            if to_df:
+                cols = [
+                    "Trans. X",
+                    "Trans. Y",
+                    "Trans. Z",
+                    "Rot. X (deg)",
+                    "Rot. Y (deg)",
+                    "Rot. Z (deg)",
+                    "Scale X (A.U.)",
+                    "Scale Y (A.U.)",
+                    "Scale Z. (A.U.)",
+                    "Shear X (A.U.)",
+                    "Shear Y (A.U.)",
+                    "Shear Z (A.U.)",
+                ]
+
+                params = pd.DataFrame(params, columns=cols)
+
+            out.append(params)
+
+        if len(out) == 1:
+            out = out[0]
+
+        return out
+
+
+    def compose_mats(self, params):
+        """Converts a sequence of global (affine) motion parameters into a
+        sequence of 4x4 affine matrices and updates the ``.mat`` attribute.
+        Essentially does the opposite of the ``decompose_mats`` method.
+
+        Parameters
+        ----------
+        params : np.ndarray
+            A 2D numpy array of shape T (time points) x 12
+
+        Examples
+        --------
+        Convert the sequences of affine matrices to a 2D numpy array and uses the
+        ``compose_mats`` function to reverse it.
+
+        >>> from medusa.data import get_example_h5
+        >>> data = get_example_h5(load=True, model="mediapipe")
+        >>> orig_mats = data.mat.copy()
+        >>> params = data.decompose_mats(to_df=False)
+        >>> data.compose_mats(params)
+        >>> np.testing.assert_array_almost_equal(orig_mats, data.mat)  # passes!
+        """
+        T = params.shape[0]
+        mats = np.zeros((T, 4, 4))
+        for i in range(T):
+            p = params[i, :]
+            trans, rots, scale, shear = p[:3], p[3:6], p[6:9], p[9:]
+            rots = np.deg2rad(rots)
+            mats[i, :, :] = compose_matrix(scale, shear, rots, trans)
+
+        self.mat = mats
+
+    def render_video(self, f_out, renderer="pyrender", video=None, alpha=1, **kwargs):
         """Renders the sequence of 3D meshes as a video. It is assumed that
         this method is only called from a child class (e.g., ``Mediapipe4D``).
 
@@ -337,41 +400,54 @@ class Data4D:
             minimum = 0 (invisible), maximum = 1 (fully opaque)
         """
 
-        if renderer == 'pyrender':
+        if renderer == "pyrender":
             from ..render import PyRenderer as Renderer
-        elif renderer == 'pytorch3d':
+        elif renderer == "pytorch3d":
             try:
                 from ..render import PytorchRenderer as Renderer
             except ImportError:
-                raise ValueError("Cannot use pytorch3d renderer, as pytorch3d is not installed!")
+                raise ValueError(
+                    "Cannot use pytorch3d renderer, as pytorch3d is not installed!"
+                )
 
-        cam_mat = np.eye(4)
-        if self.v.shape[1] == 468:
-            cam_type = 'intrinsic'
+        if self._infer_topo() == 'mediapipe':
+            cam_type = "perspective"
         else:
-            cam_type = 'orthographic'
-            cam_mat[2, 3] = 4  # zoom out 4 units in z direction
+            cam_type = "orthographic"
 
-        w, h = self.video_metadata['img_size']
+        w, h = self.video_metadata["img_size"]
 
-        renderer = Renderer(viewport=(w, h), cam_mat=cam_mat,
-                            cam_type=cam_type, **kwargs)
+        renderer = Renderer(
+            viewport=(w, h),
+            cam_mat=self.cam_mat,
+            cam_type=cam_type,
+            device=self.device,
+            **kwargs,
+        )
 
         if video is not None:
-            reader = VideoLoader(video, batch_size=1, device='cpu')
+            reader = VideoLoader(video, batch_size=1, device=self.device)
 
-        writer = VideoWriter(str(f_out), fps=self.video_metadata['fps'])
-        iter_ = tqdm_log(range(self.v.shape[0]), self.logger, desc='Render shape')
+        writer = VideoWriter(str(f_out), fps=self.video_metadata["fps"])
+        n_frames = self.video_metadata["n_img"]
+        iter_ = tqdm_log(range(n_frames), LOGGER, desc="Render shape")
 
-        for i in iter_:
+        for i_img in iter_:
 
             if video is not None:
-                background = next(iter(reader)).numpy()
+                background = next(iter(reader))
             else:
-                background = np.ones((h, w, 3)).astype(np.uint8) * 255
+                background = (
+                    torch.ones((h, w, 3), dtype=torch.uint8, device=self.device) * 255
+                )
 
-            img = renderer(self.v[i, :, :], self.tris)
-            img = renderer.alpha_blend(img, background, face_alpha=alpha)
+            img_idx = self.img_idx == i_img
+            if img_idx.sum() == 0:
+                img = background
+            else:
+                v = self.v[img_idx]
+                img = renderer(v, self.tris)
+                img = renderer.alpha_blend(img, background, face_alpha=alpha)
 
             writer.write(img)
 

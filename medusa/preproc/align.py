@@ -1,19 +1,22 @@
-import logging
-from datetime import datetime
+import torch
 from pathlib import Path
 
 import numpy as np
 from skimage.transform._geometric import _umeyama
 from tqdm import tqdm
 from trimesh.registration import icp, procrustes
-from trimesh.transformations import (compose_matrix, decompose_matrix,
-                                     transform_points)
+from trimesh.transformations import compose_matrix, decompose_matrix, transform_points
 
 from ..containers import Data4D
 
 
-def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False,
-          reference_index=0):
+def align(
+    data,
+    algorithm="icp",
+    additive_alignment=False,
+    ignore_existing=False,
+    reference_index=0,
+):
     """Aligment of 3D meshes over time.
 
     Parameters
@@ -78,79 +81,31 @@ def align(data, algorithm='icp', additive_alignment=False, ignore_existing=False
     # vidx represents the index of the vertices that we'll use for
     # alignment (using *all* vertices is not a good idea, as it may
     # inadvertently try to align non-rigid motion)
-    if data.recon_model == "mediapipe":
+
+    topo = data._infer_topo()
+    if topo == "mediapipe":
         # Technically not necessary anymore, because we have the model parameters
+        # fmt: off
         v_idx = [389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377,  # contour
                  152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162,  # contour
                  94, 19, 1, 4, 5, 195, 197, 6]  # nose ridge
-    elif data.recon_model in ["emoca-coarse", "deca-dense"]:
-        v_idx = np.load(Path(__file__).parents[1] / 'data/flame/scalp_flame.npy')
+        # fmt: on
+    elif topo == "flame":
+        v_idx = np.load(Path(__file__).parents[1] / "data/flame/scalp_flame.npy")
     else:
         raise ValueError("Unknown reconstruction model!")
-
-    if data.logger.level <= logging.INFO:
-        desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ]  Align frames")
-        iter_ = tqdm(range(data.v.shape[0]), desc=desc)
-    else:
-        iter_ = range(data.v.shape[0])
 
     # Are we going to use the existing alignment parameters (local-to-world)?
     if data.mat is not None and not ignore_existing:
 
-        for i in iter_:
+        for i in range(data.v.shape[0]):
             # Use inverse of local-to-world matrix (i.e., world-to-local)
             # to 'remove' global motion
-            this_mat = np.linalg.inv(data.mat[i, ...])
-            data.v[i, ...] = transform_points(data.v[i, ...], this_mat)
-
-    # Are we going to do (additional) data-driven alignment?
-    if data.mat is None or ignore_existing or additive_alignment:
-
-        if data.mat is None:
-            # Initialize with identity matrices
-            T = data.v.shape[0]
-            data.mat = np.repeat(np.eye(4)[None, :, :], T, axis=0)
-
-        # Set target to be the reference index; default is 0, this is an arbitrary choice,
-        # but common in e.g. fMRI motion correction
-        target = data.v[reference_index, v_idx, :]
-
-        for i in iter_:
-
-            if additive_alignment:
-                orig_mat = data.mat[i, ...]
-            else:
-                orig_mat = np.eye(4)
-
-            # Code below does some funky iterative alignment, doesn't work as
-            # well as I hoped
-
-            # regmat = np.eye(4)
-            # source = data.v[i, :, :].copy()
-            # for ii in reversed(range(0, i)):
-            #     target = data.v[ii, :, :]
-            #     r = _icp(source, target)
-            #     #source = transform_points(source, r)
-            #     regmat = r @ regmat
-
-            # v[i, :, :] = transform_points(data.v[i, :, :], regmat)#source
-
-            source = data.v[i, v_idx, :]  # to be aligned
-            if i == 0:
-                # First mesh does not have to be aligned
-                mat_ = np.eye(4)
-            else:
-                if algorithm == "icp":  # trimesh ICP implementation
-                    mat_ = _icp(source, target, scale=True, ignore_shear=False)
-                else:  # scikit-image 3D umeyama similarity transform
-                    mat_ = _umeyama(source, target, estimate_scale=True)
-
-            # Apply estimated world-to-local matrix and update existing
-            # local-to-world matrix (data.mat) if it exists
-            data.v[i, ...] = transform_points(data.v[i, ...], mat_)
-            data.mat[i, ...] = np.linalg.inv(mat_) @ orig_mat
-
-    data.v = data.v.astype(np.float32)
+            this_mat = np.linalg.inv(data.mat[i, ...].cpu().numpy())
+            data.v[i, ...] = torch.as_tensor(
+                transform_points(data.v[i, ...].cpu().numpy(), this_mat),
+                device=data.device,
+            )
 
     # Because the object space changed (world --> local) and we assume
     # the object will be visualized on top of the video frames, we need
@@ -215,7 +170,7 @@ def rigid_transform_3D(A, B):
     H = Am @ np.transpose(Bm)
 
     # sanity check
-    #if linalg.matrix_rank(H) < 3:
+    # if linalg.matrix_rank(H) < 3:
     #    raise ValueError("rank of H = {}, expecting 3".format(linalg.matrix_rank(H)))
 
     # find rotation
@@ -225,7 +180,7 @@ def rigid_transform_3D(A, B):
     # special reflection case
     if np.linalg.det(R) < 0:
         print("det(R) < R, reflection detected!, correcting for it ...")
-        Vt[2,:] *= -1
+        Vt[2, :] *= -1
         R = Vt.T @ U.T
 
     t = -R @ centroid_A + centroid_B

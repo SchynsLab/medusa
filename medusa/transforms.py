@@ -3,8 +3,10 @@ import torch
 from scipy.spatial import Delaunay
 from kornia.geometry.transform import resize
 
+from .constants import DEVICE
 
-def create_viewport_matrix(nx, ny, device='cuda'):
+
+def create_viewport_matrix(nx, ny, device="cuda"):
     """Creates a viewport matrix that transforms vertices in NDC [-1, 1] space
     to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
     https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-
@@ -32,13 +34,13 @@ def create_viewport_matrix(nx, ny, device='cuda'):
             [0, 0, 0, 1],
         ],
         dtype=torch.float32,
-        device=device
+        device=device,
     )
 
     return mat
 
 
-def create_ortho_matrix(nx, ny, znear=0.05, zfar=100.0, device='cuda'):
+def create_ortho_matrix(nx, ny, znear=0.05, zfar=100.0, device=DEVICE):
     """Creates an orthographic projection matrix, as used by EMOCA/DECA. Based
     on the pyrender implementaiton. Assumes an xmag and ymag of 1.
 
@@ -69,7 +71,7 @@ def create_ortho_matrix(nx, ny, znear=0.05, zfar=100.0, device='cuda'):
             [0, 0, 0, 1],
         ],
         dtype=torch.float32,
-        device=device
+        device=device,
     )
     return mat
 
@@ -98,20 +100,26 @@ def crop_matrix_to_3d(mat_33):
     t_xyz = torch.cat([mat_33[:, :2, 2], torch.zeros((b, 1), device=device)], dim=1)
 
     # Add column representing z at the diagonal
-    mat_33 = torch.cat([mat_33[:, :, :2],
-                        torch.tensor([0, 0, 1], device=device).repeat(b, 1)[:, :, None]], dim=2)
+    mat_33 = torch.cat(
+        [
+            mat_33[:, :, :2],
+            torch.tensor([0, 0, 1], device=device).repeat(b, 1)[:, :, None],
+        ],
+        dim=2,
+    )
 
     # Add back translation
     mat_34 = torch.cat([mat_33, t_xyz.unsqueeze(2)], dim=2)
 
     # Make it a proper 4x4 matrix
-    mat_44 = torch.cat([mat_34, torch.tensor([0, 0, 0, 1], device=device).repeat(b, 1, 1)], dim=1)
+    mat_44 = torch.cat(
+        [mat_34, torch.tensor([0, 0, 0, 1], device=device).repeat(b, 1, 1)], dim=1
+    )
     return mat_44
 
 
-
 def apply_perspective_projection(v, mat):
-    """" Applies a perspective projection of ``v`` into NDC space.
+    """ " Applies a perspective projection of ``v`` into NDC space.
 
     Parameters
     ----------
@@ -127,7 +135,11 @@ def apply_perspective_projection(v, mat):
     return v_proj
 
 
-def embed_points_in_mesh(v, f, p, ):
+def embed_points_in_mesh(
+    v,
+    f,
+    p,
+):
     """Embed points in an existing mesh by finding the face it is contained in
     and computing its barycentric coordinates. Works with either 2D or 3D data.
 
@@ -163,7 +175,7 @@ def embed_points_in_mesh(v, f, p, ):
     # https://codereview.stackexchange.com/questions/41024/faster-computation-of-barycentric-coordinates-for-many-points
     X = tri.transform[triangles, :2]
     Y = p - tri.transform[triangles, 2]
-    b = np.einsum('ijk,ik->ij', X, Y)
+    b = np.einsum("ijk,ik->ij", X, Y)
     bcoords = np.c_[b, 1 - b.sum(axis=1)]
 
     # Some vertices in `p` fall outside the mesh (i.e., not contained in a triangle),
@@ -229,8 +241,10 @@ def estimate_similarity_transform(src, dst, estimate_scale=True):
     batch, num, dim = src.shape[:3]
 
     if num < dim:
-        raise ValueError("Cannot compute (unique) transform with fewer "
-                         f"points ({num}) than dimensions ({dim})!")
+        raise ValueError(
+            "Cannot compute (unique) transform with fewer "
+            f"points ({num}) than dimensions ({dim})!"
+        )
 
     device = src.device
     if dst.device != device:
@@ -288,7 +302,9 @@ def estimate_similarity_transform(src, dst, estimate_scale=True):
 
     dst_mean = dst_mean.squeeze(dim=1)
     src_mean = src_mean.squeeze(dim=1)
-    T[:, :dim, dim] = dst_mean - scale.unsqueeze(1) * (T[:, :dim, :dim] @ src_mean.unsqueeze(2)).squeeze(dim=2)
+    T[:, :dim, dim] = dst_mean - scale.unsqueeze(1) * (
+        T[:, :dim, :dim] @ src_mean.unsqueeze(2)
+    ).squeeze(dim=2)
     T[:, :dim, :dim] *= scale[:, None, None]
 
     return T

@@ -101,9 +101,7 @@ class EpochsArray:
         v = np.transpose(v, (0, 2, 1))
 
         if include_global_motion:
-            ch_names = [
-                f"v{i}_{c}" for i in range(nV - 12) for c in ["x", "y", "z"]
-            ]
+            ch_names = [f"v{i}_{c}" for i in range(nV - 12) for c in ["x", "y", "z"]]
             ch_names += [
                 "xt",
                 "yt",
@@ -135,8 +133,7 @@ class EpochsArray:
 
         tmin = self.frame_t.min()
         return mne.epochs.EpochsArray(
-            v, info, tmin=tmin, events=events_, event_id=event_id,
-            verbose="WARNING"
+            v, info, tmin=tmin, events=events_, event_id=event_id, verbose="WARNING"
         )
 
     def _events_to_mne(self, frame_t):

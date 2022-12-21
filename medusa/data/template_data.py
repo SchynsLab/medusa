@@ -26,13 +26,13 @@ def get_template_mediapipe():
     >>> template['f'].shape
     (898, 3)
     """
-    path = Path(__file__).parent / 'mpipe/mediapipe_template.obj'
+    path = Path(__file__).parent / "mpipe/mediapipe_template.obj"
     # Note to self: maintain_order=True is important, otherwise the
     # face order is all messed up
-    with open(path, 'r') as f_in:
+    with open(path, "r") as f_in:
         data = trimesh.exchange.obj.load_obj(f_in, maintain_order=True)
 
-    template = {'v': data['vertices'], 'f': data['faces']}
+    template = {"v": data["vertices"], "f": data["faces"]}
     return template
 
 
@@ -75,11 +75,11 @@ def get_template_flame(dense=False):
     (117380, 3)
     """
 
-    file = Path(__file__).parent / 'flame/flame_template.h5'
-    with h5py.File(file, 'r') as data:
+    file = Path(__file__).parent / "flame/flame_template.h5"
+    with h5py.File(file, "r") as data:
 
-        template_h5 = data['dense' if dense else 'coarse']
-        template = {'v': template_h5['v'][:], 'f': template_h5['f'][:]}
+        template_h5 = data["dense" if dense else "coarse"]
+        template = {"v": template_h5["v"][:], "f": template_h5["f"][:]}
 
     return template
 
@@ -100,7 +100,7 @@ def get_flame_config(key=None):
         The config file as a dictionary if ``key=None``, else a string
         with the value associated with the key
     """
-    cfg_path = Path(__file__).parent / 'flame/config.yaml'
+    cfg_path = Path(__file__).parent / "flame/config.yaml"
     with open(cfg_path, "r") as f_in:
         cfg = yaml.safe_load(f_in)
 

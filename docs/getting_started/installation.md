@@ -23,14 +23,12 @@ substantial decreases in runtime. If you have access to a GPU, you can enable
 GPU processing by installing the appropriate CUDA toolkit as well. Run the command
 below depending on whether you want to run the models on GPU or CPU only:
 
-````{tabbed} GPU
-```
+````{tab-set}
+```{tab-item} GPU
 conda install pytorch cudatoolkit=11.3 -c pytorch
 ```
-````
 
-````{tabbed} CPU
-```
+```{tab-item} CPU
 conda install pytorch cpuonly -c pytorch
 ```
 ````

@@ -2,8 +2,9 @@ from torch import nn
 
 
 class DetailGenerator(nn.Module):
-    def __init__(self, latent_dim=100, out_channels=1, out_scale=0.01,
-                 sample_mode="bilinear"):
+    def __init__(
+        self, latent_dim=100, out_channels=1, out_scale=0.01, sample_mode="bilinear"
+    ):
         super().__init__()
         self.out_scale = out_scale
 

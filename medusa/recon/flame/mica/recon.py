@@ -6,6 +6,8 @@ import torch.nn.functional as F
 from ..base import FlameReconModel
 from ..decoders import FLAME
 from .encoders import Arcface, MappingNetwork
+from ....io import load_inputs
+from ....constants import DEVICE
 
 
 class MicaReconModel(FlameReconModel):
@@ -18,12 +20,15 @@ class MicaReconModel(FlameReconModel):
         Either 'cuda' (uses GPU) or 'cpu'
     """
 
-    def __init__(self, device='cuda'):
+    def __init__(self, device=DEVICE):
         """Initializes a MicaReconModel object."""
         self.device = device
         self._load_cfg()  # method inherited from parent
         self._create_submodels()
         self._load_submodels()
+
+    def __str__(self):
+        return "mica"
 
     def _create_submodels(self):
         """Loads the submodels associated with MICA. To summarizes:
@@ -36,25 +41,27 @@ class MicaReconModel(FlameReconModel):
         self.E_arcface.eval()
         self.E_flame = MappingNetwork(512, 300, 300).to(self.device)
         self.E_flame.eval()
-        self.D_flame = FLAME(self.cfg['flame_path'], n_shape=300, n_exp=0).to(self.device)
+        self.D_flame = FLAME(self.cfg["flame_path"], n_shape=300, n_exp=0).to(
+            self.device
+        )
         self.D_flame.eval()
 
     def _load_submodels(self):
         """Loads the weights for the Arcface submodel as well as the
         MappingNetwork that predicts FLAME shape parameters from the Arcface
         output."""
-        checkpoint = torch.load(self.cfg['mica_path'], map_location=self.device)
-        self.E_arcface.load_state_dict(checkpoint['arcface'])
+        checkpoint = torch.load(self.cfg["mica_path"], map_location=self.device)
+        self.E_arcface.load_state_dict(checkpoint["arcface"])
 
         # The original weights also included the data for the FLAME model (template
         # vertices, faces, etc), which we don't need here, because we use a common
         # FLAME decoder model (in decoders.py)
         new_checkpoint = OrderedDict()
-        for key, value in checkpoint['flameModel'].items():
+        for key, value in checkpoint["flameModel"].items():
             # The actual mapping-network weights are stored in keys starting with
             # regressor.
-            if 'regressor.' in key:
-                new_checkpoint[key.replace('regressor.', '')] = value
+            if "regressor." in key:
+                new_checkpoint[key.replace("regressor.", "")] = value
 
         self.E_flame.load_state_dict(new_checkpoint)
 
@@ -70,6 +77,13 @@ class MicaReconModel(FlameReconModel):
         FLAME topology."""
         v, _ = self.D_flame(shape_code)
         return v
+
+    def get_cam_mat(self):
+
+        cam_mat = torch.eye(4) * 8
+        cam_mat[3, 3] = 1
+        cam_mat[2, 3] = 4
+        return cam_mat
 
     def __call__(self, imgs):
         """Performs 3D reconstruction on the supplied image.
@@ -88,11 +102,16 @@ class MicaReconModel(FlameReconModel):
             total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
             matrix, which is in the case of MICA the identity matrix
         """
-        imgs = self._load_inputs(imgs, load_as='torch', channels_first=True, with_batch_dim=True,
-                                 device=self.device)
+        imgs = load_inputs(
+            imgs,
+            load_as="torch",
+            channels_first=True,
+            with_batch_dim=True,
+            device=self.device,
+        )
         imgs = self._preprocess(imgs)
         shape_code = self._encode(imgs)
         v = self._decode(shape_code)
-        out = {'v': v, 'mat': None}
+        out = {"v": v, "mat": None}
 
         return out

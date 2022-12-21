@@ -51,7 +51,7 @@ class FLAME(nn.Module):
         # The shape components and expression
         shapedirs = to_tensor(to_np(flame_model.shapedirs), dtype=self.dtype)
         shapedirs = torch.cat(
-            [shapedirs[:, :, :n_shape], shapedirs[:, :, 300:(300 + n_exp)]], 2
+            [shapedirs[:, :, :n_shape], shapedirs[:, :, 300 : (300 + n_exp)]], 2
         )
         self.register_buffer("shapedirs", shapedirs)
         # The pose components

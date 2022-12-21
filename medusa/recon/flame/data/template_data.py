@@ -35,14 +35,14 @@ def get_template_flame(dense=False):
     (117380, 3)
     """
 
-    file = Path(__file__).parent / 'flame_template.h5'
-    with h5py.File(file, 'r') as data:
+    file = Path(__file__).parent / "flame_template.h5"
+    with h5py.File(file, "r") as data:
 
-        template_h5 = data['dense' if dense else 'coarse']
-        template = {'v': template_h5['v'][:], 'f': template_h5['f'][:]}
+        template_h5 = data["dense" if dense else "coarse"]
+        template = {"v": template_h5["v"][:], "f": template_h5["f"][:]}
 
     return template
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     get_template_flame()
