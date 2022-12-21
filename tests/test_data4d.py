@@ -7,68 +7,73 @@ from medusa.containers import Data4D
 from medusa.data import get_example_h5
 from medusa.recon import videorecon
 
-# @pytest.mark.parametrize('device', ['cpu', 'cuda'])
-# def test_init(device):
 
-#     v = torch.randn((100, 5023, 3), device=device)
-#     mat = torch.randn((100, 4, 4), device=device)
-#     tris = torch.randint(0, 100, (9000, 3), device=device)
-#     img_idx = torch.arange(100, device=device)
-#     face_idx = torch.zeros(100, device=device)
-#     metadata = {
-#         'img_size': (512, 512),
-#         'n_img': 100,
-#         'fps': 24
-#     }
-#     data = Data4D(v, mat, tris, img_idx, face_idx, metadata, device=device)
-
-
-# @pytest.mark.parametrize('model', ['mediapipe', 'emoca-coarse'])
-# @pytest.mark.parametrize('device', ['cpu', 'cuda'])
-# def test_load_and_save(model, device):
-
-#     h5 = get_example_h5(load=False, model=model)
-#     data = Data4D.load(h5, device=device)
-
-#     with tempfile.NamedTemporaryFile() as f_out:
-#         data.save(f_out.name)
-#         assert(Path(f_out.name).is_file())
+@pytest.mark.parametrize('device', ['cpu', 'cuda'])
+def test_init(device):
+    """Simple initialization test."""
+    v = torch.randn((100, 5023, 3), device=device)
+    mat = torch.randn((100, 4, 4), device=device)
+    tris = torch.randint(0, 100, (9000, 3), device=device)
+    img_idx = torch.arange(100, device=device)
+    face_idx = torch.zeros(100, device=device)
+    metadata = {
+        'img_size': (512, 512),
+        'n_img': 100,
+        'fps': 24
+    }
+    data = Data4D(v, mat, tris, img_idx, face_idx, metadata, device=device)
 
 
-# @pytest.mark.parametrize('model', ['mediapipe', 'emoca-coarse'])
-# def test_project68(model):
+@pytest.mark.parametrize('model', ['mediapipe', 'emoca-coarse'])
+@pytest.mark.parametrize('device', ['cpu', 'cuda'])
+def test_load_and_save(model, device):
+    """Tests loading from disk and saving a Data4D object."""
+    h5 = get_example_h5(load=False, model=model)
+    data = Data4D.load(h5, device=device)
+    assert(isinstance(data, Data4D))
 
-#     data = get_example_h5(load=True, model=model)
-#     v68 = data.project_to_68_landmarks()
-#     assert(v68.shape[1:] == (68, 3))
+    with tempfile.NamedTemporaryFile() as f_out:
+        data.save(f_out.name)
+        assert(Path(f_out.name).is_file())
 
-# @pytest.mark.parametrize('pad_missing', [True, False])
-# @pytest.mark.parametrize('video_test', [1, 3], indirect=True)
-# def test_get_face(pad_missing, video_test):
-#     data = videorecon(video_test, 'emoca-coarse')
 
-#     n_exp = int(video_test.stem[0])
-#     for index in range(n_exp):
-#         d = data.get_face(index, pad_missing)
+@pytest.mark.parametrize('model', ['mediapipe', 'emoca-coarse'])
+def test_project68(model):
+    """Tests projection of vertices onto a subset of 68 canonical vertices."""
+    data = get_example_h5(load=True, model=model)
+    v68 = data.project_to_68_landmarks()
+    assert(v68.shape == (data.v.shape[0], 68, 3))
 
-#         # Check if ``d`` is actually a Data4D object
-#         assert(isinstance(d, Data4D))
 
-#         # Check if ``d`` only has face ID ``index``
-#         assert((d.face_idx == index).all())
+@pytest.mark.parametrize('pad_missing', [True, False])
+@pytest.mark.parametrize('video_test', [1, 3], indirect=True)
+def test_get_face(pad_missing, video_test):
+    """Tests the extraction of faces from a Data4D object which has multiple faces."""
+    data = videorecon(video_test, 'emoca-coarse')
 
-#         if pad_missing:
-#             assert(d.v.shape[0] == d.mat.shape[0] == data.video_metadata['n_img'])
-#         else:
-#             n_ = (data.face_idx == index).sum()
-#             assert(d.v.shape[0] == d.mat.shape[0] == n_)
+    n_exp = int(video_test.stem[0])
+    for index in range(n_exp):
+        d = data.get_face(index, pad_missing)
 
-#     with pytest.raises(ValueError):
-#         data.get_face(100)
+        # Check if ``d`` is actually a Data4D object
+        assert(isinstance(d, Data4D))
+
+        # Check if ``d`` only has face ID ``index``
+        assert((d.face_idx == index).all())
+
+        if pad_missing:
+            assert(d.v.shape[0] == d.mat.shape[0] == data.video_metadata['n_img'])
+        else:
+            n_ = (data.face_idx == index).sum()
+            assert(d.v.shape[0] == d.mat.shape[0] == n_)
+
+    with pytest.raises(ValueError):
+        data.get_face(100)
 
 
 @pytest.mark.parametrize("video_test", [1, 3], indirect=True)
 def test_decompose_mats(video_test):
+    """Tests decomposition of affine matrices into affine parameters."""
     data = videorecon(video_test, recon_model="mediapipe")
     dfs = data.decompose_mats(to_df=True)
 

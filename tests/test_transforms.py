@@ -29,10 +29,6 @@ def test_similarity_transform(batch_size, n_points, n_dim, estimate_scale, devic
     src = torch.from_numpy(src).to(device)
     dst = torch.from_numpy(dst).to(device)
     mats_ = estimate_similarity_transform(src, dst, estimate_scale=estimate_scale)
-
-    if device == "cuda":
-        mats_ = mats_.cpu()
-
-    mats_ = mats_.numpy()
+    mats_ = mats_.cpu().numpy()
 
     np.testing.assert_array_almost_equal(mats, mats_, decimal=4)

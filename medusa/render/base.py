@@ -84,6 +84,7 @@ class BaseRenderer(ABC):
 
         cv2.imwrite(str(f_out), img[:, :, [2, 1, 0]])
 
+    @staticmethod
     def load_image(f_in, device=None):
 
         img = cv2.imread(str(f_in))

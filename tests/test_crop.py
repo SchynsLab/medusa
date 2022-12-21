@@ -5,7 +5,6 @@ from conftest import _check_gha_compatible
 
 from medusa.crop import LandmarkAlignCropModel, LandmarkBboxCropModel
 from medusa.containers.results import BatchResults
-from medusa.io import VideoLoader
 
 
 @pytest.mark.parametrize('Model', [LandmarkAlignCropModel, LandmarkBboxCropModel])
@@ -13,6 +12,7 @@ from medusa.io import VideoLoader
 @pytest.mark.parametrize('imgs_test', [0, 1, 2, 3, 4, [0, 1], [0, 1, 2], [0, 1, 2, 3, 4]], indirect=True)
 @pytest.mark.parametrize('device', ['cuda', 'cpu'])
 def test_crop_model(Model, lm_name, imgs_test, device):
+    """Generic tests for crop models."""
     if not _check_gha_compatible(device):
         return
 
@@ -42,6 +42,7 @@ def test_crop_model(Model, lm_name, imgs_test, device):
 @pytest.mark.parametrize('Model', [LandmarkAlignCropModel, LandmarkBboxCropModel])
 @pytest.mark.parametrize('video_test', [0, 1, 2, 3, 4], indirect=True)
 def test_crop_model_vid(Model, video_test):
+    """Test of crop model applied to videos and the visualization thereof."""
     if Model == LandmarkBboxCropModel:
         crop_size = (224, 224)
         model = Model('2d106det', crop_size)
@@ -49,14 +50,8 @@ def test_crop_model_vid(Model, video_test):
         crop_size = (448, 448)
         model = Model(crop_size)
 
-    loader = VideoLoader(video_test, batch_size=32, loglevel='WARNING')
+    results = model.crop_faces_video(video_test, save_imgs=True)
 
-    results = BatchResults()
-    for batch in loader:
-        out_crop = model(batch)
-        results.add(imgs=batch, **out_crop)
-
-    results.concat()
     if getattr(results, 'lms', None) is None:
         return
 

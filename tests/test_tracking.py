@@ -7,7 +7,7 @@ from medusa.tracking import sort_faces, filter_faces, _ensure_consecutive_face_i
 @pytest.mark.parametrize("video_test", [1, 2, 3, 4], indirect=True)
 def test_tracking_from_detections(video_test):
     detector = SCRFDetector()
-    results = detector.detect_from_video(video_test)
+    results = detector.detect_faces_video(video_test)
 
     face_idx = sort_faces(results.lms, results.img_idx, dist_threshold=250)
 

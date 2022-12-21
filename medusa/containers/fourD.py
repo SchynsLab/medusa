@@ -105,12 +105,10 @@ class Data4D:
         nv = self.v.shape[1]
         if nv == 468:
             return 'mediapipe'
-        elif nv == 5023:
-            return 'flame-coarse'
         elif nv == 59315:
             return 'flame-dense'
         else:
-            raise ValueError(f"Unknown topology with {nv} vertices ...")
+            return 'flame-coarse'
 
     def save(self, path, compression_level=9):
         """Saves (meta)data to disk as an HDF5 file.

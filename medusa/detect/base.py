@@ -4,7 +4,7 @@ from ..io import VideoLoader
 
 
 class BaseDetectionModel:
-    def detect_from_video(self, vid, batch_size=32):
+    def detect_faces_video(self, vid, batch_size=32):
         """Utility function to get all detections in a video.
 
         Parameters

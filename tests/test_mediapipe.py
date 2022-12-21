@@ -1,9 +1,7 @@
-import cv2
 import pytest
-import numpy as np
 from pathlib import Path
 from medusa.recon import Mediapipe
-from medusa.render import Renderer
+from medusa.constants import RENDERER
 
 
 @pytest.mark.parametrize(
@@ -29,9 +27,9 @@ def test_mediapipe_recon(imgs_test):
     if isinstance(imgs, Path):
 
         cam_mat = recon_model.get_cam_mat()
-        img = cv2.imread(str(imgs))[:, :, [2, 1, 0]]
+        img = RENDERER.load_image(imgs)
         img_size = img.shape[:2]
-        renderer = Renderer(
+        renderer = RENDERER(
             viewport=img_size[::-1],
             shading="flat",
             cam_mat=cam_mat,
@@ -41,6 +39,6 @@ def test_mediapipe_recon(imgs_test):
         recon_img = renderer(out["v"], recon_model.get_tris())
         img = renderer.alpha_blend(recon_img, img)
         f_out = Path(__file__).parent / f"test_viz/recon/test_mediapipe_exp-{n_exp}.png"
-        cv2.imwrite(str(f_out), img[:, :, [2, 1, 0]])
+        renderer.save_image(f_out, img)
 
         renderer.close()

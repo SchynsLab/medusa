@@ -8,7 +8,7 @@ from medusa.containers import Data4D
 from medusa.crop import LandmarkBboxCropModel
 from medusa.data import get_example_video
 from medusa.recon import DecaReconModel
-from medusa.render import Renderer
+from medusa.constants import RENDERER
 
 from conftest import _check_gha_compatible
 
@@ -16,8 +16,9 @@ from conftest import _check_gha_compatible
 @pytest.mark.parametrize("name", ["deca", "emoca", "spectre"])
 @pytest.mark.parametrize("type_", ["coarse", "dense"])
 @pytest.mark.parametrize("no_crop_mat", [False, True])
-@pytest.mark.parametrize("device", ["cpu", "cuda"])
+@pytest.mark.parametrize("device", ["cuda", "cpu"])
 def test_deca_recon(name, type_, no_crop_mat, device):
+    """Generic test of DECA-based recon models."""
     if not _check_gha_compatible(device):
         return
 
@@ -34,6 +35,8 @@ def test_deca_recon(name, type_, no_crop_mat, device):
     recon_model = DecaReconModel(name=model_name, img_size=img_size, device=device)
 
     img_batch = next(iter(vid))
+    vid.close()
+
     out_crop = crop_model(img_batch)
 
     if no_crop_mat:
@@ -52,14 +55,11 @@ def test_deca_recon(name, type_, no_crop_mat, device):
     if not no_crop_mat:
         cam_mat = np.eye(4)
         cam_mat[2, 3] = 4
-        renderer = Renderer(viewport=img_size, shading="flat", cam_mat=cam_mat)
+        renderer = RENDERER(viewport=img_size, shading="flat", cam_mat=cam_mat, device=device)
         img = renderer(out["v"][0], recon_model.get_tris())
-
         f_out = Path(__file__).parent / f"test_viz/recon/test_{model_name}.png"
-        cv2.imwrite(str(f_out), img)
-
-    recon_model.close()
-    vid.close()
+        renderer.save_image(f_out, img)
+        renderer.close()
 
     if not no_crop_mat:
         # Only render when recon full image

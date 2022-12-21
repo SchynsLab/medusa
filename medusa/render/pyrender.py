@@ -87,6 +87,8 @@ class PyRenderer(BaseRenderer):
             cam_mat = np.eye(4)
         else:
             cam_mat = self.cam_mat
+            if torch.is_tensor(cam_mat):
+                cam_mat = cam_mat.cpu().numpy()
 
         camera_node = Node(camera=camera, matrix=cam_mat)
         scene.add_node(camera_node)
