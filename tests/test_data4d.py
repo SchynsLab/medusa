@@ -6,11 +6,17 @@ from pathlib import Path
 from medusa.containers import Data4D
 from medusa.data import get_example_h5
 from medusa.recon import videorecon
+from medusa.constants import DEVICE
+from conftest import _check_gha_compatible
 
 
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 def test_init(device):
     """Simple initialization test."""
+
+    if not _check_gha_compatible(device):
+        return
+
     v = torch.randn((100, 5023, 3), device=device)
     mat = torch.randn((100, 4, 4), device=device)
     tris = torch.randint(0, 100, (9000, 3), device=device)
@@ -28,6 +34,10 @@ def test_init(device):
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 def test_load_and_save(model, device):
     """Tests loading from disk and saving a Data4D object."""
+
+    if not _check_gha_compatible(device):
+        return
+
     h5 = get_example_h5(load=False, model=model)
     data = Data4D.load(h5, device=device)
     assert(isinstance(data, Data4D))
@@ -40,7 +50,7 @@ def test_load_and_save(model, device):
 @pytest.mark.parametrize('model', ['mediapipe', 'emoca-coarse'])
 def test_project68(model):
     """Tests projection of vertices onto a subset of 68 canonical vertices."""
-    data = get_example_h5(load=True, model=model)
+    data = get_example_h5(load=True, model=model, device=DEVICE)
     v68 = data.project_to_68_landmarks()
     assert(v68.shape == (data.v.shape[0], 68, 3))
 

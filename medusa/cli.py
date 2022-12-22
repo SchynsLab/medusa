@@ -52,7 +52,7 @@ RECON_MODELS = [
               help="File to save output to (shouldn't have an extension)")
 @click.option("-r", "--recon-model", default="emoca-coarse", type=click.Choice(RECON_MODELS),
               help='Name of the reconstruction model')
-@click.option("--device", default="cuda", type=click.Choice(["cpu", "cuda"]),
+@click.option("--device", default=DEVICE, type=click.Choice(["cpu", "cuda"]),
               help="Device to run the reconstruction on (only relevant for EMOCA")
 @click.option('--n-frames', '-n', default=None, type=click.INT,
               help='Number of frames to process')

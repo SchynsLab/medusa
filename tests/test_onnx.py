@@ -3,11 +3,16 @@ import pytest
 import medusa.data
 from pathlib import Path
 from medusa.onnx import OnnxModel
+from conftest import _check_gha_compatible
 
 
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 @pytest.mark.parametrize('set_param', [False, True])
 def test_onnx(device, set_param):
+
+    if not _check_gha_compatible(device):
+        return
+
     onnx_file = Path(medusa.data.__file__).parent / 'models/yunet.onnx'
 
     if set_param:
