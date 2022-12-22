@@ -50,6 +50,7 @@ def test_load_and_save(model, device):
 @pytest.mark.parametrize('model', ['mediapipe', 'emoca-coarse'])
 def test_project68(model):
     """Tests projection of vertices onto a subset of 68 canonical vertices."""
+    # Need to specify DEVICE here because otherwise Github Action tests error
     data = get_example_h5(load=True, model=model, device=DEVICE)
     v68 = data.project_to_68_landmarks()
     assert(v68.shape == (data.v.shape[0], 68, 3))

@@ -204,6 +204,10 @@ class Data4D:
                 init_kwargs[attr] = data
 
             for attr, value in f_in.attrs.items():
+                # Override device from file with provided parameter (if any)
+                if attr == 'device':
+                    value = device
+
                 init_kwargs[attr] = value
 
         return cls(**init_kwargs)
