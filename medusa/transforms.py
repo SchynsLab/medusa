@@ -3,7 +3,7 @@ import torch
 from kornia.geometry.transform import resize
 from scipy.spatial import Delaunay
 
-from .constants import DEVICE
+from .defaults import DEVICE
 
 
 def create_viewport_matrix(nx, ny, device="cuda"):

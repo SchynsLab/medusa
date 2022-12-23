@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from onnxruntime import InferenceSession, set_default_logger_severity
 
-from .constants import DEVICE
+from .defaults import DEVICE
 
 
 class OnnxModel:

@@ -26,7 +26,7 @@ import gdown
 import torch
 import yaml
 
-from .constants import DEVICE
+from .defaults import DEVICE
 from .containers import Data4D
 from .io import download_file
 from .log import get_logger

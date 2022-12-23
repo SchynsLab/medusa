@@ -15,7 +15,7 @@ import pandas as pd
 import torch
 from trimesh.transformations import compose_matrix, decompose_matrix
 
-from ..constants import DEVICE, LOGGER
+from ..defaults import DEVICE, LOGGER
 from ..io import VideoLoader, VideoWriter
 from ..log import tqdm_log
 

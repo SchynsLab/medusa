@@ -23,7 +23,6 @@ RENDERER = default_renderer
 FONT = str(Path(cv2.__path__[0]) / "qt/fonts/DejaVuSans.ttf")
 """Default font used in Medusa (DejaVuSans)."""
 
-
 FLAME_MODELS = [
     "deca-coarse",
     "deca-dense",

@@ -1,4 +1,6 @@
 def main():
+    """Utility cli command (see ``cli.py``) to regenerate the example data for when
+    the Data4D class changes."""
     # avoid cyclical import
     from ..recon import videorecon
     from . import get_example_video

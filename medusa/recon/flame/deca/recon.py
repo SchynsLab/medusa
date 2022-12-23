@@ -19,7 +19,7 @@ import h5py
 import numpy as np
 import torch
 
-from ....constants import DEVICE
+from ....defaults import DEVICE
 from ....io import load_inputs
 from ....log import get_logger
 from ....transforms import (create_ortho_matrix, create_viewport_matrix,

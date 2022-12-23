@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import torch
 
-from ..constants import DEVICE
+from ..defaults import DEVICE
 from ..io import load_inputs
 from .base import BaseDetectionModel
 

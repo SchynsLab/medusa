@@ -6,7 +6,7 @@ import pytest
 import torch
 from conftest import _check_gha_compatible
 
-from medusa.constants import DEVICE
+from medusa.defaults import DEVICE
 from medusa.containers import Data4D
 from medusa.data import get_example_h5
 from medusa.recon import videorecon

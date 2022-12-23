@@ -8,7 +8,6 @@ excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
 
 import warnings
 
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from OpenGL.GL import glLineWidth
@@ -17,7 +16,7 @@ from pyrender import (DirectionalLight, Mesh, Node, OffscreenRenderer,
 from pyrender.constants import RenderFlags
 from trimesh import Trimesh, visual
 
-from ..constants import DEVICE
+from ..defaults import DEVICE
 from .base import BaseRenderer
 
 

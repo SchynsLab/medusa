@@ -15,7 +15,7 @@ import torch
 from onnxruntime import InferenceSession, set_default_logger_severity
 from torchvision.ops import nms
 
-from ..constants import DEVICE
+from ..defaults import DEVICE
 from ..io import load_inputs
 from ..onnx import OnnxModel
 from ..transforms import resize_with_pad

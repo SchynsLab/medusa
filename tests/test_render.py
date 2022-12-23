@@ -2,10 +2,9 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-import torch
 from conftest import _check_gha_compatible
 
-from medusa.constants import DEVICE
+from medusa.defaults import DEVICE
 from medusa.crop import LandmarkBboxCropModel
 from medusa.data import get_example_frame, get_example_h5
 from medusa.recon import DecaReconModel, Mediapipe, videorecon

@@ -15,7 +15,7 @@ import torch
 from torch.utils.data import DataLoader, IterableDataset
 from trimesh import Trimesh
 
-from .constants import DEVICE
+from .defaults import DEVICE
 from .log import get_logger
 
 

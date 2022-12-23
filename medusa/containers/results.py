@@ -7,7 +7,7 @@ from matplotlib import cm
 from torchvision.ops import box_area
 from torchvision.utils import draw_bounding_boxes, draw_keypoints, save_image
 
-from ..constants import DEVICE, FONT
+from ..defaults import DEVICE, FONT
 from ..io import VideoWriter, load_inputs
 from ..log import get_logger
 from ..tracking import _ensure_consecutive_face_idx, filter_faces, sort_faces

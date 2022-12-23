@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from kornia.geometry.transform import warp_affine
 
-from ..constants import DEVICE
+from ..defaults import DEVICE
 from ..detect import SCRFDetector
 from ..io import load_inputs
 from ..transforms import estimate_similarity_transform

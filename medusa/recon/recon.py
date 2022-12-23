@@ -1,4 +1,4 @@
-from ..constants import DEVICE, FLAME_MODELS
+from ..defaults import DEVICE, FLAME_MODELS
 from ..containers.fourD import Data4D
 from ..containers.results import BatchResults
 from ..crop import LandmarkBboxCropModel

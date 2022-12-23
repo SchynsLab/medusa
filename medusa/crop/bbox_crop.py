@@ -5,7 +5,7 @@ import torch
 from kornia.geometry.linalg import transform_points
 from kornia.geometry.transform import warp_affine
 
-from ..constants import DEVICE
+from ..defaults import DEVICE
 from ..detect import SCRFDetector
 from ..io import load_inputs
 from ..onnx import OnnxModel

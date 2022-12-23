@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from conftest import _check_gha_compatible
 
-from medusa.constants import RENDERER
+from medusa.defaults import RENDERER
 from medusa.containers import Data4D
 from medusa.crop import LandmarkBboxCropModel
 from medusa.data import get_example_video

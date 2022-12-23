@@ -3,7 +3,7 @@ from collections import OrderedDict
 import torch
 import torch.nn.functional as F
 
-from ....constants import DEVICE
+from ....defaults import DEVICE
 from ....io import load_inputs
 from ..base import FlameReconModel
 from ..decoders import FLAME

@@ -11,7 +11,7 @@ from collections import defaultdict
 import numpy as np
 import torch
 
-from ...constants import DEVICE
+from ...defaults import DEVICE
 from ...data import get_template_mediapipe
 from ...io import load_inputs
 from ..base import BaseReconModel

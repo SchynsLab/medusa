@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from medusa.constants import RENDERER
+from medusa.defaults import RENDERER
 from medusa.recon import Mediapipe
 
 

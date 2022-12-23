@@ -6,7 +6,7 @@ from pytorch3d.renderer import (FoVOrthographicCameras, FoVPerspectiveCameras,
                                 RasterizationSettings, TexturesVertex)
 from pytorch3d.structures import Meshes
 
-from ..constants import DEVICE
+from ..defaults import DEVICE
 from .base import BaseRenderer
 
 
