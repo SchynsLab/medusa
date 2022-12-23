@@ -64,6 +64,7 @@ nbval = "^0.9.6"
 coverage = "^6.5.0"
 pre-commit = "^2.20.0"
 pytest-cov = "^4.0.0"
+interrogate = "^1.5.0"
 
 [tool.poetry.scripts]
 medusa_download_ext_data = "medusa.cli:download_ext_data"
