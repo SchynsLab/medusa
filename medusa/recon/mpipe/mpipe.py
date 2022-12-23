@@ -69,7 +69,7 @@ class Mediapipe(BaseReconModel):
 
         out = get_template_mediapipe()
         self._v_world_ref = out["v"]
-        self._f_world_ref = out["f"]
+        self._f_world_ref = out["tris"]
 
     def get_tris(self):
 

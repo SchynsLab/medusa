@@ -62,7 +62,7 @@ class FlameReconModel(BaseReconModel):
             raise ValueError("Cannot apply mask for dense reconstructions!")
 
         if not hasattr(self, "_masks"):
-            with open(self.cfg["flame_masks_path"], "rb") as f_in:
+            with open(self._cfg["flame_masks_path"], "rb") as f_in:
                 self._masks = pickle.load(f_in, encoding="latin1")
 
         if name in self._masks:

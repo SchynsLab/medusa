@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 
-from ..io import load_inputs
-
 
 class BaseReconModel(ABC):
     """Base class for reconstruction models.
