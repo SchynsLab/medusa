@@ -88,6 +88,12 @@ class Data4D:
         if self.face_idx is None:
             self.face_idx = torch.zeros(nv, dtype=torch.int64, device=self.device)
 
+        to_check = {'v': self.v, 'tris': self.tris, 'face_idx': self.face_idx, 'img_idx': self.img_idx}
+        for attr, data in to_check.items():
+            if data.device.type != self.device:                
+                raise ValueError(f"Attribute {attr} has different device ({data.device}) "
+                                 f"than Data4D ({self.device})")
+
         if self.video_metadata is None:
             self.video_metadata = {
                 'img_size': None,

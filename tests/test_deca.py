@@ -14,7 +14,7 @@ from medusa.recon import DecaReconModel
 @pytest.mark.parametrize("name", ["deca", "emoca", "spectre"])
 @pytest.mark.parametrize("type_", ["coarse", "dense"])
 @pytest.mark.parametrize("no_crop_mat", [False, True])
-@pytest.mark.parametrize("device", ["cuda", "cpu"])
+@pytest.mark.parametrize("device", ['cpu'])#["cuda", "cpu"])
 def test_deca_recon(name, type_, no_crop_mat, device):
     """Generic test of DECA-based recon models."""
     if not _check_gha_compatible(device):
@@ -41,7 +41,7 @@ def test_deca_recon(name, type_, no_crop_mat, device):
         out_crop["crop_mats"] = None
 
     out = recon_model(out_crop["imgs_crop"], out_crop["crop_mats"])
-
+    
     if type_ == "coarse":
         expected_shape = (img_batch.shape[0], 5023, 3)
     else:
@@ -65,6 +65,7 @@ def test_deca_recon(name, type_, no_crop_mat, device):
         # Only render when recon full image
         tris = recon_model.get_tris()
         cam_mat = recon_model.get_cam_mat()
-        data = Data4D(video_metadata=metadata, tris=tris, cam_mat=cam_mat, **out)
+        out = {**out, **{'img_idx': out_crop['img_idx']}}
+        data = Data4D(video_metadata=metadata, tris=tris, cam_mat=cam_mat, **out, device=device)
         f_out = str(f_out).replace(".png", ".mp4")
         data.render_video(f_out, shading="flat", video=get_example_video())
