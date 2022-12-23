@@ -2,14 +2,13 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+from conftest import _check_gha_compatible
 
+from medusa.constants import RENDERER
 from medusa.containers import Data4D
 from medusa.crop import LandmarkBboxCropModel
 from medusa.data import get_example_video
 from medusa.recon import DecaReconModel
-from medusa.constants import RENDERER
-
-from conftest import _check_gha_compatible
 
 
 @pytest.mark.parametrize("name", ["deca", "emoca", "spectre"])
@@ -54,7 +53,9 @@ def test_deca_recon(name, type_, no_crop_mat, device):
     if not no_crop_mat:
         cam_mat = np.eye(4)
         cam_mat[2, 3] = 4
-        renderer = RENDERER(viewport=img_size, shading="flat", cam_mat=cam_mat, device=device)
+        renderer = RENDERER(
+            viewport=img_size, shading="flat", cam_mat=cam_mat, device=device
+        )
         img = renderer(out["v"][0], recon_model.get_tris())
         f_out = Path(__file__).parent / f"test_viz/recon/test_{model_name}.png"
         renderer.save_image(f_out, img)

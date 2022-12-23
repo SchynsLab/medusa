@@ -1,11 +1,11 @@
 from ..constants import DEVICE, FLAME_MODELS
+from ..containers.fourD import Data4D
+from ..containers.results import BatchResults
 from ..crop import LandmarkBboxCropModel
 from ..io import VideoLoader
 from ..log import get_logger, tqdm_log
-from .mpipe import Mediapipe
 from .flame import DecaReconModel
-from ..containers.results import BatchResults
-from ..containers.fourD import Data4D
+from .mpipe import Mediapipe
 
 
 def videorecon(

@@ -1,13 +1,12 @@
 from pathlib import Path
 
 import pytest
+from conftest import _check_gha_compatible
 
+from medusa.constants import RENDERER
 from medusa.crop import LandmarkAlignCropModel
 from medusa.data import get_example_frame
 from medusa.recon.flame import MicaReconModel
-from medusa.constants import RENDERER
-
-from conftest import _check_gha_compatible
 
 
 @pytest.mark.parametrize("device", ["cpu", "cuda"])

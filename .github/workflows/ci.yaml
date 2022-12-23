@@ -32,5 +32,43 @@ jobs:
       - name: Test with pytest
         shell: bash
         run: poetry run bash ./ci/run_tests.sh
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+      - name: Coverage run & compute percentage
+        # https://nedbatchelder.com/blog/202209/making_a_coverage_badge.html
+        shell: bash
+        run: |
+          poetry run bash ./ci/run_coverage.sh
+          export TOTAL_TEST=$(python -c "import json;print(json.load(open('coverage.json'))['totals']['percent_covered_display'])")
+          echo "total_test=$TOTAL_TEST" >> $GITHUB_ENV
+          echo "### Total test coverage: ${TOTAL_TEST}%" >> $GITHUB_STEP_SUMMARY
+      - name: Coverage make badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.MEDUSA_COVERAGE_BADGE_TOKEN }}
+          gistID: 420039a0fe8fb8c1170e0478cdcd0f26
+          filename: medusa_coverage_badge.json
+          label: Coverage
+          message: ${{ env.total_test }}%
+          minColorRange: 50
+          maxColorRange: 90
+          valColorRange: ${{ env.total_test }}
+      - name: Run interrogate
+        shell: bash
+        run: poetry run bash ./ci/run_interrogate.sh
+      - name: Interrogate extract total
+        shell: bash
+        run: |
+          TOTAL_DOCSTR=$(cat .interrogate_results.txt)
+          export TOTAL_DOCSTR=${TOTAL_DOCSTR: -6:2}
+          echo "total_docstr=$TOTAL_DOCSTR" >> $GITHUB_ENV
+          echo "### Total docstring coverage: ${TOTAL_DOCSTR}%" >> $GITHUB_STEP_SUMMARY
+      - name: Interrogate make badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.MEDUSA_INTERROGATE_BADGE_TOKEN }}
+          gistID: cb6da52c965ec24f136b74a1ebad1964
+          filename: medusa_interrogate_badge.json
+          label: Docs
+          message: ${{ env.total_docstr }}%
+          minColorRange: 50
+          maxColorRange: 90
+          valColorRange: ${{ env.total_docstr }}

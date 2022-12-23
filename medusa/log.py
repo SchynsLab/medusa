@@ -1,6 +1,7 @@
 import logging
-from tqdm import tqdm
 from datetime import datetime
+
+from tqdm import tqdm
 
 
 def get_logger(level="INFO"):

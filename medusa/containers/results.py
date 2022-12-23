@@ -1,15 +1,16 @@
-import torch
 from pathlib import Path
+
+import torch
 from kornia.geometry.linalg import transform_points
 from kornia.geometry.transform import warp_affine
 from matplotlib import cm
-from torchvision.utils import draw_bounding_boxes, draw_keypoints, save_image
 from torchvision.ops import box_area
+from torchvision.utils import draw_bounding_boxes, draw_keypoints, save_image
 
 from ..constants import DEVICE, FONT
-from ..io import load_inputs, VideoWriter
+from ..io import VideoWriter, load_inputs
 from ..log import get_logger
-from ..tracking import sort_faces, filter_faces, _ensure_consecutive_face_idx
+from ..tracking import _ensure_consecutive_face_idx, filter_faces, sort_faces
 
 
 class BatchResults:

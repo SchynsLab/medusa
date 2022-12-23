@@ -1,13 +1,15 @@
 import time
-import pandas as pd
-from tqdm import tqdm
+from collections import defaultdict
 from functools import reduce
 from itertools import product
-from collections import defaultdict
+
+import pandas as pd
+from tqdm import tqdm
 
 
 class FancyTimer:
     """Fancy timer to time Python functions."""
+
     def __init__(self):
         self._timers = defaultdict(list)
 
@@ -52,7 +54,7 @@ class FancyTimer:
             start = time.perf_counter()
             _ = f(*args)
             dur = time.perf_counter() - start
-            self._timers['duration'].append(dur)
+            self._timers["duration"].append(dur)
 
             if params is not None:
                 for k, v in params.items():

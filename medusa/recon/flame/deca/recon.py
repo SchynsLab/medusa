@@ -19,19 +19,16 @@ import h5py
 import numpy as np
 import torch
 
-from ....log import get_logger
-from ....transforms import (
-    create_ortho_matrix,
-    create_viewport_matrix,
-    crop_matrix_to_3d,
-)
+from ....constants import DEVICE
 from ....io import load_inputs
+from ....log import get_logger
+from ....transforms import (create_ortho_matrix, create_viewport_matrix,
+                            crop_matrix_to_3d)
 from ..base import FlameReconModel
 from ..decoders import FLAME
 from ..utils import upsample_mesh, vertex_normals
 from .decoders import DetailGenerator
 from .encoders import PerceptualEncoder, ResnetEncoder
-from ....constants import DEVICE
 
 logger = get_logger()
 

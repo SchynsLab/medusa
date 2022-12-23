@@ -1,5 +1,6 @@
 """A module to globally set configurations."""
 import os
+
 import torch
 
 torch.set_grad_enabled(False)

@@ -7,8 +7,8 @@ from kornia.geometry.transform import warp_affine
 
 from ..constants import DEVICE
 from ..detect import SCRFDetector
-from ..onnx import OnnxModel
 from ..io import load_inputs
+from ..onnx import OnnxModel
 from ..transforms import estimate_similarity_transform
 from .base import BaseCropModel
 

@@ -1,8 +1,9 @@
-import numpy as np
 from collections import defaultdict
 from pathlib import Path
-import torch
+
 import cv2
+import numpy as np
+import torch
 
 from ..constants import DEVICE
 from ..io import load_inputs

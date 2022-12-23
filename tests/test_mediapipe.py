@@ -1,7 +1,9 @@
-import pytest
 from pathlib import Path
-from medusa.recon import Mediapipe
+
+import pytest
+
 from medusa.constants import RENDERER
+from medusa.recon import Mediapipe
 
 
 @pytest.mark.parametrize(

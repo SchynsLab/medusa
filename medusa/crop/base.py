@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from ..containers import BatchResults
 from ..io import VideoLoader
 

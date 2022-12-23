@@ -1,10 +1,10 @@
 import numpy as np
 import pytest
 import torch
+from conftest import _check_gha_compatible
 from skimage.transform._geometric import _umeyama
 
 from medusa.transforms import estimate_similarity_transform
-from conftest import _check_gha_compatible
 
 
 @pytest.mark.parametrize("batch_size", [1, 100])

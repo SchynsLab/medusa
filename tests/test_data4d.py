@@ -1,16 +1,18 @@
-import torch
-import pytest
 import tempfile
-import matplotlib.pyplot as plt
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pytest
+import torch
+from conftest import _check_gha_compatible
+
+from medusa.constants import DEVICE
 from medusa.containers import Data4D
 from medusa.data import get_example_h5
 from medusa.recon import videorecon
-from medusa.constants import DEVICE
-from conftest import _check_gha_compatible
 
 
-@pytest.mark.parametrize('device', ['cpu', 'cuda'])
+@pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_init(device):
     """Simple initialization test."""
 
@@ -22,16 +24,12 @@ def test_init(device):
     tris = torch.randint(0, 100, (9000, 3), device=device)
     img_idx = torch.arange(100, device=device)
     face_idx = torch.zeros(100, device=device)
-    metadata = {
-        'img_size': (512, 512),
-        'n_img': 100,
-        'fps': 24
-    }
+    metadata = {"img_size": (512, 512), "n_img": 100, "fps": 24}
     data = Data4D(v, mat, tris, img_idx, face_idx, metadata, device=device)
 
 
-@pytest.mark.parametrize('model', ['mediapipe', 'emoca-coarse'])
-@pytest.mark.parametrize('device', ['cpu', 'cuda'])
+@pytest.mark.parametrize("model", ["mediapipe", "emoca-coarse"])
+@pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_load_and_save(model, device):
     """Tests loading from disk and saving a Data4D object."""
 
@@ -40,43 +38,44 @@ def test_load_and_save(model, device):
 
     h5 = get_example_h5(load=False, model=model)
     data = Data4D.load(h5, device=device)
-    assert(isinstance(data, Data4D))
+    assert isinstance(data, Data4D)
 
     with tempfile.NamedTemporaryFile() as f_out:
         data.save(f_out.name)
-        assert(Path(f_out.name).is_file())
+        assert Path(f_out.name).is_file()
 
 
-@pytest.mark.parametrize('model', ['mediapipe', 'emoca-coarse'])
+@pytest.mark.parametrize("model", ["mediapipe", "emoca-coarse"])
 def test_project68(model):
     """Tests projection of vertices onto a subset of 68 canonical vertices."""
     # Need to specify DEVICE here because otherwise Github Action tests error
     data = get_example_h5(load=True, model=model, device=DEVICE)
     v68 = data.project_to_68_landmarks()
-    assert(v68.shape == (data.v.shape[0], 68, 3))
+    assert v68.shape == (data.v.shape[0], 68, 3)
 
 
-@pytest.mark.parametrize('pad_missing', [True, False])
-@pytest.mark.parametrize('video_test', [1, 3], indirect=True)
+@pytest.mark.parametrize("pad_missing", [True, False])
+@pytest.mark.parametrize("video_test", [1, 3], indirect=True)
 def test_get_face(pad_missing, video_test):
-    """Tests the extraction of faces from a Data4D object which has multiple faces."""
-    data = videorecon(video_test, 'emoca-coarse')
+    """Tests the extraction of faces from a Data4D object which has multiple
+    faces."""
+    data = videorecon(video_test, "emoca-coarse")
 
     n_exp = int(video_test.stem[0])
     for index in range(n_exp):
         d = data.get_face(index, pad_missing)
 
         # Check if ``d`` is actually a Data4D object
-        assert(isinstance(d, Data4D))
+        assert isinstance(d, Data4D)
 
         # Check if ``d`` only has face ID ``index``
-        assert((d.face_idx == index).all())
+        assert (d.face_idx == index).all()
 
         if pad_missing:
-            assert(d.v.shape[0] == d.mat.shape[0] == data.video_metadata['n_img'])
+            assert d.v.shape[0] == d.mat.shape[0] == data.video_metadata["n_img"]
         else:
             n_ = (data.face_idx == index).sum()
-            assert(d.v.shape[0] == d.mat.shape[0] == n_)
+            assert d.v.shape[0] == d.mat.shape[0] == n_
 
     with pytest.raises(ValueError):
         data.get_face(100)

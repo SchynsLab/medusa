@@ -1,7 +1,9 @@
-import torch
 import pytest
+import torch
+
 from medusa.detect import SCRFDetector
-from medusa.tracking import sort_faces, filter_faces, _ensure_consecutive_face_idx
+from medusa.tracking import (_ensure_consecutive_face_idx, filter_faces,
+                             sort_faces)
 
 
 @pytest.mark.parametrize("video_test", [1, 2, 3, 4], indirect=True)

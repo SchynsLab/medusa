@@ -1,7 +1,7 @@
 import numpy as np
 import torch
-from scipy.spatial import Delaunay
 from kornia.geometry.transform import resize
+from scipy.spatial import Delaunay
 
 from .constants import DEVICE
 

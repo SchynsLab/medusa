@@ -1,7 +1,8 @@
 """Module with some constants and defaults."""
+from pathlib import Path
+
 import cv2
 import torch
-from pathlib import Path
 
 from .log import get_logger
 

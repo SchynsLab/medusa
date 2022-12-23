@@ -22,14 +22,14 @@ from datetime import datetime
 from pathlib import Path
 
 import click
+import gdown
 import torch
 import yaml
-import gdown
 
 from .constants import DEVICE
+from .containers import Data4D
 from .io import download_file
 from .log import get_logger
-from .containers import Data4D
 from .preproc.align import align
 from .preproc.epoch import epoch
 from .preproc.filter import bw_filter

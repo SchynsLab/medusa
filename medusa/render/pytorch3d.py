@@ -1,11 +1,10 @@
-import torch
 import numpy as np
+import torch
+from pytorch3d.renderer import (FoVOrthographicCameras, FoVPerspectiveCameras,
+                                HardFlatShader, HardPhongShader,
+                                MeshRasterizer, MeshRenderer, PointLights,
+                                RasterizationSettings, TexturesVertex)
 from pytorch3d.structures import Meshes
-from pytorch3d.renderer import MeshRenderer
-from pytorch3d.renderer import MeshRasterizer, RasterizationSettings
-from pytorch3d.renderer import HardFlatShader, HardPhongShader
-from pytorch3d.renderer import FoVPerspectiveCameras, FoVOrthographicCameras
-from pytorch3d.renderer import TexturesVertex, PointLights
 
 from ..constants import DEVICE
 from .base import BaseRenderer

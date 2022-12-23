@@ -7,15 +7,16 @@ The data can be saved to disk as a `HDF5
 <http://www.h5py.org/>`_) with the ``save`` method and loaded from disk
 using the ``load`` classmethod.
 """
-import torch
+from pathlib import Path
+
 import h5py
 import numpy as np
 import pandas as pd
-from pathlib import Path
+import torch
 from trimesh.transformations import compose_matrix, decompose_matrix
 
 from ..constants import DEVICE, LOGGER
-from ..io import VideoWriter, VideoLoader
+from ..io import VideoLoader, VideoWriter
 from ..log import tqdm_log
 
 

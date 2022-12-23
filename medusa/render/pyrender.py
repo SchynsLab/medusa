@@ -6,20 +6,14 @@ excellent `pyrender <https://pyrender.readthedocs.io>`_ package [1]_.
 .. [1] Matl, Matthew. *pyrender* [computer software]. https://github.com/mmatl/pyrender
 """
 
-import torch
 import warnings
+
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 from OpenGL.GL import glLineWidth
-from pyrender import (
-    DirectionalLight,
-    Mesh,
-    Node,
-    PerspectiveCamera,
-    OffscreenRenderer,
-    OrthographicCamera,
-    Scene,
-)
+from pyrender import (DirectionalLight, Mesh, Node, OffscreenRenderer,
+                      OrthographicCamera, PerspectiveCamera, Scene)
 from pyrender.constants import RenderFlags
 from trimesh import Trimesh, visual
 

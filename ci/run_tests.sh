@@ -1,5 +1,5 @@
 # # Unit tests
-pytest --disable-warnings --cov=medusa --cov-report xml tests/
+coverage run --source=medusa/ -m pytest --disable-warnings tests/test_transforms.py
 
 # # Doctests
 # pytest --disable-warnings --doctest-modules --exitfirst medusa/

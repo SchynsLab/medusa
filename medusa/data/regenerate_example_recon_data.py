@@ -1,7 +1,7 @@
 def main():
     # avoid cyclical import
-    from . import get_example_video
     from ..recon import videorecon
+    from . import get_example_video
 
     vid = get_example_video()
     for model in ["mediapipe", "emoca-coarse"]:

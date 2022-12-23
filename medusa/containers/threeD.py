@@ -1,10 +1,10 @@
-import torch
 import numpy as np
+import torch
 from trimesh import Trimesh
 
 from ..data import get_flame_config
-from .fourD import Data4D
 from ..recon.flame.decoders import FLAME
+from .fourD import Data4D
 
 flame_path = get_flame_config("flame_path")
 flame_generator = FLAME(flame_path, 300, 100)

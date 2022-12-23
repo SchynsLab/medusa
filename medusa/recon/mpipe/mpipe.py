@@ -6,15 +6,16 @@ used in Medusa.
 mobile GPUs. *arXiv preprint arXiv:1907.06724*
 """
 
-import torch
-import numpy as np
 from collections import defaultdict
+
+import numpy as np
+import torch
 
 from ...constants import DEVICE
 from ...data import get_template_mediapipe
+from ...io import load_inputs
 from ..base import BaseReconModel
 from ._transforms import PCF, image2world
-from ...io import load_inputs
 
 
 class Mediapipe(BaseReconModel):

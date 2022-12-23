@@ -11,7 +11,7 @@ def test_videorecon(n_frames):
     """Tests the videorecon Python interface."""
 
     vid = get_example_video()
-    data = videorecon(vid, recon_model='mediapipe', n_frames=n_frames)
+    data = videorecon(vid, recon_model="mediapipe", n_frames=n_frames)
 
     with tempfile.NamedTemporaryFile() as f_out:
         data.save(f_out.name)

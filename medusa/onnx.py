@@ -1,8 +1,8 @@
-import torch
-import numpy as np
 from collections import OrderedDict
-from onnxruntime import InferenceSession
-from onnxruntime import set_default_logger_severity
+
+import numpy as np
+import torch
+from onnxruntime import InferenceSession, set_default_logger_severity
 
 from .constants import DEVICE
 

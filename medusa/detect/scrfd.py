@@ -17,8 +17,8 @@ from torchvision.ops import nms
 
 from ..constants import DEVICE
 from ..io import load_inputs
-from ..transforms import resize_with_pad
 from ..onnx import OnnxModel
+from ..transforms import resize_with_pad
 from .base import BaseDetectionModel
 
 

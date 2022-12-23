@@ -1,11 +1,12 @@
-import torch
 from pathlib import Path
 
 import numpy as np
+import torch
 from skimage.transform._geometric import _umeyama
 from tqdm import tqdm
 from trimesh.registration import icp, procrustes
-from trimesh.transformations import compose_matrix, decompose_matrix, transform_points
+from trimesh.transformations import (compose_matrix, decompose_matrix,
+                                     transform_points)
 
 from ..containers import Data4D
 

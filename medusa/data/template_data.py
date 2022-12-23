@@ -2,9 +2,9 @@
 topological templates used by the different models."""
 from pathlib import Path
 
-import yaml
 import h5py
 import trimesh
+import yaml
 
 
 def get_template_mediapipe():

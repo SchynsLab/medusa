@@ -5,8 +5,8 @@ import numpy as np
 from scipy.interpolate import interp1d
 from tqdm import tqdm
 
-from ..epochs import EpochsArray
 from ..containers import Data4D
+from ..epochs import EpochsArray
 
 
 def epoch(
