@@ -10,13 +10,12 @@ license that is applicable to this implementation.
 from collections import defaultdict
 from pathlib import Path
 
-import numpy as np
 import torch
-from onnxruntime import InferenceSession, set_default_logger_severity
 from torchvision.ops import nms
 
 from ..defaults import DEVICE
 from ..io import load_inputs
+from ..data import get_external_data_config
 from ..onnx import OnnxModel
 from ..transforms import resize_with_pad
 from .base import BaseDetectionModel
@@ -64,19 +63,9 @@ class SCRFDetector(BaseDetectionModel):
 
     def _init_det_model(self):
 
-        f_in = Path(__file__).parents[1] / "data/models/buffalo_l/det_10g.onnx"
-        # f_in = Path(__file__).parents[1] / 'data/models/antelopev2/scrfd_10g_bnkps.onnx'
-
+        f_in = get_external_data_config('buffalo_path') / 'det_10g.onnx'
         if not f_in.is_file():
-            f_out = f_in.parents[1] / "buffalo_l.zip"
-
-            # alternative: #http://insightface.cn-sh2.ufileos.com/models/buffalo_l.zip
-            import gdown
-
-            url = "https://drive.google.com/u/0/uc?id=1qXsQJ8ZT42_xSmWIYy85IcidpiZudOCB&export=download"
-            gdown.download(url, str(f_out))
-            gdown.extractall(str(f_out))
-            f_out.unlink()
+            raise ValueError("Insightface model needs to be downloaded; run `medusa_download_external_data`")
 
         output_shapes = []
         for n_feat in [1, 4, 10]:  # score, bbox, lms

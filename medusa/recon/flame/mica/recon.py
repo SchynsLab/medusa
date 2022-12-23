@@ -5,6 +5,7 @@ import torch.nn.functional as F
 
 from ....defaults import DEVICE
 from ....io import load_inputs
+from ....data import get_external_data_config
 from ..base import FlameReconModel
 from ..decoders import FLAME
 from .encoders import Arcface, MappingNetwork
@@ -23,10 +24,10 @@ class MicaReconModel(FlameReconModel):
     def __init__(self, device=DEVICE):
         """Initializes a MicaReconModel object."""
         self.device = device
-        self._load_cfg()  # method inherited from parent
+        self._cfg = get_external_data_config()
         self._create_submodels()
         self._load_submodels()
-
+        
     def __str__(self):
         return "mica"
 
@@ -41,7 +42,7 @@ class MicaReconModel(FlameReconModel):
         self.E_arcface.eval()
         self.E_flame = MappingNetwork(512, 300, 300).to(self.device)
         self.E_flame.eval()
-        self.D_flame = FLAME(self.cfg["flame_path"], n_shape=300, n_exp=0).to(
+        self.D_flame = FLAME(self._cfg["flame_path"], n_shape=300, n_exp=0).to(
             self.device
         )
         self.D_flame.eval()
@@ -50,7 +51,7 @@ class MicaReconModel(FlameReconModel):
         """Loads the weights for the Arcface submodel as well as the
         MappingNetwork that predicts FLAME shape parameters from the Arcface
         output."""
-        checkpoint = torch.load(self.cfg["mica_path"], map_location=self.device)
+        checkpoint = torch.load(self._cfg["mica_path"], map_location=self.device)
         self.E_arcface.load_state_dict(checkpoint["arcface"])
 
         # The original weights also included the data for the FLAME model (template

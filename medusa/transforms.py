@@ -135,11 +135,7 @@ def apply_perspective_projection(v, mat):
     return v_proj
 
 
-def embed_points_in_mesh(
-    v,
-    f,
-    p,
-):
+def embed_points_in_mesh(v, f, p):
     """Embed points in an existing mesh by finding the face it is contained in
     and computing its barycentric coordinates. Works with either 2D or 3D data.
 

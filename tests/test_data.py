@@ -69,3 +69,30 @@ def test_get_example_h5(load, model, device):
         assert(isinstance(out, Path))
         assert(out.is_file())        
     
+   
+@pytest.mark.parametrize('topo', ['coarse', 'dense'])
+@pytest.mark.parametrize('device', [None, 'cpu', 'cuda'])
+def test_get_template_flame(topo, device):
+
+    if not _check_gha_compatible(device):
+        return 
+   
+    out = get_template_flame(topo, device=device)
+    
+    if topo == 'dense':
+        assert(out['v'].shape == (59315, 3))
+        assert(out['tris'].shape == (117380, 3))
+    else:
+        assert(out['v'].shape == (5023, 3))
+        assert(out['tris'].shape == (9976, 3))
+        
+    if device is not None:
+        assert(out['v'].device.type == device)
+        assert(out['tris'].device.type == device)
+        
+
+def test_get_template_mediapipe():
+    
+    out = get_template_mediapipe()
+    assert(out['v'].shape == (468, 3))
+    assert(out['tris'].shape == (898, 3))

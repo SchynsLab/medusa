@@ -1,5 +1,5 @@
 # # Unit tests
-coverage run --source=medusa/ -m pytest --disable-warnings tests/test_transforms.py
+coverage run --source=medusa/ -m pytest --disable-warnings tests/ 
 
 # # Doctests
 # pytest --disable-warnings --doctest-modules --exitfirst medusa/

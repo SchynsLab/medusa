@@ -299,6 +299,16 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         url = "https://drive.google.com/u/0/uc?id=1vmWX6QmXGPnXTXWFgj67oHzOoOmxBh6B&export=download"
         gdown.download(url, str(f_out), quiet=True)
 
+    f_out = directory / 'buffalo_l/det_10g.onnx'
+    if not f_out.is_file() or overwrite:
+        logger.info("INSIGHTFACE: starting download 'buffalo_l.zip' ...")
+        f_out = f_out.parents[1] / "buffalo_l.zip"
+        url = "https://drive.google.com/u/0/uc?id=1qXsQJ8ZT42_xSmWIYy85IcidpiZudOCB&export=download"
+        gdown.download(url, str(f_out), quiet=True)
+        gdown.extractall(str(f_out))
+        f_out.unlink()
+
+    ### STARTING VALIDATION ###
     if no_validation:
         return
 
@@ -401,12 +411,19 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
 
     spectre_model_path = data_dir / "spectre_model.tar"
     if spectre_model_path.is_file():
-        logging.info("Spectre model is ready to use!")
+        logger.info("Spectre model is ready to use!")
         cfg["spectre_path"] = str(spectre_model_path)
     else:
         logger.warning(f"File {spectre_model_path} does not exist!")
 
-    cfg_path = Path(__file__).parent / "data/flame/config.yaml"
+    buffalo_path = data_dir / 'buffalo_l'
+    if buffalo_path.is_dir():
+        logger.info("Insightface models are ready to use!")
+        cfg["buffalo_path"] = str(buffalo_path)
+    else:
+        logger.warning(f"Insightface buffalo data do not exist!")
+
+    cfg_path = Path(__file__).parent / "data/config.yaml"
     with open(cfg_path, "w") as f_out:
         logger.info(f"Saving config file to {cfg_path}!")
         yaml.dump(cfg, f_out, default_flow_style=False)

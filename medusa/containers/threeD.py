@@ -2,9 +2,12 @@ import numpy as np
 import torch
 from trimesh import Trimesh
 
-from ..data import get_flame_config
+from ..data import get_flame_config, get_template_flame
 from ..recon.flame.decoders import FLAME
 from .fourD import Data4D
+from ..data import get_template_mediapipe
+
+from ..defaults import DEVICE
 
 flame_path = get_flame_config("flame_path")
 flame_generator = FLAME(flame_path, 300, 100)
@@ -30,13 +33,12 @@ class Base3D:
 
 
 class Flame3D(Base3D):
-    def __init__(self, v=None, mat=None, dense=False):
-        from ..data import get_template_flame
+    def __init__(self, v=None, mat=None, topo='coarse', device=DEVICE):
 
-        data = get_template_flame(dense=dense)
+        data = get_template_flame(topo, keys=['v', 'tris'], device=device)
         self.v = data["v"] if v is None else v
-        self.f = data["f"]
-        self.mat = np.eye(4) if mat is None else mat
+        self.f = data["tris"]
+        self.mat = torch.eye(4) if mat is None else mat
 
     @classmethod
     def from_4D(cls, data, index=0):
@@ -109,7 +111,6 @@ class Flame3D(Base3D):
 
 class Mediapipe3D(Base3D):
     def __init__(self, v=None, mat=None):
-        from ..data import get_template_mediapipe
 
         data = get_template_mediapipe()
         self.v = data["v"] if v is None else v

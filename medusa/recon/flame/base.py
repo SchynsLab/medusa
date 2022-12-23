@@ -5,20 +5,10 @@ import torch
 import yaml
 
 from ..base import BaseReconModel
-from .data import get_template_flame
+from ...data import get_template_flame
 
 
 class FlameReconModel(BaseReconModel):
-    def _load_cfg(self):
-        """Loads a (default) config file."""
-        data_dir = Path(__file__).parents[2] / "data/flame"
-        cfg = data_dir / "config.yaml"
-
-        if not cfg.is_file():
-            raise ValueError(f"Could not find {str(cfg)}!")
-
-        with open(cfg, "r") as f_in:
-            self.cfg = yaml.safe_load(f_in)
 
     def _preprocess(self, imgs):
 
@@ -50,10 +40,9 @@ class FlameReconModel(BaseReconModel):
         """
 
         if not hasattr(self, "_tris"):
-            template = get_template_flame(dense=self.is_dense())
-            self._tris = torch.as_tensor(
-                template["f"], device=self.device, dtype=torch.int64
-            )
+            topo = 'dense' if self.is_dense() else 'coarse'
+            template = get_template_flame(topo, keys=['tris'], device=self.device)
+            self._tris = template['tris']
 
         if hasattr(self, "_active_mask") and self._tris.shape[0] == 9976:
             idx = torch.isin(self._tris, self._active_mask).all(dim=1)

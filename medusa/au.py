@@ -59,13 +59,3 @@ class ActionUnitDecoder:
             p_au = self._detect_model.run(None, {inp_name: v[None, i, ...]})[
                 0
             ].squeeze()
-            print(p_au)
-
-
-if __name__ == "__main__":
-
-    from medusa.data import get_example_h5
-
-    data = get_example_h5(load=True, model="mediapipe")
-    model = ActionUnitDecoder(recon_model="mediapipe")
-    model.decode(data)

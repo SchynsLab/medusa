@@ -15,12 +15,12 @@ All model classes inherit from a common base class, ``FlameReconModel`` (see ``f
 
 from pathlib import Path
 
-import h5py
 import numpy as np
 import torch
 
 from ....defaults import DEVICE
 from ....io import load_inputs
+from ....data import get_external_data_config, get_template_flame
 from ....log import get_logger
 from ....transforms import (create_ortho_matrix, create_viewport_matrix,
                             crop_matrix_to_3d)
@@ -51,9 +51,6 @@ class DecaReconModel(FlameReconModel):
         Either 'cuda' (uses GPU) or 'cpu'
     """
 
-    # May have some speed benefits
-    torch.backends.cudnn.benchmark = True
-
     def __init__(self, name, img_size=None, mask=None, device=DEVICE):
         """Initializes an DECA-like model object."""
         super().__init__()
@@ -64,7 +61,6 @@ class DecaReconModel(FlameReconModel):
         self._dense = "dense" in name
         self._warned_about_crop_mat = False
         self._check()
-        self._load_cfg()  # sets self.cfg
         self._load_data()
         self._crop_img_size = (224, 224)
         self._create_submodels()
@@ -97,20 +93,18 @@ class DecaReconModel(FlameReconModel):
 
     def _load_data(self):
         """Loads necessary data."""
-        data_dir = Path(__file__).parents[1] / "data"
-
-        # Copy entire template file into memory
-        self.template = {}
-        with h5py.File(data_dir / "flame_template.h5", "r") as f_in:
-            topos = ["coarse", "dense"] if self._dense else ["coarse"]
-            for topo in topos:
-                self.template[topo] = {}
-                for key in f_in[topo].keys():
-                    self.template[topo][key] = f_in[topo][key][:]
-
+        
+        self._template = {
+            'coarse': get_template_flame('coarse', keys=['tris'], device=self.device)
+        }
+        data_dir = Path(__file__).parents[3] / 'data/flame'
+        
         if self._dense:
-            self.fixed_uv_dis = np.load(data_dir / "fixed_displacement_256.npy")
-            self.fixed_uv_dis = torch.tensor(self.fixed_uv_dis).float().to(self.device)
+            self._template['dense'] = get_template_flame(topo='dense', device=None)
+            self._fixed_uv_dis = np.load(data_dir / "fixed_displacement_256.npy")
+            self._fixed_uv_dis = torch.as_tensor(self._fixed_uv_dis, device=self.device)
+
+        self._cfg = get_external_data_config()
 
     def _create_submodels(self):
         """Creates all EMOCA encoding and decoding submodels. To summarize:
@@ -149,7 +143,7 @@ class DecaReconModel(FlameReconModel):
             self.E_expression = PerceptualEncoder().to(self.device)
 
         # Flame decoder: n_param Flame parameters -> vertices / affine matrix
-        self.D_flame = FLAME(self.cfg["flame_path"], n_shape=100, n_exp=50).to(
+        self.D_flame = FLAME(self._cfg["flame_path"], n_shape=100, n_exp=50).to(
             self.device
         )
 
@@ -164,7 +158,7 @@ class DecaReconModel(FlameReconModel):
 
         # Load weights from checkpoint and apply to models
         checkpoint = torch.load(
-            self.cfg[self.name.split("-")[0] + "_path"], map_location=self.device
+            self._cfg[self.name.split("-")[0] + "_path"], map_location=self.device
         )
 
         self.E_flame.load_state_dict(checkpoint["E_flame"])
@@ -175,7 +169,7 @@ class DecaReconModel(FlameReconModel):
             if "E_detail" not in checkpoint:
                 # For spectre, there are no specific E/D_detail
                 # weights
-                deca_ckpt = torch.load(self.cfg["deca_path"], map_location=self.device)
+                deca_ckpt = torch.load(self._cfg["deca_path"], map_location=self.device)
                 checkpoint["E_detail"] = deca_ckpt["E_detail"]
                 checkpoint["D_detail"] = deca_ckpt["D_detail"]
 
@@ -298,11 +292,9 @@ class DecaReconModel(FlameReconModel):
                 [enc_dict["pose"][:, 3:], enc_dict["exp"], enc_dict["detail"]], dim=1
             )
             uv_z = self.D_detail(input_detail)
-            disp_map = uv_z + self.fixed_uv_dis[None, None, :, :]
-            f = torch.tensor(
-                self.template["coarse"]["f"], dtype=torch.long, device=self.device
-            )
-            normals = vertex_normals(v, f.expand(b, -1, -1))
+            disp_map = uv_z + self._fixed_uv_dis[None, None, :, :]
+            tris = self._template['coarse']['tris'].expand(b, -1, -1)
+            normals = vertex_normals(v, tris)
 
             # Upsample mesh to 'dense' format given (coarse) vertices and displacement map
             # For now, this is done in numpy format, and cast back to torch Tensor afterwards
@@ -313,7 +305,7 @@ class DecaReconModel(FlameReconModel):
                     v[i, ...].cpu().numpy().squeeze(),
                     normals[i, ...].cpu().numpy().squeeze(),
                     disp_map[i, ...].cpu().numpy().squeeze(),
-                    self.template["dense"],
+                    self._template["dense"],
                 )
                 v_dense.append(v_)
 
