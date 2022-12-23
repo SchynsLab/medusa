@@ -17,6 +17,9 @@ class OnnxModel:
         Path to onnx file
     device : str
         Device to run model on ('cpu' or 'cuda')
+    **kwargs
+        Extra keyword arguments (from 'in_names', 'in_shapes', 'out_names', 'out_shapes')
+        to be set in `_params` (which override those parameters from the onnx model)
     """
 
     def __init__(self, onnx_file, device=DEVICE, **kwargs):
@@ -67,11 +70,14 @@ class OnnxModel:
         ----------
         inputs : torch.tensor, list
             Either a list of torch tensors or a single tensor (if just one input)
+        outputs_as_list : bool
+            Whether to return a list of outputs instead of a dict
 
         Returns
         -------
-        outputs : OrderedDict
-            Dictionary with outputs names and corresponding outputs (as torch tensors)
+        outputs : OrderedDict, list
+            Dictionary (or, when ``outputs_as_list``, a list) with outputs names
+            and corresponding outputs (as torch tensors)
         """
         if not isinstance(inputs, list):
             inputs = [inputs]

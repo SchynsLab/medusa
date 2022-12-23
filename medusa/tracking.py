@@ -140,6 +140,17 @@ def _ensure_consecutive_face_idx(face_idx):
 
     For example, if the unique IDs are ``[0, 1, 5]``, it will change it
     to ``[0, 1, 2]``.
+    
+    Parameters
+    ----------
+    face_idx : torch.tensor
+        Tensor with integers corresponding to each detection's face ID
+
+    Returns
+    -------
+    new_face_idx : torch.tensor
+        Tensor with integers corresponding to each detection's face ID,
+        but now those integers are guaranteed to be consecutive
     """
 
     ids = face_idx.unique()

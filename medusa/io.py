@@ -23,29 +23,29 @@ class VideoLoader(DataLoader):
     """Contains (meta)data and functionality associated with video files (mp4
     files only currently).
 
-    .. `
-
     Parameters
     ----------
     path : str, Path
         Path to mp4 file
-    n_preload : int
-        Number of video frames to preload before batching
+    batch_size : int
+        Batch size to use when loading frames
+    channels_first : bool
+        Whether to return a B x 3 x H x W tensor (if ``True``) or
+        a B x H x W x 3 tensor (if ``False``)
+    device : str
+        Either 'cpu' or 'cuda'
     loglevel : str
         Logging level (e.g., 'INFO' or 'WARNING')
-
-    Raises
-    ------
-    ValueError
-        If `n_preload` is not a multiple of `batch_size`
+    **kwargs
+        Extra keyword arguments passed to the initialization of the parent class
     """
 
     def __init__(
         self,
         path,
         batch_size=32,
-        device=DEVICE,
         channels_first=False,
+        device=DEVICE,
         loglevel="INFO",
         **kwargs,
     ):
@@ -60,8 +60,7 @@ class VideoLoader(DataLoader):
         self._metadata = self._extract_metadata()
 
     def get_metadata(self):
-        """Returns all (meta)data needed for initialization of a Data
-        object."""
+        """Returns all (meta)data needed for initialization of a Data object."""
 
         return self._metadata
 
@@ -104,11 +103,6 @@ class VideoDataset(IterableDataset):
     ----------
     video : pathlib.Path, str
         A video file (any format that cv2 can handle)
-    rescale_factor : float
-        Factor with which to rescale the input image (for speed)
-    n_preload : int
-        How many frames to preload before batching; higher values will
-        take up more RAM, but result in faster loading
     device : str
         Either 'cuda' (for GPU) or 'cpu'
     """
@@ -122,7 +116,7 @@ class VideoDataset(IterableDataset):
         self.metadata = self._get_metadata()
 
     def _get_metadata(self):
-
+        """Extracts some metadata from the stream."""
         stream = self._container.streams.video[0]
         fps = int(stream.average_rate)
         n = stream.frames
@@ -136,10 +130,14 @@ class VideoDataset(IterableDataset):
         return {"img_size": (w, h), "n_img": n, "fps": fps}
 
     def __len__(self):
-
+        """Returns the number of frames in the video."""
         return self.metadata["n_img"]
 
     def __iter__(self):
+        """Overrides parent method to make sure each image is a numpy array.
+        Note to self: do not cast to torch here, because doing this later is way
+        faster.
+        """
         for img in self._reader:
             yield img.to_ndarray(format="rgb24")
 
@@ -353,22 +351,28 @@ def load_inputs(
     return imgs
 
 
-def save_obj(v, f, f_out):
-    if not isinstance(f_out, Path):
-        f_out = Path(f_out)
-
-    if not f_out.suffix == ".obj":
-        raise ValueError("Filename should end in .obj!")
-
-    mesh = Trimesh(v, f)
-    mesh.export(f_out)
-
-
 def download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type="post"):
+    """Downloads a file using requests.
+    
+    Parameters
+    ----------
+    url : str
+        URL of file to download
+    f_out : Path
+        Where to save the downloaded file
+    data : dict
+        Extra data to pass to post request
+    verify : bool
+        Whether to verify the request
+    overwrite : bool
+        Whether to overwrite the file when it already exists
+    cmd_type : str
+        Either 'get' or 'post'
+    """
     if f_out.is_file() and not overwrite:
         return
 
-    with getattr(requests, cmd_type)(url, stream=True, verify=True, data=data) as r:
+    with getattr(requests, cmd_type)(url, stream=True, verify=verify, data=data) as r:
         r.raise_for_status()
         with open(f_out, "wb") as f:
             f.write(r.content)

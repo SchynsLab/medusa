@@ -43,8 +43,8 @@ def tqdm_log(iter_, logger, desc="Render shape"):
 
     Parameters
     ----------
-    n : int
-        Length of iterator
+    iter_ : iterable
+        Initial iterable
     logger : logging.Logger
         Existing Medusa logger
     desc : str

@@ -6,7 +6,7 @@ from scipy.spatial import Delaunay
 from .defaults import DEVICE
 
 
-def create_viewport_matrix(nx, ny, device="cuda"):
+def create_viewport_matrix(nx, ny, device=DEVICE):
     """Creates a viewport matrix that transforms vertices in NDC [-1, 1] space
     to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
     https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-
@@ -22,8 +22,8 @@ def create_viewport_matrix(nx, ny, device="cuda"):
 
     Returns
     -------
-    mat : np.ndarray
-        A 4x4 numpy array representing the viewport transform
+    mat : torch.tensor
+        A 4x4 tensor representing the viewport transform
     """
 
     mat = torch.tensor(
@@ -57,7 +57,7 @@ def create_ortho_matrix(nx, ny, znear=0.05, zfar=100.0, device=DEVICE):
 
     Returns
     -------
-    mat : np.ndarray
+    mat : torch.tensor
         A 4x4 affine matrix
     """
     n = znear
@@ -83,12 +83,12 @@ def crop_matrix_to_3d(mat_33):
 
     Parameters
     ----------
-    mat_33 : np.ndarray
+    mat_33 : torch.tensor
         A 3x3 affine matrix
 
     Returns
     -------
-    mat_44 : np.ndarray
+    mat_44 : torch.tensor
         A 4x4 affine matrix
     """
 
@@ -123,9 +123,9 @@ def apply_perspective_projection(v, mat):
 
     Parameters
     ----------
-    v : np.ndarray
-        A 2D (vertices x XYZ) array with vertex data
-    mat : np.ndarray
+    v : torch.tensor
+        A 2D (vertices x XYZ) tensor with vertex data
+    mat : torch.tensor
         A 4x4 perspective projection matrix
     """
 
@@ -345,7 +345,7 @@ def resize_with_pad(imgs, output_size=(224, 224), out_dtype=torch.uint8, **kwarg
     h, w = int(h), int(w)
     imgs_resized = torch.zeros(out_shape, device=imgs.device, dtype=out_dtype)
     imgs_resized[..., :h, :w] = resize(imgs, (h, w), **kwargs).to(out_dtype)
-    del imgs
+    del imgs  # free up space
 
     scale = h / ih
     return imgs_resized, scale
