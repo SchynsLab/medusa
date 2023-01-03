@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Clear any existing auto-generated documentation
 rm -rf docs/_build
 rm -rf docs/autoapi/_build
