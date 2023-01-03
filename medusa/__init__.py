@@ -1,4 +1,5 @@
 """A module to globally set configurations."""
+
 import os
 
 import torch

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from conftest import _check_gha_compatible
+from conftest import _is_gha_compatible
 
 from medusa.containers.results import BatchResults
 from medusa.crop import LandmarkAlignCropModel, LandmarkBboxCropModel
@@ -15,7 +15,7 @@ from medusa.crop import LandmarkAlignCropModel, LandmarkBboxCropModel
 @pytest.mark.parametrize("device", ["cuda", "cpu"])
 def test_crop_model(Model, lm_name, imgs_test, device):
     """Generic tests for crop models."""
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
 
     imgs, n_exp = imgs_test

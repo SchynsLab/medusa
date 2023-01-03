@@ -128,6 +128,7 @@ class Mediapipe(BaseReconModel):
             img.flags.writeable = False
             results = self.model.process(img)
             if not results.multi_face_landmarks:
+                # No faces detected!
                 continue
 
             for detection in results.multi_face_landmarks:

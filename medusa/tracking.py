@@ -1,5 +1,6 @@
 """Module with functionality to 'track' faces, i.e., to associate the same face
 across detections/reconstructions from multiple consecutive (video) frames."""
+
 import torch
 
 
@@ -19,18 +20,12 @@ def sort_faces(lms, img_idx, dist_threshold=250):
         Euclidean distance between two sets of landmarks/vertices that we consider
         comes from two different faces (e.g., if ``d(lms1, lms2) >= dist_treshold``,
         then we conclude that face 1 (``lms1``) is a different from face 2 (``lms2``)
-    present_treshold : float
-        Any face that is tracked less than a ``present_treshold`` proportion of frames
-        will not be included in the selection (i.e., in ``keep``)
 
     Returns
     -------
     face_idx : torch.tensor
         An integer tensor of length *n detections*, in which each unique value
         represents a unique face
-    keep : torch.tensor
-        A boolean tensor of length *n detections*, in which each value indicates
-        whether that detection should be kept (``True``) or discarded (``False``)
     """
     device = lms.device
     face_idx = torch.zeros_like(img_idx, device=device, dtype=torch.int64)

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 import torch
-from conftest import _check_gha_compatible
+from conftest import _is_gha_compatible
 from skimage.transform._geometric import _umeyama
 
 from medusa.transforms import estimate_similarity_transform
@@ -13,7 +13,7 @@ from medusa.transforms import estimate_similarity_transform
 @pytest.mark.parametrize("estimate_scale", [True, False])
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_similarity_transform(batch_size, n_points, n_dim, estimate_scale, device):
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
 
     if n_points < n_dim:

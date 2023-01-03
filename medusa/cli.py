@@ -14,7 +14,6 @@ For more information, check out the
 `documentation <https://lukas-snoek.com/medusa/api/cli.html`_.
 """
 
-import logging
 import shutil
 import zipfile
 from collections import OrderedDict
@@ -30,10 +29,6 @@ from .defaults import DEVICE
 from .containers import Data4D
 from .io import download_file
 from .log import get_logger
-from .preproc.align import align
-from .preproc.epoch import epoch
-from .preproc.filter import bw_filter
-from .preproc.resample import resample
 from .recon import videorecon
 
 RECON_MODELS = [
@@ -76,137 +71,23 @@ def videorecon_cmd(video_path, out, recon_model, device, n_frames, batch_size):
 
 
 @click.command()
-@click.argument("data_file", type=click.Path(exists=True, dir_okay=False))
-@click.option("-o", "--out", default=None, type=click.Path(),
-              help="File to save output to (shouldn't have an extension)")
-@click.option("--algorithm", default="icp", type=click.Choice(["icp", "umeyama"]),
-              help="Name of the alignment algorithm")
-@click.option("--additive-alignment", is_flag=True,
-              help="Whether to perform alignment on top of existing transform")
-@click.option("--ignore-existing", is_flag=True,
-              help="Whether to ignore existing alignment and run alignment")
-@click.option("--reference-index", default=0,
-              help="Index of reference mesh to align other meshes to (default = 0 = first")
-def align_cmd(data_file, out, algorithm, additive_alignment, ignore_existing,
-              reference_index):
-    """Performs alignment ("motion correction") of a mesh time series."""
-    data = align(data_file, algorithm, additive_alignment, ignore_existing,
-                 reference_index)
-
-    if out is None:
-        out = data_file.replace('.h5', '')
-
-    data.save(out + '.h5')
-
-
-@click.command()
-@click.argument("data_file", type=click.Path(exists=True, dir_okay=False))
-@click.option("-o", "--out", default=None, type=click.Path(),
-              help="File to save output to (shouldn't have an extension)")
-@click.option("--sampling-freq", default=None, type=click.INT,
-              help="Desired sampling frequency of the data (an integer, in hertz)")
-@click.option("--kind", default="pchip", type=click.Choice(["pchip", "linear", "quadratic", "cubic"]),
-              help="Kind of interpolation used")
-def resample_cmd(data_file, out, sampling_freq, kind):
-    """Performs temporal resampling of a mesh time series."""
-
-    data = resample(data_file, sampling_freq, kind)
-
-    if out is None:
-        out = data_file.replace('.h5', '')
-
-    data.save(out + '.h5')
-
-
-@click.command()
-@click.argument("data_file", type=click.Path(exists=True, dir_okay=False))
-@click.option("-o", "--out", default=None, type=click.Path(),
-              help="File to save output to (shouldn't have an extension)")
-@click.option("-l", "--low-pass", default=4,
-              help="Low-pass filter in hertz")
-@click.option("-h", "--high-pass", default=0.005,
-              help="High-pass filter in hertz")
-def filter_cmd(data_file, out, low_pass, high_pass):
-    """Performs temporal filtering of a mesh time series."""
-
-    data = bw_filter(data_file, low_pass, high_pass)
-
-    if out is None:
-        out = data_file.replace('.h5', '')
-
-    data.save(out + '.h5')
-
-
-@click.command()
-@click.argument("data_file", type=click.Path(exists=True, dir_okay=False))
-@click.option("-o", "--out", default=None, type=click.Path(),
-              help="File to save output to (shouldn't have an extension)")
-@click.option("-s", "--start", default=-0.5,
-              help="Start of epoch (in seconds), relative to event onset")
-@click.option("-e", "--end", default=3.0,
-              help="End of epoch (in seconds), relative to event onset")
-@click.option("-p", "--period", default=0.1,
-              help="Desired period (1 / sampling frequency) of epoch (in seconds)")
-@click.option("--baseline-correct", is_flag=True,
-              help="Whether to perform baseline correction")
-@click.option("--add-back-grand-mean", is_flag=True,
-              help="Whether to add back the grand mean after baseline correction")
-@click.option("--to-mne", is_flag=True,
-              help="Whether convert the output to an MNE EpochsArray object")
-def epoch_cmd(data_file, out, start, end, period, baseline_correct, add_back_grand_mean,
-              to_mne):
-    """Performs epoching of a mesh time series."""
-
-    data = Data4D.load(data_file)
-    epochsarray = epoch(data, start, end, period, baseline_correct,
-                        add_back_grand_mean=add_back_grand_mean)
-
-    if out is None:
-        out = data_file.replace('.h5', '')
-
-    if to_mne:
-        epochsarray = epochsarray.to_mne(frame_t=data.frame_t, include_global_motion=True)
-        epochsarray.save(out + '_epo.fif', split_size="2GB", fmt="single",
-                         overwrite=True, split_naming="bids", verbose="WARNING")
-    else:
-        epochsarray.save(out + '_epo.h5')
-
-
-@click.command()
 @click.argument("data_file")
-@click.option("-o", "--out", default=None, type=click.Path(),
-              help="File to save output to (shouldn't have an extension)")
-@click.option("-v", "--video", type=click.Path(exists=True, dir_okay=False),
-              help="Path to video file, when rendering on top of original video")
-@click.option("-n", "--n-frames", default=None, type=click.INT,
-              help="Number of frames to render (default is all)")
-@click.option("--smooth", is_flag=True,
-              help="Render smooth surface")
-@click.option("--wireframe", is_flag=True,
-              help="Render wireframe instead of mesh")
-@click.option("--alpha", default=None, type=click.FLOAT,
-              help="Alpha (transparency) of face")
-@click.option("--scale", default=None, type=click.FLOAT,
-              help="Scale factor of rendered video (e.g., 0.25 = 25% of original size")
-def videorender_cmd(data_file, out, video, n_frames, smooth, wireframe, alpha, scale):
+@click.option("-o", "--out", default=None, type=click.Path(), help="File to save output to (shouldn't have an extension)")
+@click.option("-v", "--video", type=click.Path(exists=True, dir_okay=False), help="Path to video file, when rendering on top of original video")
+@click.option('-r', '--renderer', default='pyrender', type=click.Choice(['pyrender', 'pytorch3d']))
+@click.option("-s", "--shading", default='flat', type=click.Choice(['flat', 'smooth']), help="Type of shading")
+@click.option("--alpha", default=None, type=click.FLOAT, help="Alpha (transparency) of face")
+def videorender_cmd(data_file, out, video, renderer, shading, alpha):
     """Renders the reconstructed mesh time series as a video (gif or mp4)."""
 
-    data = load_h5(data_file)
+    data = Data4D.load(data_file)
 
     if out is None:
         out = data_file.replace('.h5', '.mp4')
-
-    out = Path(out)
+    
     data.render_video(
-        out,
-        video=video,
-        smooth=smooth,
-        wireframe=wireframe,
-        scale=scale,
-        n_frames=n_frames,
-        alpha=alpha,
+        Path(out), video=video, renderer=renderer, shading=shading, alpha=alpha,
     )
-# fmt: on
 
 
 @click.command()

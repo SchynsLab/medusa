@@ -4,7 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pytest
 import torch
-from conftest import _check_gha_compatible
+from conftest import _is_gha_compatible
 
 from medusa.defaults import DEVICE
 from medusa.containers import Data4D
@@ -16,7 +16,7 @@ from medusa.recon import videorecon
 def test_init(device):
     """Simple initialization test."""
 
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
 
     v = torch.randn((100, 5023, 3), device=device)
@@ -33,7 +33,7 @@ def test_init(device):
 def test_load_and_save(model, device):
     """Tests loading from disk and saving a Data4D object."""
 
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
 
     h5 = get_example_h5(load=False, model=model)
@@ -52,6 +52,15 @@ def test_project68(model):
     data = get_example_h5(load=True, model=model, device=DEVICE)
     v68 = data.project_to_68_landmarks()
     assert v68.shape == (data.v.shape[0], 68, 3)
+
+
+@pytest.mark.parametrize("model", ["mediapipe", "emoca-coarse"])
+def test_to_local_and_to_world(model):
+    data = get_example_h5(load=True, model=model, device=DEVICE)
+    data.to_world()
+    assert(data.space == 'world')
+    data.to_local()
+    assert(data.space == 'local')
 
 
 @pytest.mark.parametrize("pad_missing", [True, False])

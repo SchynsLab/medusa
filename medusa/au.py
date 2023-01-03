@@ -1,5 +1,5 @@
 """A module with functionality to perform Action Units (AU) decoding from 4D
-reconstructions."""
+reconstructions (WIP)."""
 
 from pathlib import Path
 
@@ -10,8 +10,17 @@ from medusa.preproc import align
 
 
 class ActionUnitDecoder:
+    """Class to perform Action Unit decoding from meshes.
+    
+    Parameters
+    ----------
+    recon_model : str
+        Name of the reconstruction model
+    predict_amplitude : bool
+        Whether to predict amplitude (``True``) or only perform detection (``False``)
+    """
     def __init__(self, recon_model=None, predict_amplitude=True):
-
+        """Initializes an ActionUnitDecoder object."""
         self.recon_model = recon_model
         self.predict_amplitude = predict_amplitude
         self._detect_model = None
@@ -19,7 +28,7 @@ class ActionUnitDecoder:
         self._setup()
 
     def _setup(self):
-
+        """Sets up detection and/or amplitude model."""
         if self.recon_model is not None:
             self._setup_detect_model(self.recon_model)
 
@@ -27,6 +36,7 @@ class ActionUnitDecoder:
                 self._setup_amp_model(self.recon_model)
 
     def _setup_detect_model(self, recon_model):
+        """Sets up detection model."""
         f_in = (
             Path(__file__).parent
             / f"data/au/model-{recon_model}_mode-detect_model.onnx"
@@ -39,10 +49,11 @@ class ActionUnitDecoder:
         self._detect_thresh = np.load(f_in)
 
     def _setup_amp_model(self, recon_model):
+        """Sets up amplitude model."""
         pass
 
     def decode(self, data, neutral_frame=0):
-
+        """Decodes AUs from a ``Data4D`` object."""
         if data.space == "world":
             data = align(data)
 

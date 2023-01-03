@@ -31,8 +31,17 @@ def video_test(request):
     return vid
 
 
-def _check_gha_compatible(device):
+def _is_gha_compatible(device):
     if device == "cuda" and "GITHUB_ACTIONS" in os.environ:
         return False
     else:
         return True
+
+
+def _is_pytorch3d_installed():
+    
+    try:
+        import pytorch3d
+        return True
+    except:
+        return False

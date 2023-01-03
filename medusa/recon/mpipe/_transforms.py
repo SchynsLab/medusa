@@ -186,21 +186,15 @@ def internal_solve_weighted_orthogonal_problem(sources, targets, sqrt_weights):
     )
 
     design_matrix = np.matmul(weighted_targets, centered_weighted_sources.T)
-
     rotation = compute_optimal_rotation(design_matrix)
-
     scale = compute_optimal_scale(
         centered_weighted_sources, weighted_sources, weighted_targets, rotation
     )
 
     rotation_and_scale = scale * rotation
-
     pointwise_diffs = weighted_targets - np.matmul(rotation_and_scale, weighted_sources)
-
     weighted_pointwise_diffs = pointwise_diffs * sqrt_weights[None, :]
-
     translation = np.sum(weighted_pointwise_diffs, axis=1) / total_weight
-
     transform_mat = combine_transform_matrix(rotation_and_scale, translation)
 
     return transform_mat

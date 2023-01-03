@@ -1,3 +1,8 @@
+"""Encoders specific to MICA.
+
+For the associated license, see license.md.
+"""
+
 import torch
 import torch.nn.functional as F
 from torch import nn

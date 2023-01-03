@@ -1,3 +1,5 @@
+"""Module with a class to make working with ONNX models easier."""
+
 from collections import OrderedDict
 
 import numpy as np
@@ -23,7 +25,7 @@ class OnnxModel:
     """
 
     def __init__(self, onnx_file, device=DEVICE, **kwargs):
-
+        """Initializes an OnnxModel object."""
         self.device = device
         self._session = self._init_session(onnx_file)
         self._binding = self._session.io_binding()

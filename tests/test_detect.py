@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 import torch
-from conftest import _check_gha_compatible
+from conftest import _is_gha_compatible
 
 from medusa.containers.results import BatchResults
 from medusa.detect import SCRFDetector, YunetDetector
@@ -15,7 +15,7 @@ from medusa.io import VideoLoader
 )
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_detector_imgs(Detector, imgs_test, device):
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
 
     model = Detector(device=device)

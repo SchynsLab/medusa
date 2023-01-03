@@ -2,11 +2,16 @@ import torch
 import pytest
 import numpy as np
 from pathlib import Path
+from medusa.data.regenerate_example_recon_data import main as regenerate_data
 from medusa.data import get_example_frame, get_example_video, get_example_h5
 from medusa.data import get_template_flame, get_template_mediapipe
 from medusa.io import VideoLoader
 from medusa.containers import Data4D
-from conftest import _check_gha_compatible
+from conftest import _is_gha_compatible
+
+
+def test_regenerate_recon_data():
+    regenerate_data()
 
 
 @pytest.mark.parametrize('load_torch', [True, False])
@@ -14,7 +19,7 @@ from conftest import _check_gha_compatible
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_get_example_frame(load_torch, load_numpy, device):
 
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
 
     if load_numpy and load_torch:
@@ -51,7 +56,7 @@ def test_get_example_video(return_videoloader, kwargs):
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 def test_get_example_h5(load, model, device):
     
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
     
     out = get_example_h5(load, model, device)
@@ -74,7 +79,7 @@ def test_get_example_h5(load, model, device):
 @pytest.mark.parametrize('device', [None, 'cpu', 'cuda'])
 def test_get_template_flame(topo, device):
 
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return 
    
     out = get_template_flame(topo, device=device)

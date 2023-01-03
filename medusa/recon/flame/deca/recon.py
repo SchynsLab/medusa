@@ -11,6 +11,8 @@ All model classes inherit from a common base class, ``FlameReconModel`` (see ``f
 .. [3] Filntisis, P. P., Retsinas, G., Paraperas-Papantoniou, F., Katsamanis, A., Roussos, A., & Maragos, P. (2022).
        Visual Speech-Aware Perceptual 3D Facial Expression Reconstruction from Videos.
        arXiv preprint arXiv:2207.11094.
+       
+For the associated license, see license.md.
 """
 
 from pathlib import Path

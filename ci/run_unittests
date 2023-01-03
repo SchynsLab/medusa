@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+coverage run --source=medusa/ -m pytest --disable-warnings tests/ 

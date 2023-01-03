@@ -14,10 +14,12 @@ import numpy as np
 import pandas as pd
 import torch
 from trimesh.transformations import compose_matrix, decompose_matrix
+from kornia.geometry.linalg import transform_points
 
 from ..defaults import DEVICE, LOGGER
 from ..io import VideoLoader, VideoWriter
 from ..log import tqdm_log
+from ..tracking import filter_faces, _ensure_consecutive_face_idx
 
 
 class Data4D:
@@ -75,11 +77,11 @@ class Data4D:
         """Does some checks to make sure the data works with the renderer and
         other stuff."""
 
-        if self.v.dtype != torch.float32:
-            self.v = self.v.to(torch.float32)
-
-        if self.tris.dtype != torch.int64:
-            self.tris = self.tris.to(torch.int64)
+        for attr in ('v', 'mat', 'tris', 'img_idx', 'face_idx', 'cam_mat'):
+            data = getattr(self, attr, None)
+            if isinstance(data, np.ndarray):
+                data = torch.as_tensor(data, device=self.device)
+                setattr(self, attr, data)   
 
         nv = self.v.shape[0]
         if self.img_idx is None:
@@ -88,21 +90,27 @@ class Data4D:
         if self.face_idx is None:
             self.face_idx = torch.zeros(nv, dtype=torch.int64, device=self.device)
 
-        to_check = {'v': self.v, 'tris': self.tris, 'face_idx': self.face_idx, 'img_idx': self.img_idx}
-        for attr, data in to_check.items():
-            if data.device.type != self.device:                
-                raise ValueError(f"Attribute {attr} has different device ({data.device}) "
-                                 f"than Data4D ({self.device})")
-
         if self.video_metadata is None:
             self.video_metadata = {
                 'img_size': None,
-                'n_img': None,
-                'fps': None
+                'n_img': self.v.shape[0],
+                'fps': 30
             }
 
         if self.cam_mat is None:
             self.cam_mat = torch.eye(4, device=self.device)
+
+        for attr in ('v', 'mat', 'tris', 'face_idx', 'img_idx', 'cam_mat'):
+            data = getattr(self, attr)
+            if data.device.type != self.device:
+                data = data.to(self.device)
+
+            if attr in ('v', 'mat', 'cam_mat'):
+                data = data.to(torch.float32)
+            else:
+                data = data.to(torch.int64)
+
+            setattr(self, attr, data)
 
         if self.space not in ["local", "world"]:
             raise ValueError("`space` should be either 'local' or 'world'!")
@@ -218,6 +226,26 @@ class Data4D:
                 init_kwargs[attr] = value
 
         return cls(**init_kwargs)
+
+    def to_local(self):
+        
+        if self.space == 'local':
+            LOGGER.warning("Data already in 'local' space!")
+        else:
+            self.v = transform_points(torch.inverse(self.mat), self.v)
+            self.cam_mat = torch.linalg.inv(self.mat[0]) @ self.cam_mat
+            self.cam_mat[3, :] = torch.tensor([0., 0., 0., 1.], device=self.device)
+            self.space = "local"
+
+    def to_world(self):
+
+        if self.space == 'world':
+            LOGGER.warning("Data already in 'world' space!")
+        else:
+            self.v = transform_points(self.mat, self.v)
+            self.cam_mat = self.mat[0] @ self.cam_mat
+            self.cam_mat[3, :] = torch.tensor([0., 0., 0., 1.], device=self.device)
+            self.space = "world"
 
     def project_to_68_landmarks(self):
         """Projects to 68 landmark set.
@@ -353,7 +381,6 @@ class Data4D:
 
         return out
 
-
     def compose_mats(self, params):
         """Converts a sequence of global (affine) motion parameters into a
         sequence of 4x4 affine matrices and updates the ``.mat`` attribute.
@@ -378,15 +405,39 @@ class Data4D:
         """
         T = params.shape[0]
         mats = np.zeros((T, 4, 4))
+
+        if isinstance(params, pd.DataFrame):
+            params = params.to_numpy()
+
         for i in range(T):
             p = params[i, :]
             trans, rots, scale, shear = p[:3], p[3:6], p[6:9], p[9:]
             rots = np.deg2rad(rots)
             mats[i, :, :] = compose_matrix(scale, shear, rots, trans)
 
-        self.mat = mats
+        self.mat = torch.as_tensor(mats, dtype=torch.float32, device=self.device)
 
-    def render_video(self, f_out, renderer="pyrender", video=None, alpha=1, **kwargs):
+    def filter_faces(self, present_threshold=0.1):
+        """Filters the reconstructed faces by the proportion of frames they are 
+        present in.
+        
+        Parameters
+        ----------
+        present_threshold : float
+            Lower bound on proportion present
+        """
+        keep = filter_faces(self.face_idx, self.video_metadata['n_img'], present_threshold)
+
+        if not torch.all(keep):
+            for attr in ('v', 'mat', 'img_idx', 'face_idx'):
+                data = getattr(self, attr)
+                if data.shape[0] == keep.shape[0]:
+                    setattr(self, attr, data[keep])
+
+        self.face_idx = _ensure_consecutive_face_idx(self.face_idx)
+
+    def render_video(self, f_out, renderer="pyrender", shading='flat', video=None,
+                     alpha=1, **kwargs):
         """Renders the sequence of 3D meshes as a video. It is assumed that
         this method is only called from a child class (e.g., ``Mediapipe4D``).
 
@@ -424,12 +475,22 @@ class Data4D:
         else:
             cam_type = "orthographic"
 
-        w, h = self.video_metadata["img_size"]
+        if 'viewport' in kwargs:
+            w, h = kwargs.pop('viewport')
+        else:
+            img_size = self.video_metadata.get('img_size')
+            if img_size is None:
+                raise ValueError("Viewport/frame size is not known!")
+            else:
+                w, h = img_size
+
+        overlay = kwargs.pop('overlay', None)
 
         renderer = Renderer(
             viewport=(w, h),
             cam_mat=self.cam_mat,
             cam_type=cam_type,
+            shading=shading,
             device=self.device,
             **kwargs,
         )
@@ -451,11 +512,17 @@ class Data4D:
                 )
 
             img_idx = self.img_idx == i_img
+
             if img_idx.sum() == 0:
                 img = background
             else:
+                if overlay is not None:
+                    overlay_ = overlay[img_idx]
+                else:
+                    overlay_ = None
+                
                 v = self.v[img_idx]
-                img = renderer(v, self.tris)
+                img = renderer(v, self.tris, overlay=overlay_)
                 img = renderer.alpha_blend(img, background, face_alpha=alpha)
 
             writer.write(img)

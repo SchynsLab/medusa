@@ -1,3 +1,8 @@
+"""An implementation of the MICA reconstruction model.
+
+For the associated license, see license.md.
+"""
+
 from collections import OrderedDict
 
 import torch

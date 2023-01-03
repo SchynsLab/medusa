@@ -1,3 +1,5 @@
+"""Module with functions to implement some often used transformations in Medusa."""
+
 import numpy as np
 import torch
 from kornia.geometry.transform import resize

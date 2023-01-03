@@ -12,12 +12,6 @@ jobs:
       matrix:
         python-version: [3.9]
     steps:
-      # - name: Download external data
-      #   shell: bash
-      #   env:
-      #     passwd_flame: ${{ secrets.PASSWD_FLAME }}
-      #   run: poetry run bash ./ci/download_data.sh
-
       # Generate + deploy documentation
       - uses: actions/checkout@v3
       - name: Setup Medusa
@@ -26,13 +20,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Build docs
         shell: bash
-        run: poetry run bash docs/build_docs.sh
+        run: poetry run ./docs/build_docs
       - name: Publish docs
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
-
-      # Testing
-      #- name: Test with pytest
-      #  run: poetry run bash ci/run_tests.sh

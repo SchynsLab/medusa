@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+interrogate medusa/ -f 30 > .interrogate_results.txt

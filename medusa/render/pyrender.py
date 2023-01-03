@@ -28,13 +28,17 @@ class PyRenderer(BaseRenderer):
     viewport : tuple[int]
         Desired output image size (width, height), in pixels; should match
         the original image (before cropping) that was reconstructed
+    cam_mat : torch.tensor
+        A camera matrix to set the position/angle of the camera
     cam_type : str
         Either 'orthographic' (for Flame-based reconstructions) or
-        'intrinsic' (for mediapipe reconstruction, i.e., a perspective camera)
-    smooth : bool
-        Whether to render a smooth mesh (by normal interpolation) or not
-    wireframe : bool
-        Whether to render a wireframe instead of a surface
+        'perpective' (for mediapipe reconstructions)
+    shading : str
+        Type of shading ('flat', 'smooth', or 'wireframe')
+    wireframe_opts : None, dict
+        Dictionary with extra options for wireframe rendering (options: 'width', 'color')
+    device : str
+        Device to store the image on ('cuda' or 'cpu')
     """
 
     def __init__(
@@ -46,7 +50,7 @@ class PyRenderer(BaseRenderer):
         wireframe_opts=None,
         device=DEVICE,
     ):
-
+        """Initializes a Pyrenderer object."""
         self.viewport = viewport
         self.cam_mat = cam_mat
         self.cam_type = cam_type
@@ -58,6 +62,7 @@ class PyRenderer(BaseRenderer):
         self._misc_config()
 
     def __str__(self):
+        """Returns the name of the renderer (nice for testing)."""
         return "pyrender"
 
     def _create_scene(self):
@@ -65,7 +70,6 @@ class PyRenderer(BaseRenderer):
 
         The object (reconstructed face) is added when calling __call__.
         """
-        w, h = self.viewport
         scene = Scene(bg_color=[0, 0, 0, 0], ambient_light=(255, 255, 255))
 
         if self.cam_type == "orthographic":
@@ -91,7 +95,7 @@ class PyRenderer(BaseRenderer):
         return scene
 
     def _misc_config(self):
-
+        """Do some configurations."""
         if self.shading == "wireframe":
 
             if self.wireframe_opts is None:
@@ -109,76 +113,40 @@ class PyRenderer(BaseRenderer):
                     [1.0, 0.0, 0.0, 1], dtype=np.float32
                 )
 
-    def __call__(self, v, tris, overlay=None, cmap_name="bwr"):
-        """Performs the actual rendering.
+    def __call__(self, v, tris, overlay=None):
+        """Performs the actual rendering for a given mesh. Note that
+        this function does not do proper batched (vectorized) rendering,
+        but is made to look like it does to keep it consistent with the
+        ``PytorchRenderer``.
 
         Parameters
         ----------
-        v : np.ndarray
-            A 2D array with vertices of shape V (nr of vertices) x 3
-            (X, Y, Z)
-        tris : np.ndarray
-            A 2D array with 'triangles' of shape F (nr of faces) x 3
-            (nr of vertices); should be integers
-        overlay : np.ndarray
-            A 1D array with overlay values (numpy floats between 0 and 1), one for each
-            vertex or face
+        v : torch.tensor
+            A 3D (batch size x vertices x 3) tensor with vertices
+        tris : torch.tensor
+            A 3D (batch size x vertices x 3) tensor with triangles
+        overlay : torch.tensor
+            WIP
         cmap_name : str
             Name of (matplotlib) colormap; only relevant if ``overlay`` is not ``None``
-        is_colors : bool
-            If ``True``, then ``overlay`` is a V (of F) x 4 (RGBA) array; if ``False``,
-            ``overlay`` is assumed to be a 1D array with floats betwee 0 and 1
 
         Returns
         -------
-        img : np.ndarray
-            A 3D array (with np.uint8 integers) of shape ``viewport[0]`` x
+        img : torch.tensor
+            A 4D tensor with uint8 values of shape batch size x ``viewport[0]`` x
             ``viewport[1]`` x 3 (RGB)
         """
 
-        v, tris = self._preprocess(v, tris, format="numpy")
-
-        # if overlay is not None:
-        #     overlay = overlay.squeeze()
-        #     cmap = plt.get_cmap(cmap_name)
-
-        #     if overlay.shape[0] == v.shape[0]:
-        #         normals = mesh.vertex_normals
-        #     elif overlay.shape[0] == f.shape[0]:
-        #         normals = mesh.face_normals
-
-        #     if overlay.ndim == 2:
-        #         if overlay.shape[1] == 3:
-        #             overlay = (overlay * normals).sum(axis=1)
-        #         else:
-        #             raise ValueError(f"Don't know what to do with overlay of shape {overlay.shape}!")
-
-        #     from matplotlib.colors import TwoSlopeNorm
-        #     vmin = overlay.min()
-        #     vmax = overlay.max()
-        #     if vmin != 0 and vmax != 0:
-        #         tsn = TwoSlopeNorm(vmin=overlay.min(), vmax=overlay.max(), vcenter=0)
-        #         overlay = tsn(overlay)
-        #     overlay = cmap(overlay)
-        #     if overlay.shape[0] == f.shape[0]:
-        #         face_colors = overlay
-        #         vertex_colors = None
-        #     elif overlay.shape[0] == v.shape[0]:
-        #         face_colors = None
-        #         vertex_colors = overlay
-        #     else:
-        #         raise ValueError("Cannot infer whether overlay refers to vertices or "
-        #                          "faces (polygons)!")
-
-        #     mesh.visual = visual.create_visual(
-        #         face_colors=face_colors,
-        #         vertex_colors=vertex_colors,
-        #         mesh=mesh
-        #     )
-
+        v, tris, overlay = self._preprocess(v, tris, overlay, format="numpy")
+        
         for i in range(v.shape[0]):
 
-            mesh = Trimesh(v[i], tris)
+            if overlay is not None:
+                overlay_ = overlay[i]
+            else:
+                overlay_ = None
+
+            mesh = Trimesh(v[i], tris, vertex_colors=overlay_)
             mesh = Mesh.from_trimesh(
                 mesh,
                 smooth=self.shading == "smooth",
@@ -203,6 +171,6 @@ class PyRenderer(BaseRenderer):
         return img
 
     def close(self):
-        """Closes the OffScreenRenderer object."""
+        """Closes the OffScreenRenderer object and clears the scene."""
         self._renderer.delete()
         self._scene.clear()

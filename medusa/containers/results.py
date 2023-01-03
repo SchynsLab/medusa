@@ -1,3 +1,6 @@
+"""A very hack implementation of a container to store results from processing
+multiple batches of images."""
+
 from pathlib import Path
 
 import torch
@@ -30,7 +33,7 @@ class BatchResults:
     """
 
     def __init__(self, n_img=0, device=DEVICE, loglevel="INFO", **kwargs):
-
+        """Initializes a BatchResults object."""
         self.device = device
         self.n_img = n_img
         self._logger = get_logger(loglevel)
@@ -69,7 +72,14 @@ class BatchResults:
             self.n_img += kwargs["n_img"]
 
     def concat(self, n_max=None):
-
+        """Concatenate results form multiple batches.
+        
+        Parameters
+        ----------
+        n_max : None, int
+            Whether to only return ``n_max`` observations per attribute
+            (ignored if ``None``)
+        """
         for attr, data in self.__dict__.items():
             if attr[0] == "_":
                 continue
@@ -89,7 +99,24 @@ class BatchResults:
             setattr(self, attr, data)
 
     def sort_faces(self, attr="lms", dist_threshold=250):
-
+        """'Sorts' faces using the ``medusa.tracking.sort_faces`` function (and
+        performs some checks of the data).
+        
+        Parameters
+        ----------
+        attr : str
+            Name of the attribute that needs to be used to sort the faces
+            (e.g., 'lms' or 'v')
+        dist_threshold : int, float
+            Euclidean distance between two sets of landmarks/vertices that we consider
+            comes from two different faces (e.g., if ``d(lms1, lms2) >= dist_treshold``,
+            then we conclude that face 1 (``lms1``) is a different from face 2 (``lms2``)
+        
+        Returns
+        -------
+        face_idx : torch.tensor
+            The face IDs associate with each detection
+        """
         if not hasattr(self, attr):
             self._logger.warning(f"No attribute `{attr}`, maybe no detections?")
             return
@@ -149,19 +176,27 @@ class BatchResults:
         template=None,
         **kwargs,
     ):
-        """Creates an image with the estimated bounding box (bbox) on top of
-        it.
+        """Visualizes the detection/cropping results aggregated by the BatchResults object.
 
         Parameters
         ----------
-        f_out : str, pathlib.Path
-            If multiple images, a number (_xxx) is appended
-        imgs : array_like
-            A numpy array with the original (uncropped images); can also be
-            a torch Tensor; can be a batch of images or a single image
-        bbox : np.ndarray
-            A numpy array with the bounding box(es) corresponding to the
-            image(s)
+        f_out : str, Path
+            Path of output image/video
+        imgs : torch.tensor
+            A tensor with the original (uncropped images); can be a batch of images
+            or a single image
+        video : bool
+            Whether to output a video or image (grid)
+        show_cropped : bool
+            Whether to visualize the cropped image or the original image
+        face_id : None
+            Should be None (used in recursive call)
+        fps : int
+            Frames per second of video (only relevant if ``video=True``)
+        crop_size : tuple[int]
+            Size of cropped images
+        template : torch.tensor
+            Template used in aligment (optional)
         """
         # To be used in recursive function call
         recursive_kwargs = locals()

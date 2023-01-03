@@ -36,7 +36,7 @@ def get_template_mediapipe(device=None):
     template = {"v": data["vertices"], "tris": data["faces"]}
 
     if device is not None:
-        template['v'] = torch.as_tensor(template['v'], device=device)
+        template['v'] = torch.as_tensor(template['v'], device=device).float()
         template['tris'] = torch.as_tensor(template['tris'], device=device).long()
 
     return template

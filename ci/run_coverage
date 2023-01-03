@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+coverage report -m --skip-covered
+coverage json

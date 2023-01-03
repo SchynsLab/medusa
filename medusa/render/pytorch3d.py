@@ -1,9 +1,11 @@
+"""Module with a renderer class based on ``pytorch3d``."""
+
 import numpy as np
 import torch
 from pytorch3d.renderer import (FoVOrthographicCameras, FoVPerspectiveCameras,
                                 HardFlatShader, HardPhongShader,
                                 MeshRasterizer, MeshRenderer, PointLights,
-                                RasterizationSettings, TexturesVertex)
+                                RasterizationSettings, TexturesVertex, BlendParams)
 from pytorch3d.structures import Meshes
 
 from ..defaults import DEVICE
@@ -11,6 +13,25 @@ from .base import BaseRenderer
 
 
 class PytorchRenderer(BaseRenderer):
+    """A pytorch3d-based renderer.
+    
+    Parameters
+    ----------
+    viewport : tuple[int]
+        Desired output image size (width, height), in pixels; should match
+        the original image (before cropping) that was reconstructed
+    cam_mat : torch.tensor
+        A camera matrix to set the position/angle of the camera
+    cam_type : str
+        Either 'orthographic' (for Flame-based reconstructions) or
+        'perpective' (for mediapipe reconstructions)
+    shading : str
+        Type of shading ('flat', 'smooth', or 'wireframe')
+    wireframe_opts : None, dict
+        Dictionary with extra options for wireframe rendering (options: 'width', 'color')
+    device : str
+        Device to store the image on ('cuda' or 'cpu')
+    """
     def __init__(
         self,
         viewport,
@@ -19,6 +40,7 @@ class PytorchRenderer(BaseRenderer):
         shading="flat",
         device=DEVICE,
     ):
+        """Initializes a PytorchRenderer object."""
         self.viewport = viewport
         self.device = device
         self._settings = self._setup_settings(viewport)
@@ -29,10 +51,22 @@ class PytorchRenderer(BaseRenderer):
         self._renderer = MeshRenderer(self._rasterizer, self._shader)
 
     def __str__(self):
+        """Returns the name of the renderer (nice for testing)."""
         return "pytorch3d"
 
     def _setup_settings(self, viewport):
-
+        """Creates a ``RasterizationSettings`` object.
+        
+        Parameters
+        ----------
+        viewport : tuple[int]
+            Desired output image size (width, height), in pixels
+            
+        Returns
+        -------
+        RasterizationSettings
+            A pytorch3d ``RasterizationSettings`` object
+        """
         if isinstance(viewport, (list, tuple, np.ndarray)):
             # pytorch3d wants (H, W), but we always use (W, H) to
             # keep the renderer API consistent
@@ -48,6 +82,21 @@ class PytorchRenderer(BaseRenderer):
         )
 
     def _setup_cameras(self, cam_mat, cam_type):
+        """Sets of the appropriate camameras.
+        
+        Parameters
+        ----------
+        cam_mat : torch.tensor
+            Camera matrix to be used
+        cam_type : str
+            Either 'orthographic' or 'perspective'
+            
+        Returns
+        -------
+        cam : pytorch3d camera
+            A pytorch3d camera object (either ``FoVOrthographicCameras`` or
+            ``FoVPerspectiveCameras``)
+        """
         # In Medusa, we use the openGL convention of
         #   x-axis: left (-) to right (+)
         #   y-axis: bottom (-) to top (+)
@@ -100,8 +149,7 @@ class PytorchRenderer(BaseRenderer):
         return cam
 
     def _setup_shader(self, shading):
-
-        from pytorch3d.renderer import BlendParams
+        """Sets of the shader according to the ``shading`` parameter."""
 
         blend_params = BlendParams(background_color=(0, 0, 0))
 
@@ -118,15 +166,36 @@ class PytorchRenderer(BaseRenderer):
 
         return shader
 
-    def __call__(self, v, tris, tex=None, single_image=True):
+    def __call__(self, v, tris, overlay=None, single_image=True):
+        """Performs the actual rendering for a given (batch of) mesh(es).
 
-        v, tris = self._preprocess(v, tris, format="torch")
+        Parameters
+        ----------
+        v : torch.tensor
+            A 3D (batch size x vertices x 3) tensor with vertices
+        tris : torch.tensor
+            A 3D (batch size x vertices x 3) tensor with triangles
+        overlay : torch.tensor
+            WIP
+        cmap_name : str
+            Name of (matplotlib) colormap; only relevant if ``overlay`` is not ``None``
+
+        Returns
+        -------
+        img : torch.tensor
+            A 4D tensor with uint8 values of shape batch size x ``viewport[0]`` x
+            ``viewport[1]`` x 3 (RGB)
+        """
+
+        v, tris, overlay = self._preprocess(v, tris, overlay, format="torch")
         tris = tris.repeat(v.shape[0], 1, 1)
 
-        if tex is None:
-            tex = TexturesVertex(torch.ones_like(v, device=self.device))
+        if overlay is None:
+            overlay = TexturesVertex(torch.ones_like(v, device=self.device))
+        elif torch.is_tensor(overlay):
+            overlay = TexturesVertex(overlay)
 
-        meshes = Meshes(v, tris, tex)
+        meshes = Meshes(v, tris, overlay)
         imgs = self._renderer(meshes)
 
         if single_image:
@@ -137,4 +206,5 @@ class PytorchRenderer(BaseRenderer):
         return imgs
 
     def close(self):
+        """Does nothing but is included to be consistent with the ``PyRenderer`` class."""
         pass

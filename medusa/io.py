@@ -13,7 +13,6 @@ import numpy as np
 import requests
 import torch
 from torch.utils.data import DataLoader, IterableDataset
-from trimesh import Trimesh
 
 from .defaults import DEVICE
 from .log import get_logger
@@ -49,7 +48,7 @@ class VideoLoader(DataLoader):
         loglevel="INFO",
         **kwargs,
     ):
-
+        """Initializes a VideoLoader object."""
         self.logger = get_logger(loglevel)
         self.channels_first = channels_first
         self.device = device
@@ -107,8 +106,8 @@ class VideoDataset(IterableDataset):
         Either 'cuda' (for GPU) or 'cpu'
     """
 
-    def __init__(self, video, device="cuda"):
-
+    def __init__(self, video, device=DEVICE):
+        """Initializes a VideoDataset object."""
         self.device = device
         self._container = av.open(str(video), mode="r")
         self._container.streams.video[0].thread_type = "AUTO"  # thread_type
@@ -163,7 +162,7 @@ class VideoWriter:
     """
 
     def __init__(self, path, fps, codec="libx264", pix_fmt="yuv420p"):
-
+        """Initializes a VideoWriter object."""
         self._container = av.open(str(path), mode="w")
         self._stream = self._container.add_stream(codec, int(round(fps)))
         self._stream.pix_fmt = pix_fmt

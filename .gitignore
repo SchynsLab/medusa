@@ -135,6 +135,9 @@ medusa/data/models/antelopev2
 medusa/data/models/buffalo_l
 coverage.json
 .iterrogate_results.txt
+OLD
+paper
+sandbox
 
 # demos
 demos/*.gif

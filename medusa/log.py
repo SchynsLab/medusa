@@ -1,3 +1,5 @@
+"""A module with logging functionality."""
+
 import logging
 from datetime import datetime
 

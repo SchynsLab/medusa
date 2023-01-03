@@ -65,11 +65,6 @@ interrogate = "^1.5.0"
 [tool.poetry.scripts]
 medusa_download_ext_data = "medusa.cli:download_ext_data"
 medusa_videorecon = "medusa.cli:videorecon_cmd"
-medusa_align = "medusa.cli:align_cmd"
-medusa_resample = "medusa.cli:resample_cmd"
-medusa_filter = "medusa.cli:filter_cmd"
-medusa_preproc = "medusa.cli:preproc_cmd"
-medusa_epoch = "medusa.cli:epoch_cmd"
 medusa_videorender = "medusa.cli:videorender_cmd"
 medusa_regenerate_example_recon_data = "medusa.data.regenerate_example_recon_data:main"
 

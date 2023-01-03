@@ -1,5 +1,5 @@
 import pytest
-from conftest import _check_gha_compatible
+from conftest import _is_gha_compatible
 
 from medusa.data import get_example_video
 from medusa.io import VideoLoader
@@ -20,7 +20,7 @@ def test_videoloader_full_iteration():
 @pytest.mark.parametrize("batch_size", [1, 32])
 @pytest.mark.parametrize("device", ["cuda", "cpu"])
 def test_videoloader_params(batch_size, device):
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
 
     vid = get_example_video(return_videoloader=False)

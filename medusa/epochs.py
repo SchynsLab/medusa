@@ -28,6 +28,7 @@ class EpochsArray:
     """
 
     def __init__(self, v, params, frame_t, recon_model, events=None):
+        """Initializes an EpochsArray object."""
         self.v = v
         self.params = params
         self.frame_t = frame_t

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 import torch
-from conftest import _check_gha_compatible
+from conftest import _is_gha_compatible
 
 import medusa.data
 from medusa.onnx import OnnxModel
@@ -11,7 +11,7 @@ from medusa.onnx import OnnxModel
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 @pytest.mark.parametrize("set_param", [False, True])
 def test_onnx(device, set_param):
-    if not _check_gha_compatible(device):
+    if not _is_gha_compatible(device):
         return
 
     onnx_file = Path(medusa.data.__file__).parent / "models/yunet.onnx"

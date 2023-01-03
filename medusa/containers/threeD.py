@@ -1,26 +1,32 @@
+"""Classes for representing and animating 3D face meshes (WIP)."""
+
 import numpy as np
 import torch
 from trimesh import Trimesh
 
-from ..data import get_flame_config, get_template_flame
+from ..data import get_template_flame, get_external_data_config
 from ..recon.flame.decoders import FLAME
 from .fourD import Data4D
 from ..data import get_template_mediapipe
 
 from ..defaults import DEVICE
 
-flame_path = get_flame_config("flame_path")
+flame_path = get_external_data_config(key='flame_path')
 flame_generator = FLAME(flame_path, 300, 100)
 
 
 class Base3D:
+    """A base class for 3D face objects."""
+
     def save(self, path, file_type="obj", **kwargs):
+        """Saves a mesh to disk as an obj wavefront file."""
+
         mesh = Trimesh(self.v, self.f)
         with open(path, "w") as f_out:
             mesh.export(f_out, file_type=file_type, **kwargs)
 
-    def animate(self, v, mat, is_deltas=True):
-
+    def animate(self, v, mat, is_deltas=True, to_4D=True):
+        """Animates an existing 3D mesh."""
         if is_deltas:
             v = self.v + v
 
@@ -29,19 +35,24 @@ class Base3D:
             v_ = np.c_[v_, np.ones(v_.shape[0])]
             v[i, ...] = (v_ @ mat[i, ...].T)[:, :3]
 
+        if to_4D:
+            Data4D(v, )
+
         return v
 
 
 class Flame3D(Base3D):
+    """A FLAME-based 3D face mesh."""
     def __init__(self, v=None, mat=None, topo='coarse', device=DEVICE):
-
+        """Initializes a Flame3D object."""
         data = get_template_flame(topo, keys=['v', 'tris'], device=device)
         self.v = data["v"] if v is None else v
-        self.f = data["tris"]
+        self.tris = data["tris"]
         self.mat = torch.eye(4) if mat is None else mat
 
     @classmethod
     def from_4D(cls, data, index=0):
+        """Creates a 3D object by indexing a 4D object."""
         v = data.v[index, ...]
         mat = data.mat[index, ...]
         return cls(v, mat)
@@ -57,7 +68,7 @@ class Flame3D(Base3D):
         rot_z=None,
         no_exp=True,
     ):
-
+        """Creates a face with random shape/expression parametesr and pose."""
         if shape is None:
             shape = torch.randn(1, 300) * 0.6
 
@@ -101,7 +112,7 @@ class Flame3D(Base3D):
         return cls(v, mat, dense=False)
 
     def animate(self, v, mat, sf, frame_t, is_deltas=True):
-
+        """Animates a 3D face mesh and returns a proper 4D object."""
         v = super().animate(v, mat, is_deltas)
         animated = Data4D(
             v=v, mat=mat, cam_mat=np.eye(4), space="world", sf=sf, frame_t=frame_t
@@ -110,23 +121,17 @@ class Flame3D(Base3D):
 
 
 class Mediapipe3D(Base3D):
+    """A mediapipe-based 3D face mesh."""
     def __init__(self, v=None, mat=None):
-
+        """Initializes a Mediapipe3D object."""
         data = get_template_mediapipe()
         self.v = data["v"] if v is None else v
-        self.f = data["f"]
-        self.mat = np.eye(4) if mat is None else mat
+        self.f = data["tris"]
+        self.mat = torch.eye(4) if mat is None else mat
 
     @classmethod
     def from_4D(cls, data, index=0):
+        """Creates a 3D object by indexing a 4D object."""
         v = data.v[index, ...]
         mat = data.mat[index, ...]
         return cls(v, mat)
-
-    def animate(self, v, mat, sf, frame_t, is_deltas=True):
-
-        v = super().animate(v, mat, is_deltas)
-        animated = Data4D(
-            v=v, mat=mat, cam_mat=np.eye(4), space="world", sf=sf, frame_t=frame_t
-        )
-        return animated

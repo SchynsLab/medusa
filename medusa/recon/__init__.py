@@ -1,4 +1,4 @@
-""""""
+"""Top-level module with all reconstruction models."""
 
 from .base import BaseReconModel
 from .flame import DecaReconModel, MicaReconModel

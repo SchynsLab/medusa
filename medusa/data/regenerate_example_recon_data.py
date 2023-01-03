@@ -1,3 +1,5 @@
+"""Regenerates example reconstruction data."""
+
 def main():
     """Utility cli command (see ``cli.py``) to regenerate the example data for when
     the Data4D class changes."""
