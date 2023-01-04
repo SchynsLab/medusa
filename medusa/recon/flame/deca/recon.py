@@ -11,7 +11,7 @@ All model classes inherit from a common base class, ``FlameReconModel`` (see ``f
 .. [3] Filntisis, P. P., Retsinas, G., Paraperas-Papantoniou, F., Katsamanis, A., Roussos, A., & Maragos, P. (2022).
        Visual Speech-Aware Perceptual 3D Facial Expression Reconstruction from Videos.
        arXiv preprint arXiv:2207.11094.
-       
+
 For the associated license, see license.md.
 """
 
@@ -20,10 +20,9 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from ....defaults import DEVICE
+from ....defaults import DEVICE, LOGGER
 from ....io import load_inputs
 from ....data import get_external_data_config, get_template_flame
-from ....log import get_logger
 from ....transforms import (create_ortho_matrix, create_viewport_matrix,
                             crop_matrix_to_3d)
 from ..base import FlameReconModel
@@ -32,7 +31,6 @@ from ..utils import upsample_mesh, vertex_normals
 from .decoders import DetailGenerator
 from .encoders import PerceptualEncoder, ResnetEncoder
 
-logger = get_logger()
 
 
 class DecaReconModel(FlameReconModel):
@@ -88,19 +86,19 @@ class DecaReconModel(FlameReconModel):
             raise ValueError(f"Device must be in {DEVICES}, but got {self.device}!")
 
         if self.img_size is None:
-            logger.warning(
+            LOGGER.warning(
                 "Arg `img_size` not given; beware, cannot render recon "
                 "on top of original image anymore (only on cropped image)"
             )
 
     def _load_data(self):
         """Loads necessary data."""
-        
+
         self._template = {
             'coarse': get_template_flame('coarse', keys=['tris'], device=self.device)
         }
         data_dir = Path(__file__).parents[3] / 'data/flame'
-        
+
         if self._dense:
             self._template['dense'] = get_template_flame(topo='dense', device=None)
             self._fixed_uv_dis = np.load(data_dir / "fixed_displacement_256.npy")
@@ -187,7 +185,7 @@ class DecaReconModel(FlameReconModel):
             self.E_expression.eval()
 
     def _encode(self, imgs):
-        """ "Encodes" the image into FLAME parameters, i.e., predict FLAME
+        """"Encodes" the image into FLAME parameters, i.e., predict FLAME
         parameters for the given image. Note that, at the moment, it only works
         for a single image, not a batch of images.
 
@@ -345,7 +343,7 @@ class DecaReconModel(FlameReconModel):
             crop_mats = torch.eye(3).repeat(b, 1, 1).to(self.device)
 
             if not self._warned_about_crop_mat:
-                logger.warning(
+                LOGGER.warning(
                     "Arg `crop_mat` is not given, so cannot render in the "
                     "original image space, only in cropped image space!"
                 )

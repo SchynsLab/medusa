@@ -1,9 +1,9 @@
-from ..defaults import DEVICE, FLAME_MODELS
+from ..defaults import DEVICE, FLAME_MODELS, LOGGER
 from ..containers.fourD import Data4D
 from ..containers.results import BatchResults
 from ..crop import LandmarkBboxCropModel
 from ..io import VideoLoader
-from ..log import get_logger, tqdm_log
+from ..log import tqdm_log
 from .flame import DecaReconModel
 from .mpipe import Mediapipe
 
@@ -51,15 +51,13 @@ def videorecon(
     >>> data = videorecon(vid, recon_model='mediapipe')
     """
 
-    logger = get_logger(loglevel)
-    logger.info(f"Starting recon using for {video_path}")
-    logger.info(f"Initializing {recon_model} recon model")
+    LOGGER.setLevel('WARNING')#loglevel)
+    LOGGER.info(f"Starting recon using for {video_path}")
+    LOGGER.info(f"Initializing {recon_model} recon model")
 
     # Initialize VideoLoader object here to use metadata
     # in recon_model (like img_size)
-    video = VideoLoader(
-        video_path, batch_size=batch_size, loglevel=loglevel, device=device
-    )
+    video = VideoLoader(video_path, batch_size=batch_size, device=device)
     metadata = video.get_metadata()
 
     # Initialize reconstruction model
@@ -77,7 +75,7 @@ def videorecon(
 
     # Loop across frames of video, store results in `recon_data`
     recon_results = BatchResults(device=device)
-    for batch in tqdm_log(video, logger, desc="Recon images"):
+    for batch in tqdm_log(video, LOGGER, desc="Recon images"):
         inputs = {"imgs": batch}
 
         if recon_model in FLAME_MODELS:
@@ -92,6 +90,7 @@ def videorecon(
         # in `recon_data`
         if inputs["imgs"] is not None:
             outputs = reconstructor(**inputs)
+            #outputs['v'] = reconstructor.apply_mask('face', outputs['v'])
             recon_results.add(**outputs)
 
         if n_frames is not None:

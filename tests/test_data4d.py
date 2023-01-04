@@ -57,10 +57,10 @@ def test_project68(model):
 @pytest.mark.parametrize("model", ["mediapipe", "emoca-coarse"])
 def test_to_local_and_to_world(model):
     data = get_example_h5(load=True, model=model, device=DEVICE)
-    data.to_world()
-    assert(data.space == 'world')
     data.to_local()
     assert(data.space == 'local')
+    data.to_world()
+    assert(data.space == 'world')
 
 
 @pytest.mark.parametrize("pad_missing", [True, False])

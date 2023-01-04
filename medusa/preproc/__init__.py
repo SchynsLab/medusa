@@ -14,5 +14,4 @@ The recommended order in which to run the preprocessing functions are:
 """
 
 from .align import estimate_alignment
-from .epoch import epoch
 from .filter import bw_filter

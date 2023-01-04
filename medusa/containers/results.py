@@ -10,9 +10,8 @@ from matplotlib import cm
 from torchvision.ops import box_area
 from torchvision.utils import draw_bounding_boxes, draw_keypoints, save_image
 
-from ..defaults import DEVICE, FONT
+from ..defaults import DEVICE, FONT, LOGGER
 from ..io import VideoWriter, load_inputs
-from ..log import get_logger
 from ..tracking import _ensure_consecutive_face_idx, filter_faces, sort_faces
 
 
@@ -26,17 +25,14 @@ class BatchResults:
         Number of images processed thus far
     device : str
         Device to store/process the data on (either 'cpu' or 'cuda')
-    loglevel : str
-        Loglevel to use for logger
     **kwargs
         Other data that will be set as attributes
     """
 
-    def __init__(self, n_img=0, device=DEVICE, loglevel="INFO", **kwargs):
+    def __init__(self, n_img=0, device=DEVICE, **kwargs):
         """Initializes a BatchResults object."""
         self.device = device
         self.n_img = n_img
-        self._logger = get_logger(loglevel)
 
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -73,7 +69,7 @@ class BatchResults:
 
     def concat(self, n_max=None):
         """Concatenate results form multiple batches.
-        
+
         Parameters
         ----------
         n_max : None, int
@@ -89,7 +85,7 @@ class BatchResults:
 
             data = [d for d in data if d is not None]
             if len(data) == 0:
-                self._logger.warning(f"No data to concatenate for attribute {attr}!")
+                LOGGER.warning(f"No data to concatenate for attribute {attr}!")
                 data = None
             else:
                 data = torch.cat(data)
@@ -101,7 +97,7 @@ class BatchResults:
     def sort_faces(self, attr="lms", dist_threshold=250):
         """'Sorts' faces using the ``medusa.tracking.sort_faces`` function (and
         performs some checks of the data).
-        
+
         Parameters
         ----------
         attr : str
@@ -111,14 +107,14 @@ class BatchResults:
             Euclidean distance between two sets of landmarks/vertices that we consider
             comes from two different faces (e.g., if ``d(lms1, lms2) >= dist_treshold``,
             then we conclude that face 1 (``lms1``) is a different from face 2 (``lms2``)
-        
+
         Returns
         -------
         face_idx : torch.tensor
             The face IDs associate with each detection
         """
         if not hasattr(self, attr):
-            self._logger.warning(f"No attribute `{attr}`, maybe no detections?")
+            LOGGER.warning(f"No attribute `{attr}`, maybe no detections?")
             return
 
         data = getattr(self, attr, None)
@@ -176,7 +172,8 @@ class BatchResults:
         template=None,
         **kwargs,
     ):
-        """Visualizes the detection/cropping results aggregated by the BatchResults object.
+        """Visualizes the detection/cropping results aggregated by the
+        BatchResults object.
 
         Parameters
         ----------

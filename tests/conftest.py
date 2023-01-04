@@ -2,7 +2,9 @@ import os
 from pathlib import Path
 
 import pytest
+from medusa.defaults import LOGGER
 
+LOGGER.setLevel('WARNING')
 
 @pytest.fixture
 def imgs_test(request):
@@ -39,7 +41,6 @@ def _is_gha_compatible(device):
 
 
 def _is_pytorch3d_installed():
-    
     try:
         import pytorch3d
         return True

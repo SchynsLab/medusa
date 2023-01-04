@@ -1,14 +1,11 @@
 """Module with command-line interface functions, created using ``click``. Each
 function can be accessed on the command line as ``medusa_{operation}``, e.g.
-``medusa_videorecon`` or ``medusa_align`` with arguments and options
-corresponding to the function arguments, e.g.
-
-``medusa_filter some_h5_file.h5 -l 3 -h 0.01``
+``medusa_videorecon``.
 
 To get an overview of the mandatory arguments and options, run the command with the
 option ``--help``, e.g.:
 
-```medusa_filter --help``
+```medusa_videorecon --help``
 
 For more information, check out the
 `documentation <https://lukas-snoek.com/medusa/api/cli.html`_.
@@ -25,22 +22,12 @@ import gdown
 import torch
 import yaml
 
-from .defaults import DEVICE
+from .defaults import DEVICE, LOGGER, RECON_MODELS
 from .containers import Data4D
 from .io import download_file
-from .log import get_logger
 from .recon import videorecon
 
-RECON_MODELS = [
-    "spectre-coarse",
-    "emoca-dense",
-    "emoca-coarse",
-    "deca-dense",
-    "deca-coarse",
-    "mediapipe",
-]
 
-# fmt: off
 @click.command()
 @click.argument("video_path", type=click.Path(exists=True, dir_okay=False))
 @click.option("-o", "--out", default=None, type=click.Path(),
@@ -86,7 +73,7 @@ def videorender_cmd(data_file, out, video, renderer, shading, alpha, device):
 
     if out is None:
         out = data_file.replace('.h5', '.mp4')
-    
+
     data.render_video(
         Path(out), video=video, renderer=renderer, shading=shading, alpha=alpha,
     )
@@ -123,16 +110,15 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         blink=True,
     )
 
-    logger = get_logger("INFO")
-    logger.info(f"Downloading models to {directory}, configuring to run on {device}")
+    LOGGER.info(f"Downloading models to {directory}, configuring to run on {device}")
 
     directory = Path(directory)
     if not directory.is_dir():
-        logger.info(f"Creating output directory {directory}")
+        LOGGER.info(f"Creating output directory {directory}")
         directory.mkdir(parents=True, exist_ok=True)
 
     if username is not None and password is not None:
-        logger.info("FLAME: starting download ...")
+        LOGGER.info("FLAME: starting download ...")
         url = "https://download.is.tue.mpg.de/download.php?domain=flame&sfile=FLAME2020.zip&resume=1"
         data = {"username": username, "password": password}
         f_out = directory / "FLAME2020.zip"
@@ -141,7 +127,7 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         f_out = directory / "FLAME_masks.zip"
         download_file(url, f_out, overwrite=overwrite, cmd_type="get")
     else:
-        logger.warning("FLAME: cannot download, because no username and/or password!")
+        LOGGER.warning("FLAME: cannot download, because no username and/or password!")
 
     desc = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
     if click.confirm(
@@ -178,13 +164,13 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
 
     f_out = directory / "spectre_model.tar"
     if not f_out.is_file() or overwrite:
-        logger.info("SPECTRE: starting download ...")
+        LOGGER.info("SPECTRE: starting download ...")
         url = "https://drive.google.com/u/0/uc?id=1vmWX6QmXGPnXTXWFgj67oHzOoOmxBh6B&export=download"
         gdown.download(url, str(f_out), quiet=True)
 
     f_out = directory / 'buffalo_l/det_10g.onnx'
     if not f_out.is_file() or overwrite:
-        logger.info("INSIGHTFACE: starting download 'buffalo_l.zip' ...")
+        LOGGER.info("INSIGHTFACE: starting download 'buffalo_l.zip' ...")
         f_out = f_out.parents[1] / "buffalo_l.zip"
         url = "https://drive.google.com/u/0/uc?id=1qXsQJ8ZT42_xSmWIYy85IcidpiZudOCB&export=download"
         gdown.download(url, str(f_out), quiet=True)
@@ -199,59 +185,59 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
 
     data_dir = Path(directory).resolve()
     if not data_dir.is_dir():
-        logger.exception(f"Directory '{directory}' does not exist!")
+        LOGGER.exception(f"Directory '{directory}' does not exist!")
         exit()
 
     flame_model_path = data_dir / "FLAME/generic_model.pkl"
     if flame_model_path.is_file():
-        logger.info("FLAME model is ready to use!")
+        LOGGER.info("FLAME model is ready to use!")
         cfg["flame_path"] = str(flame_model_path)
     else:
         flame_zip = data_dir / "FLAME2020.zip"
         if not flame_zip.is_file():
-            logger.warning(f"File '{str(flame_zip)}' does not exist!")
+            LOGGER.warning(f"File '{str(flame_zip)}' does not exist!")
         else:
             with zipfile.ZipFile(flame_zip, "r") as zip_ref:
                 zip_ref.extractall(directory / "FLAME/")
 
-            logger.info("FLAME model is ready to use!")
+            LOGGER.info("FLAME model is ready to use!")
             cfg["flame_path"] = str(flame_model_path)
             flame_zip.unlink()
 
     flame_masks_path = data_dir / "FLAME/FLAME_masks.pkl"
     if flame_masks_path.is_file():
-        logger.info("FLAME masks are ready to use!")
+        LOGGER.info("FLAME masks are ready to use!")
         cfg["flame_masks_path"] = str(flame_masks_path)
     else:
         flame_masks_zip = data_dir / "FLAME_masks.zip"
         if not flame_masks_zip.is_file():
-            logger.warning(f"File '{str(flame_masks_zip)}' does not exist!")
+            LOGGER.warning(f"File '{str(flame_masks_zip)}' does not exist!")
         else:
             with zipfile.ZipFile(flame_masks_zip, "r") as zip_ref:
                 zip_ref.extractall(directory / "FLAME/")
 
-            logger.info("FLAME masks are ready to use!")
+            LOGGER.info("FLAME masks are ready to use!")
             flame_masks_zip.unlink()
             cfg["flame_masks_path"] = str(flame_masks_path)
 
     deca_model_path = data_dir / "deca_model.tar"
     if deca_model_path.is_file():
-        logger.info("DECA model is ready to use!")
+        LOGGER.info("DECA model is ready to use!")
         cfg["deca_path"] = str(deca_model_path)
     else:
-        logger.warning(f"File {deca_model_path} does not exist!")
+        LOGGER.warning(f"File {deca_model_path} does not exist!")
 
     ckpt_out = data_dir / "emoca.ckpt"
     if ckpt_out.is_file():
-        logger.info("EMOCA model is ready to use!")
+        LOGGER.info("EMOCA model is ready to use!")
         cfg["emoca_path"] = str(ckpt_out)
     else:
-        logger.info(f"Configuring EMOCA for device '{device}'!")
+        LOGGER.info(f"Configuring EMOCA for device '{device}'!")
         emoca_zip = data_dir / "EMOCA.zip"
         if not emoca_zip.is_file():
-            logger.warning(f"File '{str(emoca_zip)}' does not exist!")
+            LOGGER.warning(f"File '{str(emoca_zip)}' does not exist!")
         else:
-            logger.info("Unzipping EMOCA.zip file ...")
+            LOGGER.info("Unzipping EMOCA.zip file ...")
             with zipfile.ZipFile(emoca_zip, "r") as zip_ref:
                 zip_ref.extractall(f"{directory}/")
 
@@ -261,14 +247,14 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
 
             ckpt = list(data_dir.glob("**/*.ckpt"))
             if len(ckpt) == 0:
-                logger.exception("Could not find EMOCA .ckpt file!", exc_info=False)
+                LOGGER.exception("Could not find EMOCA .ckpt file!", exc_info=False)
                 exit()
 
             ckpt = ckpt[0]
             shutil.move(ckpt, data_dir / "emoca.ckpt")
             shutil.rmtree(data_dir / "EMOCA")
 
-            logger.info("Reorganizing EMOCA checkpoint file ... ")
+            LOGGER.info("Reorganizing EMOCA checkpoint file ... ")
             sd = torch.load(data_dir / "emoca.ckpt", map_location=device)["state_dict"]
             models = ["E_flame", "E_detail", "E_expression", "D_detail"]
 
@@ -282,31 +268,31 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
                         state_dict[mod][k] = value.to(device=device)
 
             torch.save(state_dict, ckpt_out)
-            logger.info(f"EMOCA model is ready to use!")
+            LOGGER.info(f"EMOCA model is ready to use!")
             cfg["emoca_path"] = str(ckpt_out)
 
     mica_model_path = data_dir / "mica.tar"
     if mica_model_path.is_file():
-        logger.info("MICA model is ready to use!")
+        LOGGER.info("MICA model is ready to use!")
         cfg["mica_path"] = str(mica_model_path)
     else:
-        logger.warning(f"File {mica_model_path} does not exist!")
+        LOGGER.warning(f"File {mica_model_path} does not exist!")
 
     spectre_model_path = data_dir / "spectre_model.tar"
     if spectre_model_path.is_file():
-        logger.info("Spectre model is ready to use!")
+        LOGGER.info("Spectre model is ready to use!")
         cfg["spectre_path"] = str(spectre_model_path)
     else:
-        logger.warning(f"File {spectre_model_path} does not exist!")
+        LOGGER.warning(f"File {spectre_model_path} does not exist!")
 
     buffalo_path = data_dir / 'buffalo_l'
     if buffalo_path.is_dir():
-        logger.info("Insightface models are ready to use!")
+        LOGGER.info("Insightface models are ready to use!")
         cfg["buffalo_path"] = str(buffalo_path)
     else:
-        logger.warning(f"Insightface buffalo data do not exist!")
+        LOGGER.warning(f"Insightface buffalo data do not exist!")
 
     cfg_path = Path(__file__).parent / "data/config.yaml"
     with open(cfg_path, "w") as f_out:
-        logger.info(f"Saving config file to {cfg_path}!")
+        LOGGER.info(f"Saving config file to {cfg_path}!")
         yaml.dump(cfg, f_out, default_flow_style=False)

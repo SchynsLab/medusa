@@ -81,7 +81,7 @@ class Data4D:
             data = getattr(self, attr, None)
             if isinstance(data, np.ndarray):
                 data = torch.as_tensor(data, device=self.device)
-                setattr(self, attr, data)   
+                setattr(self, attr, data)
 
         nv = self.v.shape[0]
         if self.img_idx is None:
@@ -170,6 +170,11 @@ class Data4D:
                 else:
                     f_out.attrs[attr] = data
 
+    @staticmethod
+    def from_video(path, **kwargs):
+        from ..recon import videorecon
+        return videorecon(path, **kwargs)
+
     @classmethod
     def load(cls, path, device=None):
         """Loads an HDF5 file from disk, parses its contents, and creates the
@@ -228,7 +233,7 @@ class Data4D:
         return cls(**init_kwargs)
 
     def to_local(self):
-        
+
         if self.space == 'local':
             LOGGER.warning("Data already in 'local' space!")
         else:
@@ -418,9 +423,9 @@ class Data4D:
         self.mat = torch.as_tensor(mats, dtype=torch.float32, device=self.device)
 
     def filter_faces(self, present_threshold=0.1):
-        """Filters the reconstructed faces by the proportion of frames they are 
+        """Filters the reconstructed faces by the proportion of frames they are
         present in.
-        
+
         Parameters
         ----------
         present_threshold : float
@@ -485,7 +490,6 @@ class Data4D:
                 w, h = img_size
 
         overlay = kwargs.pop('overlay', None)
-
         renderer = Renderer(
             viewport=(w, h),
             cam_mat=self.cam_mat,
@@ -520,7 +524,7 @@ class Data4D:
                     overlay_ = overlay[img_idx]
                 else:
                     overlay_ = None
-                
+
                 v = self.v[img_idx]
                 img = renderer(v, self.tris, overlay=overlay_)
                 img = renderer.alpha_blend(img, background, face_alpha=alpha)

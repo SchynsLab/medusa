@@ -1,5 +1,5 @@
-"""Module with default objects, which values may depend on whether the system has
-access to a GPU or not (such as ``DEVICE``)."""
+"""Module with default objects, which values may depend on whether the system
+has access to a GPU or not (such as ``DEVICE``)."""
 
 from pathlib import Path
 
@@ -37,13 +37,23 @@ FLAME_MODELS = [
 """Names of available FLAME-based models, which can be used when initializing a
 ``DecaReconModel``."""
 
+RECON_MODELS = [
+    "spectre-coarse",
+    "emoca-dense",
+    "emoca-coarse",
+    "deca-dense",
+    "deca-coarse",
+    "mediapipe",
+]
+"""Names of all available reconstruction models."""
+
 LOGGER = get_logger(level="INFO")
 """Default logger used in Medusa."""
 
 def get_rigid_vertices(topo, device=DEVICE):
-    """Gets the default 'rigid' vertices (i.e., vertices that can only move rigidly)
-    for a given topology ('mediapipe', 'flame-coarse', 'flame-dense'). 
-    
+    """Gets the default 'rigid' vertices (i.e., vertices that can only move
+    rigidly) for a given topology ('mediapipe', 'flame-coarse', 'flame-dense').
+
     Parameters
     ----------
     topo : str
@@ -64,7 +74,7 @@ def get_rigid_vertices(topo, device=DEVICE):
                 4, 6, 10, 33, 54, 67, 117, 119, 121, 127, 129, 132, 133, 136, 143, 147,
                 198, 205, 263, 284, 297, 346, 348, 350, 356, 358, 361, 362, 365, 372,
                 376, 420, 425
-            ], 
+            ],
             dtype=torch.int64,
             device=device
         )
@@ -82,9 +92,9 @@ def get_rigid_vertices(topo, device=DEVICE):
 
 
 def get_vertex_template(topo, device=DEVICE):
-    """Gets the default vertices (or 'template') for a given topology ('mediapipe',
-    'flame-coarse', 'flame-dense'). 
-    
+    """Gets the default vertices (or 'template') for a given topology
+    ('mediapipe', 'flame-coarse', 'flame-dense').
+
     Parameters
     ----------
     topo : str

@@ -15,7 +15,6 @@ import torch
 from torch.utils.data import DataLoader, IterableDataset
 
 from .defaults import DEVICE
-from .log import get_logger
 
 
 class VideoLoader(DataLoader):
@@ -33,8 +32,6 @@ class VideoLoader(DataLoader):
         a B x H x W x 3 tensor (if ``False``)
     device : str
         Either 'cpu' or 'cuda'
-    loglevel : str
-        Logging level (e.g., 'INFO' or 'WARNING')
     **kwargs
         Extra keyword arguments passed to the initialization of the parent class
     """
@@ -45,11 +42,9 @@ class VideoLoader(DataLoader):
         batch_size=32,
         channels_first=False,
         device=DEVICE,
-        loglevel="INFO",
         **kwargs,
     ):
         """Initializes a VideoLoader object."""
-        self.logger = get_logger(loglevel)
         self.channels_first = channels_first
         self.device = device
         self._validate(path)
@@ -59,7 +54,8 @@ class VideoLoader(DataLoader):
         self._metadata = self._extract_metadata()
 
     def get_metadata(self):
-        """Returns all (meta)data needed for initialization of a Data object."""
+        """Returns all (meta)data needed for initialization of a Data
+        object."""
 
         return self._metadata
 
@@ -134,8 +130,9 @@ class VideoDataset(IterableDataset):
 
     def __iter__(self):
         """Overrides parent method to make sure each image is a numpy array.
-        Note to self: do not cast to torch here, because doing this later is way
-        faster.
+
+        Note to self: do not cast to torch here, because doing this
+        later is way faster.
         """
         for img in self._reader:
             yield img.to_ndarray(format="rgb24")
@@ -161,11 +158,16 @@ class VideoWriter:
         Pixel format; should be compatible with codec
     """
 
-    def __init__(self, path, fps, codec="libx264", pix_fmt="yuv420p"):
+    def __init__(self, path, fps, codec="libx264", pix_fmt="yuv420p", size=None):
         """Initializes a VideoWriter object."""
         self._container = av.open(str(path), mode="w")
         self._stream = self._container.add_stream(codec, int(round(fps)))
         self._stream.pix_fmt = pix_fmt
+        self.size = size
+
+        if size is not None:
+            self._stream.width = size[0]
+            self._stream.height = size[1]
 
     def write(self, imgs):
         """Writes one or more images to the video stream.
@@ -187,14 +189,15 @@ class VideoWriter:
 
         imgs = imgs.astype(np.uint8)
 
-        b, h, w, c = imgs.shape
-        if self._stream.width is None:
+        b, h, w, _ = imgs.shape
+        if self.size is None:
             self._stream.width = w
             self._stream.height = h
 
         for i in range(b):
             img = imgs[i]
             img = av.VideoFrame.from_ndarray(img, format="rgb24")
+
             for packet in self._stream.encode(img):
                 self._container.mux(packet)
 
@@ -352,7 +355,7 @@ def load_inputs(
 
 def download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type="post"):
     """Downloads a file using requests.
-    
+
     Parameters
     ----------
     url : str

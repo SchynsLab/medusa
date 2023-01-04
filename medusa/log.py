@@ -57,6 +57,7 @@ def tqdm_log(iter_, logger, desc="Render shape"):
     iter_ : iterable
         Iterable to be iterated over
     """
+
     if logger.level <= 20:
         pre = datetime.now().strftime("%Y-%m-%d %H:%M [INFO   ] ")
         iter_ = tqdm(iter_, desc=f"{pre} {desc}")
