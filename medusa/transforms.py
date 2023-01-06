@@ -1,4 +1,5 @@
-"""Module with functions to implement some often used transformations in Medusa."""
+"""Module with functions to implement some often used transformations in
+Medusa."""
 
 import numpy as np
 import torch
@@ -121,7 +122,7 @@ def crop_matrix_to_3d(mat_33):
 
 
 def apply_perspective_projection(v, mat):
-    """ " Applies a perspective projection of ``v`` into NDC space.
+    """" Applies a perspective projection of ``v`` into NDC space.
 
     Parameters
     ----------
@@ -310,7 +311,7 @@ def estimate_similarity_transform(src, dst, estimate_scale=True):
 
 def resize_with_pad(imgs, output_size=(224, 224), out_dtype=torch.uint8, **kwargs):
     """Resizes image with right-bottom padding (with zeros), as used in
-    insightface's `SCRFD` detector.
+    insightface's ``SCRFD`` detector.
 
     Parameters
     ----------

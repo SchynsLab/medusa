@@ -7,21 +7,37 @@ from conftest import _is_gha_compatible
 from medusa.containers.results import BatchResults
 from medusa.detect import SCRFDetector, YunetDetector
 from medusa.io import VideoLoader
+from medusa.data import get_example_frame
+
+
+@pytest.mark.parametrize("Detector", [SCRFDetector, YunetDetector])
+@pytest.mark.parametrize("device", ["cpu", "cuda"])
+def test_detector_device(Detector, device):
+    if not _is_gha_compatible(device):
+        return
+
+    img = get_example_frame()
+    model = Detector(device=device)
+    out_det = model(img)
+    assert(out_det['lms'].device.type == device)
+
+
+@pytest.mark.parametrize('det_size', [(224, 224), (640, 640)])
+def test_scrfd_det_size(det_size):
+    img = get_example_frame()
+    model = SCRFDetector(det_size=det_size)
+    _ = model(img)
 
 
 @pytest.mark.parametrize("Detector", [SCRFDetector, YunetDetector])
 @pytest.mark.parametrize(
-    "imgs_test", [0, 1, 2, 3, 4, [0, 1], [0, 1, 2], [0, 1, 2, 3, 4]], indirect=True
+    "imgs_test", [0, 1, 2, 3, 4, [0, 1], [1, 2], [1, 2, 3, 4]], indirect=True
 )
-@pytest.mark.parametrize("device", ["cpu", "cuda"])
-def test_detector_imgs(Detector, imgs_test, device):
-    if not _is_gha_compatible(device):
-        return
-
-    model = Detector(device=device)
+def test_detector_imgs(Detector, imgs_test):
+    model = Detector()
     imgs, n_exp = imgs_test
     out_det = model(imgs)
-    out_det = BatchResults(device=device, **out_det)
+    out_det = BatchResults(**out_det)
 
     n_det = len(getattr(out_det, "conf", []))
     assert n_det == n_exp

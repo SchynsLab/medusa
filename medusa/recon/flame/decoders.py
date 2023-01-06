@@ -1,17 +1,7 @@
-# -*- coding: utf-8 -*-
-#
-# Max-Planck-Gesellschaft zur Förderung der Wissenschaften e.V. (MPG) is
-# holder of all proprietary rights on this computer program.
-# Using this computer program means that you agree to the terms
-# in the LICENSE file included with this software distribution.
-# Any use not explicitly granted by the LICENSE is prohibited.
-#
-# Copyright©2019 Max-Planck-Gesellschaft zur Förderung
-# der Wissenschaften e.V. (MPG). acting on behalf of its Max Planck Institute
-# for Intelligent Systems. All rights reserved.
-#
-# For comments or questions, please email us at deca@tue.mpg.de
-# For commercial licensing contact, please contact ps-license@tuebingen.mpg.de
+"""Decoder-modules for FLAME-based reconstruction models.
+
+See ./deca/license.md for conditions for use.
+"""
 
 import pickle
 import warnings
@@ -25,10 +15,7 @@ from .lbs import lbs
 
 
 class FLAME(nn.Module):
-    """borrowed from
-    https://github.com/soubhiksanyal/FLAME_PyTorch/blob/master/FLAME.py Given
-    flame parameters this class generates a differentiable FLAME function which
-    outputs the a mesh and 2D/3D facial landmarks."""
+    """Generates a FLAME-based based on latent parameters."""
 
     def __init__(self, model_path, n_shape, n_exp):
         super().__init__()
@@ -39,7 +26,7 @@ class FLAME(nn.Module):
                 warnings.simplefilter("ignore", DeprecationWarning)
                 ss = pickle.load(f, encoding="latin1")
 
-            flame_model = Struct(**ss)
+            flame_model = _Struct(**ss)
 
         self.faces = to_np(flame_model.f, dtype=np.int64)
         self.dtype = torch.float32
@@ -173,7 +160,7 @@ def to_np(array, dtype=np.float32):
     return np.array(array, dtype=dtype)
 
 
-class Struct(object):
+class _Struct(object):
     def __init__(self, **kwargs):
         for key, val in kwargs.items():
             setattr(self, key, val)

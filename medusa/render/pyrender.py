@@ -70,6 +70,7 @@ class PyRenderer(BaseRenderer):
 
         The object (reconstructed face) is added when calling __call__.
         """
+        # TODO: make bg_color an init parameter
         scene = Scene(bg_color=[0, 0, 0, 0], ambient_light=(255, 255, 255))
 
         if self.cam_type == "orthographic":
@@ -114,9 +115,9 @@ class PyRenderer(BaseRenderer):
                 )
 
     def __call__(self, v, tris, overlay=None):
-        """Performs the actual rendering for a given mesh. Note that
-        this function does not do proper batched (vectorized) rendering,
-        but is made to look like it does to keep it consistent with the
+        """Performs the actual rendering for a given mesh. Note that this
+        function does not do proper batched (vectorized) rendering, but is made
+        to look like it does to keep it consistent with the
         ``PytorchRenderer``.
 
         Parameters
@@ -126,19 +127,17 @@ class PyRenderer(BaseRenderer):
         tris : torch.tensor
             A 3D (batch size x vertices x 3) tensor with triangles
         overlay : torch.tensor
-            WIP
-        cmap_name : str
-            Name of (matplotlib) colormap; only relevant if ``overlay`` is not ``None``
+            A tensor with shape (batch size x vertices) with vertex colors
 
         Returns
         -------
         img : torch.tensor
-            A 4D tensor with uint8 values of shape batch size x ``viewport[0]`` x
-            ``viewport[1]`` x 3 (RGB)
+            A 4D tensor with uint8 values of shape batch size x h x w x 3 (RGB), where
+            h and w are defined in the viewport
         """
 
         v, tris, overlay = self._preprocess(v, tris, overlay, format="numpy")
-        
+
         for i in range(v.shape[0]):
 
             if overlay is not None:

@@ -10,6 +10,7 @@ using the ``load`` classmethod.
 from pathlib import Path
 
 import h5py
+import pickle
 import numpy as np
 import pandas as pd
 import torch
@@ -23,45 +24,29 @@ from ..tracking import filter_faces, _ensure_consecutive_face_idx
 
 
 class Data4D:
-    """Base Data class with attributes and methods common to all 4D data
-    classes (such as ``Flame4D``, ``Mediapipe4D``, etc.).
-
-    Warning: objects should never be initialized with this class directly,
-    only when calling ``super().__init__()`` from the subclass (like ``Flame4D``). Note,
-    though, that the initialization parameters are the same for every class that
-    inherits from ``Base4D``.
+    """Data class which stores reconstruction data and provides methods to
+    preprocess/manipulate them.
 
     Parameters
     ----------
-    v : ndarray
-        Numpy array of shape T (time points) x nV (no. vertices) x 3 (x/y/z)
-    tris : ndarray
-        Integer numpy array of shape n_t (no. of triangles) x 3 (vertices per triangle)
-    face_idx : ndarray
-        Integer numpy array with indices that map vertices to distinct faces
+    v : np.ndarray, torch.tensor
+        Numpy array or torch tensor of shape T (time points) x nV (no. vertices) x 3 (x/y/z)
+    tris : ndarray, torch.tensor
+        Integer numpy array or torch tensor of shape n_t (no. of triangles) x 3 (vertices per triangle)
     mat : ndarray
         Numpy array of shape T (time points) x 4 x 4 (affine matrix) representing
         the 'world' (or 'model') matrix for each time point
+    face_idx : ndarray
+        Integer numpy array with indices that map vertices to distinct faces
     cam_mat : ndarray
         Numpy array of shape 4x4 (affine matrix) representing the camera matrix
-    frame_t : ndarray
-        Numpy array of length T (time points) with "frame times", i.e.,
-        onset of each frame (in seconds) from the video
-    sf : int, float
-        Sampling frequency of video
-    recon_model : str
-        Name of reconstruction model
     space : str
         The space the vertices are currently in; can be either 'local' or 'world'
-    path : str
-        Path where the data is saved; if initializing a new object (rather than
-        loading one from disk), this should be `None`
     """
 
-    # fmt: off
-    def __init__(self, v, mat, tris, img_idx=None, face_idx=None, video_metadata=None,
-                 cam_mat=None, space="world", device=DEVICE):
-    # fmt: on
+    def __init__(self, v, mat, tris=None, img_idx=None, face_idx=None,
+                 video_metadata=None, cam_mat=None, space="world", device=DEVICE):
+        """Initializes a Data4D object."""
         self.v = v
         self.mat = mat
         self.tris = tris
@@ -77,18 +62,27 @@ class Data4D:
         """Does some checks to make sure the data works with the renderer and
         other stuff."""
 
+        if self.mat.ndim == 2 and self.mat.shape[1] == 12:
+            # probably dealing with params instead of mats
+            self.compose_mats(self.mat)
+
+        B, V, _ = self.v.shape  # batch size, number of vertices
+        if self.img_idx is None:
+            self.img_idx = torch.arange(B, dtype=torch.int64, device=self.device)
+
+        if self.face_idx is None:
+            self.face_idx = torch.zeros(B, dtype=torch.int64, device=self.device)
+
+        if self.tris is None:
+            from ..data import get_tris  # avoids circular import
+            self.tris = get_tris(self._infer_topo(), self.device)
+
         for attr in ('v', 'mat', 'tris', 'img_idx', 'face_idx', 'cam_mat'):
             data = getattr(self, attr, None)
             if isinstance(data, np.ndarray):
                 data = torch.as_tensor(data, device=self.device)
                 setattr(self, attr, data)
 
-        nv = self.v.shape[0]
-        if self.img_idx is None:
-            self.img_idx = torch.arange(nv, dtype=torch.int64, device=self.device)
-
-        if self.face_idx is None:
-            self.face_idx = torch.zeros(nv, dtype=torch.int64, device=self.device)
 
         if self.video_metadata is None:
             self.video_metadata = {
@@ -116,13 +110,15 @@ class Data4D:
             raise ValueError("`space` should be either 'local' or 'world'!")
 
     def _infer_topo(self):
-
+        """Tries to infer the topology of the current vertices."""
         nv = self.v.shape[1]
         if nv == 468:
             return 'mediapipe'
         elif nv == 59315:
             return 'flame-dense'
         else:
+            # Could be that mask is applied, but not an ideal situation here; must be
+            # another way to check which topo we're dealing with
             return 'flame-coarse'
 
     def save(self, path, compression_level=9):
@@ -170,21 +166,73 @@ class Data4D:
                 else:
                     f_out.attrs[attr] = data
 
+    def apply_vertex_mask(self, name):
+        """Applies a mask to the vertices (and triangles).
+
+        Parameters
+        ----------
+        name : str
+            Name of masks (one of 'face', 'lips', 'neck', 'nose', 'boundary', 'forehead',
+            'scalp')
+        """
+
+        # Avoids circular import
+        from ..data import get_external_data_config
+
+        topo = self._infer_topo()
+        if topo != 'flame-coarse':
+            raise ValueError("Can only apply masks to flame-coarse topology data!")
+
+        masks_path = get_external_data_config(key='flame_masks_path')
+        with open(masks_path, "rb") as f_in:
+            masks = pickle.load(f_in, encoding="latin1")
+            if name not in masks:
+                raise ValueError(f"Mask name '{name}' not in masks")
+
+        mask = torch.as_tensor(masks[name], dtype=torch.int64, device=self.device)
+
+        # Apply mask to vertices
+        self.v = self.v[:, mask, :]
+
+        # We also need to filter out the triangles that contain vertices that are not
+        # part of the mask! First, find which triangles contain only vertices part of
+        # the mask
+        idx = torch.isin(self.tris, mask).all(dim=1)
+
+        # This is ugly/slow, but create a look-up table mapping mask values to new
+        # indices (from 0, 1, ... len(mask))
+        lut = {k.item(): i for i, k in enumerate(mask)}
+
+        # Finally, map old indices to new indices and unflatten
+        self.tris = torch.as_tensor([lut[x.item()] for x in self.tris[idx].flatten()],
+                                     dtype=torch.int64, device=self.device)
+        self.tris = self.tris.reshape((idx.sum(), -1))
+
     @staticmethod
     def from_video(path, **kwargs):
+        """Utility method to directly initialize a ``Data4D`` object by calling
+        the ``videorecon`` function.
+
+        Parameters
+        ----------
+        path : str, pathlib.Path
+            Path to video that will be reconstructed
+        **kwargs
+            Keyword arguments passed to ``videorecon``
+
+        Returns
+        -------
+        data : Data4D
+            A Data4D object
+        """
         from ..recon import videorecon
-        return videorecon(path, **kwargs)
+        data = videorecon(path, **kwargs)
+        return data
 
     @classmethod
     def load(cls, path, device=None):
         """Loads an HDF5 file from disk, parses its contents, and creates the
         initialization parameters necessary to initialize a ``*Data`` object.
-        It does not return a ``*Data`` object itself; only a dictionary with
-        the parameters.
-
-        Important: it is probably better to call the ``load`` method from a specific
-        data class (e.g., ``Mediapipe4D``) than the ``load`` method from the
-        ``Base4D`` class.
 
         Parameters
         ----------
@@ -193,20 +241,7 @@ class Data4D:
 
         Returns
         -------
-        init_kwargs : dict
-            Parameters necessary to initialize a ``*4D`` object.
-
-        Examples
-        --------
-        Get Mediapipe reconstruction data and initialize a ``Mediapipe4D`` object.
-        Note that it's easier to just call the ``load`` classmethod from the
-        ``Mediapipe4D`` class directly, i.e., ``Mediapipe4D.load(path)``.
-
-        >>> from medusa.data import get_example_h5
-        >>> from medusa.core import Mediapipe4D
-        >>> path = get_example_h5(load=False, model="mediapipe")
-        >>> init_kwargs = Base4D.load(path)
-        >>> data = Mediapipe4D(**init_kwargs)
+        An initialized Data4D object
         """
 
         init_kwargs = dict()
@@ -233,7 +268,7 @@ class Data4D:
         return cls(**init_kwargs)
 
     def to_local(self):
-
+        """Converts the data to local space."""
         if self.space == 'local':
             LOGGER.warning("Data already in 'local' space!")
         else:
@@ -243,7 +278,7 @@ class Data4D:
             self.space = "local"
 
     def to_world(self):
-
+        """Converts the data to world space."""
         if self.space == 'world':
             LOGGER.warning("Data already in 'world' space!")
         else:
@@ -282,7 +317,13 @@ class Data4D:
         return v_proj
 
     def get_face(self, index, pad_missing=True):
+        """Get the data from a particular face in the reconstruction.
 
+        Parameters
+        ----------
+        index : int
+            Integer index corresponding to the face
+        """
         available = self.face_idx.unique()
         if index not in available:
             raise ValueError(f"Face not available; choose from {available.tolist()}")
@@ -450,19 +491,18 @@ class Data4D:
         ----------
         f_out: str
             Filename of output
-        renderer : ``medusa.render.Renderer``
-            The renderer object
+        renderer : str
+            Either 'pyrender' or 'pytorch3d' (if installed)
+        shading : str
+            Type of shading ('flat', 'smooth', or 'wireframe'; latter only when using
+            'pyrender')
         video : str
             Path to video, in order to render face on top of original video frames
-        scale : float
-            A scaling factor of the resulting video; 0.25 means 25% of original size
-        n_frames : int
-            Number of frames to render; e.g., ``10`` means "render only the first
-            10 frames of the video"; nice for debugging. If ``None`` (default), all
-            frames are rendered
         alpha : float
             Alpha (transparency) level of the rendered face; lower = more transparent;
             minimum = 0 (invisible), maximum = 1 (fully opaque)
+        **kwargs
+            Keyword arguments supplied to renderer initialization
         """
 
         if renderer == "pyrender":

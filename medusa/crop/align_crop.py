@@ -1,21 +1,18 @@
-"""Crop model adapted from the insightface implementation. By reimplementing it
-here, insightface does not have to be installed.
-
-Please see the LICENSE file in the current directory for the license
-that is applicable to this implementation.
-"""
+"""Module with an implementation of a "crop model" that aligns an image to a
+template based on a set of landmarks (based on an implementation from
+Insightface)."""
 
 import numpy as np
 import torch
 from kornia.geometry.transform import warp_affine
 
+from .base import BaseCropModel
+from ..io import load_inputs
 from ..defaults import DEVICE
 from ..detect import SCRFDetector
-from ..io import load_inputs
 from ..transforms import estimate_similarity_transform
-from .base import BaseCropModel
 
-# Arcface template as defined by Insightface
+
 TEMPLATE = torch.Tensor(
     np.array(
         [
@@ -28,6 +25,8 @@ TEMPLATE = torch.Tensor(
         dtype=np.float32,
     )
 )
+"""The 5-landmark template used by Insightface (e.g. in their arcface implementation).
+The coordinates are relative to an image of size 112 x 112."""
 
 
 class LandmarkAlignCropModel(BaseCropModel):
@@ -53,11 +52,9 @@ class LandmarkAlignCropModel(BaseCropModel):
     To crop an image to be used for MICA reconstruction:
 
     >>> from medusa.data import get_example_frame
-    >>> crop_model = InsightfaceCropModel(device='cpu')
+    >>> crop_model = LandmarkAlignCropModel()
     >>> img = get_example_frame()  # path to jpg image
-    >>> crop_img = crop_model(img)
-    >>> crop_img.shape
-    torch.Size([1, 3, 112, 112])
+    >>> out = crop_model(img)
     """
 
     def __init__(
@@ -65,7 +62,6 @@ class LandmarkAlignCropModel(BaseCropModel):
         output_size=(112, 112),
         template=TEMPLATE,
         detector=SCRFDetector,
-        return_lmk=False,
         device=DEVICE,
         **kwargs
     ):
@@ -73,7 +69,6 @@ class LandmarkAlignCropModel(BaseCropModel):
         self.output_size = output_size  # h, w
         self.template = template * (output_size[0] / 112.0)
         self._det_model = detector(device=device, **kwargs)
-        self.return_lmk = return_lmk
         self.device = device
 
         if output_size[0] != output_size[1]:
@@ -83,7 +78,20 @@ class LandmarkAlignCropModel(BaseCropModel):
         return "aligncrop"
 
     def __call__(self, imgs):
+        """Aligns and crops images to the desired size.
 
+        Parameters
+        ----------
+        imgs : str, Path, tuple, list, array_like, torch.tensor
+            A path to an image, or a tuple/list of them, or already loaded images
+            as a torch.tensor or numpy array
+
+        Returns
+        -------
+        out_crop : dict
+            Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
+            images) and "crop_mats" (3x3 crop matrices)
+        """
         # Load images here instead of in detector to avoid loading them twice
         imgs = load_inputs(
             imgs, load_as="torch", channels_first=True, device=self.device

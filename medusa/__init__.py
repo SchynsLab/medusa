@@ -1,7 +1,6 @@
-"""A module to globally set configurations."""
+"""Medusa's top-level module; sets some global configurations."""
 
 import os
-
 import torch
 
 torch.set_grad_enabled(False)

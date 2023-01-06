@@ -4,4 +4,5 @@ Mediapipe vertices/triangles)."""
 
 from .example_data import get_example_frame, get_example_h5, get_example_video
 from .template_data import (get_external_data_config, get_template_flame,
-                            get_template_mediapipe)
+                            get_template_mediapipe, get_rigid_vertices,
+                            get_vertex_template, get_tris)

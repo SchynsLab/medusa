@@ -14,7 +14,7 @@ from .base import BaseRenderer
 
 class PytorchRenderer(BaseRenderer):
     """A pytorch3d-based renderer.
-    
+
     Parameters
     ----------
     viewport : tuple[int]
@@ -56,12 +56,12 @@ class PytorchRenderer(BaseRenderer):
 
     def _setup_settings(self, viewport):
         """Creates a ``RasterizationSettings`` object.
-        
+
         Parameters
         ----------
         viewport : tuple[int]
             Desired output image size (width, height), in pixels
-            
+
         Returns
         -------
         RasterizationSettings
@@ -83,14 +83,14 @@ class PytorchRenderer(BaseRenderer):
 
     def _setup_cameras(self, cam_mat, cam_type):
         """Sets of the appropriate camameras.
-        
+
         Parameters
         ----------
         cam_mat : torch.tensor
             Camera matrix to be used
         cam_type : str
             Either 'orthographic' or 'perspective'
-            
+
         Returns
         -------
         cam : pytorch3d camera
@@ -176,15 +176,17 @@ class PytorchRenderer(BaseRenderer):
         tris : torch.tensor
             A 3D (batch size x vertices x 3) tensor with triangles
         overlay : torch.tensor
-            WIP
-        cmap_name : str
-            Name of (matplotlib) colormap; only relevant if ``overlay`` is not ``None``
+            A tensor with shape (batch size x vertices) with vertex colors
+        single_image : bool
+            Whether a single image with (potentially) multiple faces should be
+            renderer (True) or multiple images with a single face should be renderered
+            (False)
 
         Returns
         -------
         img : torch.tensor
-            A 4D tensor with uint8 values of shape batch size x ``viewport[0]`` x
-            ``viewport[1]`` x 3 (RGB)
+            A 4D tensor with uint8 values of shape batch size x h x w x 3 (RGB), where
+            h and w are defined in the viewport
         """
 
         v, tris, overlay = self._preprocess(v, tris, overlay, format="torch")
@@ -206,5 +208,6 @@ class PytorchRenderer(BaseRenderer):
         return imgs
 
     def close(self):
-        """Does nothing but is included to be consistent with the ``PyRenderer`` class."""
+        """Does nothing but is included to be consistent with the
+        ``PyRenderer`` class."""
         pass

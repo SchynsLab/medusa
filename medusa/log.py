@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 
 def get_logger(level="INFO"):
-    """Create a Python logger.
+    """Creates a Python logger with a nice format.
 
     Parameters
     ----------

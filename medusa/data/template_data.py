@@ -3,9 +3,12 @@ topological templates used by the different models."""
 from pathlib import Path
 import numpy as np
 import torch
+import pickle
 import h5py
 import trimesh
 import yaml
+
+from ..defaults import DEVICE
 
 
 def get_template_mediapipe(device=None):
@@ -87,10 +90,10 @@ def get_template_flame(topo='coarse', keys=None, device=None):
 
     template = {}
     with h5py.File(file, "r") as data:
-        
+
         for topo_ in topo:
             template[topo_] = {}
-               
+
             if keys is not None:
                 for key in keys:
                     template[topo_][key] = data[topo_][key][:]
@@ -99,7 +102,7 @@ def get_template_flame(topo='coarse', keys=None, device=None):
                     template[topo_][key] = data[topo_][key][:]
 
     if device is not None:
-        
+
         for topo_ in template.keys():
             for key in template[topo_].keys():
                 d = template[topo_][key]
@@ -140,3 +143,96 @@ def get_external_data_config(key=None):
             raise ValueError(f"Key {key} not in config!")
         else:
             return Path(cfg[key])
+
+
+def get_rigid_vertices(topo, device=DEVICE):
+    """Gets the default 'rigid' vertices (i.e., vertices that can only move
+    rigidly) for a given topology ('mediapipe', 'flame-coarse', 'flame-dense').
+
+    Parameters
+    ----------
+    topo : str
+        Topology name ('mediapipe', 'flame-coarse', or 'flame-dense')
+    device : str
+        Either 'cuda' (GPU) or 'cpu'
+
+    Returns
+    -------
+    v_idx : torch.tensor
+        A long tensor with indices of rigid vertices
+    """
+
+    if topo == 'mediapipe':
+        v_idx = torch.tensor(
+            [
+                4, 6, 10, 33, 54, 67, 117, 119, 121, 127, 129, 132, 133, 136, 143, 147,
+                198, 205, 263, 284, 297, 346, 348, 350, 356, 358, 361, 362, 365, 372,
+                376, 420, 425
+            ],
+            dtype=torch.int64,
+            device=device
+        )
+    elif topo == 'flame-coarse':
+        path = get_external_data_config(key='flame_masks_path')
+        with open(path, 'rb') as f_in:
+            v_idx = torch.as_tensor(pickle.load(f_in, encoding='latin1')['scalp'],
+                                    dtype=torch.int64, device=device)
+    elif topo == 'flame-dense':
+        v_idx = torch.ones(59315, dtype=torch.bool, device=device)
+    else:
+        raise ValueError(f"Unknown topology '{topo}'!")
+
+    return v_idx
+
+
+def get_vertex_template(topo, device=DEVICE):
+    """Gets the default vertices (or 'template') for a given topology
+    ('mediapipe', 'flame-coarse', 'flame-dense').
+
+    Parameters
+    ----------
+    topo : str
+        Topology name ('mediapipe', 'flame-coarse', or 'flame-dense')
+    device : str
+        Either 'cuda' (GPU) or 'cpu'
+
+    Returns
+    -------
+    target : torch.tensor
+        A float tensor with the default (template) vertices
+    """
+
+    if topo == 'mediapipe':
+        target = get_template_mediapipe(device=device)['v']
+    elif topo in ['flame-coarse', 'flame-dense']:
+        target = get_template_flame(topo.split('-')[1], keys=['v'], device=device)['v']
+    else:
+        raise ValueError(f"Unknown topology '{topo}'!")
+
+    return target
+
+
+def get_tris(topo, device=DEVICE):
+    """Gets the triangles for a given topology ('mediapipe', 'flame-coarse',
+    'flame-dense').
+
+    Parameters
+    ----------
+    topo : str
+        Topology name ('mediapipe', 'flame-coarse', or 'flame-dense')
+    device : str
+        Either 'cuda' (GPU) or 'cpu'
+
+    Returns
+    -------
+    tris : torch.tensor
+        A long tensor with the triangles
+    """
+    if topo == 'mediapipe':
+        tris = get_template_mediapipe(device=device)['tris']
+    elif topo in ['flame-coarse', 'flame-dense']:
+        tris = get_template_flame(topo.split('-')[1], keys=['tris'], device=device)['tris']
+    else:
+        raise ValueError(f"Unknown topology '{topo}'!")
+
+    return tris.long()

@@ -1,3 +1,6 @@
+"""Module with canonical ``videorecon`` function that takes in a video and
+returns a ``Data4D`` object."""
+
 from ..defaults import DEVICE, FLAME_MODELS, LOGGER
 from ..containers.fourD import Data4D
 from ..containers.results import BatchResults
@@ -8,15 +11,8 @@ from .flame import DecaReconModel
 from .mpipe import Mediapipe
 
 
-def videorecon(
-    video_path,
-    recon_model="mediapipe",
-    device=DEVICE,
-    n_frames=None,
-    batch_size=32,
-    loglevel="INFO",
-    **kwargs,
-):
+def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None,
+               batch_size=32, loglevel="INFO", **kwargs):
     """Reconstruction of all frames of a video.
 
     Parameters
@@ -24,11 +20,13 @@ def videorecon(
     video_path : str, Path
         Path to video file to reconstruct
     recon_model : str
-        Name of reconstruction model, options are: 'emoca', 'mediapipe',
+        Name of reconstruction model, options are: 'deca-coarse', 'deca-dense',
+        'emoca-coarse', 'emoca-dense', 'spectre-coarse', 'spectre-dense', and
+        'mediapipe'
     device : str
-        Either "cuda" (for GPU) or "cpu" (ignored when using mediapipe)
+        Either "cuda" (for GPU) or "cpu"
     n_frames : int
-        If not `None` (default), only reconstruct and render the first `n_frames`
+        If not ``None`` (default), only reconstruct and render the first ``n_frames``
         frames of the video; nice for debugging
     batch_size : int
         Batch size (i.e., number of frames) processed by the reconstruction model
@@ -36,11 +34,13 @@ def videorecon(
     loglevel : str
         Logging level, options are (in order of verbosity): 'DEBUG', 'INFO', 'WARNING',
         'ERROR', and 'CRITICAL'
+    **kwargs
+        Additional keyword arguments passed to the reconstruction model initialization
 
     Returns
     -------
-    data : medusa.core.*Data
-        An object with a class inherited from ``medusa.core.BaseData``
+    data : Data4D
+        An Data4D object with all reconstruction (meta)data
 
     Examples
     --------
@@ -51,7 +51,7 @@ def videorecon(
     >>> data = videorecon(vid, recon_model='mediapipe')
     """
 
-    LOGGER.setLevel('WARNING')#loglevel)
+    LOGGER.setLevel(loglevel)
     LOGGER.info(f"Starting recon using for {video_path}")
     LOGGER.info(f"Initializing {recon_model} recon model")
 
@@ -90,7 +90,6 @@ def videorecon(
         # in `recon_data`
         if inputs["imgs"] is not None:
             outputs = reconstructor(**inputs)
-            #outputs['v'] = reconstructor.apply_mask('face', outputs['v'])
             recon_results.add(**outputs)
 
         if n_frames is not None:

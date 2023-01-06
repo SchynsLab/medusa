@@ -1,12 +1,13 @@
 import torch
 
 from ..transforms import estimate_similarity_transform
-from ..defaults import DEVICE, get_rigid_vertices, get_vertex_template
+from ..defaults import DEVICE
+from ..data import get_rigid_vertices, get_vertex_template
 
 
 def estimate_alignment(v, topo, target=None, estimate_scale=False, device=DEVICE):
-    """Aligment of a temporal series of 3D meshes to a target (which should have the
-    same topology).
+    """Aligment of a temporal series of 3D meshes to a target (which should
+    have the same topology).
 
     Parameters
     ----------
@@ -29,13 +30,13 @@ def estimate_alignment(v, topo, target=None, estimate_scale=False, device=DEVICE
     """
 
     v_idx = get_rigid_vertices(topo, device)
-    
+
     if target is None:
         target = get_vertex_template(topo, device)
-    
+
     mat = estimate_similarity_transform(v[:, v_idx, :], target[v_idx], estimate_scale)
     mat = torch.linalg.inv(mat)
-    
+
     return mat
 
 

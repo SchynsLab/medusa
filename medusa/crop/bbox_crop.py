@@ -1,13 +1,17 @@
-from pathlib import Path
+"""Module with a "crop model" which crops an image by creating a bounding box
+based on a set of existing (2D) landmarks.
 
-import numpy as np
+Based on the implementation in DECA (see
+../recon/flame/deca/license.md).
+"""
+
 import torch
 from kornia.geometry.linalg import transform_points
 from kornia.geometry.transform import warp_affine
 
 from ..defaults import DEVICE
-from ..detect import SCRFDetector
 from ..io import load_inputs
+from ..detect import SCRFDetector
 from ..data import get_external_data_config
 from ..onnx import OnnxModel
 from ..transforms import estimate_similarity_transform
@@ -15,6 +19,21 @@ from .base import BaseCropModel
 
 
 class LandmarkBboxCropModel(BaseCropModel):
+    """A model that crops an image by creating a bounding box based on a set of
+    face landmarks.
+
+    Parameters
+    -----------
+    name : str
+        Name of the landmark model from Insightface that should be used; options are
+        '2d106det' (106 landmarks) or '1k3d68' (68 landmarks)
+    output_size : tuple[int]
+        Desired size of the cropped image
+    detector : BaseDetector
+        A Medusa-based detector
+    device : str
+        Either 'cuda' (GPU) or 'cpu'
+    """
     def __init__(
         self,
         name="2d106det",
@@ -31,7 +50,7 @@ class LandmarkBboxCropModel(BaseCropModel):
         self._lms_model = self._init_lms_model()
 
     def _init_lms_model(self):
-
+        """Initializes the landmark prediction model."""
         f_in = f_in = get_external_data_config('buffalo_path') / f'{self.name}.onnx'
         return OnnxModel(f_in, self.device)
 
@@ -41,10 +60,12 @@ class LandmarkBboxCropModel(BaseCropModel):
     def _create_bbox(self, lm, scale=1.25):
         """Creates a bounding box (bbox) based on the landmarks by creating a
         box around the outermost landmarks (+10%), as done in the original DECA
-        usage.
+        model.
 
         Parameters
         ----------
+        lm : torch.tensor
+            Float tensor with landmarks of shape L (landmarks) x 2
         scale : float
             Factor to scale the bounding box with
         """
@@ -73,11 +94,25 @@ class LandmarkBboxCropModel(BaseCropModel):
 
         return bbox
 
-    def __call__(self, images):
+    def __call__(self, imgs):
+        """Crops images to the desired size.
+
+        Parameters
+        ----------
+        imgs : str, Path, tuple, list, array_like, torch.tensor
+            A path to an image, or a tuple/list of them, or already loaded images
+            as a torch.tensor or numpy array
+
+        Returns
+        -------
+        out_crop : dict
+            Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
+            images) and "crop_mats" (3x3 crop matrices)
+        """
         # Load images here instead of in detector to avoid loading them twice
 
         imgs = load_inputs(
-            images, load_as="torch", channels_first=True, device=self.device
+            imgs, load_as="torch", channels_first=True, device=self.device
         )
         b, c, h, w = imgs.shape
         out_det = self._detector(imgs)
@@ -106,7 +141,7 @@ class LandmarkBboxCropModel(BaseCropModel):
 
         # Need to set batch dimension in output shape
         self._lms_model._params["out_shapes"][0][0] = n_det
-        lms = self._lms_model.run(imgs_crop)["fc1"]
+        lms = self._lms_model.run(imgs_crop)["fc1"]  # fc1 = output (layer) name
 
         if lms.shape[1] == 3309:  # 3D data!
             # Reshape to n_det x n_lms x 3

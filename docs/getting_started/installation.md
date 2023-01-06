@@ -1,11 +1,11 @@
 # Medusa installation
 
-Medusa is a Python package which works with Python versions 3.6 and above. We recommend
+Medusa is a Python package which works with Python versions 3.9 and above. We recommend
 using Python version 3.9. Moreover, we strongly recommend to install the `medusa` package
 in a separate [conda environment](https://anaconda.org/anaconda/conda). Assuming you have
-access to the `conda` command (by installing [Anaconda](https://www.anaconda.com/products/distribution) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html)), run the
-following command in your terminal to create a new environment named `medusa` with Python
-version 3.9:
+access to the `conda` command (by installing [Anaconda](https://www.anaconda.com/products/distribution)
+or [Miniconda](https://docs.conda.io/en/latest/miniconda.html)), run the following command
+in your terminal to create a new environment named `medusa` with Python version 3.9:
 
 ```console
 conda create -n medusa python=3.9
@@ -16,25 +16,6 @@ To activate the environment, run:
 ```console
 conda activate medusa
 ```
-
-Several reconstruction models depend on the `pytorch` Python package. Also, some
-models (like EMOCA and FAN) can be run on the GPU (instead of CPU), which offers
-substantial decreases in runtime. If you have access to a GPU, you can enable
-GPU processing by installing the appropriate CUDA toolkit as well. Run the command
-below depending on whether you want to run the models on GPU or CPU only:
-
-````{tab-set}
-```{tab-item} GPU
-conda install pytorch cudatoolkit=11.3 -c pytorch
-```
-
-```{tab-item} CPU
-conda install pytorch cpuonly -c pytorch
-```
-````
-
-For more detailed information on how to install `pytorch` on different platforms
-(e.g., Mac), check out the `pytorch` [website](https://pytorch.org/).
 
 The next step is to download the `medusa` package from Github, either as [zip file](https://github.com/lukassnoek/medusa/archive/refs/heads/master.zip) (which you need to extract afterwards) or using `git` (i.e., `git clone https://github.com/lukassnoek/medusa.git`). Finally, again assuming you're in the root of the downloaded repository (and you have the `medusa` conda environment activated), run the following command to install `medusa` and its dependencies:
 

@@ -95,9 +95,6 @@ def test_multiple_faces(imgs_test, Renderer, recon_model_name):
 
     out = recon_model(**inputs)
 
-    if isinstance(recon_model, DecaReconModel):
-        out["v"] = recon_model.apply_mask("face", out["v"])
-
     renderer = Renderer(viewport, cam_type=cam_type, cam_mat=cam_mat, shading="flat")
     img_recon = renderer(out["v"], recon_model.get_tris())
     img_final = renderer.alpha_blend(img_recon, img)
@@ -114,16 +111,10 @@ def test_multiple_faces(imgs_test, Renderer, recon_model_name):
 @pytest.mark.parametrize("video_test", [1, 4], indirect=True)
 @pytest.mark.parametrize("renderer", ["pyrender", "pytorch3d"])
 def test_render_video(video_test, renderer, device=DEVICE):
-    data = videorecon(video_test, "emoca-coarse", device=device, mask="face")
+    data = videorecon(video_test, "emoca-coarse", device=device)
+    data.apply_vertex_mask('face')
     f_out = (
         Path(__file__).parent
         / f"test_viz/render/renderer-{renderer}_{video_test.stem}.mp4"
     )
     data.render_video(f_out, renderer=renderer, video=video_test)
-
-
-# def test_render_video_ultimate():
-#     video_test = "./two_face_demo.mp4"
-#     data = videorecon(video_test, "emoca-coarse", device="cpu", mask="face")
-#     f_out = "./ultimate.mp4"
-#     data.render_video(f_out, renderer="pyrender", video=video_test)

@@ -36,14 +36,8 @@ class VideoLoader(DataLoader):
         Extra keyword arguments passed to the initialization of the parent class
     """
 
-    def __init__(
-        self,
-        path,
-        batch_size=32,
-        channels_first=False,
-        device=DEVICE,
-        **kwargs,
-    ):
+    def __init__(self, path, batch_size=32, channels_first=False, device=DEVICE,
+                 **kwargs):
         """Initializes a VideoLoader object."""
         self.channels_first = channels_first
         self.device = device
@@ -54,8 +48,13 @@ class VideoLoader(DataLoader):
         self._metadata = self._extract_metadata()
 
     def get_metadata(self):
-        """Returns all (meta)data needed for initialization of a Data
-        object."""
+        """Returns all (meta)data needed for initialization of a Data object.
+
+        Returns
+        -------
+        A dictionary with keys "img_size" (image size of frames), "n_img" (total number
+        of frames), and "fps" (frames-per-second)
+        """
 
         return self._metadata
 
@@ -74,10 +73,6 @@ class VideoLoader(DataLoader):
 
     def _extract_metadata(self):
         """Extracts some metadata from Dataset and exposes it to the loader."""
-
-        # tmp = self.dataset.metadata
-        # end = tmp['n'] / tmp['fps']
-        # frame_t = np.linspace(0, end, endpoint=False, num=tmp['n'])
 
         return self.dataset.metadata
 
@@ -156,6 +151,9 @@ class VideoWriter:
         Video codec to use (e.g., 'mpeg4', 'libx264', 'h264')
     pix_fmt : str
         Pixel format; should be compatible with codec
+    size : tuple[int]
+        Desired output size of video (if ``None``, wil be set the first time a frame
+        is written)
     """
 
     def __init__(self, path, fps, codec="libx264", pix_fmt="yuv420p", size=None):
@@ -209,24 +207,18 @@ class VideoWriter:
         self._container.close()
 
 
-def load_inputs(
-    inputs,
-    load_as="torch",
-    channels_first=True,
-    with_batch_dim=True,
-    dtype="float32",
-    device=DEVICE,
-):
+def load_inputs(inputs, load_as="torch", channels_first=True, with_batch_dim=True,
+                dtype="float32", device=DEVICE):
     """Generic image loader function, which also performs some basic
-    preprocessing and checks. Is used internally for crop models and
+    preprocessing and checks. Is used internally for detection, crop, and
     reconstruction models.
 
     Parameters
     ----------
     inputs : str, Path, iterable, array_like
-        String or Path to a single image or an iterable (list, tuple) with
+        String or ``Path`` to a single image or an iterable (list, tuple) with
         multiple image paths, or a numpy array or torch Tensor with already
-        loaded images
+        loaded images (in which the first dimension represents the number of images)
     load_as : str
         Either 'torch' (returns torch Tensor) or 'numpy' (returns numpy ndarray)
     to_bgr : bool
@@ -245,7 +237,7 @@ def load_inputs(
 
     Returns
     -------
-    imgs : np.ndarray, torch.Tensor
+    imgs : np.ndarray, torch.tensor
         Images loaded in memory; object depends on the ``load_as`` parameter
 
     Examples
@@ -354,7 +346,8 @@ def load_inputs(
 
 
 def download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type="post"):
-    """Downloads a file using requests.
+    """Downloads a file using requests. Used internally to download external
+    data.
 
     Parameters
     ----------

@@ -7,10 +7,10 @@ import torch
 
 from ..defaults import DEVICE
 from ..io import load_inputs
-from .base import BaseDetectionModel
+from .base import BaseDetector
 
 
-class YunetDetector(BaseDetectionModel):
+class YunetDetector(BaseDetector):
     def __init__(self, det_threshold=0.9, nms_threshold=0.3, device=DEVICE, **kwargs):
 
         self.det_threshold = det_threshold

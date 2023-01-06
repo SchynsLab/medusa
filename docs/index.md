@@ -1,6 +1,6 @@
 # Medusa: 4D face reconstruction and analysis
 
-[![CI](https://github.com/medusa-4D/medusa/actions/workflows/ci.yaml/badge.svg)](https://github.com/medusa-4D/medusa/actions/workflows/ci.yaml)
+[![CI](https://github.com/medusa-4D/medusa/actions/workflows/tests.yaml/badge.svg)](https://github.com/medusa-4D/medusa/actions/workflows/tests.yaml)
 [![CI](https://github.com/medusa-4D/medusa/actions/workflows/docs.yaml/badge.svg)](https://medusa.lukas-snoek.com/medusa)
 ![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lukassnoek/420039a0fe8fb8c1170e0478cdcd0f26/raw/medusa_coverage_badge.json)
 ![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lukassnoek/cb6da52c965ec24f136b74a1ebad1964/raw/medusa_interrogate_badge.json)
@@ -10,18 +10,16 @@ Medusa is a Python toolbox to perform 4D face reconstruction and analysis. You c
 to reconstruct a series of 3D meshes of (moving) faces from video files: one 3D mesh for
 each frame of the video (resulting in a "4D" representation of facial movement). In
 addition to functionality to reconstruct faces, Medusa also contains functionality to
-preprocess and analyze the resulting 4D reconstructions.
-
-## When (not) to use Medusa?
+preprocess and visualize the resulting 4D reconstructions.
 
 More specifically, Medusa allows you to reconstruct, preprocess, and analyze
 frame-by-frame time series of 3D faces from videos. The data that Medusa outputs is
-basically a set of 3D points ("vertices"), which together represent face shape,
-that move over time. Medusa then processes these points in a similar way that fMRI or
-EEG/MEG software processes voxels or sensors, but instead of representing "brain activity",
-it represents face movement! Medusa makes relatively few assumptions as to how you want
+basically a set of 3D points ("vertices"), which together represent face shape.
+Medusa then processes these points in a similar way that fMRI or EEG/MEG software
+processes voxels or sensors, but instead of representing "brain activity", it represents
+face movement! Medusa makes relatively few assumptions as to how you want
 to (further) analyze the face and just returns the raw set of vertices. For some ideas on
-how to analyze such data, check out the [analysis tutorials](tutorials/analysis).
+how to analyze such data, check out the [analysis tutorials](tutorials/analysis) (WIP).
 
 ## Documentation overview
 

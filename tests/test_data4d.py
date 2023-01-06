@@ -28,6 +28,21 @@ def test_init(device):
     data = Data4D(v, mat, tris, img_idx, face_idx, metadata, device=device)
 
 
+@pytest.mark.parametrize("video_test", [1], indirect=True)
+@pytest.mark.parametrize("kwargs", [{}, {'recon_model': 'emoca-coarse'}])
+def test_from_video(video_test, kwargs):
+    data = Data4D.from_video(video_test, **kwargs)
+    if kwargs:
+        assert(data.v.shape[1:] == (5023, 3))
+
+
+def test_apply_mask():
+    data = get_example_h5(load=True, model='emoca-coarse')
+    data.apply_vertex_mask('face')
+    assert(data.v.shape[1] == 1787)
+    assert(data.tris.shape[0] == 3408)
+
+
 @pytest.mark.parametrize("model", ["mediapipe", "emoca-coarse"])
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_load_and_save(model, device):

@@ -36,8 +36,8 @@ from .encoders import PerceptualEncoder, ResnetEncoder
 class DecaReconModel(FlameReconModel):
     """A 3D face reconstruction model that uses the FLAME topology.
 
-    At the moment, four different models are supported: 'deca-coarse', 'deca-dense',
-    'emoca-coarse', and 'emoca-dense'.
+    At the moment, six different models are supported: 'deca-coarse', 'deca-dense',
+    'emoca-coarse', 'emoca-dense', 'spectre-coarse', and 'spectre-dense'
 
     Parameters
     ----------
@@ -51,12 +51,11 @@ class DecaReconModel(FlameReconModel):
         Either 'cuda' (uses GPU) or 'cpu'
     """
 
-    def __init__(self, name, img_size=None, mask=None, device=DEVICE):
+    def __init__(self, name, img_size=None, device=DEVICE):
         """Initializes an DECA-like model object."""
         super().__init__()
         self.name = name
         self.img_size = img_size
-        self.mask = mask
         self.device = device
         self._dense = "dense" in name
         self._warned_about_crop_mat = False
@@ -472,8 +471,5 @@ class DecaReconModel(FlameReconModel):
 
         enc_dict = self._encode(imgs)
         dec_dict = self._decode(enc_dict, crop_mats)
-
-        if self.mask is not None:
-            dec_dict["v"] = self.apply_mask(self.mask, dec_dict["v"])
 
         return dec_dict

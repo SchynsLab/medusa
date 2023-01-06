@@ -1,9 +1,9 @@
 """Module with a wrapper around a Mediapipe face mesh model [1]_ that can be
 used in Medusa.
 
-.. [1] Kartynnik, Y., Ablavatski, A., Grishchenko, I., & Grundmann, M.
-(2019).        Real-time facial surface geometry from monocular video on
-mobile GPUs. *arXiv preprint arXiv:1907.06724*
+.. [1] Kartynnik, Y., Ablavatski, A., Grishchenko, I., & Grundmann, M. (2019).
+       Real-time facial surface geometry from monocular video on mobile GPUs.
+       *arXiv preprint arXiv:1907.06724*
 """
 
 from collections import defaultdict
@@ -25,6 +25,10 @@ class Mediapipe(BaseReconModel):
     ----------
     static_image_mode : bool
         Whether to expect a sequence of related images (like in a video)
+    det_threshold : float
+        Minimum detection threshold (default set to 0.1 because lots of false negatives)
+    device : str
+        Either 'cuda' (GPU) or 'cpu'
     **kwargs : dict
         Extra keyword arguments to be passed to the initialization of FaceMesh
 
@@ -34,14 +38,8 @@ class Mediapipe(BaseReconModel):
         The actual Mediapipe model object
     """
 
-    def __init__(
-        self,
-        static_image_mode=False,
-        refine_landmarks=True,
-        min_detection_confidence=0.1,
-        min_tracking_confidence=0.5,
-        device=DEVICE,
-    ):
+    def __init__(self, static_image_mode=False, det_threshold=0.1, device=DEVICE,
+                 **kwargs):
         """Initializes a Mediapipe recon model."""
 
         # Importing here speeds up CLI
@@ -49,10 +47,10 @@ class Mediapipe(BaseReconModel):
 
         self.model = mp.solutions.face_mesh.FaceMesh(
             static_image_mode=static_image_mode,
-            refine_landmarks=refine_landmarks,
-            min_detection_confidence=min_detection_confidence,
-            min_tracking_confidence=min_tracking_confidence,
+            refine_landmarks=True,
+            min_detection_confidence=det_threshold,
             max_num_faces=5,
+            **kwargs
         )
 
         self.model.__enter__()  # enter context manually
@@ -72,10 +70,11 @@ class Mediapipe(BaseReconModel):
         self._f_world_ref = out["tris"]
 
     def get_tris(self):
-
+        """Returns the triangles associated with the mediapipe mesh."""
         return torch.as_tensor(self._f_world_ref, device=self.device)
 
     def get_cam_mat(self):
+        """Returns a default camera matrix."""
         return torch.eye(4, device=self.device)
 
     def __call__(self, imgs):

@@ -32,7 +32,7 @@ class MicaReconModel(FlameReconModel):
         self._cfg = get_external_data_config()
         self._create_submodels()
         self._load_submodels()
-        
+
     def __str__(self):
         return "mica"
 
@@ -96,7 +96,7 @@ class MicaReconModel(FlameReconModel):
 
         Parameters
         ----------
-        image : np.ndarray, torch.Tensor
+        imgs : np.ndarray, torch.Tensor
             Ideally, a numpy array or torch tensor of shape 1 x 3 x 112 x 112
             (1, C, W, H), representing a cropped image as done by the
             InsightFaceCroppingModel

@@ -11,7 +11,7 @@ from medusa.recon import Mediapipe
 )
 def test_mediapipe_recon(imgs_test):
     imgs, n_exp = imgs_test
-    recon_model = Mediapipe(static_image_mode=True, min_detection_confidence=0.1)
+    recon_model = Mediapipe(static_image_mode=True)
     out = recon_model(imgs)
 
     if n_exp == 0:

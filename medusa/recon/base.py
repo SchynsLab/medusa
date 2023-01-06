@@ -1,3 +1,4 @@
+"""Module with a base reconstruction model class."""
 from abc import ABC, abstractmethod
 
 
