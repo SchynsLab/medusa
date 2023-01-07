@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "medusa-gpu"
+name = "medusa"
 version = "0.0.1"
 description = "Medusa: 4D face reconstruction and analysis"
 authors = ["Lukas Snoek <lukassnoek@gmail.com>"]
@@ -15,23 +15,24 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Scientific/Engineering :: Artificial Intelligence"
 ]
-packages = [
-    {include = "medusa"}
-]
 
 [tool.poetry.dependencies]
 python = "3.9.*"
 click = ">=8.1.3"
 torch = [
-    { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl" },
-    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-win_amd64.whl" }
+    { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/cpu/torch-1.13.1%2Bcpu-cp39-cp39-linux_x86_64.whl" },
+    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/cpu/torch-1.13.1%2Bcpu-cp39-cp39-win_amd64.whl" },
+    { markers = "sys_platform == 'darwin' and platform_machine == 'arm64'", url = "https://download.pytorch.org/whl/cpu/torch-1.13.1-cp39-none-macosx_11_0_arm64.whl" },
+    { markers = "sys_platform == 'darwin' and platform_machine != 'arm64'", url = "https://download.pytorch.org/whl/cpu/torch-1.13.1-cp39-none-macosx_10_9_x86_64.whl" }
 ]
 torchvision = [
     { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-linux_x86_64.whl" },
-    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-win_amd64.whl" }
+    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-win_amd64.whl" },
+    { markers = "sys_platform == 'darwin'", version = "0.14.1" }
 ]
 pytorch3d = [
-    { markers = "sys_platform == 'linux'", url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl" }
+    { markers = "sys_platform == 'linux'", url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl" },
+    { markers = "sys_platform == 'darwin'", version = "^0.7.2" }
 ]
 pandas = ">=1.5.1"
 numpy = ">=1.23.4"
@@ -46,7 +47,7 @@ gdown = ">=4.5.3"
 kornia = ">=0.6.8"
 mediapipe = { version = ">=0.8.11", markers = "platform_system != 'Darwin' and platform_machine != 'arm64'" }
 mediapipe-silicon = { version = ">=0.8.11", markers = "platform_system == 'Darwin' and platform_machine == 'arm64'" }
-onnxruntime-gpu = ">=1.13.1"
+onnxruntime = ">=1.13.1"
 chumpy = {git = "https://github.com/lukassnoek/chumpy.git"}
 av = ">=10.0.0"
 

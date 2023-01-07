@@ -23,4 +23,7 @@ runs:
   # Install package + deps + download data
   - name: Install Medusa
     shell: bash
-    run: poetry install
+    run: |
+      cp builds/cpu/pyproject.toml .
+      cp builds/cpu/poetry.lock .
+      poetry install

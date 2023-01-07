@@ -19,20 +19,14 @@ Usage: medusa_videorecon [OPTIONS] VIDEO_PATH
   Performs frame-by-frame 3D face reconstruction of a video file.
 
 Options:
-  --events-path FILE              Path to events-file (a .tsv file)
   -o, --out PATH                  File to save output to (shouldn't have an
                                   extension)
-  -r, --recon-model-name [emoca|mediapipe]
+  -r, --recon-model [spectre-coarse|emoca-dense|emoca-coarse|deca-dense|deca-coarse|mediapipe]
                                   Name of the reconstruction model
-  -c, --cfg TEXT                  Path to a custom Medusa config file
   --device [cpu|cuda]             Device to run the reconstruction on (only
-                                  relevant for FLAME-based models
-  --render-recon                  Render the reconstruction as a video
-  --render-on-video               Render the reconstruction on top of the
-                                  original video
-  --render-format [gif|mp4]       Format of rendering output
-  -n, --n-frames INTEGER          Number of frames to reconstruct (5 means
-                                  'reconstruct only the 5 first frames)
+                                  relevant for EMOCA
+  -n, --n-frames INTEGER          Number of frames to process
+  -b, --batch-size INTEGER        Batch size of inputs to recon model
   --help                          Show this message and exit.
 ```
 
@@ -42,22 +36,11 @@ If the option accepts an argument, like `--recon-model` or `--out-dir`, then it 
 shows the available options (such as "emoca", "mediapipe", in case of `--recon-model`)
 or the expected input type (like "PATH" in case of `--out-dir`).
 
-If you, for example, would like to reconstruct your video,
-`my_vid.mp4`, using the "mediapipe" model and store the output in the `recon/` directory,
-you'd run:
+If you, for example, would like to reconstruct your video, `my_vid.mp4`, using the
+"mediapipe" model and store the output in the `recon/` directory, you'd run:
 
 ```console
 $ medusa_videorecon my_vid.mp4 --recon-model mediapipe --out-dir recon/
-```
-
-In addition, there may be some options which are not followed by an argument, like
-`--render-recon` (which are not followed by available options or expected input type).
-So, if you'd want to run the same reconstruction as the previous command, but this time
-also render the reconstruction (`--render-recon`) on top of the input video
-(`--render-on-video`), you'd run:
-
-```console
-$ medusa_videorecon my_vid.mp4 --recon-model-name mediapipe --out-dir recon/ --render-recon --render-on-video
 ```
 
 Each CLI command follows its underlying Python function closely in terms of which
@@ -78,86 +61,6 @@ there is one, and only one, face present in each frame of the video.
 This CLI command uses the Python function
 [`medusa.recon.videorecon`](./python/recon/recon/index) under the hood.
 
-### `medusa_align`
-
-This command spatially aligns the reconstructed 3D meshes from different time points,
-which is also known as "motion correction" in the functional MRI literature. It expects
-as input an HDF5 file (extension: `.h5`) with reconstruction data, as created by running
-the `medusa_videorecon` command.
-
-If a "local-to-world" matrix is known for each time point (as provided by the EMOCA and
-Mediapipe reconstruction models), each mesh is aligned to the underlying canonical model
-by applying the inverse matrix (i.e., the "world-to-local" matrix) to the vertices.
-
-If these matrices are not known, each mesh ($V_{i}$) is aligned to the mesh of the first
-time point ($V_{1}$) using the ICP algorithm {cite:p}`arun1987least` (from
-[trimesh](https://trimsh.org/trimesh.registration.html)) or Umeyama algorithm
-{cite:p}`umeyama1991least` (from
-[scikit-image](https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/_geometric.py#L91)).
-
-This CLI command uses the Python function
-[`medusa.preproc.align.align`](./python/preproc/align/index) under the hood.
-
-```{note}
-If you want to separate global face movements (translation and rotation) from local face
-movements (facial soft tissue movement due to muscle activations), you need to run this
-algorithm.
-```
-
-### `medusa_resample`
-
-This command temporally resamples the time series of reconstructed 3D face meshes. It
-expects as input an HDF5 file with reconstruction data. The command can be used to resamle
-the data to a regular period and/or to upsample the data (by setting the
-`--sampling-freq` higher the the video's sampling frequency, or FPS).
-
-This CLI command uses the Python function
-[`medusa.preproc.resample.resample`](./python/preproc/resample/index) under the hood.
-
-```{note}
-For videos with a regular sampling frequency (i.e., the same time period between
-frames), running this command is not strictly necessary.
-```
-
-### `medusa_filter`
-
-This command performs temporal filtering on the time series of the reconstructed 3D face
-meshes. It expects as input an HDF5 file with reconstruction data. It uses a
-[Butterworth filter](https://en.wikipedia.org/wiki/Butterworth_filter) to perform low-
-and/or high-pass filtering. The cutoffs are expected to be given in hertz.
-
-It uses a [Butterworth filter](https://en.wikipedia.org/wiki/Butterworth_filter)
-to perform low- and/or high-pass filtering. The cutoffs are expected to be given in
-hertz.
-
-This CLI command uses the Python function
-[`medusa.preproc.filter.filter`](./python/preproc/filter/index) under the hood.
-
-### `medusa_epoch`
-
-This command performs "epoching" on the time series of the reconstructed 3D face
-meshes. It expects as input an HDF5 file with reconstruction data. Here, an "epoch" refers to
-an equal duration chunk of signal, usually time-locked to repeated experimental events
-(such as stimulus onsets or button presses; definition adapted from
-[MNE](https://mne.tools/stable/auto_tutorials/epochs/10_epochs_overview.html)).
-
-```{warning}
-In Medusa, you can only use this functionality when you actually have an events-file with
-stimulus/response/trial onsets (see [quickstart](../getting_started/quickstart) for more
-information).
-```
-
-The result of the epoching operation is a 4D numpy array of shape $N$ (epochs) $\times\ T$
-(number of time points of epoch) $\times\ V$ (number of vertices) $\times\ 3$ (X, Y, Z).
-The CLI command actually converts this data into an MNE-compatible structure
-(an [`EpochsArray`](https://mne.tools/stable/generated/mne.EpochsArray.html)) and saves
-it as a FIF file (extension: `.fif`). This file can then be loaded using MNE
-(with [`mne.read_epochs`](https://mne.tools/stable/generated/mne.read_epochs.html#mne.read_epochs))
-to be further analyzed.
-
-This CLI command uses the Python function
-[`medusa.epochs`](./python/epochs/index) under the hood.
-
 ### `medusa_videorender`
 
 This command renders the time series of the reconstructed 3D face meshes as an MP4 video
@@ -166,6 +69,10 @@ reconstruction data and, if you want to render the reconstruction on top of the 
 videon, a video file (e.g., `--video my_video.mp4`).
 
 This CLI command uses the `render_video` method from the
-[`medusa.core.Data4D`](./python/containers/fourD/index) class, which in turn uses the
-[`medusa.render.PyRenderer`](./python/render/index) class (a wrapper around a
-[pyrender](https://pyrender.readthedocs.io/) renderer).
+[`medusa.core.Data4D`](./python/containers/fourD/index) class.
+
+### `medusa_download_ext_data`
+
+This command downloads external data necessary for some detection and reconstruction
+models. As explained in the [installation instructions](../getting_started/installation),
+you need to create an account on the [FLAME website](https://flame.is.tue.mpg.de/) first.

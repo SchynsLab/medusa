@@ -157,3 +157,8 @@ docs/autoapi/_build
 docs/getting_started/*.mp4
 docs/getting_started/*.gif
 docs/api/python/**/*.rst.txt
+
+# builds
+builds/*/medusa
+builds/*/README.md
+builds/*/dist

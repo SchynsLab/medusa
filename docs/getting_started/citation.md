@@ -2,14 +2,13 @@
 
 If you use Medusa, please cite it as follows:
 
-> Snoek, L., Garrod, O., Knapen, T., Jack, R., & Schyns, P. (2022). Dynamic Face Imaging:
-a novel analysis framework for 3D face expression and perception.
+> Snoek, L., Jack, R., & Schyns, P. (2023). Dynamic face imaging: a novel analysis framework for 4D social face perception and expression. *IEEE International Conference on Automatic Face and Gesture Recognition Proceedings*.
 
 ## Citing reconstruction models
 
 Please also cite the following, depending on the reconstruction model you use.
 
-### EMOCA
+### DECA / EMOCA
 > Danecek, R., Black, M. J., & Bolkart, T. (2022). EMOCA: Emotion Driven Monocular
 Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
 
