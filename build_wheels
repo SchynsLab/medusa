@@ -5,4 +5,5 @@ for device in cpu gpu; do
     poetry update
     poetry build --format wheel
     mv ./pyproject.toml ./pyproject_${device}.toml
+    mv ./poetry.lock ./poetry_${device}.lock
 done

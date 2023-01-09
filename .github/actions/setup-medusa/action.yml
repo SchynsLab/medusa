@@ -13,9 +13,11 @@ runs:
     run: sudo apt install -y freeglut3-dev
   - name: Get Medusa repository
     uses: actions/checkout@v3
-  - name: Set current pyproject.toml
+  - name: Set current pyproject.toml and lockfile
     shell: bash
-    run: cp ./pyproject_cpu.toml ./pyproject.toml
+    run: |
+      cp ./pyproject_cpu.toml ./pyproject.toml
+      cp ./poetry_cpu.lock ./poetry.lock
   - name: Install Poetry Action
     uses: snok/install-poetry@v1.3.3
   - name: Set up Python ${{ inputs.python-version }}

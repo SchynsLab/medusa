@@ -48,6 +48,10 @@ url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-l
 markers = "sys_platform == 'win32'"
 url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-win_amd64.whl"
 
+[[tool.poetry.dependencies.pytorch3d]]
+markers = "sys_platform == 'linux'"
+url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl"
+
 [tool.poetry.scripts]
 medusa_download_ext_data = "medusa.cli:download_ext_data"
 medusa_videorecon = "medusa.cli:videorecon_cmd"
