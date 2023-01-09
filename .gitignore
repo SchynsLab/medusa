@@ -159,6 +159,5 @@ docs/getting_started/*.gif
 docs/api/python/**/*.rst.txt
 
 # builds
-builds/*/medusa
-builds/*/README.md
-builds/*/dist
+dist/*tar.gz
+dist/*wheel

@@ -25,11 +25,11 @@ def main(device_type, device):
     for i in range(n):
         cfg['tool']['poetry']['dependencies']['torchvision'][i]['url'] = cfg['tool']['poetry']['dependencies']['torchvision'][i]['url'].format(device=device)
 
-    if device_type == 'cpu':
-        # At the moment, pytorch3d does not provide CPU wheels
-        del cfg['tool']['poetry']['dependencies']['pytorch3d']
-    else:
-        cfg['tool']['poetry']['dependencies']['pytorch3d'][0]['url'] = cfg['tool']['poetry']['dependencies']['pytorch3d'][0]['url'].format(device=device)
+    #if device_type == 'cpu':
+    #    # At the moment, pytorch3d does not provide CPU wheels
+    #    del cfg['tool']['poetry']['dependencies']['pytorch3d']
+    #else:
+    #    cfg['tool']['poetry']['dependencies']['pytorch3d'][0]['url'] = cfg['tool']['poetry']['dependencies']['pytorch3d'][0]['url'].format(device=device)
 
     with open('./pyproject.toml', 'w') as f_out:
         toml.dump(f=f_out, o=cfg)

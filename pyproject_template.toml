@@ -32,7 +32,7 @@ torchvision = [
 ]
 # pytorch3d wheels only available for cuda, so will be removed when building cpu package
 pytorch3d = [
-    { markers = "sys_platform == 'linux'", url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_{device}_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl" }
+    { markers = "sys_platform == 'linux'", url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl" }
 ]
 pandas = ">=1.5.1"
 numpy = ">=1.23.4"

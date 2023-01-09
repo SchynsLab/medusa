@@ -4,4 +4,5 @@ for device in cpu gpu; do
     python ./set_package_version.py $device
     poetry update
     poetry build --format wheel
+    mv ./pyproject.toml ./pyproject_${device}.toml
 done
