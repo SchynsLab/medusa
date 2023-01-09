@@ -8,22 +8,22 @@ inputs:
 runs:
   using: "composite"
   steps:
-  # Getting everything ready
+  - name: Install GLU
+    shell: bash
+    run: sudo apt install -y freeglut3-dev
   - uses: actions/checkout@v3
-  - name: Install Poetry Action
-    uses: snok/install-poetry@v1.3.3
   - name: Set up Python ${{ inputs.python-version }}
     uses: actions/setup-python@v4
     with:
       python-version: ${{ inputs.python-version }}
       cache: 'poetry'
-  - name: Install GLU
-    shell: bash
-    run: sudo apt install -y freeglut3-dev
-  # Install package + deps + download data
-  - name: Install Medusa
+  - name: Set package version to CPU
     shell: bash
     run: |
       pip install toml click
       python ./set_package_version.py cpu
-      poetry install
+  - name: Install Poetry Action
+    uses: snok/install-poetry@v1.3.3
+  - name: Install Medusa
+    shell: bash
+    run: poetry install
