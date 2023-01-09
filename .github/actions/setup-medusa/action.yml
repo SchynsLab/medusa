@@ -24,6 +24,6 @@ runs:
   - name: Install Medusa
     shell: bash
     run: |
-      pip install toml
+      pip install toml click
       python ./set_package_version.py cpu
       poetry install
