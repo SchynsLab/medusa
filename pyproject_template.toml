@@ -47,7 +47,8 @@ gdown = ">=4.5.3"
 kornia = ">=0.6.8"
 mediapipe = { version = ">=0.8.11", markers = "platform_system != 'Darwin' and platform_machine != 'arm64'" }
 mediapipe-silicon = { version = ">=0.8.11", markers = "platform_system == 'Darwin' and platform_machine == 'arm64'" }
-onnxruntime-gpu = ">=1.13.1"
+onnxruntime-gpu = { version = ">=1.13.1", markers = "platform_system != 'Darwin' and platform_machine != 'arm64'" }
+onnxruntime-silicon = { version = ">=1.13.1", markers = "platform_system == 'Darwin' and platform_machine == 'arm64'" }
 chumpy = {git = "https://github.com/lukassnoek/chumpy.git"}
 av = ">=10.0.0"
 

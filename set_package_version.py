@@ -11,6 +11,7 @@ def main(device_type, device):
 
     if device_type == 'cpu':
         package_name = 'medusa'
+        device = 'cpu'
     else:
         package_name = 'medusa-gpu'
 
