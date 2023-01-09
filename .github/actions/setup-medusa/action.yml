@@ -16,8 +16,8 @@ runs:
   - name: Set current pyproject.toml and lockfile
     shell: bash
     run: |
-      cp ./pyproject_cpu.toml ./pyproject.toml
-      cp ./poetry_cpu.lock ./poetry.lock
+      cp ./pyproject_gpu.toml ./pyproject.toml
+      cp ./poetry_gpu.lock ./poetry.lock
   - name: Install Poetry Action
     uses: snok/install-poetry@v1.3.3
   - name: Set up Python ${{ inputs.python-version }}
@@ -29,7 +29,7 @@ runs:
     shell: bash
     run: |
       pip install toml click
-      python ./set_package_version.py cpu
+      python ./set_package_version.py gpu
       echo `python --version`
   - name: Install Medusa
     shell: bash

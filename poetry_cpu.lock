@@ -4191,13 +4191,13 @@ files = [
 
 [[package]]
 name = "torch"
-version = "1.13.1+cpu"
+version = "1.13.1+cu116"
 description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
 category = "main"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "torch-1.13.1%2Bcpu-cp39-cp39-linux_x86_64.whl", hash = "sha256:71636a5c21927236f4974d2355fb3f66a0b707c28219b0135ff65ed0f0e61287"},
+    {file = "torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl", hash = "sha256:db457a822d736013b6ffe509053001bc918bdd78fe68967b605f53984a9afac5"},
 ]
 
 [package.dependencies]
@@ -4208,17 +4208,17 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 
 [package.source]
 type = "url"
-url = "https://download.pytorch.org/whl/cpu/torch-1.13.1%2Bcpu-cp39-cp39-linux_x86_64.whl"
+url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl"
 
 [[package]]
 name = "torch"
-version = "1.13.1+cpu"
+version = "1.13.1+cu116"
 description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
 category = "main"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "torch-1.13.1%2Bcpu-cp39-cp39-win_amd64.whl", hash = "sha256:988ee77c0975b4c3f570dfc62277b1e300bbbe7cc000ce2720e2e8c730fb9ce5"},
+    {file = "torch-1.13.1%2Bcu116-cp39-cp39-win_amd64.whl", hash = "sha256:80a6b55915ac72c087ab85122289431fde5c5a4c85ca83a38c6d11a7ecbfdb35"},
 ]
 
 [package.dependencies]
@@ -4229,17 +4229,17 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 
 [package.source]
 type = "url"
-url = "https://download.pytorch.org/whl/cpu/torch-1.13.1%2Bcpu-cp39-cp39-win_amd64.whl"
+url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-win_amd64.whl"
 
 [[package]]
 name = "torchvision"
-version = "0.14.1+cpu"
+version = "0.14.1+cu116"
 description = "image and video datasets and models for torch deep learning"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "torchvision-0.14.1%2Bcpu-cp39-cp39-linux_x86_64.whl", hash = "sha256:5d2b67028e2782e60fd667a8e95f071bf612282411cba7ae88720213c58a651a"},
+    {file = "torchvision-0.14.1%2Bcu116-cp39-cp39-linux_x86_64.whl", hash = "sha256:a9fc38040e133d1779f131b4497caef830e9e699faf89cd323cd58794ffb305b"},
 ]
 
 [package.dependencies]
@@ -4254,17 +4254,17 @@ scipy = ["scipy"]
 
 [package.source]
 type = "url"
-url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-linux_x86_64.whl"
+url = "https://download.pytorch.org/whl/cu116/torchvision-0.14.1%2Bcu116-cp39-cp39-linux_x86_64.whl"
 
 [[package]]
 name = "torchvision"
-version = "0.14.1+cpu"
+version = "0.14.1+cu116"
 description = "image and video datasets and models for torch deep learning"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "torchvision-0.14.1%2Bcpu-cp39-cp39-win_amd64.whl", hash = "sha256:cc1466848e58873135afdda4f1c6432a5fd4bf4fb2a00886e9fb496a3004674b"},
+    {file = "torchvision-0.14.1%2Bcu116-cp39-cp39-win_amd64.whl", hash = "sha256:4b75cfe80d1e778f252fce94a7dd4ea35bc66a10efd53c4c63910ee95425face"},
 ]
 
 [package.dependencies]
@@ -4279,7 +4279,7 @@ scipy = ["scipy"]
 
 [package.source]
 type = "url"
-url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-win_amd64.whl"
+url = "https://download.pytorch.org/whl/cu116/torchvision-0.14.1%2Bcu116-cp39-cp39-win_amd64.whl"
 
 [[package]]
 name = "tornado"
@@ -4616,4 +4616,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.9.*"
-content-hash = "65a5763559a559c3bad8764d7494ad7e76edd13a2251bb5c2c9706c910976185"
+content-hash = "a0adde3c42574cf581b7f0498068aba0891fc331896b9e2ea05910c7c0119bba"

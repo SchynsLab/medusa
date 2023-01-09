@@ -34,19 +34,19 @@ kornia = ">=0.6.8"
 av = ">=10.0.0"
 [[tool.poetry.dependencies.torch]]
 markers = "sys_platform == 'linux'"
-url = "https://download.pytorch.org/whl/cpu/torch-1.13.1%2Bcpu-cp39-cp39-linux_x86_64.whl"
+url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl"
 
 [[tool.poetry.dependencies.torch]]
 markers = "sys_platform == 'win32'"
-url = "https://download.pytorch.org/whl/cpu/torch-1.13.1%2Bcpu-cp39-cp39-win_amd64.whl"
+url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-win_amd64.whl"
 
 [[tool.poetry.dependencies.torchvision]]
 markers = "sys_platform == 'linux'"
-url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-linux_x86_64.whl"
+url = "https://download.pytorch.org/whl/cu116/torchvision-0.14.1%2Bcu116-cp39-cp39-linux_x86_64.whl"
 
 [[tool.poetry.dependencies.torchvision]]
 markers = "sys_platform == 'win32'"
-url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.1%2Bcpu-cp39-cp39-win_amd64.whl"
+url = "https://download.pytorch.org/whl/cu116/torchvision-0.14.1%2Bcu116-cp39-cp39-win_amd64.whl"
 
 [[tool.poetry.dependencies.pytorch3d]]
 markers = "sys_platform == 'linux'"
