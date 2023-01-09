@@ -24,6 +24,5 @@ runs:
   - name: Install Medusa
     shell: bash
     run: |
-      cp builds/cpu/pyproject.toml .
-      cp builds/cpu/poetry.lock .
+      poetry run python ./set_package_version.py cpu
       poetry install
