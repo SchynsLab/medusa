@@ -5,10 +5,9 @@
 """
 
 from .pyrender import PyRenderer
-
-try:
-    from .pytorch3d import PytorchRenderer
-except ImportError as e:
-    # pytorch3d not available
-    print(e)
-    pass
+from .pytorch3d import PytorchRenderer
+# try:
+#     from .pytorch3d import PytorchRenderer
+# except ImportError as e:
+#     # pytorch3d not available
+#     pass
