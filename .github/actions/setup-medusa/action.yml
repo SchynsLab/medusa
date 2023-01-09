@@ -17,7 +17,6 @@ runs:
     with:
       python-version: ${{ inputs.python-version }}
       cache: 'poetry'
-    run: pip install toml
   - name: Install GLU
     shell: bash
     run: sudo apt install -y freeglut3-dev
@@ -25,5 +24,6 @@ runs:
   - name: Install Medusa
     shell: bash
     run: |
+      pip install toml
       python ./set_package_version.py cpu
       poetry install
