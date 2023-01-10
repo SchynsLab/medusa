@@ -34,23 +34,31 @@ kornia = ">=0.6.8"
 av = ">=10.0.0"
 [[tool.poetry.dependencies.torch]]
 markers = "sys_platform == 'linux'"
-url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl"
+url = "https://download.pytorch.org/whl/cpu/torch-1.13.0%2Bcpu-cp39-cp39-linux_x86_64.whl"
 
 [[tool.poetry.dependencies.torch]]
 markers = "sys_platform == 'win32'"
-url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-win_amd64.whl"
+url = "https://download.pytorch.org/whl/cpu/torch-1.13.0%2Bcpu-cp39-cp39-win_amd64.whl"
+
+[[tool.poetry.dependencies.torch]]
+markers = "sys_platform == 'darwin'"
+version = "1.13.0"
 
 [[tool.poetry.dependencies.torchvision]]
 markers = "sys_platform == 'linux'"
-url = "https://download.pytorch.org/whl/cu116/torchvision-0.14.1%2Bcu116-cp39-cp39-linux_x86_64.whl"
+url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.0%2Bcpu-cp39-cp39-linux_x86_64.whl"
 
 [[tool.poetry.dependencies.torchvision]]
 markers = "sys_platform == 'win32'"
-url = "https://download.pytorch.org/whl/cu116/torchvision-0.14.1%2Bcu116-cp39-cp39-win_amd64.whl"
+url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.0%2Bcpu-cp39-cp39-win_amd64.whl"
+
+[[tool.poetry.dependencies.torchvision]]
+markers = "sys_platform == 'darwin'"
+version = "0.14.0"
 
 [[tool.poetry.dependencies.pytorch3d]]
-markers = "sys_platform == 'linux'"
-url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl"
+markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'"
+version = "0.7.2"
 
 [tool.poetry.scripts]
 medusa_download_ext_data = "medusa.cli:download_ext_data"
@@ -60,19 +68,19 @@ medusa_regenerate_example_recon_data = "medusa.data.regenerate_example_recon_dat
 
 [tool.poetry.dependencies.mediapipe]
 version = ">=0.8.11"
-markers = "platform_system != 'Darwin' and platform_machine != 'arm64'"
+markers = "sys_platform != 'darwin' and platform_machine != 'arm64'"
 
 [tool.poetry.dependencies.mediapipe-silicon]
 version = ">=0.8.11"
-markers = "platform_system == 'Darwin' and platform_machine == 'arm64'"
+markers = "sys_platform == 'darwin' and platform_machine == 'arm64'"
 
 [tool.poetry.dependencies.onnxruntime-gpu]
 version = ">=1.13.1"
-markers = "platform_system != 'Darwin' and platform_machine != 'arm64'"
+markers = "sys_platform != 'darwin' and platform_machine != 'arm64'"
 
 [tool.poetry.dependencies.onnxruntime-silicon]
 version = ">=1.13.1"
-markers = "platform_system == 'Darwin' and platform_machine == 'arm64'"
+markers = "sys_platform == 'darwin' and platform_machine == 'arm64'"
 
 [tool.poetry.dependencies.chumpy]
 git = "https://github.com/lukassnoek/chumpy.git"

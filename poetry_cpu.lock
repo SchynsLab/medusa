@@ -1049,9 +1049,6 @@ files = [
     {file = "humanfriendly-10.0.tar.gz", hash = "sha256:6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc"},
 ]
 
-[package.dependencies]
-pyreadline3 = {version = "*", markers = "sys_platform == \"win32\" and python_version >= \"3.8\""}
-
 [[package]]
 name = "identify"
 version = "2.5.12"
@@ -3112,18 +3109,6 @@ files = [
 diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
-name = "pyreadline3"
-version = "3.4.1"
-description = "A python implementation of GNU readline."
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pyreadline3-3.4.1-py3-none-any.whl", hash = "sha256:b0efb6516fd4fb07b45949053826a62fa4cb353db5be2bbb4a7aa1fdd1e345fb"},
-    {file = "pyreadline3-3.4.1.tar.gz", hash = "sha256:6f3d1f7b8a31ba32b73917cefc1f28cc660562f39aea8646d30bd6eff21f7bae"},
-]
-
-[[package]]
 name = "pyrender"
 version = "0.1.45"
 description = "Easy-to-use Python renderer for 3D visualization"
@@ -3260,7 +3245,9 @@ category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl", hash = "sha256:31ea57464d810f945d4688f0c53456e67c5dacea548c1fdf9ce6d455b3a82018"},
+    {file = "pytorch3d-0.7.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:aaae30ce4039c2eab85fe4b89c71505080090df22f370891b42f7a0ec3a76846"},
+    {file = "pytorch3d-0.7.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:5185e778c264994cbe9bd5fb247733538c08c211641b92dc4821b3d1caa83a1a"},
+    {file = "pytorch3d-0.7.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:8efa8d55ad0a60117f5c8abe93bf546b8436e0c110113b8a29b8e982faf7bd63"},
 ]
 
 [package.dependencies]
@@ -3271,10 +3258,6 @@ iopath = "*"
 all = ["imageio", "ipywidgets", "matplotlib", "tqdm (>4.29.0)"]
 dev = ["flake8", "usort"]
 implicitron = ["accelerate", "hydra-core (>=1.1)", "lpips", "matplotlib", "tqdm (>4.29.0)", "visdom"]
-
-[package.source]
-type = "url"
-url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl"
 
 [[package]]
 name = "pytz"
@@ -4191,13 +4174,13 @@ files = [
 
 [[package]]
 name = "torch"
-version = "1.13.1+cu116"
+version = "1.13.0+cpu"
 description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
 category = "main"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl", hash = "sha256:db457a822d736013b6ffe509053001bc918bdd78fe68967b605f53984a9afac5"},
+    {file = "torch-1.13.0%2Bcpu-cp39-cp39-linux_x86_64.whl", hash = "sha256:c7531242830606713a32a3c0047e19ec7d718c971a8a9482de7f3c38a05a97a7"},
 ]
 
 [package.dependencies]
@@ -4208,17 +4191,17 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 
 [package.source]
 type = "url"
-url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl"
+url = "https://download.pytorch.org/whl/cpu/torch-1.13.0%2Bcpu-cp39-cp39-linux_x86_64.whl"
 
 [[package]]
 name = "torch"
-version = "1.13.1+cu116"
+version = "1.13.0+cpu"
 description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
 category = "main"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "torch-1.13.1%2Bcu116-cp39-cp39-win_amd64.whl", hash = "sha256:80a6b55915ac72c087ab85122289431fde5c5a4c85ca83a38c6d11a7ecbfdb35"},
+    {file = "torch-1.13.0%2Bcpu-cp39-cp39-win_amd64.whl", hash = "sha256:8df18dacc5b3b5739fa86b133329abb2f63932104e5a0e57ce01133dff754eb7"},
 ]
 
 [package.dependencies]
@@ -4229,24 +4212,24 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 
 [package.source]
 type = "url"
-url = "https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-win_amd64.whl"
+url = "https://download.pytorch.org/whl/cpu/torch-1.13.0%2Bcpu-cp39-cp39-win_amd64.whl"
 
 [[package]]
 name = "torchvision"
-version = "0.14.1+cu116"
+version = "0.14.0+cpu"
 description = "image and video datasets and models for torch deep learning"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "torchvision-0.14.1%2Bcu116-cp39-cp39-linux_x86_64.whl", hash = "sha256:a9fc38040e133d1779f131b4497caef830e9e699faf89cd323cd58794ffb305b"},
+    {file = "torchvision-0.14.0%2Bcpu-cp39-cp39-linux_x86_64.whl", hash = "sha256:a811869a5af275e74faf621b8c4ab0f56eae878d3e9549694371f13663f2bff1"},
 ]
 
 [package.dependencies]
 numpy = "*"
 pillow = ">=5.3.0,<8.3.0 || >=8.4.0"
 requests = "*"
-torch = "1.13.1"
+torch = "1.13.0"
 typing-extensions = "*"
 
 [package.extras]
@@ -4254,24 +4237,24 @@ scipy = ["scipy"]
 
 [package.source]
 type = "url"
-url = "https://download.pytorch.org/whl/cu116/torchvision-0.14.1%2Bcu116-cp39-cp39-linux_x86_64.whl"
+url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.0%2Bcpu-cp39-cp39-linux_x86_64.whl"
 
 [[package]]
 name = "torchvision"
-version = "0.14.1+cu116"
+version = "0.14.0+cpu"
 description = "image and video datasets and models for torch deep learning"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "torchvision-0.14.1%2Bcu116-cp39-cp39-win_amd64.whl", hash = "sha256:4b75cfe80d1e778f252fce94a7dd4ea35bc66a10efd53c4c63910ee95425face"},
+    {file = "torchvision-0.14.0%2Bcpu-cp39-cp39-win_amd64.whl", hash = "sha256:bd931e377b9f6d91030e95e2dcbbc1f9d304d143ebdc2ac68a0ca599f4a75d06"},
 ]
 
 [package.dependencies]
 numpy = "*"
 pillow = ">=5.3.0,<8.3.0 || >=8.4.0"
 requests = "*"
-torch = "1.13.1"
+torch = "1.13.0"
 typing-extensions = "*"
 
 [package.extras]
@@ -4279,7 +4262,7 @@ scipy = ["scipy"]
 
 [package.source]
 type = "url"
-url = "https://download.pytorch.org/whl/cu116/torchvision-0.14.1%2Bcu116-cp39-cp39-win_amd64.whl"
+url = "https://download.pytorch.org/whl/cpu/torchvision-0.14.0%2Bcpu-cp39-cp39-win_amd64.whl"
 
 [[package]]
 name = "tornado"
@@ -4616,4 +4599,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.9.*"
-content-hash = "a0adde3c42574cf581b7f0498068aba0891fc331896b9e2ea05910c7c0119bba"
+content-hash = "f590bfce23f24a3991574bb3c636436502c8cce666ba71fbad01e5b06c13436d"

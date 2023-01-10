@@ -19,17 +19,20 @@ def main(device_type, device):
     cfg['tool']['poetry']['name'] = package_name
     n = len(cfg['tool']['poetry']['dependencies']['torch'])
     for i in range(n):
+        if 'url' not in cfg['tool']['poetry']['dependencies']['torch'][i]:
+            continue
         cfg['tool']['poetry']['dependencies']['torch'][i]['url'] = cfg['tool']['poetry']['dependencies']['torch'][i]['url'].format(device=device)
 
     n = len(cfg['tool']['poetry']['dependencies']['torchvision'])
     for i in range(n):
+        if 'url' not in cfg['tool']['poetry']['dependencies']['torchvision'][i]:
+            continue
         cfg['tool']['poetry']['dependencies']['torchvision'][i]['url'] = cfg['tool']['poetry']['dependencies']['torchvision'][i]['url'].format(device=device)
 
-    #if device_type == 'cpu':
-    #    # At the moment, pytorch3d does not provide CPU wheels
-    #    del cfg['tool']['poetry']['dependencies']['pytorch3d']
+    if device_type == 'cpu':
+        cfg['tool']['poetry']['dependencies']['pytorch3d'] = cfg['tool']['poetry']['dependencies']['pytorch3d'][1:]
     #else:
-    #    cfg['tool']['poetry']['dependencies']['pytorch3d'][0]['url'] = cfg['tool']['poetry']['dependencies']['pytorch3d'][0]['url'].format(device=device)
+    #    cfg['tool']['poetry']['dependencies']['pytorch3d'][0] = cfg['tool']['poetry']['dependencies']['pytorch3d'][0]['url'].format(device=device)
 
     with open('./pyproject.toml', 'w') as f_out:
         toml.dump(f=f_out, o=cfg)

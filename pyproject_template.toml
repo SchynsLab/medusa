@@ -23,16 +23,19 @@ packages = [{include = "medusa"}]
 python = "3.9.*"
 click = ">=8.1.3"
 torch = [
-    { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/{device}/torch-1.13.1%2B{device}-cp39-cp39-linux_x86_64.whl" },
-    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/{device}/torch-1.13.1%2B{device}-cp39-cp39-win_amd64.whl" }
+    { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/{device}/torch-1.13.0%2B{device}-cp39-cp39-linux_x86_64.whl" },
+    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/{device}/torch-1.13.0%2B{device}-cp39-cp39-win_amd64.whl" },
+    { markers = "sys_platform == 'darwin'", version = "1.13.0" }
 ]
 torchvision = [
-    { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/{device}/torchvision-0.14.1%2B{device}-cp39-cp39-linux_x86_64.whl" },
-    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/{device}/torchvision-0.14.1%2B{device}-cp39-cp39-win_amd64.whl" }
+    { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/{device}/torchvision-0.14.0%2B{device}-cp39-cp39-linux_x86_64.whl" },
+    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/{device}/torchvision-0.14.0%2B{device}-cp39-cp39-win_amd64.whl" },
+    { markers = "sys_platform == 'darwin'", version = "0.14.0" }
 ]
 # pytorch3d wheels only available for cuda, so will be removed when building cpu package
 pytorch3d = [
-    { markers = "sys_platform == 'linux'", url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl" }
+    { markers = "sys_platform == 'linux'", url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl" },
+    { markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "0.7.2" }
 ]
 pandas = ">=1.5.1"
 numpy = ">=1.23.4"
@@ -45,10 +48,10 @@ pyrender = ">=0.1.45"
 matplotlib = ">=3.6.2"
 gdown = ">=4.5.3"
 kornia = ">=0.6.8"
-mediapipe = { version = ">=0.8.11", markers = "platform_system != 'Darwin' and platform_machine != 'arm64'" }
-mediapipe-silicon = { version = ">=0.8.11", markers = "platform_system == 'Darwin' and platform_machine == 'arm64'" }
-onnxruntime-gpu = { version = ">=1.13.1", markers = "platform_system != 'Darwin' and platform_machine != 'arm64'" }
-onnxruntime-silicon = { version = ">=1.13.1", markers = "platform_system == 'Darwin' and platform_machine == 'arm64'" }
+mediapipe = { version = ">=0.8.11", markers = "sys_platform != 'darwin' and platform_machine != 'arm64'" }
+mediapipe-silicon = { version = ">=0.8.11", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
+onnxruntime-gpu = { version = ">=1.13.1", markers = "sys_platform != 'darwin' and platform_machine != 'arm64'" }
+onnxruntime-silicon = { version = ">=1.13.1", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
 chumpy = {git = "https://github.com/lukassnoek/chumpy.git"}
 av = ">=10.0.0"
 
