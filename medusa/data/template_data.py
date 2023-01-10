@@ -131,9 +131,25 @@ def get_external_data_config(key=None):
     dict, str
         The config file as a dictionary if ``key=None``, else a string
         with the value associated with the key
+
+    Examples
+    --------
+    Load in the entire config file as a dictionary
+
+    >>> cfg = get_external_data_config()
+    >>> isinstance(cfg, dict)
+    True
+
+    Get the path of the FLAME model:
+
+    >>> flame_path = get_external_data_config(key='flame_path')
     """
 
     cfg_path = Path(__file__).parent / "config.yaml"
+    if not cfg_path.is_file():
+        # Fall back to default
+        cfg_path = Path(__file__).parent / "default_config.yaml"
+
     with open(cfg_path, "r") as f_in:
         cfg = yaml.safe_load(f_in)
 
