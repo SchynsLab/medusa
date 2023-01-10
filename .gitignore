@@ -138,6 +138,7 @@ coverage.json
 OLD
 paper
 sandbox
+medusa/data/config.yaml
 
 # demos
 demos/*.gif
