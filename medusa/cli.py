@@ -80,7 +80,7 @@ def videorender_cmd(data_file, out, video, renderer, shading, alpha, device):
 
 
 @click.command()
-@click.option("--directory", default="./medusa_ext_data")
+@click.option("--directory", default="~/.medusa_ext_data")
 @click.option("--overwrite", is_flag=True)
 @click.option(
     "--username", default=None, type=click.STRING, help="Username for FLAME website"
@@ -112,7 +112,7 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
 
     LOGGER.info(f"Downloading models to {directory}, configuring to run on {device}")
 
-    directory = Path(directory)
+    directory = Path(directory).expanduser()
     if not directory.is_dir():
         LOGGER.info(f"Creating output directory {directory}")
         directory.mkdir(parents=True, exist_ok=True)

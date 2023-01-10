@@ -132,9 +132,13 @@ def get_external_data_config(key=None):
         The config file as a dictionary if ``key=None``, else a string
         with the value associated with the key
     """
+
     cfg_path = Path(__file__).parent / "config.yaml"
     with open(cfg_path, "r") as f_in:
         cfg = yaml.safe_load(f_in)
+
+    for key in cfg:
+        cfg[key] = Path(cfg[key]).expanduser()
 
     if key is None:
         return cfg

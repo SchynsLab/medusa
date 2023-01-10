@@ -25,7 +25,7 @@ runs:
     with:
       python-version: ${{ inputs.python-version }}
       cache: 'poetry'
-  - name: Set package version to CPU
+  - name: Set package version to GPU
     shell: bash
     run: |
       pip install toml click
