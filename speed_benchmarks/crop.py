@@ -2,12 +2,12 @@ from pathlib import Path
 
 from timer import FancyTimer
 
-from medusa.crop import LandmarkAlignCropModel, LandmarkBboxCropModel
+from medusa.crop import AlignCropModel, BboxCropModel
 from medusa.data import get_example_frame
 
 timer_ = FancyTimer()
 params = {
-    "model_cls": [LandmarkBboxCropModel, LandmarkAlignCropModel],
+    "model_cls": [BboxCropModel, AlignCropModel],
     "device": ["cpu", "cuda"],
     "batch_size": [1, 2, 4, 8, 16, 32, 64, 128],
 }

@@ -15,9 +15,9 @@ class BaseRenderer(ABC):
         pass
 
     def _preprocess(self, v, tris, overlay, format="numpy"):
-        """Performs some basic preprocessing of the vertices and triangles
-        that is common to all renderers.
-        
+        """Performs some basic preprocessing of the vertices and triangles that
+        is common to all renderers.
+
         Parameters
         ----------
         v : torch.tensor
@@ -27,7 +27,7 @@ class BaseRenderer(ABC):
             with triangles
         format : str
             Either 'numpy' or 'torch'
-            
+
         Returns
         -------
         v : torch.tensor
@@ -69,7 +69,7 @@ class BaseRenderer(ABC):
             A 3D or 4D tensor of shape (batch size) x height x width x 4 (RGBA)
         background : np.ndarray
             A 3D or 4D tensor shape height x width x 3 (RGB[A])
-            
+
         Returns
         -------
         img : torch.tensor
@@ -95,6 +95,10 @@ class BaseRenderer(ABC):
         if img.ndim == 3:
             img = img[None, ...]
 
+        if background.shape[1] == 3:
+            # channels_first -> channels_last
+            background = background.permute(0, 2, 3, 1)
+
         img = img[..., :3] * alpha + (1 - alpha) * background
 
         if torch.is_tensor(img):
@@ -108,12 +112,11 @@ class BaseRenderer(ABC):
     @staticmethod
     def save_image(f_out, img):
         """Saves a single image (using ``cv2``) to disk.
-        
+
         Parameters
         ----------
         f_out : str, Path
             Path where the image should be saved
-        
         """
         if torch.is_tensor(img):
             img = img.cpu().numpy()
@@ -132,7 +135,7 @@ class BaseRenderer(ABC):
     @staticmethod
     def load_image(f_in, device=None):
         """Utility function to read a single image to disk (using ``cv2``).
-        
+
         Parameters
         ----------
         f_in : str, Path

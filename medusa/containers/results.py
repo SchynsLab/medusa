@@ -308,8 +308,8 @@ class BatchResults:
             # BELOW: OLD CODE TO CREATE BOUNDING BOX FROM CROPPED IMAGES
             # bbox_crop = torch.tensor([[0, 0], [0, h-1], [h-1, w-1], [0, w-1]], dtype=torch.float32, device=self.device)
             # bbox_crop = bbox_crop.repeat(b, 1, 1)
-            # crop_mats = torch.inverse(self.crop_mats[idx])
-            # bbox = transform_points(crop_mats, bbox_crop)
+            # crop_mat = torch.inverse(self.crop_mat[idx])
+            # bbox = transform_points(crop_mat, bbox_crop)
 
             # Check for landmarks (`lms`), which we'll draw if available
             if hasattr(self, "lms"):
@@ -317,14 +317,14 @@ class BatchResults:
 
                 if show_cropped:
                     # Need to crop the original images!
-                    crop_mats = self.crop_mats[det_idx]
+                    crop_mat = self.crop_mat[det_idx]
                     img = warp_affine(
-                        img.unsqueeze(0).float(), crop_mats[:, :2, :], crop_size
+                        img.unsqueeze(0).float(), crop_mat[:, :2, :], crop_size
                     )
                     img = img.to(torch.uint8).squeeze(0)
 
                     # And warp the landmarks to the cropped image space
-                    lms = transform_points(crop_mats, lms)
+                    lms = transform_points(crop_mat, lms)
 
                 # TODO: scale radius
                 img = draw_keypoints(img, lms, colors=(0, 255, 0), radius=2)
@@ -334,11 +334,11 @@ class BatchResults:
                     if show_cropped:
                         template_ = template.unsqueeze(0)
                     else:
-                        crop_mats = torch.inverse(self.crop_mats[det_idx])
+                        crop_mat = torch.inverse(self.crop_mat[det_idx])
                         template_ = template.repeat(lms.shape[0], 1, 1).to(
-                            crop_mats.device
+                            crop_mat.device
                         )
-                        template_ = transform_points(crop_mats, template_)
+                        template_ = transform_points(crop_mat, template_)
 
                     img = draw_keypoints(img, template_, colors=(0, 0, 255), radius=1.5)
                     img = img.to(self.device)

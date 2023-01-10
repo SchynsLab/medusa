@@ -14,6 +14,7 @@ from ....data import get_external_data_config
 from ..base import FlameReconModel
 from ..decoders import FLAME
 from .encoders import Arcface, MappingNetwork
+from ....crop import AlignCropModel
 
 
 class MicaReconModel(FlameReconModel):
@@ -32,6 +33,7 @@ class MicaReconModel(FlameReconModel):
         self._cfg = get_external_data_config()
         self._create_submodels()
         self._load_submodels()
+        self._crop_model = AlignCropModel((112, 112), device=device)
 
     def __str__(self):
         return "mica"
@@ -85,7 +87,8 @@ class MicaReconModel(FlameReconModel):
         return v
 
     def get_cam_mat(self):
-
+        """Gets a default camera matrix that most likely renders a face in full
+        view."""
         cam_mat = torch.eye(4) * 8
         cam_mat[3, 3] = 1
         cam_mat[2, 3] = 4
@@ -108,16 +111,21 @@ class MicaReconModel(FlameReconModel):
             total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
             matrix, which is in the case of MICA the identity matrix
         """
-        imgs = load_inputs(
-            imgs,
-            load_as="torch",
-            channels_first=True,
-            with_batch_dim=True,
-            device=self.device,
-        )
+
+        imgs = load_inputs(imgs, device=self.device)
+        out = {}
+
+        if imgs.shape[2:] != (112, 122):
+            # Align & crop images (arcface style) if necessary
+            crop_results = self._crop_model(imgs)
+            imgs = crop_results["imgs_crop"]
+            out["crop_mat"] = crop_results["crop_mat"]
+
         imgs = self._preprocess(imgs)
         shape_code = self._encode(imgs)
         v = self._decode(shape_code)
-        out = {"v": v, "mat": None}
+
+        out["v"] = v
+        out["mat"] = None
 
         return out

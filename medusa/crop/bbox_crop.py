@@ -18,7 +18,7 @@ from ..transforms import estimate_similarity_transform
 from .base import BaseCropModel
 
 
-class LandmarkBboxCropModel(BaseCropModel):
+class BboxCropModel(BaseCropModel):
     """A model that crops an image by creating a bounding box based on a set of
     face landmarks.
 
@@ -107,7 +107,7 @@ class LandmarkBboxCropModel(BaseCropModel):
         -------
         out_crop : dict
             Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
-            images) and "crop_mats" (3x3 crop matrices)
+            images) and "crop_mat" (3x3 crop matrices)
         """
         # Load images here instead of in detector to avoid loading them twice
 
@@ -118,7 +118,7 @@ class LandmarkBboxCropModel(BaseCropModel):
         out_det = self._detector(imgs)
 
         if out_det.get("conf", None) is None:
-            return {**out_det, "imgs_crop": None, "crop_mats": None}
+            return {**out_det, "imgs_crop": None, "crop_mat": None}
 
         n_det = out_det["lms"].shape[0]
         bbox = out_det["bbox"]
@@ -173,17 +173,17 @@ class LandmarkBboxCropModel(BaseCropModel):
             device=self.device,
         )
         dst = dst.repeat(n_det, 1, 1)
-        crop_mats = estimate_similarity_transform(
+        crop_mat = estimate_similarity_transform(
             bbox[:, :3, :], dst, estimate_scale=True
         )
 
         # Finally, warp the original images (uncropped) images to the final
         # cropped space
-        imgs_crop = warp_affine(imgs_stack, crop_mats[:, :2, :], dsize=(h_out, w_out))
+        imgs_crop = warp_affine(imgs_stack, crop_mat[:, :2, :], dsize=(h_out, w_out))
         out_crop = {
             **out_det,
             "imgs_crop": imgs_crop,
-            "crop_mats": crop_mats,
+            "crop_mat": crop_mat,
             "lms": lms,
         }
 

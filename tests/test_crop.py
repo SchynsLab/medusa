@@ -4,10 +4,10 @@ import pytest
 from conftest import _is_gha_compatible
 
 from medusa.containers.results import BatchResults
-from medusa.crop import LandmarkAlignCropModel, LandmarkBboxCropModel
+from medusa.crop import AlignCropModel, BboxCropModel
 
 
-@pytest.mark.parametrize("Model", [LandmarkAlignCropModel, LandmarkBboxCropModel])
+@pytest.mark.parametrize("Model", [AlignCropModel, BboxCropModel])
 @pytest.mark.parametrize("lm_name", ["2d106det", "1k3d68"])
 @pytest.mark.parametrize(
     "imgs_test", [0, 1, 2, 3, 4, [0, 1], [0, 1, 2], [0, 1, 2, 3, 4]], indirect=True
@@ -20,7 +20,7 @@ def test_crop_model(Model, lm_name, imgs_test, device):
 
     imgs, n_exp = imgs_test
 
-    if Model == LandmarkBboxCropModel:
+    if Model == BboxCropModel:
         model = Model(lm_name, (224, 224), device=device)
     else:
         if lm_name == "2d106det":
@@ -33,7 +33,7 @@ def test_crop_model(Model, lm_name, imgs_test, device):
     out_crop = BatchResults(device=device, **out_crop)
 
     template = getattr(model, "template", None)
-    if Model == LandmarkBboxCropModel:
+    if Model == BboxCropModel:
         f_out = (
             Path(__file__).parent
             / f"test_viz/crop/{str(model)}_lm-{lm_name}_exp-{n_exp}.jpg"
@@ -44,11 +44,11 @@ def test_crop_model(Model, lm_name, imgs_test, device):
     out_crop.visualize(f_out, imgs, template=template)
 
 
-@pytest.mark.parametrize("Model", [LandmarkAlignCropModel, LandmarkBboxCropModel])
+@pytest.mark.parametrize("Model", [AlignCropModel, BboxCropModel])
 @pytest.mark.parametrize("video_test", [0, 1, 2, 3, 4], indirect=True)
 def test_crop_model_vid(Model, video_test):
     """Test of crop model applied to videos and the visualization thereof."""
-    if Model == LandmarkBboxCropModel:
+    if Model == BboxCropModel:
         crop_size = (224, 224)
         model = Model("2d106det", crop_size)
     else:

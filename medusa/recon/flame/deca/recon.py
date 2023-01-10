@@ -2,7 +2,8 @@
 
 [1]_, EMOCA [2]_, and spectre [3]_.
 
-All model classes inherit from a common base class, ``FlameReconModel`` (see ``flame.base`` module).
+All model classes inherit from a common base class, ``FlameReconModel`` (see
+``flame.base`` module).
 
 .. [1] Feng, Y., Feng, H., Black, M. J., & Bolkart, T. (2021). Learning an animatable detailed
        3D face model from in-the-wild images. ACM Transactions on Graphics (ToG), 40(4), 1-13.
@@ -30,7 +31,8 @@ from ..decoders import FLAME
 from ..utils import upsample_mesh, vertex_normals
 from .decoders import DetailGenerator
 from .encoders import PerceptualEncoder, ResnetEncoder
-
+from ....crop import BboxCropModel
+from ....defaults import FLAME_MODELS
 
 
 class DecaReconModel(FlameReconModel):
@@ -43,7 +45,7 @@ class DecaReconModel(FlameReconModel):
     ----------
     name : str
         Either 'deca-coarse', 'deca-dense', 'emoca-coarse', or 'emoca-dense'
-    img_size : tuple
+    orig_img_size : tuple
         Original (before cropping!) image dimensions of video frame (width, height);
         needed for baking in translation due to cropping; if not set, it is assumed
         that the image is not cropped!
@@ -51,44 +53,27 @@ class DecaReconModel(FlameReconModel):
         Either 'cuda' (uses GPU) or 'cpu'
     """
 
-    def __init__(self, name, img_size=None, device=DEVICE):
+    def __init__(self, name, orig_img_size=None, device=DEVICE):
         """Initializes an DECA-like model object."""
         super().__init__()
         self.name = name
-        self.img_size = img_size
+        self.orig_img_size = orig_img_size
         self.device = device
         self._dense = "dense" in name
         self._warned_about_crop_mat = False
         self._check()
         self._load_data()
-        self._crop_img_size = (224, 224)
         self._create_submodels()
+        self._crop_model = BboxCropModel("2d106det", (224, 224), device=device)
 
     def __str__(self):
         return self.name
 
     def _check(self):
         """Does some checks of the parameters."""
-        MODELS = [
-            "spectre-coarse",
-            "spectre-dense",
-            "deca-coarse",
-            "deca-dense",
-            "emoca-coarse",
-            "emoca-dense",
-        ]
-        if self.name not in MODELS:
-            raise ValueError(f"Name must be in {MODELS}, but got {self.name}!")
 
-        DEVICES = ["cuda", "cpu"]
-        if self.device not in DEVICES:
-            raise ValueError(f"Device must be in {DEVICES}, but got {self.device}!")
-
-        if self.img_size is None:
-            LOGGER.warning(
-                "Arg `img_size` not given; beware, cannot render recon "
-                "on top of original image anymore (only on cropped image)"
-            )
+        if self.name not in FLAME_MODELS:
+            raise ValueError(f"Name must be in {FLAME_MODELS}, but got {self.name}!")
 
     def _load_data(self):
         """Loads necessary data."""
@@ -200,10 +185,10 @@ class DecaReconModel(FlameReconModel):
             for the decoding stage.
         """
 
-        if self.img_size is None:
-            # If img_size was not set upon initialization, assume no cropping
+        if self.orig_img_size is None:
+            # If orig_img_size was not set upon initialization, assume no cropping
             # and use the size of the current image
-            self.img_size = tuple(imgs.shape[2:])  # h x w
+            self.orig_img_size = tuple(imgs.shape[2:])  # h x w
 
         # Encode image into FLAME parameters, then decompose parameters
         # into a dict with parameter names (shape, tex, exp, etc) as keys
@@ -256,7 +241,7 @@ class DecaReconModel(FlameReconModel):
 
         return enc_dict
 
-    def _decode(self, enc_dict, crop_mats):
+    def _decode(self, enc_dict, crop_mat):
         """Decodes the face attributes (vertices, landmarks, texture, detail
         map) from the encoded parameters.
 
@@ -336,10 +321,10 @@ class DecaReconModel(FlameReconModel):
         S = torch.eye(4, 4, device=self.device).repeat(b, 1, 1) * sc
         S[:, 3, 3] = 1
 
-        if crop_mats is None or self.img_size is None:
+        if crop_mat is None:
 
             # Setting crop matrix to identity matrix
-            crop_mats = torch.eye(3).repeat(b, 1, 1).to(self.device)
+            crop_mat = torch.eye(3).repeat(b, 1, 1).to(self.device)
 
             if not self._warned_about_crop_mat:
                 LOGGER.warning(
@@ -360,19 +345,12 @@ class DecaReconModel(FlameReconModel):
         # world to NDC space, and a viewport matrix (VP), which maps from NDC to raster space.
         # Note that we need this twice: one for the 'forward' transform (world -> crop raster space)
         # and one for the 'backward' transform (full image raster space -> world)
-        OP = create_ortho_matrix(
-            *self._crop_img_size, device=self.device
-        )  # forward (world -> cropped NDC)
-        VP = create_viewport_matrix(
-            *self._crop_img_size, device=self.device
-        )  # forward (cropped NDC -> cropped raster)
-        CP = crop_matrix_to_3d(crop_mats)  # crop matrix
-        VP_ = create_viewport_matrix(
-            *self.img_size, device=self.device
-        )  # backward (full NDC -> full raster)
-        OP_ = create_ortho_matrix(
-            *self.img_size, device=self.device
-        )  # backward (full NDC -> world)
+        crop_size = self._crop_model.output_size
+        OP = create_ortho_matrix(*crop_size, device=self.device)  # forward (world -> cropped NDC)
+        VP = create_viewport_matrix(*crop_size, device=self.device)  # forward (cropped NDC -> cropped raster)
+        CP = crop_matrix_to_3d(crop_mat)  # crop matrix
+        VP_ = create_viewport_matrix(*self.orig_img_size, device=self.device)  # backward (full NDC -> full raster)
+        OP_ = create_ortho_matrix(*self.orig_img_size, device=self.device)  # backward (full NDC -> world)
 
         # Let's define the *full* transformation chain into a single 4x4 matrix
         # (Order of transformations is from right to left)
@@ -400,7 +378,7 @@ class DecaReconModel(FlameReconModel):
         # tex = self.D_flame_tex(enc_dict['tex'])
         return {"v": v, "mat": mat}
 
-    def __call__(self, imgs, crop_mats):
+    def __call__(self, imgs, crop_mat=None):
         """Performs reconstruction of the face as a list of landmarks
         (vertices).
 
@@ -442,13 +420,23 @@ class DecaReconModel(FlameReconModel):
         (1, 4, 4)
         """
 
-        imgs = load_inputs(
-            imgs,
-            channels_first=True,
-            with_batch_dim=True,
-            load_as="torch",
-            device=self.device,
-        )
+        imgs = load_inputs(imgs, device=self.device)
+        out = {}
+        if imgs.shape[2:] != (224, 224):
+            # Extract width (imgs.shape[3]) and height (img.shape[2])
+            self.orig_img_size = imgs.shape[2:][::-1]
+            crop_results = self._crop_model(imgs)
+            imgs = crop_results["imgs_crop"]
+            crop_mat = crop_results["crop_mat"]
+            out["img_idx"] = crop_results["img_idx"]
+        else:
+            # Must be already cropped!
+            if self.orig_img_size is None or crop_mat is None:
+                # If we don't know the original image size or we don't have access to
+                # the crop matrix, we won't be able to render in original space so we'll
+                # set the original image size to be the cropped image size
+                self.orig_img_size = (224, 224)
+
         imgs = self._preprocess(imgs)
 
         if "spectre" in self.name:
@@ -464,12 +452,13 @@ class DecaReconModel(FlameReconModel):
             post = imgs[None, -1, ...]
             imgs = torch.cat([pre, pre, imgs, post, post])
 
-            if crop_mats is not None:
-                pre = crop_mats[None, 0, ...]
-                post = crop_mats[None, -1, ...]
-                crop_mats = torch.cat([pre, pre, crop_mats, post, post])
+            if crop_mat is not None:
+                pre = crop_mat[None, 0, ...]
+                post = crop_mat[None, -1, ...]
+                crop_mat = torch.cat([pre, pre, crop_mat, post, post])
 
         enc_dict = self._encode(imgs)
-        dec_dict = self._decode(enc_dict, crop_mats)
+        dec_dict = self._decode(enc_dict, crop_mat)
+        out = {**out, **dec_dict}
 
-        return dec_dict
+        return out

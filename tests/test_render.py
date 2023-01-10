@@ -5,7 +5,7 @@ import pytest
 from conftest import _is_gha_compatible
 
 from medusa.defaults import DEVICE
-from medusa.crop import LandmarkBboxCropModel
+from medusa.crop import BboxCropModel
 from medusa.data import get_example_frame, get_example_h5
 from medusa.recon import DecaReconModel, Mediapipe, videorecon
 from medusa.render import PyRenderer
@@ -85,10 +85,10 @@ def test_multiple_faces(imgs_test, Renderer, recon_model_name):
         inputs = {"imgs": img.copy()}
         cam_mat = None
     else:
-        crop_model = LandmarkBboxCropModel()
+        crop_model = BboxCropModel()
         out_crop = crop_model(img)
-        recon_model = DecaReconModel("emoca-coarse", img_size=viewport)
-        inputs = {"crop_mats": out_crop["crop_mats"], "imgs": out_crop["imgs_crop"]}
+        recon_model = DecaReconModel("emoca-coarse", orig_img_size=viewport)
+        inputs = {"crop_mat": out_crop["crop_mat"], "imgs": out_crop["imgs_crop"]}
         cam_type = "orthographic"
         cam_mat = np.eye(4)
         cam_mat[2, 3] = 4.0

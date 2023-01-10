@@ -4,7 +4,7 @@ returns a ``Data4D`` object."""
 from ..defaults import DEVICE, FLAME_MODELS, LOGGER
 from ..containers.fourD import Data4D
 from ..containers.results import BatchResults
-from ..crop import LandmarkBboxCropModel
+from ..crop import BboxCropModel
 from ..io import VideoLoader
 from ..log import tqdm_log
 from .flame import DecaReconModel
@@ -62,11 +62,11 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
 
     # Initialize reconstruction model
     if recon_model in FLAME_MODELS:
-        crop_model = LandmarkBboxCropModel(
+        crop_model = BboxCropModel(
             device=device
         )  # for face detection / cropping
         reconstructor = DecaReconModel(
-            recon_model, device=device, img_size=metadata["img_size"], **kwargs
+            recon_model, device=device, orig_img_size=metadata["img_size"], **kwargs
         )
     elif recon_model == "mediapipe":
         reconstructor = Mediapipe(static_image_mode=False, device=device, **kwargs)
@@ -83,7 +83,7 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
             out_crop = crop_model(batch)
             del batch
             inputs["imgs"] = out_crop.pop("imgs_crop")
-            inputs["crop_mats"] = out_crop.pop("crop_mats")
+            inputs["crop_mat"] = out_crop.pop("crop_mat")
             recon_results.add(**out_crop)
 
         # Reconstruct and store whatever `recon_model`` returns

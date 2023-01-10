@@ -29,7 +29,7 @@ TEMPLATE = torch.Tensor(
 The coordinates are relative to an image of size 112 x 112."""
 
 
-class LandmarkAlignCropModel(BaseCropModel):
+class AlignCropModel(BaseCropModel):
     """Cropping model based on functionality from the ``insightface`` package,
     as used by MICA (https://github.com/Zielon/MICA).
 
@@ -52,7 +52,7 @@ class LandmarkAlignCropModel(BaseCropModel):
     To crop an image to be used for MICA reconstruction:
 
     >>> from medusa.data import get_example_frame
-    >>> crop_model = LandmarkAlignCropModel()
+    >>> crop_model = AlignCropModel()
     >>> img = get_example_frame()  # path to jpg image
     >>> out = crop_model(img)
     """
@@ -90,7 +90,7 @@ class LandmarkAlignCropModel(BaseCropModel):
         -------
         out_crop : dict
             Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
-            images) and "crop_mats" (3x3 crop matrices)
+            images) and "crop_mat" (3x3 crop matrices)
         """
         # Load images here instead of in detector to avoid loading them twice
         imgs = load_inputs(
@@ -100,17 +100,17 @@ class LandmarkAlignCropModel(BaseCropModel):
         out_det = self._det_model(imgs)
 
         if out_det.get("conf", None) is None:
-            return {"imgs_crop": None, "crop_mats": None, **out_det}
+            return {"imgs_crop": None, "crop_mat": None, **out_det}
 
         # Estimate transform landmarks -> template landmarks
-        crop_mats = estimate_similarity_transform(
+        crop_mat = estimate_similarity_transform(
             out_det["lms"], self.template, estimate_scale=True
         )
         imgs_stacked = imgs[out_det["img_idx"]]
         imgs_crop = warp_affine(
-            imgs_stacked, crop_mats[:, :2, :], dsize=self.output_size
+            imgs_stacked, crop_mat[:, :2, :], dsize=self.output_size
         )
 
-        out_crop = {"imgs_crop": imgs_crop, "crop_mats": crop_mats, **out_det}
+        out_crop = {"imgs_crop": imgs_crop, "crop_mat": crop_mat, **out_det}
 
         return out_crop

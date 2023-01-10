@@ -4,7 +4,7 @@ import pytest
 from conftest import _is_gha_compatible
 
 from medusa.defaults import RENDERER
-from medusa.crop import LandmarkAlignCropModel
+from medusa.crop import AlignCropModel
 from medusa.data import get_example_frame
 from medusa.recon.flame import MicaReconModel
 
@@ -17,7 +17,7 @@ def test_mica_recon(device):
         return
 
     img = get_example_frame()
-    crop_model = LandmarkAlignCropModel(device=device)
+    crop_model = AlignCropModel(device=device)
     out_crop = crop_model(img)
 
     # Check single image recon
