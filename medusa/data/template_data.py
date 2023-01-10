@@ -137,8 +137,9 @@ def get_external_data_config(key=None):
     with open(cfg_path, "r") as f_in:
         cfg = yaml.safe_load(f_in)
 
-    for key in cfg:
-        cfg[key] = Path(cfg[key]).expanduser()
+    for k, v in cfg.items():
+        # If default location (~/.medusa_ext_data), resolve path
+        cfg[k] = Path(v).expanduser()
 
     if key is None:
         return cfg

@@ -73,7 +73,7 @@ class SCRFDetector(BaseDetector):
 
         f_in = get_external_data_config('buffalo_path') / 'det_10g.onnx'
         if not f_in.is_file():
-            raise ValueError("Insightface model needs to be downloaded; run `medusa_download_external_data`")
+            raise ValueError(f"Could not find model at {f_in}; run `medusa_download_external_data`")
 
         output_shapes = []
         for n_feat in [1, 4, 10]:  # score, bbox, lms
