@@ -4,10 +4,30 @@ import pytest
 from conftest import _is_gha_compatible
 
 from medusa.defaults import RENDERER
+from medusa.render import VideoRenderer
 from medusa.containers import Data4D
 from medusa.data import get_example_video
 from medusa.recon import DecaReconModel
 from medusa.crop import BboxCropModel
+
+
+@pytest.mark.parametrize("imgs_test", [1, 2, 3, 4], indirect=True)
+def test_deca_recon_img(imgs_test):
+    """Test DECA-based recon models with single image."""
+    img, n_exp = imgs_test
+    img = RENDERER.load_image(img)
+    deca_recon_model = DecaReconModel("emoca-coarse", orig_img_size=(img.shape[1], img.shape[0]))
+
+    out = deca_recon_model(img)
+    cam_mat = deca_recon_model.get_cam_mat()
+    tris = deca_recon_model.get_tris()
+
+    renderer = RENDERER((img.shape[1], img.shape[0]), cam_mat, shading="smooth")
+
+    img_r = renderer(out["v"], tris)
+    img_r = renderer.alpha_blend(img_r, img)
+    renderer.save_image(Path(__file__).parent / f'test_viz/recon/test_emoca-coarse_exp-{n_exp}.png', img_r)
+    renderer.close()
 
 
 @pytest.mark.parametrize("name", ["deca", "emoca", "spectre"])
@@ -57,5 +77,7 @@ def test_deca_recon(name, type_, already_cropped, device):
         # Only render when recon full image
         tris = recon_model.get_tris()
         data = Data4D(video_metadata=metadata, tris=tris, cam_mat=cam_mat, **out, device=device)
+        data.video_metadata['n_img'] = vid.batch_size  # avoid rendering full video
         f_out = str(f_out).replace(".png", ".mp4")
-        data.render_video(f_out, shading="flat", video=get_example_video())
+        renderer = VideoRenderer()
+        renderer(f_out, data, video=get_example_video(device=device))

@@ -17,6 +17,9 @@ parts:
   - file: tutorials/analysis
   - file: tutorials/experimentation
     title: Experimentation
+- caption: Examples
+  chapters:
+  - glob: examples/*
 - caption: API documentation
   chapters:
   - file: api/cli

@@ -1,7 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
 
-import cv2
 import numpy as np
 import torch
 
@@ -11,6 +10,7 @@ from .base import BaseDetector
 
 
 class YunetDetector(BaseDetector):
+
     def __init__(self, det_threshold=0.9, nms_threshold=0.3, device=DEVICE, **kwargs):
 
         self.det_threshold = det_threshold
@@ -22,6 +22,11 @@ class YunetDetector(BaseDetector):
         return "yunet"
 
     def _init_model(self, **kwargs):
+
+        try:
+            import cv2
+        except ImportError:
+            raise ImportError("cv2 is required for YunetDetector")
 
         f_in = Path(__file__).parents[1] / "data/models/yunet.onnx"
         model = cv2.FaceDetectorYN.create(

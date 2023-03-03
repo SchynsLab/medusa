@@ -27,7 +27,7 @@ from ....data import get_external_data_config, get_template_flame
 from ....transforms import (create_ortho_matrix, create_viewport_matrix,
                             crop_matrix_to_3d)
 from ..base import FlameReconModel
-from ..decoders import FLAME
+from ..decoders import FLAME, FLAMETex
 from ..utils import upsample_mesh, vertex_normals
 from .decoders import DetailGenerator
 from .encoders import PerceptualEncoder, ResnetEncoder
@@ -53,10 +53,11 @@ class DecaReconModel(FlameReconModel):
         Either 'cuda' (uses GPU) or 'cpu'
     """
 
-    def __init__(self, name, orig_img_size=None, device=DEVICE):
+    def __init__(self, name, extract_tex=False, orig_img_size=None, device=DEVICE):
         """Initializes an DECA-like model object."""
         super().__init__()
         self.name = name
+        self.extract_tex = extract_tex
         self.orig_img_size = orig_img_size
         self.device = device
         self._dense = "dense" in name
@@ -64,7 +65,7 @@ class DecaReconModel(FlameReconModel):
         self._check()
         self._load_data()
         self._create_submodels()
-        self._crop_model = BboxCropModel("2d106det", (224, 224), device=device)
+        self._crop_model = None
 
     def __str__(self):
         return self.name
@@ -127,9 +128,12 @@ class DecaReconModel(FlameReconModel):
             self.E_expression = PerceptualEncoder().to(self.device)
 
         # Flame decoder: n_param Flame parameters -> vertices / affine matrix
-        self.D_flame = FLAME(self._cfg["flame_path"], n_shape=100, n_exp=50).to(
+        self.D_flame_shape = FLAME(self._cfg["flame_path"], n_shape=100, n_exp=50).to(
             self.device
         )
+
+        if self.extract_tex:
+            self.D_flame_tex = FLAMETex(n_tex=self.param_dict['n_tex']).to(self.device)
 
         if self._dense:
             # Detail decoder: (detail, exp, cam params) -> detail map
@@ -266,7 +270,7 @@ class DecaReconModel(FlameReconModel):
         """
 
         # Decode vertices (`v`) and rotation params (`R`) from the shape/exp/pose params
-        v, R = self.D_flame(
+        v, R = self.D_flame_shape(
             enc_dict["shape"], enc_dict["exp"], pose_params=enc_dict["pose"]
         )
         b = v.shape[0]  # batch dim
@@ -345,7 +349,8 @@ class DecaReconModel(FlameReconModel):
         # world to NDC space, and a viewport matrix (VP), which maps from NDC to raster space.
         # Note that we need this twice: one for the 'forward' transform (world -> crop raster space)
         # and one for the 'backward' transform (full image raster space -> world)
-        crop_size = self._crop_model.output_size
+
+        crop_size = (224, 224)  # fixed by DECA-based models
         OP = create_ortho_matrix(*crop_size, device=self.device)  # forward (world -> cropped NDC)
         VP = create_viewport_matrix(*crop_size, device=self.device)  # forward (cropped NDC -> cropped raster)
         CP = crop_matrix_to_3d(crop_mat)  # crop matrix
@@ -375,8 +380,12 @@ class DecaReconModel(FlameReconModel):
             v = v[2:-2, ...]
             mat = mat[2:-2, ...]
 
-        # tex = self.D_flame_tex(enc_dict['tex'])
-        return {"v": v, "mat": mat}
+        out = {"v": v, "mat": mat}
+        if self.extract_tex:
+            # Note to self: this makes reconstruction very slow!
+            out['tex'] = self.D_flame_tex(enc_dict['tex'])
+
+        return out
 
     def __call__(self, imgs, crop_mat=None):
         """Performs reconstruction of the face as a list of landmarks
@@ -421,10 +430,12 @@ class DecaReconModel(FlameReconModel):
         """
 
         imgs = load_inputs(imgs, device=self.device)
+
         out = {}
         if imgs.shape[2:] != (224, 224):
             # Extract width (imgs.shape[3]) and height (img.shape[2])
             self.orig_img_size = imgs.shape[2:][::-1]
+            self._crop_model = BboxCropModel("2d106det", (224, 224), device=self.device)
             crop_results = self._crop_model(imgs)
             imgs = crop_results["imgs_crop"]
             crop_mat = crop_results["crop_mat"]
@@ -436,6 +447,7 @@ class DecaReconModel(FlameReconModel):
                 # the crop matrix, we won't be able to render in original space so we'll
                 # set the original image size to be the cropped image size
                 self.orig_img_size = (224, 224)
+                LOGGER.warning("Original image size unkown, rendering in cropped space!")
 
         imgs = self._preprocess(imgs)
 

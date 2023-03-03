@@ -26,6 +26,7 @@ from .defaults import DEVICE, LOGGER, RECON_MODELS
 from .containers import Data4D
 from .io import download_file
 from .recon import videorecon
+from .render import VideoRenderer
 
 
 @click.command()
@@ -61,12 +62,11 @@ def videorecon_cmd(video_path, out, recon_model, device, n_frames, batch_size):
 @click.argument("data_file")
 @click.option("-o", "--out", default=None, type=click.Path(), help="File to save output to (shouldn't have an extension)")
 @click.option("-v", "--video", type=click.Path(exists=True, dir_okay=False), help="Path to video file, when rendering on top of original video")
-@click.option('-r', '--renderer', default='pyrender', type=click.Choice(['pyrender', 'pytorch3d']))
+@click.option('-r', '--renderer', default='pytorch3d', type=click.Choice(['pytorch3d']))
 @click.option("-s", "--shading", default='flat', type=click.Choice(['flat', 'smooth']), help="Type of shading")
-@click.option("--alpha", default=None, type=click.FLOAT, help="Alpha (transparency) of face")
 @click.option("--device", default=DEVICE, type=click.Choice(["cpu", "cuda"]),
               help="Device to run the rendering on")
-def videorender_cmd(data_file, out, video, renderer, shading, alpha, device):
+def videorender_cmd(data_file, out, video, renderer, shading, device):
     """Renders the reconstructed mesh time series as a video (gif or mp4)."""
 
     data = Data4D.load(data_file, device=device)
@@ -74,9 +74,8 @@ def videorender_cmd(data_file, out, video, renderer, shading, alpha, device):
     if out is None:
         out = data_file.replace('.h5', '.mp4')
 
-    data.render_video(
-        Path(out), video=video, renderer=renderer, shading=shading, alpha=alpha,
-    )
+    renderer = VideoRenderer(shading=shading)
+    renderer(Path(out), data=data, video=video)
 
 
 @click.command()
@@ -144,8 +143,8 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
     if click.confirm(
         f"{desc} EMOCA: I have registered and agreed to the license terms at https://emoca.is.tue.mpg.de"
     ):
-        url = "https://download.is.tue.mpg.de/emoca/assets/EMOCA/models/EMOCA.zip"
-        f_out = directory / "EMOCA.zip"
+        url = "https://download.is.tue.mpg.de/emoca/assets/EMOCA/models/EMOCA_v2_lr_mse_20.zip"
+        f_out = directory / "EMOCA_v2_lr_mse_20.zip"
         download_file(url, f_out, overwrite=overwrite)
 
         # Note to self: not sure whether the EMOCA.zip data contains the finetuned detail
@@ -233,7 +232,7 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         cfg["emoca_path"] = str(ckpt_out)
     else:
         LOGGER.info(f"Configuring EMOCA for device '{device}'!")
-        emoca_zip = data_dir / "EMOCA.zip"
+        emoca_zip = data_dir / "EMOCA_v2_lr_mse_20.zip"
         if not emoca_zip.is_file():
             LOGGER.warning(f"File '{str(emoca_zip)}' does not exist!")
         else:
@@ -241,6 +240,7 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
             with zipfile.ZipFile(emoca_zip, "r") as zip_ref:
                 zip_ref.extractall(f"{directory}/")
 
+            shutil.move(data_dir / "EMOCA_v2_lr_mse_20", data_dir / "EMOCA")
             cfg_ = data_dir / "EMOCA/cfg.yaml"
             if cfg_.is_file():
                 cfg_.unlink()

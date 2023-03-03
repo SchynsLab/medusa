@@ -1,14 +1,16 @@
 """Module with a renderer class based on ``pytorch3d``."""
 
+from math import pi, sqrt
 import numpy as np
 import torch
 from pytorch3d.renderer import (FoVOrthographicCameras, FoVPerspectiveCameras,
                                 HardFlatShader, HardPhongShader,
-                                MeshRasterizer, MeshRenderer, PointLights,
+                                MeshRasterizer, MeshRendererWithFragments, PointLights,
                                 RasterizationSettings, TexturesVertex, BlendParams)
 from pytorch3d.structures import Meshes
+from pytorch3d.ops import interpolate_face_attributes
 
-from ..defaults import DEVICE
+from ...defaults import DEVICE
 from .base import BaseRenderer
 
 
@@ -26,7 +28,7 @@ class PytorchRenderer(BaseRenderer):
         Either 'orthographic' (for Flame-based reconstructions) or
         'perpective' (for mediapipe reconstructions)
     shading : str
-        Type of shading ('flat', 'smooth', or 'wireframe')
+        Type of shading ('flat', 'smooth')
     wireframe_opts : None, dict
         Dictionary with extra options for wireframe rendering (options: 'width', 'color')
     device : str
@@ -38,17 +40,19 @@ class PytorchRenderer(BaseRenderer):
         cam_mat=None,
         cam_type="orthographic",
         shading="flat",
+        lights=None,
         device=DEVICE,
     ):
         """Initializes a PytorchRenderer object."""
         self.viewport = viewport
         self.device = device
         self._settings = self._setup_settings(viewport)
-        self._lights = PointLights(device=device, location=[[0.0, 0.0, 3.0]])
+        self._lights = self._setup_lights(lights)
         self._cameras = self._setup_cameras(cam_mat, cam_type)
         self._rasterizer = MeshRasterizer(self._cameras, self._settings)
         self._shader = self._setup_shader(shading)
-        self._renderer = MeshRenderer(self._rasterizer, self._shader)
+        self._renderer = MeshRendererWithFragments(self._rasterizer, self._shader)
+        self._fn = None
 
     def __str__(self):
         """Returns the name of the renderer (nice for testing)."""
@@ -80,6 +84,18 @@ class PytorchRenderer(BaseRenderer):
             bin_size=0,
             faces_per_pixel=1,
         )
+
+    def _setup_lights(self, lights):
+
+        if lights is None:
+            # Pointlight is default
+            return PointLights(device=self.device, location=[[0.0, 0.0, 3.0]])
+        elif lights == 'sh':
+            # Spherical harmonics, to be added later
+            return 'sh'
+        else:
+            # Assume it's a Pytorch3d light class
+            return lights
 
     def _setup_cameras(self, cam_mat, cam_type):
         """Sets of the appropriate camameras.
@@ -166,7 +182,26 @@ class PytorchRenderer(BaseRenderer):
 
         return shader
 
-    def __call__(self, v, tris, overlay=None, single_image=True):
+    def _create_meshes(self, v, tris, overlay, mask=None):
+
+        v, tris, overlay = self._preprocess(v, tris, overlay, format="torch")
+
+        if overlay is None:
+            # Note to self: Meshes *always* needs a texture, so create a dummy one
+            overlay = TexturesVertex(torch.ones_like(v, device=self.device))
+        elif torch.is_tensor(overlay):
+            if overlay.shape[-2] != v.shape[-2]:
+                raise ValueError("Tensor-based overlays should have the same number of "
+                                 "vertices as the mesh!")
+            overlay = TexturesVertex(overlay)
+
+        meshes = Meshes(v, tris, textures=overlay)
+        if mask is not None:
+            meshes = meshes.submeshes([[mask]])
+
+        return meshes
+
+    def __call__(self, v, tris, overlay=None, single_image=True, mask=None, return_frags=False):
         """Performs the actual rendering for a given (batch of) mesh(es).
 
         Parameters
@@ -189,25 +224,95 @@ class PytorchRenderer(BaseRenderer):
             h and w are defined in the viewport
         """
 
-        v, tris, overlay = self._preprocess(v, tris, overlay, format="torch")
-        tris = tris.repeat(v.shape[0], 1, 1)
-
-        if overlay is None:
-            overlay = TexturesVertex(torch.ones_like(v, device=self.device))
-        elif torch.is_tensor(overlay):
-            overlay = TexturesVertex(overlay)
-
-        meshes = Meshes(v, tris, overlay)
-        imgs = self._renderer(meshes)
+        meshes = self._create_meshes(v, tris, overlay, mask=mask)
+        self._fn = meshes.verts_normals_packed()[meshes.faces_packed()]
+        imgs, frags = self._renderer(meshes)
 
         if single_image:
             imgs = torch.amax(imgs, dim=0, keepdim=True)
 
         imgs = (imgs * 255).to(torch.uint8)
 
-        return imgs
+        if return_frags:
+            return imgs, frags
+        else:
+            return imgs
+
+    def normal_map(self, fragments=None, v=None, tris=None):
+
+        if fragments is None:
+            meshes = self._create_meshes(v, tris, None, format="torch")
+            fragments = self._rasterizer(
+                meshes,
+                raster_settings=self._settings,
+                camers=self._cameras
+            )
+
+        #f = meshes.faces_packed()  # (F, 3)
+        #vn = meshes.verts_normals_packed()  # (V, 3)
+
+        # No need to interpolate the barycentric coordinates for normal map
+        # (see https://github.com/facebookresearch/pytorch3d/issues/865)
+        bcc = torch.ones_like(fragments.bary_coords, device=self.device)
+
+        # N x H x W x K (1) x D
+        normals = interpolate_face_attributes(fragments.pix_to_face, bcc, self._fn)
+        normals = normals.squeeze(-2)  # get rid of 'K' dimension
+        #normals = normals / torch.norm(normals, dim=-1, keepdim=True)
+        #normals = (torch.nan_to_num(normals, nan=0.0) * 255.).to(torch.uint8)
+
+        return normals
+
+    def add_sh_light(self, img, fragments, sh_coeff):
+
+        constant = torch.tensor(
+            [
+                1 / sqrt(4 * pi),
+                ((2 * pi) / 3) * (sqrt(3 / (4 * pi))),
+                ((2 * pi) / 3) * (sqrt(3 / (4 * pi))),
+                ((2 * pi) / 3) * (sqrt(3 / (4 * pi))),
+                (pi / 4) * (3) * (sqrt(5 / (12 * pi))),
+                (pi / 4) * (3) * (sqrt(5 / (12 * pi))),
+                (pi / 4) * (3) * (sqrt(5 / (12 * pi))),
+                (pi / 4) * (3 / 2) * (sqrt(5 / (12 * pi))),
+                (pi / 4) * (1 / 2) * (sqrt(5 / (4 * pi))),
+            ], device=self.device
+        )
+
+        normal_imgs = self.normal_map(fragments)
+        N = normal_imgs.permute(0, 3, 1, 2)
+        sh = torch.stack([  # [bz, 9, h, w]
+                N[:, 0]* 0. +1., N[:, 0], N[:, 1], \
+                N[:, 2], N[:, 0] * N[:, 1], N[:, 0] * N[:, 2],
+                N[:, 1] * N[:, 2], N[:, 0] ** 2 - N[:, 1] ** 2, 3 * (N[:, 2] ** 2) - 1
+            ], 1
+        )
+
+        sh = sh * constant[None, :, None, None]
+        shading = torch.sum(sh_coeff[:, :, :, None, None] * sh[:, :, None, :, :], 1) # [bz, 9, 3, h, w]
+        shading = shading.permute(0, 2, 3, 1)  # N x H x W x 3
+        img[..., :3] = ((img[..., :3] * shading) * 1).to(torch.uint8)
+        return img
+
+    # def _world2uv(self, vt, tris_uv):
+
+    #     meshes = Meshes(vt, tris_uv)
+    #     fragments = rasterize_meshes(
+    #         meshes,
+    #         image_size=(256, 256),
+    #         blur_radius=0.0,
+    #         faces_per_pixel=1,
+    #         bin_size=0,
+    #         perspective_correct=False,
+    #     )
+    #     face_vertices = v[tris]
+
+
+    # def extract_texture(self, imgs, v):
+
+    #     v_screen = (self._cameras.transform_points_ndc(v, image_size=self.viewport) + 1 ) / 2
+    #     self._rasterizer()
+    #     self._renderer
 
     def close(self):
-        """Does nothing but is included to be consistent with the
-        ``PyRenderer`` class."""
         pass

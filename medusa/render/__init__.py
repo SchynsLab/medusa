@@ -1,12 +1,9 @@
-"""Top-level rendering module, containg Medusa's two main renderers:
+"""Top-level render package."""
 
-* ``PyRenderer`` (based on the ``pyrender`` package)
-* ``PytorchRenderer (based on the ``pytorch3d`` package, if available)
-"""
+from .overlay import Overlay
+from .video import VideoRenderer
 
-from .pyrender import PyRenderer
 try:
-    from .pytorch3d import PytorchRenderer
-except ImportError as e:
-    # pytorch3d not available
+    from .image import PytorchRenderer
+except ImportError:
     pass

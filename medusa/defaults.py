@@ -3,7 +3,6 @@ has access to a GPU or not (such as ``DEVICE``)."""
 
 from pathlib import Path
 
-import cv2
 import torch
 
 from .log import get_logger
@@ -13,16 +12,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 """Default device ('cuda' or 'cpu') used across Medusa, which depends on whether
 *cuda* is available ('cuda') or not ('cpu')."""
 
-try:
-    from .render.pytorch3d import PytorchRenderer as default_renderer
-except ImportError:
-    from .render.pyrender import PyRenderer as default_renderer
-
-RENDERER = default_renderer
-"""Default renderer used in Medusa, which depends on whether ``pytorch3d`` is installed
-(in which case ``PytorchRenderer`` is used) or not (``PyRenderer`` is used)."""
-
-FONT = str(Path(cv2.__path__[0]) / "qt/fonts/DejaVuSans.ttf")
+FONT = str(Path(__file__).parent / "data/DejaVuSans.ttf")
 """Default font used in Medusa (DejaVuSans)."""
 
 FLAME_MODELS = [
@@ -48,3 +38,13 @@ RECON_MODELS = [
 
 LOGGER = get_logger(level="INFO")
 """Default logger used in Medusa."""
+
+try:
+    from .render import PytorchRenderer as default_renderer
+except ImportError as e:
+    LOGGER.warning("pytorch3d not available; cannot render stimuli!")
+    default_renderer = None
+
+RENDERER = default_renderer
+"""Default renderer used in Medusa, which depends on whether ``pytorch3d`` is installed
+(in which case ``PytorchRenderer`` is used) or not (no rendering possible)."""

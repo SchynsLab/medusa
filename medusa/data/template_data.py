@@ -5,9 +5,9 @@ import numpy as np
 import torch
 import pickle
 import h5py
-import trimesh
 import yaml
 
+from ..io import load_obj
 from ..defaults import DEVICE
 
 
@@ -31,12 +31,8 @@ def get_template_mediapipe(device=None):
     (898, 3)
     """
     path = Path(__file__).parent / "mpipe/mediapipe_template.obj"
-    # Note to self: maintain_order=True is important, otherwise the
-    # face order is all messed up
-    with open(path, "r") as f_in:
-        data = trimesh.exchange.obj.load_obj(f_in, maintain_order=True)
-
-    template = {"v": data["vertices"], "tris": data["faces"]}
+    template = load_obj(path)
+    template = {key: template[key] for key in ['v', 'tris']}
 
     if device is not None:
         template['v'] = torch.as_tensor(template['v'], device=device).float()

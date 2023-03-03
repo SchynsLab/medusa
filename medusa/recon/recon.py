@@ -17,8 +17,8 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
 
     Parameters
     ----------
-    video_path : str, Path
-        Path to video file to reconstruct
+    video_path : str, Path, VideoLoader
+        Path to video file to reconstruct, or an already initialized VideoLoader
     recon_model : str
         Name of reconstruction model, options are: 'deca-coarse', 'deca-dense',
         'emoca-coarse', 'emoca-dense', 'spectre-coarse', 'spectre-dense', and
@@ -51,22 +51,23 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
     >>> data = videorecon(vid, recon_model='mediapipe')
     """
 
+    if isinstance(video_path, VideoLoader):
+        video = video_path
+        video_path = video.video_path
+    else:
+        video = VideoLoader(video_path, batch_size=batch_size, device=device)
+
+    video_metadata = video.get_metadata()
+
     LOGGER.setLevel(loglevel)
     LOGGER.info(f"Starting recon using for {video_path}")
     LOGGER.info(f"Initializing {recon_model} recon model")
 
-    # Initialize VideoLoader object here to use metadata
-    # in recon_model (like img_size)
-    video = VideoLoader(video_path, batch_size=batch_size, device=device)
-    metadata = video.get_metadata()
-
     # Initialize reconstruction model
     if recon_model in FLAME_MODELS:
-        crop_model = BboxCropModel(
-            device=device
-        )  # for face detection / cropping
+        crop_model = BboxCropModel(device=device)  # for face detection / cropping
         reconstructor = DecaReconModel(
-            recon_model, device=device, orig_img_size=metadata["img_size"], **kwargs
+            recon_model, device=device, orig_img_size=video_metadata["img_size"], **kwargs
         )
     elif recon_model == "mediapipe":
         reconstructor = Mediapipe(static_image_mode=False, device=device, **kwargs)
@@ -104,10 +105,15 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
         raise ValueError("No faces in entire video!")
 
     metadata = video.get_metadata()
+    if n_frames is not None:
+        # If we only want to reconstruct `n_frames`, set this in the
+        # video metadata, so that the Data4D object knows how many frames to render
+        video_metadata['n_img'] = n_frames
+
     tris = reconstructor.get_tris()
     cam_mat = reconstructor.get_cam_mat()
     init_kwargs = recon_results.to_dict(
-        exclude=["lms", "device", "n_img", "conf", "bbox"]
+        exclude=["lms", "device", "n_img", "conf", "bbox", "tex", "sh_coeff"]
     )
     data = Data4D(video_metadata=metadata, tris=tris, cam_mat=cam_mat, **init_kwargs)
 

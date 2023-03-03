@@ -10,17 +10,16 @@ using the ``load`` classmethod.
 from pathlib import Path
 
 import h5py
-import pickle
 import numpy as np
 import pandas as pd
 import torch
-from trimesh.transformations import compose_matrix, decompose_matrix
 from kornia.geometry.linalg import transform_points
 
 from ..defaults import DEVICE, LOGGER
 from ..io import VideoLoader, VideoWriter
 from ..log import tqdm_log
 from ..tracking import filter_faces, _ensure_consecutive_face_idx
+from ..transforms import compose_matrix, decompose_matrix
 
 
 class Data4D:
@@ -82,7 +81,6 @@ class Data4D:
             if isinstance(data, np.ndarray):
                 data = torch.as_tensor(data, device=self.device)
                 setattr(self, attr, data)
-
 
         if self.video_metadata is None:
             self.video_metadata = {
@@ -175,38 +173,10 @@ class Data4D:
             Name of masks (one of 'face', 'lips', 'neck', 'nose', 'boundary', 'forehead',
             'scalp')
         """
-
-        # Avoids circular import
-        from ..data import get_external_data_config
-
-        topo = self._infer_topo()
-        if topo != 'flame-coarse':
-            raise ValueError("Can only apply masks to flame-coarse topology data!")
-
-        masks_path = get_external_data_config(key='flame_masks_path')
-        with open(masks_path, "rb") as f_in:
-            masks = pickle.load(f_in, encoding="latin1")
-            if name not in masks:
-                raise ValueError(f"Mask name '{name}' not in masks")
-
-        mask = torch.as_tensor(masks[name], dtype=torch.int64, device=self.device)
-
-        # Apply mask to vertices
-        self.v = self.v[:, mask, :]
-
-        # We also need to filter out the triangles that contain vertices that are not
-        # part of the mask! First, find which triangles contain only vertices part of
-        # the mask
-        idx = torch.isin(self.tris, mask).all(dim=1)
-
-        # This is ugly/slow, but create a look-up table mapping mask values to new
-        # indices (from 0, 1, ... len(mask))
-        lut = {k.item(): i for i, k in enumerate(mask)}
-
-        # Finally, map old indices to new indices and unflatten
-        self.tris = torch.as_tensor([lut[x.item()] for x in self.tris[idx].flatten()],
-                                     dtype=torch.int64, device=self.device)
-        self.tris = self.tris.reshape((idx.sum(), -1))
+        from ..geometry import apply_vertex_mask
+        out = apply_vertex_mask(name, v=self.v, tris=self.tris)
+        self.v = out['v']
+        self.tris = out['tris']
 
     @staticmethod
     def from_video(path, **kwargs):
@@ -481,98 +451,3 @@ class Data4D:
                     setattr(self, attr, data[keep])
 
         self.face_idx = _ensure_consecutive_face_idx(self.face_idx)
-
-    def render_video(self, f_out, renderer="pyrender", shading='flat', video=None,
-                     alpha=1, **kwargs):
-        """Renders the sequence of 3D meshes as a video. It is assumed that
-        this method is only called from a child class (e.g., ``Mediapipe4D``).
-
-        Parameters
-        ----------
-        f_out: str
-            Filename of output
-        renderer : str
-            Either 'pyrender' or 'pytorch3d' (if installed)
-        shading : str
-            Type of shading ('flat', 'smooth', or 'wireframe'; latter only when using
-            'pyrender')
-        video : str
-            Path to video, in order to render face on top of original video frames
-        alpha : float
-            Alpha (transparency) level of the rendered face; lower = more transparent;
-            minimum = 0 (invisible), maximum = 1 (fully opaque)
-        **kwargs
-            Keyword arguments supplied to renderer initialization
-        """
-
-        if renderer == "pyrender":
-            from ..render import PyRenderer as Renderer
-        elif renderer == "pytorch3d":
-            try:
-                from ..render import PytorchRenderer as Renderer
-            except ImportError:
-                raise ValueError(
-                    "Cannot use pytorch3d renderer, as pytorch3d is not installed!"
-                )
-
-        if self._infer_topo() == 'mediapipe':
-            cam_type = "perspective"
-        else:
-            cam_type = "orthographic"
-
-        if 'viewport' in kwargs:
-            w, h = kwargs.pop('viewport')
-        else:
-            img_size = self.video_metadata.get('img_size')
-            if img_size is None:
-                raise ValueError("Viewport/frame size is not known!")
-            else:
-                w, h = img_size
-
-        overlay = kwargs.pop('overlay', None)
-        renderer = Renderer(
-            viewport=(w, h),
-            cam_mat=self.cam_mat,
-            cam_type=cam_type,
-            shading=shading,
-            device=self.device,
-            **kwargs,
-        )
-
-        if video is not None:
-            reader = VideoLoader(video, batch_size=1, device=self.device)
-
-        writer = VideoWriter(str(f_out), fps=self.video_metadata["fps"])
-        n_frames = self.video_metadata["n_img"]
-        iter_ = tqdm_log(range(n_frames), LOGGER, desc="Render shape")
-
-        for i_img in iter_:
-
-            if video is not None:
-                background = next(iter(reader))
-            else:
-                background = (
-                    torch.ones((h, w, 3), dtype=torch.uint8, device=self.device) * 255
-                )
-
-            img_idx = self.img_idx == i_img
-
-            if img_idx.sum() == 0:
-                img = background
-            else:
-                if overlay is not None:
-                    overlay_ = overlay[img_idx]
-                else:
-                    overlay_ = None
-
-                v = self.v[img_idx]
-                img = renderer(v, self.tris, overlay=overlay_)
-                img = renderer.alpha_blend(img, background, face_alpha=alpha)
-
-            writer.write(img)
-
-        renderer.close()
-        writer.close()
-
-        if video is not None:
-            reader.close()

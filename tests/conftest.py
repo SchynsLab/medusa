@@ -1,4 +1,5 @@
 import os
+import torch
 from pathlib import Path
 
 import pytest
@@ -46,3 +47,11 @@ def _is_pytorch3d_installed():
         return True
     except:
         return False
+
+
+@pytest.fixture(autouse=True)
+def run_around_tests():
+    yield
+    # Code that will run after your test, for example:
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()

@@ -61,8 +61,10 @@ def bw_filter(data, fps, low_pass, high_pass):
 
 class OneEuroFilter:
     """A high-pass filter that can be used in real-time applications; based on
-    the implementation by `Jaan Tollander <https://github.com/jaantollander/OneEuroFilter.`_.
-    
+    the implementation by `Jaan Tollander.
+
+    <https://github.com/jaantollander/OneEuroFilter>`_.
+
     Parameters
     ----------
     TODO

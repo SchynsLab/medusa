@@ -1,9 +1,9 @@
 """Module with a renderer base class."""
 from abc import ABC, abstractmethod
 
-import cv2
 import numpy as np
 import torch
+from PIL import Image
 
 
 class BaseRenderer(ABC):
@@ -14,7 +14,7 @@ class BaseRenderer(ABC):
         """Closes the currently used renderer."""
         pass
 
-    def _preprocess(self, v, tris, overlay, format="numpy"):
+    def _preprocess(self, v, tris, tex, format="numpy"):
         """Performs some basic preprocessing of the vertices and triangles that
         is common to all renderers.
 
@@ -38,11 +38,8 @@ class BaseRenderer(ABC):
         if v.ndim == 2:
             v = v[None, ...]
 
-        if overlay is not None:
-            if overlay.ndim == 2:
-                overlay = overlay.repeat(v.shape[0], 1, 1)
-            elif overlay.ndim == 3 and overlay.shape[0] != v.shape[0]:
-                raise ValueError("Batch size of overlay different from vertices!")
+        if tris.ndim == 2:
+            tris = tris.repeat(v.shape[0], 1, 1)
 
         if format == "numpy":
             if torch.is_tensor(v):
@@ -51,10 +48,10 @@ class BaseRenderer(ABC):
             if torch.is_tensor(tris):
                 tris = tris.cpu().numpy()
 
-            if torch.is_tensor(overlay):
-                overlay = overlay.cpu().numpy()
+            if torch.is_tensor(tex):
+                tex = tex.cpu().numpy()
 
-        return v, tris, overlay
+        return v, tris, tex
 
     def alpha_blend(self, img, background, face_alpha=None):
         """Simple alpha blend of a rendered image and a background. The image
@@ -99,7 +96,11 @@ class BaseRenderer(ABC):
             # channels_first -> channels_last
             background = background.permute(0, 2, 3, 1)
 
+        # Fill black pixels in rendered image with background for nicer renderings,
+        # especially with texturing
         img = img[..., :3] * alpha + (1 - alpha) * background
+        idx = (img == 0).all(dim=-1)[..., None].repeat(1, 1, 1, 3)
+        img[idx] = background[idx].float()
 
         if torch.is_tensor(img):
             img = img.to(dtype=torch.uint8)
@@ -111,13 +112,14 @@ class BaseRenderer(ABC):
 
     @staticmethod
     def save_image(f_out, img):
-        """Saves a single image (using ``cv2``) to disk.
+        """Saves a single image (using ``PIL``) to disk.
 
         Parameters
         ----------
         f_out : str, Path
             Path where the image should be saved
         """
+
         if torch.is_tensor(img):
             img = img.cpu().numpy()
 
@@ -130,11 +132,14 @@ class BaseRenderer(ABC):
         if img.shape[0] == 3:
             img = img.transpose(1, 2, 0)
 
-        cv2.imwrite(str(f_out), img[:, :, [2, 1, 0]])
+        if img.dtype != np.uint8:
+            img = img.astype(np.uint8)
+
+        Image.fromarray(img).save(str(f_out))
 
     @staticmethod
     def load_image(f_in, device=None):
-        """Utility function to read a single image to disk (using ``cv2``).
+        """Utility function to read a single image to disk (using ``PIL``).
 
         Parameters
         ----------
@@ -144,8 +149,7 @@ class BaseRenderer(ABC):
             If ``None``, the image is returned as a numpy array; if 'cuda' or 'cpu',
             the image is returned as a torch tensor
         """
-        img = cv2.imread(str(f_in))
-        img = img[:, :, [2, 1, 0]]
+        img = np.array(Image.open(str(f_in)))
 
         if device is not None:
             img = torch.as_tensor(img, device=device)

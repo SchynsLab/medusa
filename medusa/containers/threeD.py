@@ -2,12 +2,12 @@
 
 import numpy as np
 import torch
-from trimesh import Trimesh
 
 from ..data import get_template_flame, get_external_data_config
 from ..recon.flame.decoders import FLAME
 from .fourD import Data4D
 from ..data import get_template_mediapipe
+from ..io import save_obj
 
 from ..defaults import DEVICE
 
@@ -21,9 +21,7 @@ class Base3D:
     def save(self, path, file_type="obj", **kwargs):
         """Saves a mesh to disk as an obj wavefront file."""
 
-        mesh = Trimesh(self.v, self.f)
-        with open(path, "w") as f_out:
-            mesh.export(f_out, file_type=file_type, **kwargs)
+        save_obj(v=self.v, tris=self.tris)
 
     def animate(self, v, mat, is_deltas=True, to_4D=True):
         """Animates an existing 3D mesh."""

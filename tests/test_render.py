@@ -8,32 +8,18 @@ from medusa.defaults import DEVICE
 from medusa.crop import BboxCropModel
 from medusa.data import get_example_frame, get_example_h5
 from medusa.recon import DecaReconModel, Mediapipe, videorecon
-from medusa.render import PyRenderer
-
-try:
-    from medusa.render import PytorchRenderer
-except ImportError:
-    renderers = [PytorchRenderer]
-else:
-    renderers = [PytorchRenderer, PyRenderer]
+from medusa.render import PytorchRenderer, VideoRenderer
 
 
-@pytest.mark.parametrize("shading", ["flat", "wireframe", "smooth"])
-@pytest.mark.parametrize("Renderer", renderers)
+@pytest.mark.parametrize("shading", ["flat", "smooth"])
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
-def test_shading(shading, Renderer, device):
+def test_shading(shading, device):
     if not _is_gha_compatible(device):
-        return
-
-    if Renderer != PyRenderer and shading == "wireframe":
-        return
-
-    if Renderer == PyRenderer and device == "cuda":
         return
 
     data = get_example_h5(load=True, model="mediapipe", device=device)
     viewport = data.video_metadata["img_size"]
-    renderer = Renderer(
+    renderer = PytorchRenderer(
         viewport, cam_type="perspective", shading=shading, device=device
     )
 
@@ -51,32 +37,12 @@ def test_shading(shading, Renderer, device):
     renderer.save_image(f_out, img)
 
 
-@pytest.mark.parametrize("color", ["red", "blue"])
-@pytest.mark.parametrize("width", [None, 3])
-def test_pyrender_wireframe(color, width):
-    data = get_example_h5(load=True, model="mediapipe", device=DEVICE)
-    viewport = data.video_metadata["img_size"]
-    c = None if color == "red" else (0, 0, 1, 1)
-    renderer = PyRenderer(
-        viewport,
-        cam_type="perspective",
-        shading="wireframe",
-        wireframe_opts={"color": c, "width": width},
-    )
-    img = renderer(data.v[0], data.tris)
-    f_out = (
-        Path(__file__).parent
-        / f"test_viz/render/wireframecolor-{color}_wireframewidth-{width}.jpg"
-    )
-    renderer.save_image(f_out, img)
-
 
 @pytest.mark.parametrize("imgs_test", [2, 3, 4], indirect=True)
-@pytest.mark.parametrize("Renderer", renderers)
 @pytest.mark.parametrize("recon_model_name", ["mediapipe", "emoca-coarse"])
-def test_multiple_faces(imgs_test, Renderer, recon_model_name):
+def test_multiple_faces(imgs_test, recon_model_name):
     img, n_exp = imgs_test
-    img = Renderer.load_image(img)
+    img = PytorchRenderer.load_image(img)
     viewport = (img.shape[1], img.shape[0])
 
     if recon_model_name == "mediapipe":
@@ -95,7 +61,7 @@ def test_multiple_faces(imgs_test, Renderer, recon_model_name):
 
     out = recon_model(**inputs)
 
-    renderer = Renderer(viewport, cam_type=cam_type, cam_mat=cam_mat, shading="flat")
+    renderer = PytorchRenderer(viewport, cam_type=cam_type, cam_mat=cam_mat, shading="flat")
     img_recon = renderer(out["v"], recon_model.get_tris())
     img_final = renderer.alpha_blend(img_recon, img)
 
@@ -109,12 +75,12 @@ def test_multiple_faces(imgs_test, Renderer, recon_model_name):
 
 
 @pytest.mark.parametrize("video_test", [1, 4], indirect=True)
-@pytest.mark.parametrize("renderer", ["pyrender", "pytorch3d"])
-def test_render_video(video_test, renderer, device=DEVICE):
+def test_render_video(video_test, device=DEVICE):
     data = videorecon(video_test, "emoca-coarse", device=device)
     data.apply_vertex_mask('face')
     f_out = (
         Path(__file__).parent
-        / f"test_viz/render/renderer-{renderer}_{video_test.stem}.mp4"
+        / f"test_viz/render/{video_test.stem}.mp4"
     )
-    data.render_video(f_out, renderer=renderer, video=video_test)
+    renderer = VideoRenderer()
+    renderer(f_out, data, video=video_test)

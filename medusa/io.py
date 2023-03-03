@@ -8,11 +8,12 @@ file, which is used in the reconstruction process (e.g., in the
 from pathlib import Path
 
 import av
-import cv2
 import numpy as np
 import requests
 import torch
+from PIL import Image
 from torch.utils.data import DataLoader, IterableDataset
+from torchvision.transforms.functional import crop
 
 from .defaults import DEVICE
 
@@ -36,13 +37,16 @@ class VideoLoader(DataLoader):
         Extra keyword arguments passed to the initialization of the parent class
     """
 
-    def __init__(self, path, batch_size=32, channels_first=False, device=DEVICE,
-                 **kwargs):
+    def __init__(self, video_path, batch_size=32, channels_first=False, device=DEVICE,
+                 crop=None, **kwargs):
+
         """Initializes a VideoLoader object."""
+        self.video_path = video_path
         self.channels_first = channels_first
         self.device = device
-        self._validate(path)
-        dataset = VideoDataset(path, device)
+        self.crop = crop
+        self._validate(video_path)
+        dataset = VideoDataset(video_path, device)
 
         super().__init__(dataset, batch_size, num_workers=0, pin_memory=True, **kwargs)
         self._metadata = self._extract_metadata()
@@ -73,8 +77,11 @@ class VideoLoader(DataLoader):
 
     def _extract_metadata(self):
         """Extracts some metadata from Dataset and exposes it to the loader."""
+        metadata = self.dataset.metadata
+        if self.crop is not None:
+            metadata["img_size"] = (self.crop[2], self.crop[3])
 
-        return self.dataset.metadata
+        return metadata
 
     def __iter__(self):
         """Little hack to put data on device automatically."""
@@ -82,6 +89,17 @@ class VideoLoader(DataLoader):
             batch = batch.to(self.device, non_blocking=True)
             if self.channels_first:
                 batch = batch.permute(0, 3, 1, 2)
+
+            if self.crop is not None:
+
+                if len(self.crop) != 4:
+                    raise ValueError("crop parameter should be an iterable of length 4!")
+
+                # top, left, height, width
+                if self.channels_first:
+                    batch = crop(batch, *self.crop)
+                else:
+                    batch = crop(batch.permute(0, 3, 1, 2), *self.crop).permute(0, 2, 3, 1)
 
             yield batch
 
@@ -92,15 +110,16 @@ class VideoDataset(IterableDataset):
     Parameters
     ----------
     video : pathlib.Path, str
-        A video file (any format that cv2 can handle)
+        A video file (any format that pyav can handle)
     device : str
         Either 'cuda' (for GPU) or 'cpu'
     """
 
-    def __init__(self, video, device=DEVICE):
+    def __init__(self, video_path, device=DEVICE):
         """Initializes a VideoDataset object."""
         self.device = device
-        self._container = av.open(str(video), mode="r")
+        self.video_path = video_path
+        self._container = av.open(str(video_path), mode="r")
         self._container.streams.video[0].thread_type = "AUTO"  # thread_type
         self._reader = self._container.decode(video=0)
         self.metadata = self._get_metadata()
@@ -112,10 +131,6 @@ class VideoDataset(IterableDataset):
         n = stream.frames
         w = stream.codec_context.width
         h = stream.codec_context.height
-
-        # if self.rescale_factor is not None:
-        #    w = round(self.rescale_factor * w)
-        #    h = round(self.rescale_factor * h)
 
         return {"img_size": (w, h), "n_img": n, "fps": fps}
 
@@ -133,7 +148,7 @@ class VideoDataset(IterableDataset):
             yield img.to_ndarray(format="rgb24")
 
     def close(self):
-        """Closes the cv2 videoreader and free up memory."""
+        """Closes the pyav videoreader and free up memory."""
         self._container.close()
 
 
@@ -300,9 +315,7 @@ def load_inputs(inputs, load_as="torch", channels_first=True, with_batch_dim=Tru
             if not inp.is_file():
                 raise ValueError(f"Input '{inp}' does not exist!")
 
-            img = cv2.imread(str(inp))
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
+            img = np.array(Image.open(str(inp)))
             imgs.append(img)
 
         if torch.is_tensor(imgs[0]):
@@ -371,3 +384,106 @@ def download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type=
         r.raise_for_status()
         with open(f_out, "wb") as f:
             f.write(r.content)
+
+
+def load_obj(f, device=None):
+    """Loads data from obj file, based on the DECA implementation, which in
+    turn is based on the pytorch3d implementation.
+
+    Parameters
+    ----------
+    f : str, Path
+        Filename of object file
+    device : str, None
+        If None, returns numpy arrays. Otherwise, returns torch tensors on this device
+
+
+    Returns
+    -------
+    out : dict
+        Dictionary with outputs (keys: 'v', 'tris', 'vt', 'tris_uv')
+    """
+
+    with open(f, 'r') as f_in:
+        lines = [line.strip() for line in f_in]
+
+    verts, uvcoords = [], []
+    faces, uv_faces = [], []
+    # startswith expects each line to be a string. If the file is read in as
+    # bytes then first decode to strings.
+    if lines and isinstance(lines[0], bytes):
+        lines = [el.decode("utf-8") for el in lines]
+
+    for line in lines:
+        tokens = line.strip().split()
+        if line.startswith("v "):  # Line is a vertex.
+            vert = [float(x) for x in tokens[1:4]]
+            if len(vert) != 3:
+                msg = "Vertex %s does not have 3 values. Line: %s"
+                raise ValueError(msg % (str(vert), str(line)))
+            verts.append(vert)
+        elif line.startswith("vt "):  # Line is a texture.
+            tx = [float(x) for x in tokens[1:3]]
+            if len(tx) != 2:
+                raise ValueError(
+                    "Texture %s does not have 2 values. Line: %s" % (str(tx), str(line))
+                )
+            uvcoords.append(tx)
+        elif line.startswith("f "):  # Line is a face.
+            # Update face properties info.
+            face = tokens[1:]
+            face_list = [f.split("/") for f in face]
+            for vert_props in face_list:
+                # Vertex index.
+                faces.append(int(vert_props[0]))
+                if len(vert_props) > 1:
+                    if vert_props[1] != "":
+                        # Texture index is present e.g. f 4/1/1.
+                        uv_faces.append(int(vert_props[1]))
+
+    verts = np.array(verts, dtype=np.float32)
+    faces = np.array(faces, dtype=np.int64).reshape((-1, 3)) - 1
+    uvcoords = np.array(uvcoords, dtype=np.float32)
+    uv_faces = np.array(uv_faces, dtype=np.int64).reshape((-1, 3)) - 1
+
+    if device is not None:
+        verts = torch.as_tensor(verts, dtype=torch.float32, device=device)
+        uvcoords = torch.as_tensor(uvcoords, dtype=torch.float32, device=device)
+        faces = torch.as_tensor(faces, dtype=torch.long, device=device)
+        uv_faces = torch.as_tensor(uv_faces, dtype=torch.long, device=device)
+
+    out = {'v': verts, 'tris': faces, 'vt': uvcoords, 'tris_uv': uv_faces}
+    return out
+
+
+def save_obj(f, data):
+    """Saves data to an obj file, based on the implementation from PRNet.
+
+    Parameters
+    ----------
+    f : str, Path
+        Path to save file to
+    data : dict
+        Dictionary with 3D mesh data
+    """
+
+    for k in data.keys():
+        if torch.is_tensor(data[k]):
+            data[k] = data[k].cpu().numpy().copy()
+
+    v = data.get('v')
+    tris = data.get('tris') + 1
+    vt = data.get('vt', None)
+
+    # write obj
+    with open(f, 'w') as f_out:
+
+        for i in range(v.shape[0]):
+            f_out.write(f"v {v[i, 0]} {v[i, 1]} {v[i, 2]} \n")
+
+        if vt is not None:
+            for i in range(vt.shape[0]):
+                f_out.write(f"vt {vt[i, 0]} {vt[i, 1]}\n")
+
+        for i in range(tris.shape[0]):
+            f_out.write(f"f {tris[i, 0]} {tris[i, 1]} {tris[i, 2]}\n")

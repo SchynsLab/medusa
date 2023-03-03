@@ -27,13 +27,6 @@ as follows:
 
 > Alexandre Gramfort, Martin Luessi, Eric Larson, Denis A. Engemann, Daniel Strohmeier, Christian Brodbeck, Roman Goj, Mainak Jas, Teon Brooks, Lauri Parkkonen, and Matti S. Hämäläinen. MEG and EEG data analysis with MNE-Python. *Frontiers in Neuroscience, 7*(267):1–13, 2013. doi:10.3389/fnins.2013.00267.
 
-Consider citing [trimesh](https://trimsh.org/) and [pyrender](https://pyrender.readthedocs.io/)
-as well, given that they are crucial to the functionality of Medusa:
-
-> Trimesh [Computer software]. (2019). Retrieved from https://github.com/mikedh/trimesh
-
-> Matl, M. (2019). Pyrender [Computer software]. Retrieved from https://github.com/mmatl/pyrender
-
 ## An example methods section
 
 The following is an example paragraph that you can include in your methods section:

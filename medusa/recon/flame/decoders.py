@@ -6,6 +6,7 @@ See ./deca/license.md for conditions for use.
 import pickle
 import warnings
 
+from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
@@ -126,14 +127,24 @@ class FLAMETex(nn.Module):
     https://github.com/TimoBolkart/BFM_to_FLAME
     """
 
-    def __init__(self, model_path, n_tex):
-        super(FLAMETex, self).__init__()
-        tex_space = np.load(model_path)
+    def __init__(self, model_path=None, n_tex=50):
+        super().__init__()
+        self.tex_space = self._load_model(model_path)
+        self._register_buffers(self.tex_space)
+
+    def _load_model(self, model_path):
+
+        if model_path is None:
+            model_path = Path(__file__).parents[2] / "data/flame/FLAME_albedo_from_BFM_tex50.npz"
+
+        return np.load(model_path)
+
+    def _register_buffers(self, tex_space):
         texture_mean = tex_space["MU"].reshape(1, -1)
-        texture_basis = tex_space["PC"].reshape(-1, 199)  # 199 comp
+        texture_basis = tex_space["PC"]#.reshape(-1, 50)  # 199 comp
 
         texture_mean = torch.from_numpy(texture_mean).float()[None, ...]
-        texture_basis = torch.from_numpy(texture_basis[:, :n_tex]).float()[None, ...]
+        texture_basis = torch.from_numpy(texture_basis).float()[None, ...]
         self.register_buffer("texture_mean", texture_mean)
         self.register_buffer("texture_basis", texture_basis)
 

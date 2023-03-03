@@ -9,8 +9,9 @@ space.
 
 from pathlib import Path
 
-import cv2
 import torch
+import numpy as np
+from PIL import Image
 
 from ..defaults import DEVICE
 from ..containers import Data4D
@@ -60,8 +61,7 @@ def get_example_frame(load_numpy=False, load_torch=False, device=DEVICE):
     if not load_torch and not load_numpy:
         return img_path
 
-    img = cv2.imread(str(img_path))
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = np.array(Image.open(str(img_path)))
 
     if load_torch:
         img = torch.from_numpy(img).to(device)
