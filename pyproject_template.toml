@@ -37,6 +37,7 @@ pytorch3d = [
     { markers = "sys_platform == 'linux'", url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1131/pytorch3d-0.7.2-cp39-cp39-linux_x86_64.whl" },
     { markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "0.7.2" }
 ]
+pytorch-lightning = ">=1.9.4"
 pandas = ">=1.5.1"
 numpy = ">=1.23.4"
 tqdm = ">=4.64.1"
