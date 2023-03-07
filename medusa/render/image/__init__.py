@@ -6,6 +6,6 @@ renderer:
 
 try:
     from .pytorch3d import PytorchRenderer
-except ImportError:
+except ImportError as e:
     # pytorch3d not available
     pass

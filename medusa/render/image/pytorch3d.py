@@ -46,9 +46,10 @@ class PytorchRenderer(BaseRenderer):
         """Initializes a PytorchRenderer object."""
         self.viewport = viewport
         self.device = device
+        self.cam_type = cam_type
         self._settings = self._setup_settings(viewport)
-        self._lights = self._setup_lights(lights)
         self._cameras = self._setup_cameras(cam_mat, cam_type)
+        self._lights = self._setup_lights(lights)
         self._rasterizer = MeshRasterizer(self._cameras, self._settings)
         self._shader = self._setup_shader(shading)
         self._renderer = MeshRendererWithFragments(self._rasterizer, self._shader)
@@ -85,18 +86,6 @@ class PytorchRenderer(BaseRenderer):
             faces_per_pixel=1,
         )
 
-    def _setup_lights(self, lights):
-
-        if lights is None:
-            # Pointlight is default
-            return PointLights(device=self.device, location=[[0.0, 0.0, 3.0]])
-        elif lights == 'sh':
-            # Spherical harmonics, to be added later
-            return 'sh'
-        else:
-            # Assume it's a Pytorch3d light class
-            return lights
-
     def _setup_cameras(self, cam_mat, cam_type):
         """Sets of the appropriate camameras.
 
@@ -119,30 +108,27 @@ class PytorchRenderer(BaseRenderer):
         #   z-axis: forward (-) to backward (+),
         # but pytorch3d uses a flipped x and z-axis, to
         # we define a "flip matrix" to convert the camera matrix
-        flip_mat = np.array(
+        flip_mat = torch.tensor(
             [
                 [-1.0, 0.0, 0.0, 0.0],
                 [0.0, 1.0, 0.0, 0.0],
                 [0.0, 0.0, -1.0, 0.0],
                 [0.0, 0.0, 0.0, 1.0],
-            ]
+            ], device=self.device, dtype=torch.float32
         )
 
         if cam_mat is None:
-            cam_mat = np.eye(4)
-
-        # For now, we'll do this in numpy; perhaps not very efficient
-        # but I'm too lazy to implement this in pytorch and, assuming a
-        # static camera, this only has to be executed once, anyway
-        # (i.e., during initialization of the renderer)
-        if torch.is_tensor(cam_mat):
-            cam_mat = cam_mat.cpu().numpy().squeeze()
+            cam_mat = torch.eye(4, dtype=torch.float32, device=self.device)
 
         # Convert column-major order (medusa/opengl) to row-major order (pytorch3d)
         # by transposing the camera matrix; then, flip it to pytorch3d coordinates
         cam_mat = flip_mat @ cam_mat.T
-        R = torch.as_tensor(cam_mat[:3, :3], device=self.device).unsqueeze(0)
-        T = torch.as_tensor(cam_mat[3, :3], device=self.device).unsqueeze(0)
+
+        # I'm so confused, but inverting the camera matrix again is necessary...
+        cam_mat = torch.linalg.inv(cam_mat)
+
+        R = cam_mat[:3, :3].unsqueeze(0)
+        T = cam_mat[3, :3].unsqueeze(0)
 
         if cam_type == "orthographic":
             cam = FoVOrthographicCameras(
@@ -151,18 +137,32 @@ class PytorchRenderer(BaseRenderer):
         elif cam_type == "perspective":
             fov = 2 * np.arctan(self.viewport[1] / (2 * self.viewport[0]))
             cam = FoVPerspectiveCameras(
-                fov=fov,
-                znear=1.0,
-                zfar=10000.0,
-                degrees=False,
-                device=self.device,
-                R=R,
-                T=T,
+                fov=fov, znear=1., zfar=10_000.0, degrees=False, device=self.device,
+                R=R, T=T
             )
         else:
             raise ValueError(f"Unknown camera type '{cam_type}'!")
 
         return cam
+
+    def _setup_lights(self, lights):
+
+        if lights is None:  # Pointlight is default
+            # By default, we'll set the light to be at the same position as the camera
+            cam_T = self._cameras.T
+
+            # For orthographic cameras, we'll set the light to be 5 units away
+            # (looks a bit better)
+            if self.cam_type == 'orthographic':
+                cam_T[:, 2] = 20
+            return PointLights(device=self.device, location=cam_T)
+
+        elif lights == 'sh':
+            # Spherical harmonics, to be added later
+            return 'sh'
+        else:
+            # Assume it's a Pytorch3d light class
+            return lights
 
     def _setup_shader(self, shading):
         """Sets of the shader according to the ``shading`` parameter."""

@@ -31,7 +31,6 @@ class PCF:
         fov_y = 2 * np.arctan(frame_height / (2 * fy))
         height_at_near = 2 * near * np.tan(0.5 * fov_y)
         width_at_near = frame_width * height_at_near / frame_height
-
         self.fov_y = fov_y
         self.left = -0.5 * width_at_near
         self.right = 0.5 * width_at_near

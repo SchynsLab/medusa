@@ -32,8 +32,17 @@ class VideoRenderer:
 
     def _determine_render_cls(self, render_cls):
         """Determines the renderer class to use."""
-        from ..defaults import RENDERER  # avoids circular import
-        return RENDERER if render_cls is None else render_cls
+
+        if render_cls is None:
+            # try importing pytorch3d renderer
+            try:
+                from .image import PytorchRenderer
+            except ImportError:
+                raise ValueError("pytorch3d not installed!")
+
+            return PytorchRenderer
+        else:
+            return render_cls
 
     def __call__(self, f_out, data, overlay=None, video=None, **kwargs):
         """Renders the sequence of 3D meshes from a Data4D object as a video.

@@ -3,26 +3,26 @@ from pathlib import Path
 import pytest
 from conftest import _is_gha_compatible
 
-from medusa.defaults import RENDERER
 from medusa.render import VideoRenderer
 from medusa.containers import Data4D
 from medusa.data import get_example_video
 from medusa.recon import DecaReconModel
 from medusa.crop import BboxCropModel
+from medusa.render import PytorchRenderer
 
 
 @pytest.mark.parametrize("imgs_test", [1, 2, 3, 4], indirect=True)
 def test_deca_recon_img(imgs_test):
     """Test DECA-based recon models with single image."""
     img, n_exp = imgs_test
-    img = RENDERER.load_image(img)
+    img = PytorchRenderer.load_image(img)
     deca_recon_model = DecaReconModel("emoca-coarse", orig_img_size=(img.shape[1], img.shape[0]))
 
     out = deca_recon_model(img)
     cam_mat = deca_recon_model.get_cam_mat()
     tris = deca_recon_model.get_tris()
 
-    renderer = RENDERER((img.shape[1], img.shape[0]), cam_mat, shading="smooth")
+    renderer = PytorchRenderer((img.shape[1], img.shape[0]), cam_mat, shading="smooth")
 
     img_r = renderer(out["v"], tris)
     img_r = renderer.alpha_blend(img_r, img)
@@ -64,7 +64,7 @@ def test_deca_recon(name, type_, already_cropped, device):
 
     img_size = (224, 224) if already_cropped else metadata['img_size']
     cam_mat = recon_model.get_cam_mat()
-    renderer = RENDERER(
+    renderer = PytorchRenderer(
         viewport=img_size, shading="flat", cam_mat=cam_mat, device=device
     )
     img = renderer(out["v"][0], recon_model.get_tris())

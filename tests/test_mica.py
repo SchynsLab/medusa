@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 from conftest import _is_gha_compatible
 
-from medusa.defaults import RENDERER
+from medusa.render import PytorchRenderer
 from medusa.crop import AlignCropModel
 from medusa.data import get_example_frame
 from medusa.recon.flame import MicaReconModel
@@ -28,7 +28,7 @@ def test_mica_recon(device):
 
     # Check visually
     cam_mat = model.get_cam_mat()
-    renderer = RENDERER(
+    renderer = PytorchRenderer(
         viewport=(512, 512), shading="flat", cam_mat=cam_mat, device=device
     )
 
@@ -40,3 +40,4 @@ def test_mica_recon(device):
     # Check batch image recon
     out = model(out_crop["imgs_crop"].repeat(2, 1, 1, 1))
     assert out["v"].shape == (2, 5023, 3)
+s

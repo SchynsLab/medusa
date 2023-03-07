@@ -38,13 +38,3 @@ RECON_MODELS = [
 
 LOGGER = get_logger(level="INFO")
 """Default logger used in Medusa."""
-
-try:
-    from .render import PytorchRenderer as default_renderer
-except ImportError as e:
-    LOGGER.warning("pytorch3d not available; cannot render stimuli!")
-    default_renderer = None
-
-RENDERER = default_renderer
-"""Default renderer used in Medusa, which depends on whether ``pytorch3d`` is installed
-(in which case ``PytorchRenderer`` is used) or not (no rendering possible)."""

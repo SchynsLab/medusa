@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from medusa.defaults import RENDERER
+from medusa.render import PytorchRenderer
 from medusa.recon import Mediapipe
 
 
@@ -29,9 +29,9 @@ def test_mediapipe_recon(imgs_test):
     if isinstance(imgs, Path):
 
         cam_mat = recon_model.get_cam_mat()
-        img = RENDERER.load_image(imgs)
+        img = PytorchRenderer.load_image(imgs)
         img_size = img.shape[:2]
-        renderer = RENDERER(
+        renderer = PytorchRenderer(
             viewport=img_size[::-1],
             shading="flat",
             cam_mat=cam_mat,
