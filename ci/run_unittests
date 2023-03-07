@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-coverage run --source=medusa/ -m pytest --disable-warnings tests/ 
+rm -f tests/test_viz/*/*.mp4 tests/test_viz/*/*.png tests/test_viz/*/*.tsv tests/test_viz/*/*.png tests/test_viz/*/*.obj
+coverage run --source=medusa/ -m pytest --disable-warnings tests/

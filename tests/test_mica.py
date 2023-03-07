@@ -40,4 +40,3 @@ def test_mica_recon(device):
     # Check batch image recon
     out = model(out_crop["imgs_crop"].repeat(2, 1, 1, 1))
     assert out["v"].shape == (2, 5023, 3)
-s
