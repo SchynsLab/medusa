@@ -120,6 +120,12 @@ class PytorchRenderer(BaseRenderer):
         if cam_mat is None:
             cam_mat = torch.eye(4, dtype=torch.float32, device=self.device)
 
+        if isinstance(cam_mat, np.ndarray):
+            cam_mat = torch.from_numpy(cam_mat).to(device=self.device, dtype=torch.float32)
+
+        if cam_mat.device.type != self.device:
+            cam_mat = cam_mat.to(device=self.device)
+
         # Convert column-major order (medusa/opengl) to row-major order (pytorch3d)
         # by transposing the camera matrix; then, flip it to pytorch3d coordinates
         cam_mat = flip_mat @ cam_mat.T
