@@ -1,125 +1,74 @@
 # Medusa installation
 
-Medusa is a Python package which works with Python versions 3.6 and above. We recommend
-using Python version 3.9. Moreover, we strongly recommend to install the `medusa` package
-in a separate [conda environment](https://anaconda.org/anaconda/conda). Assuming you have
-access to the `conda` command (by installing [Anaconda](https://www.anaconda.com/products/distribution) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html)), run the
-following command in your terminal to create a new environment named `medusa` with Python
-version 3.9:
+Medusa is a Python package which works with Python version 3.9 and on Linux, Windows,
+and Mac (except Mac M1/M2). Moreover, we strongly recommend to install the `medusa` package
+in a separate environment, using for example [conda](https://anaconda.org/anaconda/conda).
+If you'd use *conda*, you can create a new environment named "medusa" with Python 3.9
+as follows:
 
 ```console
 conda create -n medusa python=3.9
 ```
 
-To activate the environment, run:
+Then, to activate the environment, run:
 
 ```console
 conda activate medusa
 ```
 
-Several reconstruction models depend on the `pytorch` Python package. Also, some
-models (like EMOCA and FAN) can be run on the GPU (instead of CPU), which offers
-substantial decreases in runtime. If you have access to a GPU, you can enable
-GPU processing by installing the appropriate CUDA toolkit as well. Run the command
-below depending on whether you want to run the models on GPU or CPU only:
+The next step is to install Medusa. Medusa actually offers two version of the package:
+`medusa` and `medusa-gpu`, where the latter can be used instead of the former if you
+have access to an NVIDIA GPU (and CUDA version 11.6). Actually, `medusa-gpu` can also
+be installed and used on systems without a GPU, but the installation is noticeably
+larger (~2GB, instead of 300MB for the CPU version). When you're not sure whether
+you have access to an appropriate GPU, we recommend installing the regular `medusa` package.
 
-````{tabbed} GPU
-```
-conda install pytorch cudatoolkit=11.3 -c pytorch
+To install Medusa, run one of the commands listed below in your terminal (with the right
+environment activated):
+
+`````{tab-set}
+
+````{tab-item} medusa (CPU)
+```console
+pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.3/medusa-0.0.3-py3-none-any.whl
 ```
 ````
 
-````{tabbed} CPU
-```
-conda install pytorch cpuonly -c pytorch
+````{tab-item} medusa-gpu
+```console
+pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.3/medusa_gpu-0.0.3-py3-none-any.whl
 ```
 ````
 
-For more detailed information on how to install `pytorch` on different platforms
-(e.g., Mac), check out the `pytorch` [website](https://pytorch.org/).
+`````
 
-The next step is to download the `medusa` package from Github, either as [zip file](https://github.com/lukassnoek/medusa/archive/refs/heads/master.zip) (which you need to extract afterwards) or using `git` (i.e., `git clone https://github.com/lukassnoek/medusa.git`). Finally, again assuming you're in the root of the downloaded repository (and you have the `medusa` conda environment activated), run the following command to install `medusa` and its dependencies:
+```{note}
+While installing Python packages/wheels from other locations than PyPI is generally
+discouraged, Medusa actually hosts its builds in its own Github repository (as you can
+see in the install commands above). The reason for doing so (instead of on PyPI) is that
+Medusa depends on a specific version of [PyTorch](https://pytorch.org/), which itself
+is not available on PyPI (only as a wheel). Listing non-PyPI dependencies in packages
+is not permitted by PyPI, which is why Medusa wheels are hosted on Github.
+
+If you want to build Medusa yourself, you can clone the repository and run the
+`build_wheels` script, which will create a directory `dist` with two wheel files
+(one for `medusa` and one for `medusa-gpu`).
+```
+
+At this point, `medusa` can be used, but only the Mediapipe reconstruction model will be
+available. To be able to use the FLAME-based reconstruction models such as DECA, EMOCA, and
+Spectre, you need to download some additional data. Importantly, before you do, you need
+to [register](https://flame.is.tue.mpg.de/register.php) on the [FLAME website](https://flame.is.tue.mpg.de/index.html)
+and accept their [license terms](https://flame.is.tue.mpg.de/modellicense.html).
+
+After creating an account, you can download all external data with the
+`medusa_download_ext_data` command. To download all data to new directory
+(default location: `~/.medusa_ext_data`), you'd run:
 
 ```console
-pip install .
+medusa_download_ext_data --directory medusa_ext_data --username your_flame_username --password your_flame_passwd
 ```
 
-At this point, the package's CLI tools (e.g., `medusa_videorecon`) and Python API should be available. To verify, run the following commands in your terminal:
-
-```
-medusa_videorecon --help  # to verify the CLI (should print out options)
-python -c 'import medusa'  # to verify the Python API (shouldn't error)
-```
-
-## Additional reconstruction models
-
-The [Mediapipe](https://google.github.io/mediapipe/solutions/face_mesh) model works out-of-the-box, but Medusa can work with any reconstruction model as long as it takes as input an image and outputs a set of vertices.
-
-### FLAME-based models
-
-We also support reconstruction using [FLAME](https://flame.is.tue.mpg.de/)-based
-models, such as [DECA](https://deca.is.tue.mpg.de/) and [EMOCA](https://emoca.is.tue.mpg.de/). These models are not
-part of the core Medusa package, but are implemented in a [separate package](https://github.com/medusa-4D/flame),
-`flame`. The reason for doing so is that the implementation of FLAME-based models is relatively complicated and
-also needs additional data to work properly. We describe below which data you need and where to get it
-and how to install the `flame` package.
-
-First of all, download the `flame` package here: [https://github.com/medusa-4D/flame](https://github.com/medusa-4D/flame).
-No need to install it yet; first, you need to download some data.
-
-If you want to use all functionality from the `flame` package, you need to download three files:
-`FLAME2020.zip` (the FLAME 3D morphable model files), `deca_model.tar` (the DECA reconstruction model weights),
-and `EMOCA.zip` (the EMOCA reconstruction model weights). 
-
-The FLAME model is necessary to convert the shape predictions from DECA and EMOCA into a dense
-mesh. You can download the model [here](https://flame.is.tue.mpg.de/download.php). You
-need to register an account before being able to do so. After logging in, download
-the "FLAME 2020 (fixed mouth, improved expressions, more data)" zip file (`FLAME2020.zip`).
-
-The EMOCA model, i.e., the model that generates predictions of FLAME components from images,
-can be downloaded [here](https://emoca.is.tue.mpg.de/download.php). Again, you need to register an account
-before being able to do so. After logging in, download the "EMOCA" file (`EMOCA.zip`)
-lister under the "Face Reconstruction" header. 
-
-Finally, the DECA model (`deca_model.tar`) can be downloaded [here](https://drive.google.com/file/d/1rp8kdyLPvErw2dTmqtjISRVvQLj6Yzje/view).
-
-The next step is downloading the `flame` package itself: [https://github.com/medusa-4D/flame](https://github.com/medusa-4D/flame).
-Make sure all three files (`FLAME2020.zip`, `deca_model.tar`, and `EMOCA.zip`) are placed in the same directory, for example,
-`ext_data` in the root of the `flame` package. This directory should look as follows:
-
-```
-ext_data/
-    ├── deca_model.tar
-    ├── EMOCA.zip
-    └── FLAME2020.zip
-```
-
-Finally, run the `validate_external_data.py` script, located in the root of the `flame` package.
-It takes a single positional argument, which should point towards the directory with the downloaded data (e.g., `ext_data`)
-If you plan on running the EMOCA model on CPU only (i.e., not on GPU),
-make sure to add `--cpu` to the command below.
-
-```console
-python validate_external_data.py ./ext_data
-```
-
-This script will unpack and reorganize the FLAME and EMOCA data such that it can be used
-in `flame`. After running the script, your directory with datashould look like this:
-
-```
-ext_data/
-    ├── deca_model.tar
-    ├── FLAME/
-    │   ├── Readme.pdf
-    │   ├── female_model.pkl
-    │   ├── generic_model.pkl
-    │   └── male_model.pkl
-    └── EMOCA/
-        └── emoca.ckpt
-```
-
-Now, you can install the `flame` package by running the following command from the root of the package:
-
-```console
-pip install .
-```
+where `your_flame_username` and `your_flame_passwd` are the username and password associated
+with the account you created on the FLAME website. After all data has been downloaded
+(~1.8GB), all Medusa functionality should be available!

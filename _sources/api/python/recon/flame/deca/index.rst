@@ -3,6 +3,11 @@
 
 .. py:module:: medusa.recon.flame.deca
 
+.. autoapi-nested-parse::
+
+   Top-level module of DECA-based reconstruction models.
+
+
 
 Submodules
 ----------

@@ -5,19 +5,20 @@
 
 .. autoapi-nested-parse::
 
-   This module contains functions to load in example data, which
-   is used for examples and tests. The example data is the following video:
-   https://www.pexels.com/video/close-up-of-a-woman-showing-different-facial-expressions-3063839/
-   made freely available by Wolfgang Langer.
+   This module contains functions to load in example data, which is used for
+   examples and tests. The example data is the following video:
+   https://www.pexels.com/video/close-up-of-a-woman-showing-different-facial-
+   expressions-3063839/ made freely available by Wolfgang Langer.
 
-   The video was trimmed to 10 seconds and resized in order to reduce disk space.
+   The video was trimmed to 10 seconds and resized in order to reduce disk
+   space.
 
 
 
 Module Contents
 ---------------
 
-.. py:function:: get_example_frame(load_numpy=False, load_torch=False, device='cuda')
+.. py:function:: get_example_frame(load_numpy=False, load_torch=False, device=DEVICE)
 
    Loads an example frame from the example video.
 
@@ -80,10 +81,10 @@ Module Contents
    torch.Size([32, 384, 480, 3])
 
 
-.. py:function:: get_example_h5(load=False, model='mediapipe', as_path=True)
+.. py:function:: get_example_h5(load=False, model='mediapipe', device=DEVICE)
 
-   Retrieves an example hdf5 file with reconstructed 4D
-   data from the example video.
+   Retrieves an example hdf5 file with reconstructed 4D data from the
+   example video.
 
    :param load: Whether to return the hdf5 file loaded in memory (``True``)
                 or to just return the path to the file
@@ -91,9 +92,6 @@ Module Contents
    :param model: Model used to reconstruct the data; either 'mediapipe' or
                  'emoca'
    :type model: str
-   :param as_path: Whether to return the path as a ``pathlib.Path`` object (``True``)
-                   or just a string (``False``); ignored when ``load`` is ``True``
-   :type as_path: bool
 
    :returns: When ``load`` is ``True``, returns either a ``MediapipeData``
              or a ``FlameData`` object, otherwise a string or ``pathlib.Path``

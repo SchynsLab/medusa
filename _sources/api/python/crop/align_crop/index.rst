@@ -5,11 +5,9 @@
 
 .. autoapi-nested-parse::
 
-   Crop model adapted from the insightface implementation. By reimplementing
-   it here, insightface does not have to be installed.
-
-   Please see the LICENSE file in the current directory for the license that
-   is applicable to this implementation.
+   Module with an implementation of a "crop model" that aligns an image to a
+   template based on a set of landmarks (based on an implementation from
+   Insightface).
 
 
 
@@ -17,16 +15,16 @@ Module Contents
 ---------------
 
 .. py:data:: TEMPLATE
-   
 
-   
+   The 5-landmark template used by Insightface (e.g. in their arcface implementation).
+   The coordinates are relative to an image of size 112 x 112.
 
-.. py:class:: LandmarkAlignCropModel(output_size=(112, 112), template=TEMPLATE, detector=RetinanetDetector, return_lmk=False, device=DEVICE, **kwargs)
+.. py:class:: AlignCropModel(output_size=(112, 112), template=TEMPLATE, detector=SCRFDetector, device=DEVICE, **kwargs)
 
-   Bases: :py:obj:`medusa.crop.base.BaseCropModel`
 
-   Cropping model based on functionality from the ``insightface`` package, as used
-   by MICA (https://github.com/Zielon/MICA).
+
+   Cropping model based on functionality from the ``insightface`` package,
+   as used by MICA (https://github.com/Zielon/MICA).
 
    :param name: Name of underlying insightface model
    :type name: str
@@ -45,18 +43,8 @@ Module Contents
    To crop an image to be used for MICA reconstruction:
 
    >>> from medusa.data import get_example_frame
-   >>> crop_model = InsightfaceCropModel(device='cpu')
+   >>> crop_model = AlignCropModel()
    >>> img = get_example_frame()  # path to jpg image
-   >>> crop_img = crop_model(img)
-   >>> crop_img.shape
-   torch.Size([1, 3, 112, 112])
-
-   .. py:method:: __str__()
-
-      Return str(self).
-
-
-   .. py:method:: __call__(imgs)
-
+   >>> out = crop_model(img)
 
 

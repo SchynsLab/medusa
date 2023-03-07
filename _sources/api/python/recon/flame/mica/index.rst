@@ -3,6 +3,11 @@
 
 .. py:module:: medusa.recon.flame.mica
 
+.. autoapi-nested-parse::
+
+   Top-level module of MICA reconstruction model.
+
+
 
 Submodules
 ----------

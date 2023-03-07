@@ -5,8 +5,9 @@
 
 .. autoapi-nested-parse::
 
-   This module contains functionality to easily load in example data (used in tests and exapmles)
-   and default template (topology) data (such as the default Mediapipe vertices/triangles).
+   This module contains functionality to easily load in example data (used in
+   tests and exapmles) and default template (topology) data (such as the default
+   Mediapipe vertices/triangles).
 
 
 
@@ -17,6 +18,7 @@ Submodules
    :maxdepth: 1
 
    example_data/index.rst
+   regenerate_example_recon_data/index.rst
    template_data/index.rst
 
 

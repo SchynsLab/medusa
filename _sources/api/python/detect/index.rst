@@ -3,6 +3,11 @@
 
 .. py:module:: medusa.detect
 
+.. autoapi-nested-parse::
+
+   TBD.
+
+
 
 Submodules
 ----------
@@ -11,7 +16,7 @@ Submodules
    :maxdepth: 1
 
    base/index.rst
-   retinanet/index.rst
+   scrfd/index.rst
    yunet/index.rst
 
 

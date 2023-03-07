@@ -3,6 +3,14 @@
 
 .. py:module:: medusa.crop
 
+.. autoapi-nested-parse::
+
+   Top-level module with two main crop models:
+
+   * ``AlignCropModel``
+   * ``BboxCropModel``
+
+
 
 Submodules
 ----------

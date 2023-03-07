@@ -3,6 +3,11 @@
 
 .. py:module:: medusa.recon.flame
 
+.. autoapi-nested-parse::
+
+   Top-level module with FLAME-based reconstruction models.
+
+
 
 Subpackages
 -----------
@@ -10,7 +15,6 @@ Subpackages
    :titlesonly:
    :maxdepth: 3
 
-   data/index.rst
    deca/index.rst
    mica/index.rst
 
@@ -23,6 +27,7 @@ Submodules
 
    base/index.rst
    decoders/index.rst
+   lbs/index.rst
    utils/index.rst
 
 

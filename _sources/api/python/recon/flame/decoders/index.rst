@@ -3,17 +3,22 @@
 
 .. py:module:: medusa.recon.flame.decoders
 
+.. autoapi-nested-parse::
+
+   Decoder-modules for FLAME-based reconstruction models.
+
+   See ./deca/license.md for conditions for use.
+
+
 
 Module Contents
 ---------------
 
 .. py:class:: FLAME(model_path, n_shape, n_exp)
 
-   Bases: :py:obj:`torch.nn.Module`
 
-   borrowed from https://github.com/soubhiksanyal/FLAME_PyTorch/blob/master/FLAME.py
-   Given flame parameters this class generates a differentiable FLAME function
-   which outputs the a mesh and 2D/3D facial landmarks
+
+   Generates a FLAME-based based on latent parameters.
 
    .. py:method:: forward(shape_params=None, expression_params=None, pose_params=None)
 
@@ -27,11 +32,12 @@ Module Contents
 
 
 
-.. py:class:: FLAMETex(model_path, n_tex)
+.. py:class:: FLAMETex(model_path=None, n_tex=50)
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    FLAME texture:
+
    https://github.com/TimoBolkart/TF_FLAME/blob/ade0ab152300ec5f0e8555d6765411555c5ed43d/sample_texture.py#L64
    FLAME texture converted from BFM:
    https://github.com/TimoBolkart/BFM_to_FLAME
@@ -47,10 +53,5 @@ Module Contents
 
 
 .. py:function:: to_np(array, dtype=np.float32)
-
-
-.. py:class:: Struct(**kwargs)
-
-   Bases: :py:obj:`object`
 
 

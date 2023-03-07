@@ -6,37 +6,40 @@
 .. autoapi-nested-parse::
 
    Module with functionality (mostly) for working with video data.
-   The ``VideoLoader`` class allows for easy looping over frames of a video file,
-   which is used in the reconstruction process (e.g., in the ``videorecon`` function).
+
+   The ``VideoLoader`` class allows for easy looping over frames of a video
+   file, which is used in the reconstruction process (e.g., in the
+   ``videorecon`` function).
 
 
 
 Module Contents
 ---------------
 
-.. py:class:: VideoLoader(path, rescale_factor=None, n_preload=512, device=DEVICE, batch_size=32, loglevel='INFO', **kwargs)
+.. py:class:: VideoLoader(video_path, batch_size=32, channels_first=False, device=DEVICE, crop=None, **kwargs)
 
-   Bases: :py:obj:`torch.utils.data.DataLoader`
 
-   " Contains (meta)data and functionality associated
-   with video files (mp4 files only currently).
+
+   Contains (meta)data and functionality associated with video files (mp4
+   files only currently).
 
    :param path: Path to mp4 file
    :type path: str, Path
-   :param rescale_factor: Rescale factor of video frames (e.g., 0.25 means scale each dimension to 25% of original);
-                          if ``None`` (default), the image is not resized
-   :type rescale_factor: float
-   :param n_preload: Number of video frames to preload before batching
-   :type n_preload: int
-   :param loglevel: Logging level (e.g., 'INFO' or 'WARNING')
-   :type loglevel: str
-
-   :raises ValueError: If `n_preload` is not a multiple of `batch_size`
+   :param batch_size: Batch size to use when loading frames
+   :type batch_size: int
+   :param channels_first: Whether to return a B x 3 x H x W tensor (if ``True``) or
+                          a B x H x W x 3 tensor (if ``False``)
+   :type channels_first: bool
+   :param device: Either 'cpu' or 'cuda'
+   :type device: str
+   :param \*\*kwargs: Extra keyword arguments passed to the initialization of the parent class
 
    .. py:method:: get_metadata()
 
-      Returns all (meta)data needed for initialization
-      of a Data object.
+      Returns all (meta)data needed for initialization of a Data object.
+
+      :returns: * *A dictionary with keys "img_size" (image size of frames), "n_img" (total number*
+                * *of frames), and "fps" (frames-per-second)*
 
 
    .. py:method:: close()
@@ -44,75 +47,65 @@ Module Contents
       Closes the opencv videoloader in the underlying pytorch Dataset.
 
 
-   .. py:method:: __len__()
 
-      Utility function to easily access number of video frames.
-
-
-   .. py:method:: __next__()
-
-      Return the next batch of the dataloader.
+.. py:class:: VideoDataset(video_path, device=DEVICE)
 
 
-
-.. py:class:: VideoDataset(video, rescale_factor=None, n_preload=512, device='cuda')
-
-   Bases: :py:obj:`torch.utils.data.Dataset`
 
    A pytorch Dataset class based on loading frames from a single video.
 
-   :param video: A video file (any format that cv2 can handle)
+   :param video: A video file (any format that pyav can handle)
    :type video: pathlib.Path, str
-   :param rescale_factor: Factor with which to rescale the input image (for speed)
-   :type rescale_factor: float
-   :param n_preload: How many frames to preload before batching; higher values will
-                     take up more RAM, but result in faster loading
-   :type n_preload: int
    :param device: Either 'cuda' (for GPU) or 'cpu'
    :type device: str
 
-   .. py:method:: __len__()
+   .. py:method:: close()
+
+      Closes the pyav videoreader and free up memory.
 
 
-   .. py:method:: __getitem__(i)
+
+.. py:class:: VideoWriter(path, fps, codec='libx264', pix_fmt='yuv420p', size=None)
+
+   A PyAV based images-to-video writer.
+
+   :param path: Output path (including extension)
+   :type path: str, Path
+   :param fps: Frames per second of output video; if float, it's rounded
+               and cast to int
+   :type fps: float, int
+   :param codec: Video codec to use (e.g., 'mpeg4', 'libx264', 'h264')
+   :type codec: str
+   :param pix_fmt: Pixel format; should be compatible with codec
+   :type pix_fmt: str
+   :param size: Desired output size of video (if ``None``, wil be set the first time a frame
+                is written)
+   :type size: tuple[int]
+
+   .. py:method:: write(imgs)
+
+      Writes one or more images to the video stream.
+
+      :param imgs: A torch tensor or numpy array with image data; can be
+                   a single image or batch of images
+      :type imgs: array_like
 
 
    .. py:method:: close()
 
-      Closes the cv2 videoreader and free up memory.
+      Closes the video stream.
 
-
-
-.. py:function:: load_h5(path)
-
-   Convenience function to load a hdf5 file and immediately initialize the correct
-   data class.
-
-   :param path: Path to an HDF5 file
-   :type path: str
-
-   :returns: **data** -- An object with a class derived from ``data.BaseData``
-             (like ``MediapipeData``, or ``FlameData``)
-   :rtype: ``data.BaseData`` subclass
-
-   .. rubric:: Examples
-
-   Load in HDF5 data reconstructed by Mediapipe:
-
-   >>> from medusa.data import get_example_h5
-   >>> path = get_example_h5(load=False)
-   >>> data = load_h5(path)
 
 
 .. py:function:: load_inputs(inputs, load_as='torch', channels_first=True, with_batch_dim=True, dtype='float32', device=DEVICE)
 
    Generic image loader function, which also performs some basic
-   preprocessing and checks. Is used internally for crop models and
+   preprocessing and checks. Is used internally for detection, crop, and
    reconstruction models.
 
-   :param inputs: String or Path to a single image or an iterable (list, tuple) with
+   :param inputs: String or ``Path`` to a single image or an iterable (list, tuple) with
                   multiple image paths, or a numpy array or torch Tensor with already
-                  loaded images
+                  loaded images (in which the first dimension represents the number of images)
    :type inputs: str, Path, iterable, array_like
    :param load_as: Either 'torch' (returns torch Tensor) or 'numpy' (returns numpy ndarray)
    :type load_as: str
@@ -131,7 +124,7 @@ Module Contents
    :type device: str
 
    :returns: **imgs** -- Images loaded in memory; object depends on the ``load_as`` parameter
-   :rtype: np.ndarray, torch.Tensor
+   :rtype: np.ndarray, torch.tensor
 
    .. rubric:: Examples
 
@@ -167,9 +160,46 @@ Module Contents
    (2, 3, 384, 480)
 
 
-.. py:function:: save_obj(v, f, f_out)
-
-
 .. py:function:: download_file(url, f_out, data=None, verify=True, overwrite=False, cmd_type='post')
+
+   Downloads a file using requests. Used internally to download external
+   data.
+
+   :param url: URL of file to download
+   :type url: str
+   :param f_out: Where to save the downloaded file
+   :type f_out: Path
+   :param data: Extra data to pass to post request
+   :type data: dict
+   :param verify: Whether to verify the request
+   :type verify: bool
+   :param overwrite: Whether to overwrite the file when it already exists
+   :type overwrite: bool
+   :param cmd_type: Either 'get' or 'post'
+   :type cmd_type: str
+
+
+.. py:function:: load_obj(f, device=None)
+
+   Loads data from obj file, based on the DECA implementation, which in
+   turn is based on the pytorch3d implementation.
+
+   :param f: Filename of object file
+   :type f: str, Path
+   :param device: If None, returns numpy arrays. Otherwise, returns torch tensors on this device
+   :type device: str, None
+
+   :returns: **out** -- Dictionary with outputs (keys: 'v', 'tris', 'vt', 'tris_uv')
+   :rtype: dict
+
+
+.. py:function:: save_obj(f, data)
+
+   Saves data to an obj file, based on the implementation from PRNet.
+
+   :param f: Path to save file to
+   :type f: str, Path
+   :param data: Dictionary with 3D mesh data
+   :type data: dict
 
 

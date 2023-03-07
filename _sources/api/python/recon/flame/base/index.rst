@@ -3,25 +3,44 @@
 
 .. py:module:: medusa.recon.flame.base
 
+.. autoapi-nested-parse::
+
+   Module with a base class for FLAME-based reconstruction models.
+
+
 
 Module Contents
 ---------------
 
 .. py:class:: FlameReconModel
 
-   Bases: :py:obj:`medusa.recon.base.BaseReconModel`
 
-   Base class for reconstrution models. Implements some
-   abstract methods that should be implemented by classes that
-   inherent from it (such as ``get_tris``) and some default
-   methods (such as ``close``).
+
+   A reconstruction model which outputs data based on the FLAME-
+   topology.
+
+   .. py:method:: is_dense()
+
+      Checks if the current model is a dense model.
+
+      :returns: **dense** -- True if dense, False otherwise
+      :rtype: bool
+
 
    .. py:method:: get_tris()
 
-      Retrieves the triangles (tris) associated with the predicted vertex mesh.
+      Retrieves the triangles (tris) associated with the predicted vertex
+      mesh.
+
+
+   .. py:method:: get_cam_mat()
+
+      Returns a default camera matrix for FLAME-based reconstructions.
 
 
    .. py:method:: close()
+
+      Sets loaded triangles to None.
 
 
 

@@ -3,23 +3,30 @@
 
 .. py:module:: medusa.recon.flame.mica.encoders
 
+.. autoapi-nested-parse::
+
+   Encoders specific to MICA.
+
+   For the associated license, see license.md.
+
+
 
 Module Contents
 ---------------
 
 .. py:function:: conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1)
 
-   3x3 convolution with padding
+   3x3 convolution with padding.
 
 
 .. py:function:: conv1x1(in_planes, out_planes, stride=1)
 
-   1x1 convolution
+   1x1 convolution.
 
 
 .. py:class:: IBasicBlock(inplanes, planes, stride=1, downsample=None, groups=1, base_width=64, dilation=1)
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    Base class for all neural network modules.
 
@@ -53,7 +60,7 @@ Module Contents
    :vartype training: bool
 
    .. py:attribute:: expansion
-      :annotation: = 1
+      :value: 1
 
       
 
@@ -63,7 +70,7 @@ Module Contents
 
 .. py:class:: IResNet(block, layers, dropout=0, num_features=512, zero_init_residual=False, groups=1, width_per_group=64, replace_stride_with_dilation=None, fp16=False)
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    Base class for all neural network modules.
 
@@ -97,7 +104,6 @@ Module Contents
    :vartype training: bool
 
    .. py:attribute:: fc_scale
-      
 
       
 
@@ -107,7 +113,7 @@ Module Contents
 
 .. py:class:: Arcface(pretrained_path=None, **kwargs)
 
-   Bases: :py:obj:`IResNet`
+
 
    Base class for all neural network modules.
 
@@ -152,7 +158,7 @@ Module Contents
 
 .. py:class:: MappingNetwork(z_dim=512, map_hidden_dim=300, map_output_dim=300)
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    Base class for all neural network modules.
 

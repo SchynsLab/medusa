@@ -7,50 +7,24 @@
 Module Contents
 ---------------
 
-.. py:function:: align(data, algorithm='icp', additive_alignment=False, ignore_existing=False, reference_index=0)
+.. py:function:: estimate_alignment(v, topo, target=None, estimate_scale=False, device=DEVICE)
 
-   Aligment of 3D meshes over time.
+   Aligment of a temporal series of 3D meshes to a target (which should
+   have the same topology).
 
-   :param data: Either a path (``str`` or ``pathlib.Path``) to a ``medusa`` hdf5
-                data file or a ``Data`` object (like ``FlameData`` or ``MediapipeData``)
-   :type data: str, Data
-   :param algorithm: Either 'icp' or 'umeyama'; ignored for Mediapipe or EMOCA reconstructions
-                     (except if ``additive_alignment`` or ``ignore_existing`` is set to ``True``)
-   :type algorithm: str
-   :param additive_alignment: Whether to estimate an additional set of alignment parameters on
-                              top of the existing ones (if present; ignored otherwise)
-   :type additive_alignment: bool
-   :param ignore_existing: Whether to ignore the existing alignment parameters
-   :type ignore_existing: bool
-   :param reference_index: Index of the mesh used as the reference mesh; for reconstructions that already
-                           include the local-to-world matrix, the reference mesh is only used to fix the
-                           camera to; for other reconstructions, the reference mesh is used as the target
-                           to align all other meshes to
-   :type reference_index: int
+   :param v: A float tensor with vertices of shape B (batch size) x V (vertices) x 3
+   :type v: torch.tensor
+   :param topo: Topology corresponding to ``v``
+   :type topo: str
+   :param target: Target to use for alignment; if ``None`` (default), a default template will be
+                  used
+   :type target: torch.tensor
+   :param estimate_scale: Whether the alignment may also involve scaling
+   :type estimate_scale: bool
+   :param device: Either 'cuda' (GPU) or 'cpu'
+   :type device: str
 
-   :returns: **data** -- An object with a class inherited from ``medusa.core.BaseData``
-   :rtype: medusa.core.*Data
-
-   .. rubric:: Examples
-
-   Align sequence of 3D Mediapipe meshes using its previously estimated local-to-world
-   matrices (the default alignment option):
-
-   >>> from medusa.data import get_example_h5
-   >>> data = get_example_h5(load=True, model='mediapipe')
-   >>> data.space  # before alignment, data is is 'world' space
-   'world'
-   >>> data = align(data)
-   >>> data.space  # after alignment, data is in 'local' space
-   'local'
-
-   Do an initial alignment of EMOCA meshes using the existing transform, but also
-   do additional alignment (probably not a good idea):
-
-   >>> data = get_example_h5(load=True, model='emoca-coarse')
-   >>> data = align(data, algorithm='icp', additive_alignment=True)
-
-
-.. py:function:: rigid_transform_3D(A, B)
+   :returns: **mat** -- A float tensor with affine matrices of shape B (batch size) x 4 x 4
+   :rtype: torch.tensor
 
 

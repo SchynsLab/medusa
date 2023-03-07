@@ -9,13 +9,17 @@ Module Contents
 
 .. py:class:: BaseCropModel
 
+   Base crop model, from which all crop models inherit.
 
-.. py:class:: CropResults(n_img, imgs_crop=None, crop_mats=None, lms=None, img_idx=None, face_idx=None, device=DEVICE)
+   .. py:method:: crop_faces_video(vid, batch_size=32, save_imgs=False)
 
-   .. py:method:: sort(dist_threshold=200, present_threshold=0.1)
+      Utility function to crop all faces in each frame of a video.
 
+      :param vid: Path to video (or, optionally, a ``VideoLoader`` object)
+      :type vid: str, Path
 
-   .. py:method:: visualize(imgs, f_out, template=None, video=False, **kwargs)
+      :returns: **results** -- A BatchResults object with all crop information/results
+      :rtype: BatchResults
 
 
 

@@ -2,14 +2,13 @@
 
 If you use Medusa, please cite it as follows:
 
-> Snoek, L., Garrod, O., Knapen, T., Jack, R., & Schyns, P. (2022). Dynamic Face Imaging:
-a novel analysis framework for 3D face expression and perception. 
+> Snoek, L., Jack, R., & Schyns, P. (2023). Dynamic face imaging: a novel analysis framework for 4D social face perception and expression. *IEEE International Conference on Automatic Face and Gesture Recognition Proceedings*.
 
 ## Citing reconstruction models
 
 Please also cite the following, depending on the reconstruction model you use.
 
-### EMOCA
+### DECA / EMOCA
 > Danecek, R., Black, M. J., & Bolkart, T. (2022). EMOCA: Emotion Driven Monocular
 Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
 
@@ -27,13 +26,6 @@ If you use [MNE-Python](https://mne.tools) to analyze data from Medusa, please c
 as follows:
 
 > Alexandre Gramfort, Martin Luessi, Eric Larson, Denis A. Engemann, Daniel Strohmeier, Christian Brodbeck, Roman Goj, Mainak Jas, Teon Brooks, Lauri Parkkonen, and Matti S. Hämäläinen. MEG and EEG data analysis with MNE-Python. *Frontiers in Neuroscience, 7*(267):1–13, 2013. doi:10.3389/fnins.2013.00267.
-
-Consider citing [trimesh](https://trimsh.org/) and [pyrender](https://pyrender.readthedocs.io/)
-as well, given that they are crucial to the functionality of Medusa:
-
-> Trimesh [Computer software]. (2019). Retrieved from https://github.com/mikedh/trimesh
-
-> Matl, M. (2019). Pyrender [Computer software]. Retrieved from https://github.com/mmatl/pyrender
 
 ## An example methods section
 

@@ -7,33 +7,17 @@
 Module Contents
 ---------------
 
-.. py:class:: BaseDetectionModel
+.. py:class:: BaseDetector
 
+   .. py:method:: detect_faces_video(vid, batch_size=32)
 
-.. py:class:: DetectionResults(n_img, conf=None, bbox=None, lms=None, img_idx=None, device=DEVICE)
+      Utility function to get all detections in a video.
 
-   .. py:method:: __len__()
+      :param vid: Path to video (or, optionally, a ``VideoLoader`` object)
+      :type vid: str, Path
 
-
-   .. py:method:: from_batches(batches)
-      :classmethod:
-
-
-   .. py:method:: sort(dist_threshold=200, present_threshold=0.1)
-
-
-   .. py:method:: visualize(imgs, f_out, video=False, **kwargs)
-
-      Creates an image with the estimated bounding box (bbox) on top of it.
-
-      :param image: A numpy array with the original (uncropped images); can also be
-                    a torch Tensor; can be a batch of images or a single image
-      :type image: array_like
-      :param bbox: A numpy array with the bounding box(es) corresponding to the
-                   image(s)
-      :type bbox: np.ndarray
-      :param f_out: If multiple images, a number (_xxx) is appended
-      :type f_out: str, pathlib.Path
+      :returns: **results** -- A BatchResults object with all detection information
+      :rtype: BatchResults
 
 
 

@@ -3,13 +3,20 @@
 
 .. py:module:: medusa.recon.flame.deca.encoders
 
+.. autoapi-nested-parse::
+
+   Encoders specific to DECA-based reconstruction models.
+
+   For the associated license, see license.md.
+
+
 
 Module Contents
 ---------------
 
 .. py:class:: ResNet(block, layers)
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    Base class for all neural network modules.
 
@@ -48,7 +55,7 @@ Module Contents
 
 .. py:class:: Bottleneck(inplanes, planes, stride=1, downsample=None)
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    Base class for all neural network modules.
 
@@ -82,7 +89,7 @@ Module Contents
    :vartype training: bool
 
    .. py:attribute:: expansion
-      :annotation: = 4
+      :value: 4
 
       
 
@@ -92,12 +99,12 @@ Module Contents
 
 .. py:function:: conv3x3(in_planes, out_planes, stride=1)
 
-   3x3 convolution with padding
+   3x3 convolution with padding.
 
 
 .. py:class:: BasicBlock(inplanes, planes, stride=1, downsample=None)
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    Base class for all neural network modules.
 
@@ -131,7 +138,7 @@ Module Contents
    :vartype training: bool
 
    .. py:attribute:: expansion
-      :annotation: = 1
+      :value: 1
 
       
 
@@ -141,7 +148,7 @@ Module Contents
 
 .. py:class:: ResnetEncoder(outsize, last_op=None)
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    Base class for all neural network modules.
 
@@ -180,7 +187,7 @@ Module Contents
 
 .. py:class:: PerceptualEncoder
 
-   Bases: :py:obj:`torch.nn.Module`
+
 
    Base class for all neural network modules.
 

@@ -9,26 +9,28 @@
    used in Medusa.
 
    .. [1] Kartynnik, Y., Ablavatski, A., Grishchenko, I., & Grundmann, M. (2019).
-      Real-time facial surface geometry from monocular video on mobile GPUs. *arXiv
-      preprint arXiv:1907.06724*
+          Real-time facial surface geometry from monocular video on mobile GPUs.
+          *arXiv preprint arXiv:1907.06724*
 
 
 
 Module Contents
 ---------------
 
-.. py:class:: Mediapipe(static_image_mode=False, max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.01, min_tracking_confidence=0.1)
+.. py:class:: Mediapipe(static_image_mode=False, det_threshold=0.1, device=DEVICE, **kwargs)
 
-   Bases: :py:obj:`medusa.recon.base.BaseReconModel`
+
 
    A Mediapipe face mesh reconstruction model.
 
-   :param static_image_mode: Whether to expect a sequence of related images
-                             (like in a video)
+   :param static_image_mode: Whether to expect a sequence of related images (like in a video)
    :type static_image_mode: bool
-   :param kwargs: Extra keyword arguments to be passed to
-                  the initialization of FaceMesh
-   :type kwargs: dict
+   :param det_threshold: Minimum detection threshold (default set to 0.1 because lots of false negatives)
+   :type det_threshold: float
+   :param device: Either 'cuda' (GPU) or 'cpu'
+   :type device: str
+   :param \*\*kwargs: Extra keyword arguments to be passed to the initialization of FaceMesh
+   :type \*\*kwargs: dict
 
    .. attribute:: model
 
@@ -38,46 +40,22 @@ Module Contents
 
    .. py:method:: get_tris()
 
+      Returns the triangles associated with the mediapipe mesh.
 
-   .. py:method:: __call__(images)
 
-      Performs reconstruction of the face as a list of landmarks (vertices).
+   .. py:method:: get_cam_mat()
 
-      :param image: A 3D (w x h x 3) numpy array representing a RGB image
-      :type image: np.ndarray
-
-      :returns: **out** -- A dictionary with two keys: ``"v"``, the reconstructed vertices (468 in
-                total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
-                matrix
-      :rtype: dict
-
-      .. rubric:: Notes
-
-      This implementation returns 468 vertices instead of the original 478, because
-      the last 10 vertices (representing the irises) are not present in the canonical
-      model.
-
-      .. rubric:: Examples
-
-      To reconstruct an example, simply call the ``Mediapipe`` object:
-
-      >>> from medusa.data import get_example_frame
-      >>> model = Mediapipe()
-      >>> img = get_example_frame()
-      >>> out = model(img)  # reconstruct!
-      >>> out['v'].shape    # vertices
-      (1, 468, 3)
-      >>> out['mat'].shape  # local-to-world matrix
-      (1, 4, 4)
+      Returns a default camera matrix.
 
 
    .. py:method:: close()
 
       Closes context manager.
 
-      Ideally, after you're doing with reconstructing each frame of the video,
-      you call this method to close the manually opened context (but shouldn't
-      matter much if you only instantiate a single model).
+      Ideally, after you're doing with reconstructing each frame of
+      the video, you call this method to close the manually opened
+      context (but shouldn't matter much if you only instantiate a
+      single model).
 
 
 
