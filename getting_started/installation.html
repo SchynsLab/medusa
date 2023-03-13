@@ -167,7 +167,7 @@ const thebe_selector_output = ".output, .cell_output"
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../tutorials/reconstruction.html">
-                        Reconstruction
+                        4D reconstruction
                       </a>
                     </li>
                 
@@ -178,7 +178,7 @@ const thebe_selector_output = ".output, .cell_output"
                 <div class="dropdown-menu">
                     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/data.html">
+                      <a class="nav-link nav-internal" href="../tutorials/data_representation.html">
                         Data representation
                       </a>
                     </li>
@@ -187,13 +187,6 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../tutorials/rendering.html">
                         Rendering
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/preprocessing.html">
-                        Preprocessing
                       </a>
                     </li>
                 
@@ -352,7 +345,7 @@ const thebe_selector_output = ".output, .cell_output"
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../tutorials/reconstruction.html">
-                        Reconstruction
+                        4D reconstruction
                       </a>
                     </li>
                 
@@ -363,7 +356,7 @@ const thebe_selector_output = ".output, .cell_output"
                 <div class="dropdown-menu">
                     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/data.html">
+                      <a class="nav-link nav-internal" href="../tutorials/data_representation.html">
                         Data representation
                       </a>
                     </li>
@@ -372,13 +365,6 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../tutorials/rendering.html">
                         Rendering
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/preprocessing.html">
-                        Preprocessing
                       </a>
                     </li>
                 
@@ -518,10 +504,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/reconstruction.html">Reconstruction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/data.html">Data representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/reconstruction.html">4D reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/rendering.html">Rendering</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/preprocessing.html">Preprocessing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/experimentation.html">Experimentation</a></li>
 </ul>
@@ -776,10 +761,8 @@ title="Print to PDF"
               
   <section class="tex2jax_ignore mathjax_ignore" id="medusa-installation">
 <h1>Medusa installation<a class="headerlink" href="#medusa-installation" title="Permalink to this heading">#</a></h1>
-<p>Medusa is a Python package which works with Python version 3.9 and on Linux, Windows,
-and Mac (except Mac M1/M2). Moreover, we strongly recommend to install the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package
-in a separate environment, using for example <a class="reference external" href="https://anaconda.org/anaconda/conda">conda</a>.
-If you’d use <em>conda</em>, you can create a new environment named “medusa” with Python 3.9
+<p>Medusa is a Python package which works with Python version 3.9 and on Linux and
+and Mac (except Mac with M1/M2 chips). Moreover, we strongly recommend to install the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package in a separate environment, using for example <a class="reference external" href="https://anaconda.org/anaconda/conda">conda</a>. If you’d use <em>conda</em>, you can create a new environment named “medusa” with Python 3.9
 as follows:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda create -n medusa python=3.9</span>
 </pre></div>
@@ -790,10 +773,11 @@ as follows:</p>
 </div>
 <p>The next step is to install Medusa. Medusa actually offers two version of the package:
 <code class="docutils literal notranslate"><span class="pre">medusa</span></code> and <code class="docutils literal notranslate"><span class="pre">medusa-gpu</span></code>, where the latter can be used instead of the former if you
-have access to an NVIDIA GPU (and CUDA version 11.6). Actually, <code class="docutils literal notranslate"><span class="pre">medusa-gpu</span></code> can also
+have access to an NVIDIA GPU (and CUDA version 11.6); apart from the installation, both
+versions contain exactly the same functionality. Actually, <code class="docutils literal notranslate"><span class="pre">medusa-gpu</span></code> can also
 be installed and used on systems without a GPU, but the installation is noticeably
 larger (~2GB, instead of 300MB for the CPU version). When you’re not sure whether
-you have access to an appropriate GPU, we recommend installing the regular <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package.</p>
+you have access to an appropriate GPU, we recommend installing the regular (cpu) <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package.</p>
 <p>To install Medusa, run one of the commands listed below in your terminal (with the right
 environment activated):</p>
 <div class="sd-tab-set docutils">

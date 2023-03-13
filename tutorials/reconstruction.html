@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Reconstruction &#8212; Medusa</title>
+    <title>4D reconstruction &#8212; Medusa</title>
   
   
   
@@ -59,10 +59,12 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/reconstruction';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Data representation" href="data.html" />
+    <link rel="next" title="Data representation" href="data_representation.html" />
     <link rel="prev" title="License" href="../getting_started/license.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
@@ -167,7 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
-                        Reconstruction
+                        4D reconstruction
                       </a>
                     </li>
                 
@@ -178,7 +180,7 @@ const thebe_selector_output = ".output, .cell_output"
                 <div class="dropdown-menu">
                     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="data.html">
+                      <a class="nav-link nav-internal" href="data_representation.html">
                         Data representation
                       </a>
                     </li>
@@ -187,13 +189,6 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="rendering.html">
                         Rendering
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="preprocessing.html">
-                        Preprocessing
                       </a>
                     </li>
                 
@@ -299,6 +294,10 @@ const thebe_selector_output = ".output, .cell_output"
   
 
   
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
 
 </div>
   </nav>
@@ -352,7 +351,7 @@ const thebe_selector_output = ".output, .cell_output"
 
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
-                        Reconstruction
+                        4D reconstruction
                       </a>
                     </li>
                 
@@ -363,7 +362,7 @@ const thebe_selector_output = ".output, .cell_output"
                 <div class="dropdown-menu">
                     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="data.html">
+                      <a class="nav-link nav-internal" href="data_representation.html">
                         Data representation
                       </a>
                     </li>
@@ -372,13 +371,6 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="rendering.html">
                         Rendering
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="preprocessing.html">
-                        Preprocessing
                       </a>
                     </li>
                 
@@ -518,10 +510,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Reconstruction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">Data representation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4D reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rendering.html">Rendering</a></li>
-<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="experimentation.html">Experimentation</a></li>
 </ul>
@@ -646,6 +637,32 @@ const thebe_selector_output = ".output, .cell_output"
         </label>
     </div>
     <div class="header-article__right">
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://mybinder.org/v2/gh/medusa-4D/medusa/master?urlpath=tree/tutorials/reconstruction.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
 <button onclick="toggleFullScreen()"
   class="btn btn-sm"
   data-toggle="tooltip"
@@ -755,7 +772,9 @@ title="Print to PDF"
       
   </ul>
 </div>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
     </div>
 </div>
             </div>
@@ -763,20 +782,437 @@ title="Print to PDF"
             
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Reconstruction</h1>
+    <h1>4D reconstruction</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-easy-way">
+   The easy way
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mediapipe">
+     Mediapipe
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#flame-based-models">
+     FLAME-based models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-hard-way">
+   The hard way
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-loading">
+     Data loading
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cropping">
+     Cropping
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reconstruction">
+     Reconstruction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tracking">
+     Tracking
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#storing-the-data">
+     Storing the data
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
 
             <article class="bd-article" role="main">
               
-  <section class="tex2jax_ignore mathjax_ignore" id="reconstruction">
-<h1>Reconstruction<a class="headerlink" href="#reconstruction" title="Permalink to this heading">#</a></h1>
-<p>In this tutorial, we’ll focus on how to reconstruct 4D faces from video data.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="d-reconstruction">
+<h1>4D reconstruction<a class="headerlink" href="#d-reconstruction" title="Permalink to this heading">#</a></h1>
+<p>In this short tutorial, we’ll focus on how to use Medusa to reconstruct 4D faces from (video) data.</p>
+<section id="the-easy-way">
+<h2>The easy way<a class="headerlink" href="#the-easy-way" title="Permalink to this heading">#</a></h2>
+<p>The easiest way, as shown in the <a class="reference internal" href="../getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a>, is using the high-level function <code class="docutils literal notranslate"><span class="pre">videorecon</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.recon</span> <span class="kn">import</span> <span class="n">videorecon</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As can be seen in the package’s <span class="xref myst">API docs</span>, this function takes multiple arguments, the most important being:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">video_path</span></code>: path to the video that you want to process, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">recon_model</span></code>: the name of the reconstruction model you want to use</p></li>
+</ul>
+<p>Medusa loads in the video data using the <a class="reference external" href="https://github.com/PyAV-Org/PyAV">PyAV</a> package (which itself is a wrapper around <a class="reference external" href="https://ffmpeg.org/">ffmpeg</a>), so any video format supported by PyAV can be used; later in this tutorial, we’ll address data loading in more detail!</p>
+<p>At the moment, Medusa supports the following reconstruction models:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.defaults</span> <span class="kn">import</span> <span class="n">RECON_MODELS</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">RECON_MODELS</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;spectre-coarse&#39;, &#39;emoca-dense&#39;, &#39;emoca-coarse&#39;, &#39;deca-dense&#39;, &#39;deca-coarse&#39;, &#39;mediapipe&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="mediapipe">
+<h3>Mediapipe<a class="headerlink" href="#mediapipe" title="Permalink to this heading">#</a></h3>
+<p>The ‘mediapipe’ model is a wrapper around the <a class="reference external" href="https://google.github.io/mediapipe/solutions/face_mesh.html">Mediapipe Face Mesh</a> model with added functionality that estimates the pose of the face. The 3D topology that Mediapipe reconstructs has 468 vertices (or “landmarks”) that describe the shape of the face surface. We’ll discuss how the reconstructed data is represented in more detail in the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> data!</p>
+<p><img alt="mediapipe_topo" src="../_images/mediapipe_mesh.png" /></p>
+<p><em>Example of mesh reconstructed by the Mediapipe model, containing 468 vertices (red points).</em></p>
+</section>
+<section id="flame-based-models">
+<h3>FLAME-based models<a class="headerlink" href="#flame-based-models" title="Permalink to this heading">#</a></h3>
+<p>The ‘*-coarse’ and *-dense’ models are different reconstruction models based on the <a class="reference external" href="https://flame.is.tue.mpg.de/">FLAME</a> topology. The different types of models (<a class="reference external" href="https://filby89.github.io/spectre/">spectre</a>, <a class="reference external" href="https://emoca.is.tue.mpg.de/">emoca</a>, and <a class="reference external" href="https://deca.is.tue.mpg.de/">deca</a>) differ in how they reconstruct the face, but they all return a 3D mesh in the FLAME topology.</p>
+<p>The suffixes “coarse” and “dense” refer to the density of the returned topology; its “spatial resolution” if you will. The “coarse” models return a mesh with 5023 vertices while the “dense” models return a mesh with 59,315 vertices. Both the coarse and dense FLAME-based models return a reconstruction of the entire head (as shown in the figure below), in contrast to the Mediapipe model which only reconstucts the face.</p>
+<p><img alt="flame_mesh" src="../_images/flame_mesh.png" /></p>
+<p><em>Example of mesh reconstructed by a coarse FLAME-based model, containing 5023 vertices (red points) that cover the entire head (including ears and eyes).</em></p>
+<p>In our experience, the “emoca-coarse” model provides the most accurate reconstructions at an acceptable spatial resolution, so we’ll use that model throughout the tutorials. <strong>Note</strong>: you need to downloaded additional data to use the FLAME-based models; check the <a class="reference internal" href="../getting_started/installation.html"><span class="doc std std-doc">installation instructions</span></a> for details.</p>
+<p>Enough talking; let’s reconstruct a video! We’ll use a short example video clip contained in the package.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="n">vid_path</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+
+<span class="c1"># We&#39;ll also set the logging level to WARNING to avoid printing too much information</span>
+<span class="c1"># Set this to &#39;INFO&#39; (the default) to see more information</span>
+<span class="n">data_recon</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid_path</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function returns the reconstruction data as an object from the custom <a class="reference internal" href="../api/python/containers/fourD/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">Data4D</span></code></span></a> class. In the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> tutorial, we’ll explain the way Medusa represents reconstruction data at length!</p>
+</section>
+</section>
+<section id="the-hard-way">
+<h2>The hard way<a class="headerlink" href="#the-hard-way" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function provides an easy to use, high-level API to reconstuct faces from videos, but it hides much of the intermediate steps between data loading and reconstruction. In you want to know more about these steps or want more flexibility in your analyses, read on!</p>
+<section id="data-loading">
+<h3>Data loading<a class="headerlink" href="#data-loading" title="Permalink to this heading">#</a></h3>
+<p>The first step in the pipeline is to read (part of) a video into memory. (Although Medusa’s reconstruction models work on both single images as well as videos, here we’ll assume you want to reconstruct face data from videos.) As mentioned before, Medusa provides a custom class, <a class="reference internal" href="../api/python/io/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code></span></a> to perform easy and fast loading of video frames.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.io</span> <span class="kn">import</span> <span class="n">VideoLoader</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> class inherits from PyTorch’s <a class="reference external" href="https://pytorch.org/docs/stable/data.html"><code class="docutils literal notranslate"><span class="pre">DataLoader</span></code></a> class, so it can be used in roughly the same way. The most important arguments when initializing a <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> object are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">video_path</span></code>: path to the video file, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code>: number of frames to read in at once.</p></li>
+</ul>
+<p>As the <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> parameter suggests, the video is not loaded into memory at once, but in <em>batches</em>. This is to avoid out-of-memory errors, especially if you intend load data onto a GPU (which you can control using the <code class="docutils literal notranslate"><span class="pre">device</span></code> parameter in most classes/functions). Let’s initialize a <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> with our example video file and a batch size of 32 (the default, in fact):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loader</span> <span class="o">=</span> <span class="n">VideoLoader</span><span class="p">(</span><span class="n">vid_path</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">loader</span></code> is, like PyTorch <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects, an iterable, which means that you can loop over it! In each iteration of the loop, it will yield a batch of data with <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> number of frames:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">loader</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading in batch </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> frames ...&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 1 with 32 frames ...
+Loading in batch 2 with 32 frames ...
+Loading in batch 3 with 32 frames ...
+Loading in batch 4 with 32 frames ...
+Loading in batch 5 with 32 frames ...
+Loading in batch 6 with 32 frames ...
+Loading in batch 7 with 32 frames ...
+Loading in batch 8 with 8 frames ...
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, each iteration returns a batch of 32 frames, except the last batch which only contains the last 8 frames, after which the loader stops automatically.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">batch</span></code> variable returned each iteration contains video frame data as a <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code> object with unsigned integers (with values ranging from 0-255):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">batch</span><span class="p">),</span> <span class="n">batch</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;torch.Tensor&#39;&gt; torch.uint8
+</pre></div>
+</div>
+</div>
+</div>
+<p>The tensor is organized as a four dimensional array with dimensions <span class="math notranslate nohighlight">\(N\)</span> (number of frames) <span class="math notranslate nohighlight">\(\times H\)</span> (height) <span class="math notranslate nohighlight">\(\times W\)</span> (width) <span class="math notranslate nohighlight">\(\times 3\)</span> (RGB), which is the format in which the Medusa pipeline expects the loaded video data to be.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 384, 480, 3)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cropping">
+<h3>Cropping<a class="headerlink" href="#cropping" title="Permalink to this heading">#</a></h3>
+<p>With the exception of the Mediapipe model, reconstruction models implemented in Medusa expect the data to be cropped in a particular way and resized to a specific height and width. For convenience, Medusa’s reconstruction models will in fact crop the data for you if you haven’t done so already. Here, however, we’ll show you how to crop the data yourself.</p>
+<p>For all FLAME-based reconstruction models, you need to use Medusa’s <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> class, which is a reimplementation of the cropping procedure in the original <a class="reference external" href="https://github.com/yfeng95/DECA/blob/master/decalib/datasets/datasets.py">DECA model</a>. (Medusa’s other crop model, <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code>, is only used for the image-based reconstruction model <span class="xref myst">MICA</span>.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.crop</span> <span class="kn">import</span> <span class="n">BboxCropModel</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This particular crop model roughly does the following:</p>
+<ul class="simple">
+<li><p>Runs a face detection model that returns, per detected face, a bounding box (and five landmarks);</p></li>
+<li><p>Transforms the bounding box into a standard format and size;</p></li>
+<li><p>Warps and resamples the original image to the cropped image space (using a similarity transform)</p></li>
+</ul>
+<p>The face detection model used is the <a class="reference external" href="https://insightface.ai/scrfd">SCRFD model</a> from <a class="reference external" href="https://insightface.ai/">Insightface</a>, reimplemented to be completely in PyTorch (and thus a lot faster). We’ll skip over the details of the crop model for now (see <span class="xref myst">this tutorial</span>).</p>
+<p>For most FLAME-based models, the default arguments for initialization of this crop model suffice:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">crop_model</span> <span class="o">=</span> <span class="n">BboxCropModel</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, to run the crop model on the batch of video frames, you use the <code class="docutils literal notranslate"><span class="pre">crop_model</span></code> object as if it were a function (which runs the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method, which is common for PyTorch models):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_crop</span> <span class="o">=</span> <span class="n">crop_model</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The crop model in fact returns a dictionary with multiple outputs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">out_crop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;img_idx&#39;, &#39;conf&#39;, &#39;lms&#39;, &#39;bbox&#39;, &#39;n_img&#39;, &#39;imgs_crop&#39;, &#39;crop_mat&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>For now, the most important key is <code class="docutils literal notranslate"><span class="pre">'imgs_crop'</span></code>, which contain the cropped images:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_cropped</span> <span class="o">=</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;imgs_crop&#39;</span><span class="p">]</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">batch_cropped</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 3, 224, 224)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, the crop models returns the data in the “channels first” format, i.e., <span class="math notranslate nohighlight">\(N \times 3 \times H \times W\)</span>, as is expected by the reconstruction models.</p>
+</section>
+<section id="reconstruction">
+<h3>Reconstruction<a class="headerlink" href="#reconstruction" title="Permalink to this heading">#</a></h3>
+<p>With the data cropped and resampled to the correct dimensions, we can finally run the reconstruction model. The reconstruction model classes can be imported from <code class="docutils literal notranslate"><span class="pre">medusa.recon</span></code> and currently we provide three different classes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Mediapipe</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DecaReconModel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MicaReconModel</span></code></p></li>
+</ul>
+<p>Importantly, as the EMOCA and Spectre models are retrained versions of the original DECA models, they are all created by initializing a <code class="docutils literal notranslate"><span class="pre">DecaReconModel</span></code> object. The exact deep learning model used by <code class="docutils literal notranslate"><span class="pre">DecaReconModel</span></code> depends on the <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter (which is one of ‘deca-coarse’, ‘deca-dense’, ‘emoca-coarse’, ‘emoca-dense’, ‘spectre-coarse’, ‘spectre-dense’).</p>
+<p>So if you’d want to create an EMOCA-based (coarse) reconstruction model, you’ll do:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.recon</span> <span class="kn">import</span> <span class="n">DecaReconModel</span>
+<span class="n">recon_model</span> <span class="o">=</span> <span class="n">DecaReconModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Actually, when you’re manually cropping the image yourself, you also need to supply an additional argument upon initialization: <code class="docutils literal notranslate"><span class="pre">orig_img_size</span></code> (a tuple with two integers representing width and height of the original image). The reason is that this will include the information about the location of the face(s) in the <em>original</em> image space rather than the <em>cropped</em> image space.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">orig_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># W x H</span>
+<span class="n">recon_model</span> <span class="o">=</span> <span class="n">DecaReconModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">,</span> <span class="n">orig_img_size</span><span class="o">=</span><span class="n">orig_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To run the reconstruction model on the cropped images, you’ll call it as a function (triggering the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method) with the cropped images as first input and, optionally, the crop matrices from the cropping outputs (for the same reason as we initialized the recon model with the <code class="docutils literal notranslate"><span class="pre">orig_img_size</span></code> parameter):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_crop_mat</span> <span class="o">=</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;crop_mat&#39;</span><span class="p">]</span>
+<span class="n">out_recon</span> <span class="o">=</span> <span class="n">recon_model</span><span class="p">(</span><span class="n">batch_cropped</span><span class="p">,</span> <span class="n">batch_crop_mat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Like the crop model, the reconstruction model returns a dictionary with different outputs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">out_recon</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;v&#39;, &#39;mat&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">'v'</span></code> key represents the reconstructed vertices and are stored in a PyTorch tensor of shape <span class="math notranslate nohighlight">\(N\)</span> (cropped images) <span class="math notranslate nohighlight">\(\times V\)</span> (vertices) <span class="math notranslate nohighlight">\(\times 3\)</span> (XYZ):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 5023, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">'mat'</span></code> key represents the estimated “pose” relative to a standard (forward facing, non-rotated) reference face. It does so using a <span class="math notranslate nohighlight">\(4 \times 4\)</span> affine matrix per cropped image:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 4, 4)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’ll go into how to interpret these values in more detail in <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">another tutorial</span></a>.</p>
+</section>
+<section id="tracking">
+<h3>Tracking<a class="headerlink" href="#tracking" title="Permalink to this heading">#</a></h3>
+<p>Ideally, the face detector (used in the <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> class) only detects a single face in each frame of our video (which, in fact, only contains only face; see <a class="reference internal" href="../getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a>). However, sometimes a video frame might not contain a face (or might be missed by the detector) or might contain multiple faces.</p>
+<p><strong>Note</strong>: the rest of the section contains extra information that is relevant if you deal with video stimuli with more than one face in it. If you don’t, you can safely ignore this section.</p>
+<p>In case of multiple faces per frame, at some point you might want to “assign” each detection (and subsequent cropped image and reconstruction) to a particular face index. This process is sometimes called (face) “tracking”. To perform tracking, you can use the function <code class="docutils literal notranslate"><span class="pre">sort_faces</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.tracking</span> <span class="kn">import</span> <span class="n">sort_faces</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This function needs two arguments: <code class="docutils literal notranslate"><span class="pre">lms</span></code> and <code class="docutils literal notranslate"><span class="pre">img_idx</span></code>. The <code class="docutils literal notranslate"><span class="pre">lms</span></code> (short for “landmarks”) refers to a PyTorch tensor of shape <span class="math notranslate nohighlight">\(N\)</span> (frames) <span class="math notranslate nohighlight">\(\times L\)</span> (landmarks) <span class="math notranslate nohighlight">\(\times C\)</span> (coordinates, e.g., 2 for image-based landmarks). The <code class="docutils literal notranslate"><span class="pre">img_idx</span></code> represents a integer tensor which maps detections to the frame they were detected in. For example, an <code class="docutils literal notranslate"><span class="pre">img_idx</span></code> of [0, 0, 1, 1, 2, 3, 4] would mean that there were two detections in frame 0, two in frame 1, and just one in frame 2, 3, and 4.</p>
+<p>Such an <code class="docutils literal notranslate"><span class="pre">img_idx</span></code> tensor is in fact returned by Medusa’s crop models (as part of the output dictionary):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;img_idx&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0, 1, 2, 3, 4, 5, 6, 7], device=&#39;cuda:0&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>For this video, the detector actually detected one face for each frame (as expected).</p>
+<p>For the <code class="docutils literal notranslate"><span class="pre">lms</span></code> parameter, you can use the five landmarks returned by the crop model or the full set of reconstructed vertices (here: 5023 landmarks); the <code class="docutils literal notranslate"><span class="pre">sort_faces</span></code> function does not care whether the landmarks are 2D (such as the <code class="docutils literal notranslate"><span class="pre">lms</span></code> from the crop model) or 3D (such as the reconstructed vertices).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">sort_faces</span></code> function will basically just try to assign each set of vertices to the “closest” (in terms of Euclidean distance) set of vertices in its current set. It then returns a face index for each detection (as an integer tensor):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">face_idx</span> <span class="o">=</span> <span class="n">sort_faces</span><span class="p">(</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">],</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;img_idx&#39;</span><span class="p">])</span>
+<span class="n">face_idx</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0, 0, 0, 0, 0, 0, 0, 0], device=&#39;cuda:0&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, the function assigned the same face index (<code class="docutils literal notranslate"><span class="pre">0</span></code>) to each detection across the eight frames. However, the function has been tested and validated with much more difficult stimuli with frames without faces and multiple (up to four) moving faces.</p>
+</section>
+<section id="storing-the-data">
+<h3>Storing the data<a class="headerlink" href="#storing-the-data" title="Permalink to this heading">#</a></h3>
+<p>At this point, we have a bunch of different data sources, like reconstruction data, video metadata, tracking data, that we might like to store. As we’ve seen before, Medusa uses the custom class <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> to store all features relevant to analyze and render the 4D reconstruction data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.containers</span> <span class="kn">import</span> <span class="n">Data4D</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It takes quite a few arguments upon initialization. The most important ones are <code class="docutils literal notranslate"><span class="pre">v</span></code> and <code class="docutils literal notranslate"><span class="pre">mat</span></code>, representing the reconstructed vertices and pose (as affine matrices) — both as PyTorch tensors. Additionally, if you want to render the reconstructed data, you also need to pass the constructor the triangles associated with the vertices (the <code class="docutils literal notranslate"><span class="pre">tri</span></code> argument), the camera matrix to use (the <code class="docutils literal notranslate"><span class="pre">cam_mat</span></code> argument), and some video metadata (the <code class="docutils literal notranslate"><span class="pre">video_metadata</span></code> argument, a dictionary), as well as some tracking information (the aforementioned <code class="docutils literal notranslate"><span class="pre">img_idx</span></code> and <code class="docutils literal notranslate"><span class="pre">face_idx</span></code> features).</p>
+<p>The default triangles and camera matrix can be extracted from the reconstruction model and the video metadata from the <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> object:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tris</span> <span class="o">=</span> <span class="n">recon_model</span><span class="o">.</span><span class="n">get_tris</span><span class="p">()</span>
+<span class="n">cam_mat</span> <span class="o">=</span> <span class="n">recon_model</span><span class="o">.</span><span class="n">get_cam_mat</span><span class="p">()</span>
+<span class="n">video_metadata</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, initialization would look something like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_recon</span> <span class="o">=</span> <span class="n">Data4D</span><span class="p">(</span>
+    <span class="c1"># recon data</span>
+    <span class="n">v</span><span class="o">=</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">],</span>
+    <span class="n">mat</span><span class="o">=</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">],</span>
+    <span class="c1"># data for rendering</span>
+    <span class="n">tris</span><span class="o">=</span><span class="n">tris</span><span class="p">,</span>
+    <span class="n">cam_mat</span><span class="o">=</span><span class="n">cam_mat</span><span class="p">,</span>
+    <span class="n">img_idx</span><span class="o">=</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;img_idx&#39;</span><span class="p">],</span>
+    <span class="n">face_idx</span><span class="o">=</span><span class="n">face_idx</span><span class="p">,</span>
+    <span class="n">video_metadata</span><span class="o">=</span><span class="n">video_metadata</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>That’s it for this tutorial! If you want to know more about the <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> class and how data is represented in Medusa, check out the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> tutorial (up next).</p>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -814,7 +1250,7 @@ title="Print to PDF"
           <p class="prev-next-title">License</p>
       </div>
   </a>
-  <a class='right-next' id="next-link" href="data.html" title="next page">
+  <a class='right-next' id="next-link" href="data_representation.html" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
       <p class="prev-next-title">Data representation</p>
@@ -827,6 +1263,71 @@ title="Print to PDF"
           </div>
           
           
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-easy-way">
+   The easy way
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mediapipe">
+     Mediapipe
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#flame-based-models">
+     FLAME-based models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-hard-way">
+   The hard way
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-loading">
+     Data loading
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cropping">
+     Cropping
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reconstruction">
+     Reconstruction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tracking">
+     Tracking
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#storing-the-data">
+     Storing the data
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
           
           
         </div>

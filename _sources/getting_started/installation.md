@@ -1,9 +1,7 @@
 # Medusa installation
 
-Medusa is a Python package which works with Python version 3.9 and on Linux, Windows,
-and Mac (except Mac M1/M2). Moreover, we strongly recommend to install the `medusa` package
-in a separate environment, using for example [conda](https://anaconda.org/anaconda/conda).
-If you'd use *conda*, you can create a new environment named "medusa" with Python 3.9
+Medusa is a Python package which works with Python version 3.9 and on Linux and
+and Mac (except Mac with M1/M2 chips). Moreover, we strongly recommend to install the `medusa` package in a separate environment, using for example [conda](https://anaconda.org/anaconda/conda). If you'd use *conda*, you can create a new environment named "medusa" with Python 3.9
 as follows:
 
 ```console
@@ -18,10 +16,11 @@ conda activate medusa
 
 The next step is to install Medusa. Medusa actually offers two version of the package:
 `medusa` and `medusa-gpu`, where the latter can be used instead of the former if you
-have access to an NVIDIA GPU (and CUDA version 11.6). Actually, `medusa-gpu` can also
+have access to an NVIDIA GPU (and CUDA version 11.6); apart from the installation, both
+versions contain exactly the same functionality. Actually, `medusa-gpu` can also
 be installed and used on systems without a GPU, but the installation is noticeably
 larger (~2GB, instead of 300MB for the CPU version). When you're not sure whether
-you have access to an appropriate GPU, we recommend installing the regular `medusa` package.
+you have access to an appropriate GPU, we recommend installing the regular (cpu) `medusa` package.
 
 To install Medusa, run one of the commands listed below in your terminal (with the right
 environment activated):
