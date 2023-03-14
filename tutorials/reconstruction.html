@@ -208,13 +208,6 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../examples/quantifying_total_movement.html">
-                        Quantifying total movement
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../api/cli.html">
                         Command-line interface
                       </a>
@@ -390,13 +383,6 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../examples/quantifying_total_movement.html">
-                        Quantifying total movement
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../api/cli.html">
                         Command-line interface
                       </a>
@@ -515,10 +501,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="experimentation.html">Experimentation</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../examples/quantifying_total_movement.html">Quantifying total movement</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -948,13 +930,27 @@ title="Print to PDF"
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 1 with 32 frames ...
-Loading in batch 2 with 32 frames ...
-Loading in batch 3 with 32 frames ...
-Loading in batch 4 with 32 frames ...
-Loading in batch 5 with 32 frames ...
-Loading in batch 6 with 32 frames ...
-Loading in batch 7 with 32 frames ...
-Loading in batch 8 with 8 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 2 with 32 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 3 with 32 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 4 with 32 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 5 with 32 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 6 with 32 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 7 with 32 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 8 with 8 frames ...
 </pre></div>
 </div>
 </div>
@@ -990,7 +986,7 @@ Loading in batch 8 with 8 frames ...
 <section id="cropping">
 <h3>Cropping<a class="headerlink" href="#cropping" title="Permalink to this heading">#</a></h3>
 <p>With the exception of the Mediapipe model, reconstruction models implemented in Medusa expect the data to be cropped in a particular way and resized to a specific height and width. For convenience, Medusa’s reconstruction models will in fact crop the data for you if you haven’t done so already. Here, however, we’ll show you how to crop the data yourself.</p>
-<p>For all FLAME-based reconstruction models, you need to use Medusa’s <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> class, which is a reimplementation of the cropping procedure in the original <a class="reference external" href="https://github.com/yfeng95/DECA/blob/master/decalib/datasets/datasets.py">DECA model</a>. (Medusa’s other crop model, <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code>, is only used for the image-based reconstruction model <span class="xref myst">MICA</span>.)</p>
+<p>For all FLAME-based reconstruction models, you need to use Medusa’s <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> class, which is a reimplementation of the cropping procedure in the original <a class="reference external" href="https://github.com/yfeng95/DECA/blob/master/decalib/datasets/datasets.py">DECA model</a>. (Medusa’s other crop model, <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code>, is only used for the image-based reconstruction model <a class="reference internal" href="../api/python/recon/flame/mica/recon/index.html"><span class="doc std std-doc">MICA</span></a>.)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.crop</span> <span class="kn">import</span> <span class="n">BboxCropModel</span>
@@ -1004,7 +1000,7 @@ Loading in batch 8 with 8 frames ...
 <li><p>Transforms the bounding box into a standard format and size;</p></li>
 <li><p>Warps and resamples the original image to the cropped image space (using a similarity transform)</p></li>
 </ul>
-<p>The face detection model used is the <a class="reference external" href="https://insightface.ai/scrfd">SCRFD model</a> from <a class="reference external" href="https://insightface.ai/">Insightface</a>, reimplemented to be completely in PyTorch (and thus a lot faster). We’ll skip over the details of the crop model for now (see <span class="xref myst">this tutorial</span>).</p>
+<p>The face detection model used is the <a class="reference external" href="https://insightface.ai/scrfd">SCRFD model</a> from <a class="reference external" href="https://insightface.ai/">Insightface</a>, reimplemented to be completely in PyTorch (and thus a lot faster). We’ll skip over the details of the crop model for now (see <a class="reference internal" href="face_and_landmark_detection.html"><span class="doc std std-doc">this tutorial</span></a>).</p>
 <p>For most FLAME-based models, the default arguments for initialization of this crop model suffice:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

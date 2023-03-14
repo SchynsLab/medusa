@@ -206,13 +206,6 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../examples/quantifying_total_movement.html">
-                        Quantifying total movement
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../api/cli.html">
                         Command-line interface
                       </a>
@@ -388,13 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../examples/quantifying_total_movement.html">
-                        Quantifying total movement
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../api/cli.html">
                         Command-line interface
                       </a>
@@ -513,10 +499,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/experimentation.html">Experimentation</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../examples/quantifying_total_movement.html">Quantifying total movement</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -770,26 +752,21 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mediapipe">
+     Mediapipe
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deca-emoca">
      DECA / EMOCA
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#mediapipe">
-     Mediapipe
+    <a class="reference internal nav-link" href="#spectre">
+     Spectre
     </a>
    </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#miscellaneous">
-   Miscellaneous
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#an-example-methods-section">
-   An example methods section
-  </a>
  </li>
 </ul>
 
@@ -802,13 +779,38 @@ title="Print to PDF"
               
   <section class="tex2jax_ignore mathjax_ignore" id="how-to-cite-medusa-and-its-dependencies">
 <h1>How to cite Medusa and its dependencies<a class="headerlink" href="#how-to-cite-medusa-and-its-dependencies" title="Permalink to this heading">#</a></h1>
-<p>If you use Medusa, please cite it as follows:</p>
-<blockquote>
-<div><p>Snoek, L., Jack, R., &amp; Schyns, P. (2023). Dynamic face imaging: a novel analysis framework for 4D social face perception and expression. <em>IEEE International Conference on Automatic Face and Gesture Recognition Proceedings</em>.</p>
-</div></blockquote>
+<p>If you use Medusa in your research, please cite it as follows:</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-0">
+APA</label><div class="sd-tab-content docutils">
+<p>Snoek, L., Jack, R., &amp; Schyns, P. (2023, January 7). Dynamic face imaging: a novel analysis framework for 4D social face perception and expression. <em>IEEE 17th International Conference on Automatic Face and Gesture Recognition (FG)</em>, 1-4. <a class="reference external" href="https://doi.org/10.1109/FG57933.2023.10042724">https://doi.org/10.1109/FG57933.2023.10042724</a>.</p>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-1">
+BibTeX</label><div class="sd-tab-content docutils">
+<p>&#64;inproceedings{snoek2023dynamic,
+title={Dynamic face imaging: a novel analysis framework for 4D social face perception and expression},
+author={Snoek, Lukas and Jack, Rachael E and Schyns, Philippe G},
+booktitle={IEEE 17th International Conference on Automatic Face and Gesture Recognition (FG)},
+pages={1–4},
+year={2023},
+organization={IEEE}
+}</p>
+</div>
+</div>
 <section id="citing-reconstruction-models">
 <h2>Citing reconstruction models<a class="headerlink" href="#citing-reconstruction-models" title="Permalink to this heading">#</a></h2>
 <p>Please also cite the following, depending on the reconstruction model you use.</p>
+<section id="mediapipe">
+<h3>Mediapipe<a class="headerlink" href="#mediapipe" title="Permalink to this heading">#</a></h3>
+<blockquote>
+<div><p>Kartynnik, Y., Ablavatski, A., Grishchenko, I., &amp; Grundmann, M. (2019). Real-time facial surface geometry from monocular video on mobile GPUs. <em>arXiv preprint arXiv:1907.06724</em></p>
+</div></blockquote>
+<blockquote>
+<div><p>Lugaresi, C., Tang, J., Nash, H., McClanahan, C., Uboweja, E., Hays, M., … &amp; Grundmann, M. (2019). Mediapipe: A framework for building perception pipelines. <em>arXiv preprint arXiv:1906.08172</em>.</p>
+</div></blockquote>
+</section>
 <section id="deca-emoca">
 <h3>DECA / EMOCA<a class="headerlink" href="#deca-emoca" title="Permalink to this heading">#</a></h3>
 <blockquote>
@@ -819,30 +821,12 @@ Face Capture and Animation. <em>arXiv preprint arXiv:2204.11312</em>.</p>
 <div><p>Feng, Y., Feng, H., Black, M. J., &amp; Bolkart, T. (2021). Learning an animatable detailed 3D face model from in-the-wild images. <em>ACM Transactions on Graphics (TOG), 40</em>(4), 1-13.</p>
 </div></blockquote>
 </section>
-<section id="mediapipe">
-<h3>Mediapipe<a class="headerlink" href="#mediapipe" title="Permalink to this heading">#</a></h3>
+<section id="spectre">
+<h3>Spectre<a class="headerlink" href="#spectre" title="Permalink to this heading">#</a></h3>
 <blockquote>
-<div><p>Kartynnik, Y., Ablavatski, A., Grishchenko, I., &amp; Grundmann, M. (2019). Real-time facial surface geometry from monocular video on mobile GPUs. <em>arXiv preprint arXiv:1907.06724</em></p>
-</div></blockquote>
-<blockquote>
-<div><p>Lugaresi, C., Tang, J., Nash, H., McClanahan, C., Uboweja, E., Hays, M., … &amp; Grundmann, M. (2019). Mediapipe: A framework for building perception pipelines. <em>arXiv preprint arXiv:1906.08172</em>.</p>
+<div><p>Filntisis, P. P., Retsinas, G., Paraperas-Papantoniou, F., Katsamanis, A., Roussos, A., &amp; Maragos, P. (2022). Visual Speech-Aware Perceptual 3D Facial Expression Reconstruction from Videos. <em>arXiv preprint arXiv:2207.11094</em>.</p>
 </div></blockquote>
 </section>
-</section>
-<section id="miscellaneous">
-<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this heading">#</a></h2>
-<p>If you use <a class="reference external" href="https://mne.tools">MNE-Python</a> to analyze data from Medusa, please cite it
-as follows:</p>
-<blockquote>
-<div><p>Alexandre Gramfort, Martin Luessi, Eric Larson, Denis A. Engemann, Daniel Strohmeier, Christian Brodbeck, Roman Goj, Mainak Jas, Teon Brooks, Lauri Parkkonen, and Matti S. Hämäläinen. MEG and EEG data analysis with MNE-Python. <em>Frontiers in Neuroscience, 7</em>(267):1–13, 2013. doi:10.3389/fnins.2013.00267.</p>
-</div></blockquote>
-</section>
-<section id="an-example-methods-section">
-<h2>An example methods section<a class="headerlink" href="#an-example-methods-section" title="Permalink to this heading">#</a></h2>
-<p>The following is an example paragraph that you can include in your methods section:</p>
-<blockquote>
-<div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque facilisis fringilla rhoncus. Suspendisse sit amet elit ante. Cras aliquet diam lectus, et varius risus convallis in. Pellentesque vel quam tincidunt, varius augue eget, posuere orci. Nam pellentesque eleifend vestibulum. Quisque varius ex et ornare facilisis. Integer quis elementum erat, in tincidunt tortor. Sed odio urna, feugiat in sapien a, faucibus rutrum sapien. Nunc ultrices tempus felis, non accumsan odio maximus vel. Vestibulum vitae justo sit amet magna lobortis posuere. Proin nisi tellus, congue nec sem et, ullamcorper blandit purus. Quisque molestie at arcu sodales commodo. Nunc euismod urna quis nisl condimentum, vitae porta felis imperdiet. Proin quis ante eu lectus tempor lacinia tincidunt nec turpis.</p>
-</div></blockquote>
 </section>
 </section>
 
@@ -910,26 +894,21 @@ as follows:</p>
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mediapipe">
+     Mediapipe
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deca-emoca">
      DECA / EMOCA
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#mediapipe">
-     Mediapipe
+    <a class="reference internal nav-link" href="#spectre">
+     Spectre
     </a>
    </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#miscellaneous">
-   Miscellaneous
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#an-example-methods-section">
-   An example methods section
-  </a>
  </li>
 </ul>
 

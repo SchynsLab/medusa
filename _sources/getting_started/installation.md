@@ -1,8 +1,6 @@
 # Medusa installation
 
-Medusa is a Python package which works with Python version 3.9 and on Linux and
-and Mac (except Mac with M1/M2 chips). Moreover, we strongly recommend to install the `medusa` package in a separate environment, using for example [conda](https://anaconda.org/anaconda/conda). If you'd use *conda*, you can create a new environment named "medusa" with Python 3.9
-as follows:
+Medusa is a Python package which works with Python version 3.9 and on Linux and and Mac (except Mac with M1/M2 chips). Moreover, we strongly recommend to install the `medusa` package in a separate environment, using for example [conda](https://anaconda.org/anaconda/conda). If you'd use *conda*, you can create a new environment named "medusa" with Python 3.9 as follows:
 
 ```console
 conda create -n medusa python=3.9

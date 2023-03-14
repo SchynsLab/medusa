@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Quantifying total movement &#8212; Medusa</title>
+    <title>Face &amp; landmark detection &#8212; Medusa</title>
   
   
   
@@ -59,11 +59,9 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/quantifying_total_movement';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/face_and_landmark_detection';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Command-line interface" href="../api/cli.html" />
-    <link rel="prev" title="Designing experiments" href="../tutorials/experimentation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -166,7 +164,7 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/reconstruction.html">
+                      <a class="nav-link nav-internal" href="reconstruction.html">
                         4D reconstruction
                       </a>
                     </li>
@@ -178,36 +176,29 @@ const thebe_selector_output = ".output, .cell_output"
                 <div class="dropdown-menu">
                     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/data_representation.html">
+                      <a class="nav-link nav-internal" href="data_representation.html">
                         Data representation
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/rendering.html">
+                      <a class="nav-link nav-internal" href="rendering.html">
                         Rendering
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/analysis.html">
+                      <a class="nav-link nav-internal" href="analysis.html">
                         Analysis
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/experimentation.html">
+                      <a class="nav-link nav-internal" href="experimentation.html">
                         Experimentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
-                        Quantifying total movement
                       </a>
                     </li>
                 
@@ -344,7 +335,7 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/reconstruction.html">
+                      <a class="nav-link nav-internal" href="reconstruction.html">
                         4D reconstruction
                       </a>
                     </li>
@@ -356,36 +347,29 @@ const thebe_selector_output = ".output, .cell_output"
                 <div class="dropdown-menu">
                     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/data_representation.html">
+                      <a class="nav-link nav-internal" href="data_representation.html">
                         Data representation
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/rendering.html">
+                      <a class="nav-link nav-internal" href="rendering.html">
                         Rendering
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/analysis.html">
+                      <a class="nav-link nav-internal" href="analysis.html">
                         Analysis
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials/experimentation.html">
+                      <a class="nav-link nav-internal" href="experimentation.html">
                         Experimentation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
-                        Quantifying total movement
                       </a>
                     </li>
                 
@@ -504,15 +488,11 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/reconstruction.html">4D reconstruction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/data_representation.html">Data representation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/rendering.html">Rendering</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/experimentation.html">Experimentation</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Quantifying total movement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reconstruction.html">4D reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_representation.html">Data representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rendering.html">Rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimentation.html">Experimentation</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -631,32 +611,6 @@ const thebe_selector_output = ".output, .cell_output"
         </label>
     </div>
     <div class="header-article__right">
-
-
-<div class="dropdown dropdown-launch-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
-    <i class="fas fa-rocket"></i>
-  </button>
-  <ul class="dropdown-menu">
-      <li><a href="https://mybinder.org/v2/gh/medusa-4D/medusa/master?urlpath=tree/examples/quantifying_total_movement.ipynb" target="_blank"
-   class="btn btn-sm dropdown-item"
-   data-toggle="tooltip"
-data-placement="left"
-title="Launch on Binder"
->
-  
-
-<span class="btn__icon-container">
-  
-    <img src="../_static/images/logo_binder.svg">
-  </span>
-<span class="btn__text-container">Binder</span>
-</a>
-</a>
-      
-  </ul>
-</div>
-
 <button onclick="toggleFullScreen()"
   class="btn btn-sm"
   data-toggle="tooltip"
@@ -693,7 +647,7 @@ title="Source repository"
 </a>
 </a>
       
-      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fexamples/quantifying_total_movement.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Ftutorials/face_and_landmark_detection.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm dropdown-item"
    data-toggle="tooltip"
 data-placement="left"
@@ -708,7 +662,7 @@ title="Open an issue"
 </a>
 </a>
       
-      <li><a href="https://github.com/medusa-4D/medusa/edit/master/examples/quantifying_total_movement.ipynb" target="_blank"
+      <li><a href="https://github.com/medusa-4D/medusa/edit/master/tutorials/face_and_landmark_detection.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    data-toggle="tooltip"
 data-placement="left"
@@ -733,7 +687,7 @@ title="Edit this page"
     <i class="fas fa-download"></i>
   </button>
   <ul class="dropdown-menu">
-      <li><a href="../_sources/examples/quantifying_total_movement.ipynb" target="_blank"
+      <li><a href="../_sources/tutorials/face_and_landmark_detection.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    data-toggle="tooltip"
 data-placement="left"
@@ -774,7 +728,7 @@ title="Print to PDF"
             
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Quantifying total movement</h1>
+    <h1>Face & landmark detection</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -785,9 +739,9 @@ title="Print to PDF"
 
             <article class="bd-article" role="main">
               
-  <section class="tex2jax_ignore mathjax_ignore" id="quantifying-total-movement">
-<h1>Quantifying total movement<a class="headerlink" href="#quantifying-total-movement" title="Permalink to this heading">#</a></h1>
-<p>Example analysis.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="face-landmark-detection">
+<h1>Face &amp; landmark detection<a class="headerlink" href="#face-landmark-detection" title="Permalink to this heading">#</a></h1>
+<p>Here we demonstrate how to use Medusa for face and facial landmark detection.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -803,7 +757,7 @@ title="Print to PDF"
         },
         kernelOptions: {
             name: "python3",
-            path: "./examples"
+            path: "./tutorials"
         },
         predefinedOutput: true
     }
@@ -818,20 +772,6 @@ title="Print to PDF"
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="../tutorials/experimentation.html" title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-          <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Designing experiments</p>
-      </div>
-  </a>
-  <a class='right-next' id="next-link" href="../api/cli.html" title="next page">
-  <div class="prev-next-info">
-      <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Command-line interface</p>
-  </div>
-  <i class="fa-solid fa-angle-right"></i>
-  </a>
 </div>
             </footer>
             
