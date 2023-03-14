@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -41,6 +42,10 @@ def test_crop_model(Model, lm_name, imgs_test, device):
     else:
         f_out = Path(__file__).parent / f"test_viz/crop/{str(model)}_exp-{n_exp}.jpg"
 
+    if 'GITHUB_ACTIONS' in os.environ:
+        # Too slow for Github Actions
+        return
+
     out_crop.visualize(f_out, imgs, template=template)
 
 
@@ -61,6 +66,10 @@ def test_crop_model_vid(Model, video_test):
         return
 
     results.sort_faces(attr="lms")
+
+    if 'GITHUB_ACTIONS' in os.environ:
+        # Too slow for Github Actions
+        return
 
     f_out = Path(__file__).parent / f"test_viz/crop/{str(model)}_{video_test.stem}.mp4"
     template = getattr(model, "template", None)

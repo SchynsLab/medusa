@@ -151,6 +151,7 @@ tests/test_viz/*/*.mp4
 tests/test_viz/*/*.jpg
 tests/test_viz/*/*.tsv
 tests/test_viz/*/*.csv
+tests/test_viz/*/*.obj
 
 # Docs
 docs/_build

@@ -11,15 +11,14 @@ parts:
 - caption: Tutorials
   chapters:
   - file: tutorials/reconstruction
-  - file: tutorials/data
+  - file: tutorials/data_representation
   - file: tutorials/rendering
-  - file: tutorials/preprocessing
   - file: tutorials/analysis
   - file: tutorials/experimentation
     title: Experimentation
-- caption: Examples
-  chapters:
-  - glob: examples/*
+#- caption: Examples
+#  chapters:
+#  - glob: examples/*
 - caption: API documentation
   chapters:
   - file: api/cli

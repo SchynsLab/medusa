@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -73,7 +74,7 @@ def test_deca_recon(name, type_, already_cropped, device):
     renderer.save_image(f_out, img)
     renderer.close()
 
-    if not already_cropped:
+    if not already_cropped and not 'GITHUB_ACTIONS' in os.environ:
         # Only render when recon full image
         tris = recon_model.get_tris()
         data = Data4D(video_metadata=metadata, tris=tris, cam_mat=cam_mat, **out, device=device)

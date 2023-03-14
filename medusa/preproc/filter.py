@@ -2,13 +2,11 @@ import torch
 import numpy as np
 from scipy.signal import butter, sosfilt
 
-
+# fmt: off
 def bw_filter(data, fps, low_pass, high_pass):
     """Applies a bandpass filter the vertex coordinate time series.
-    Implementation based on `this StackOverflow post`
-
-    <https://stackoverflow.com/questions/12093594/how-to-implement-band-pass-
-    butterworth-filter-with-scipy-signal-butter>`_.
+    Implementation based on
+    `this StackOverflow post <https://stackoverflow.com/questions/12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter>`_.
 
     Parameters
     ----------
@@ -33,7 +31,7 @@ def bw_filter(data, fps, low_pass, high_pass):
     >>> data = get_example_h5(load=True, model='mediapipe')
     >>> data = bw_filter(data, low_pass=4., high_pass=0.005)
     """
-
+    # fmt: on
     convert_back_to_tensor = False
     if torch.is_tensor(data):
         convert_back_to_tensor = True
@@ -61,8 +59,7 @@ def bw_filter(data, fps, low_pass, high_pass):
 
 class OneEuroFilter:
     """A high-pass filter that can be used in real-time applications; based on
-    the implementation by `Jaan Tollander.
-
+    the implementation by `Jaan Tollander
     <https://github.com/jaantollander/OneEuroFilter>`_.
 
     Parameters

@@ -1,10 +1,8 @@
 # fmt: off
 """A Python implementation of the C++ transform module in mediapipe by Rasmus
-Jones (https://github.com/Rassibassi), adapted from `here.
-
-<https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py>`__ and
-`here <https://github.com/Rassibassi/mediapipeDemos/blob/main/custom/face_geome
-try.py>`__.
+Jones (https://github.com/Rassibassi), adapted from
+`here.<https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py>`__ and
+`here <https://github.com/Rassibassi/mediapipeDemos/blob/main/custom/face_geometry.py>`__.
 
 The code in the module is used to estimate the local-to-world matrix of the ``Mediapipe``
 reconstruction, i.e., how the current reconstruction is transformed relative to the

@@ -10,14 +10,10 @@ Medusa is Python toolbox for face image and video analysis. It offers tools for 
 detection, alignment, rendering, and most importantly, *4D reconstruction*.
 Using state-of-the-art 3D reconstruction models, Medusa can track and reconstruct faces
 in videos (one 3D mesh per face, per frame) and thus provide a way to automatically
-measure and quantify face movement as 4D signals.
+measure and quantify face movement as 4D signals. For an overview of the package and the
+underlying methods, check out the video below.
 
-In Medusa, 4D reconstruction data is represented as a series of 3D meshes. Each mesh
-describes the face shape at a particular frame in the video, and the changes in the
-meshes over time thus decribe facial *movement* (including expression) quantitatively
-and dynamically. Medusa makes relatively few assumptions as to how you want to (further)
-analyze the face and just returns the raw set of vertices. For some ideas on
-how to analyze such data, check out the [analysis tutorials](tutorials/analysis) (WIP).
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fnKfWwlrn6Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## Documentation overview
 

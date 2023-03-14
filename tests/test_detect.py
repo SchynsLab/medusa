@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -69,6 +70,9 @@ def test_detector_vid(Detector, video_test):
 
     assert torch.all(torch.diff(results.img_idx) >= 0)
     results.sort_faces("lms")
+
+    if 'GITHUB_ACTIONS' in os.environ:
+        return
 
     f_out = (
         Path(__file__).parent / f"test_viz/detection/{str(model)}_{video_test.stem}.mp4"

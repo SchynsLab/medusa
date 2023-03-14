@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import numpy as np
@@ -76,6 +77,10 @@ def test_multiple_faces(imgs_test, recon_model_name):
 
 @pytest.mark.parametrize("video_test", [1, 4], indirect=True)
 def test_render_video(video_test, device=DEVICE):
+    if 'GITHUB_ACTIONS' in os.environ:
+        # Too slow for Github Actions
+        return
+
     data = videorecon(video_test, "emoca-coarse", device=device)
     data.apply_vertex_mask('face')
     f_out = (
