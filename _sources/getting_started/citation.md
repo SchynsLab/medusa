@@ -2,12 +2,13 @@
 
 If you use Medusa in your research, please cite it as follows:
 
-````{tab-set}
-```{tab-item} APA
+`````{tab-set}
+````{tab-item} APA
 Snoek, L., Jack, R., & Schyns, P. (2023, January 7). Dynamic face imaging: a novel analysis framework for 4D social face perception and expression. *IEEE 17th International Conference on Automatic Face and Gesture Recognition (FG)*, 1-4. https://doi.org/10.1109/FG57933.2023.10042724.
-```
+````
 
-```{tab-item} BibTeX
+````{tab-item} BibTeX
+```bibtex
 @inproceedings{snoek2023dynamic,
   title={Dynamic face imaging: a novel analysis framework for 4D social face perception and expression},
   author={Snoek, Lukas and Jack, Rachael E and Schyns, Philippe G},
@@ -18,6 +19,7 @@ Snoek, L., Jack, R., & Schyns, P. (2023, January 7). Dynamic face imaging: a nov
 }
 ```
 ````
+`````
 
 ## Citing reconstruction models
 

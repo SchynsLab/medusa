@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/data_representation';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -466,7 +468,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -482,6 +486,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vertices">Vertices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#triangles">Triangles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-3d-to-4d">From 3D to 4D</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -493,7 +507,138 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-representation">
 <h1>Data representation<a class="headerlink" href="#data-representation" title="Permalink to this heading">#</a></h1>
-<p>In this tutorial, we’ll take a closer look at the reconstruction data.</p>
+<p>In this tutorial, we’ll take a closer look at the reconstruction data is represented in Medusa. The most important features of Medusa’s representation of (4D) reconstruction data are the <em>vertices</em> and the associated <em>triangles</em>, which we’ll discuss in detail.</p>
+<section id="vertices">
+<h2>Vertices<a class="headerlink" href="#vertices" title="Permalink to this heading">#</a></h2>
+<p>Before going into 4D, let’s first focus on <em>3D</em> objects. There are many ways in which the shape of a 3D object can be represented digitally, but arguably the most common one is as a <a class="reference external" href="https://en.wikipedia.org/wiki/Polygon_mesh">mesh</a>. The most important element of 3D mesh is its set of <em>vertices</em> (singular: vertex), which each define a location in space (and possibly other attributes).</p>
+<p>Let’s take a look at a set of vertices that make up the template face from the <a class="reference external" href="https://flame.is.tue.mpg.de/">FLAME</a> topology:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_template_flame</span>
+<span class="n">template</span> <span class="o">=</span> <span class="n">get_template_flame</span><span class="p">(</span><span class="n">topo</span><span class="o">=</span><span class="s1">&#39;coarse&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">template</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+
+<span class="c1"># Show shape of vertices</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(5023, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Often, as in the case above, a set of 3D vertices is organized as an <span class="math notranslate nohighlight">\(V\)</span> (number of vertices) <span class="math notranslate nohighlight">\(\times 3\)</span> (X, Y, Z), where the latter dimension refers to some 3D coordinate system. The values of the vertices refer to the location relative to the coordinate system’s origin and, in the case of the FLAME topology, are defined in meters (but could also be in centimeters or millimeters):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show values of first vertex</span>
+<span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([ 0.0620,  1.4935, -0.0272])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Each vertex within given topology (like FLAME, or Mediapipe) has a particular semantic meaning. In the context of 3D face shape, this means that each vertex refers to a particular predefined part of the face. For example, vertex <span class="math notranslate nohighlight">\(p\)</span> in the FLAME mesh <em>always</em> refers to the tip of the nose. Importantly, vertex <span class="math notranslate nohighlight">\(p\)</span> in a set of vertices corresponding to one face (face A) and vertex <span class="math notranslate nohighlight">\(p\)</span> in a set of vertices corresponding to another face (face A’) <em>both</em> refer to the tip of the nose (see figure below), but the <em>values</em> (i.e., the location of that vertex) of that vertex may differ for you and me.</p>
+<p><img alt="semantic_correspondence" src="../_images/semantic_correspondence.png" /></p>
+<p><em>From Fan et al. (2018). Dense Semantic and Topological Correspondence of 3D Faces without Landmarks. ECCV.</em></p>
+<p>A fancy term to denote this consistency across meshes of the same topology is sometimes called “semantic correspondence” and is crucial when you want to compare different shapes (of the same topology).</p>
+</section>
+<section id="triangles">
+<h2>Triangles<a class="headerlink" href="#triangles" title="Permalink to this heading">#</a></h2>
+<p>In addition to vertices, a mesh also contains information on how to connect vertices to create surfaces. These surfaces can be made up of any polygon (indeed, meshes are often called <em>polygon meshes</em>), but <em>triangle</em> meshes are most common as they are very fast to render. In a triangle mesh, the object’s shape is thus represented as a collection of triangles, each made up of three vertices. The figure below shows you how this looks like by explicitly showing the edges of each triangle (a “wireframe” rendering):</p>
+<p><img alt="mpipe_mesh" src="https://i.stack.imgur.com/HBa8z.jpg" /></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Often, you’ll see triangles (or other polygons) referred to as “faces” (which, I assume, is short for <em>surfaces</em>) or simply <code class="docutils literal notranslate"><span class="pre">f</span></code>. To avoid confusion with our object of interest (the human face), we’ll use “triangles” instead.</p>
+</div>
+<p>Triangles are represented as an <span class="math notranslate nohighlight">\(T\)</span> (triangles) <span class="math notranslate nohighlight">\(\times 3\)</span> (number of vertices that make up a triangle) array with integers. For example, the (coarse) FLAME mesh consists of 9976 triangles:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In Medusa, we often refer to triangles as &quot;tris&quot;</span>
+<span class="n">tris</span> <span class="o">=</span> <span class="n">template</span><span class="p">[</span><span class="s1">&#39;tris&#39;</span><span class="p">]</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">tris</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(9976, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The three integers of each triangle refer to the vertex indices that make up that particular triangle. For example, the first triangle in the <code class="docutils literal notranslate"><span class="pre">tri</span></code> array consists of vertex 3, 1, and 0:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tris</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([3, 1, 0])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Importantly, the triangles across different meshes (of the same topology) is always the same! So while the vertex values of one face mesh may differ from vertex values of another face mesh (as their face shape probably differs), their triangles will be exactly the same.</p>
+<p>When working with Medusa, you probably won’t deal with triangles much; they are technically only needed for rendering.</p>
+</section>
+<section id="from-3d-to-4d">
+<h2>From 3D to 4D<a class="headerlink" href="#from-3d-to-4d" title="Permalink to this heading">#</a></h2>
+<p>So far we only talked about how 3D data is represented, but what about <em>4D</em> reconstruction data? Indeed, Medusa provides means to reconstruct not just a single 3D face from an image, but a 3D face <em>from each frame of a video</em>! The way Medusa represents this 4D data is by an <span class="math notranslate nohighlight">\(N\)</span> (number of frames) <span class="math notranslate nohighlight">\(\times V\)</span> (number of vertices) <span class="math notranslate nohighlight">\(\times 3\)</span> (X, Y, Z). Let’s inspect such a vertex array:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_h5</span>
+<span class="n">data_4d</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+
+<span class="c1"># Project out global movement (rotation/translation/scale)</span>
+<span class="n">data_4d</span><span class="o">.</span><span class="n">to_local</span><span class="p">()</span>
+
+<span class="c1"># In Data4d objects, vertices are stored in the `v` attribute</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(232, 5023, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, this 4D reconstruction is based on 232 frames (eaching containing 5023 3D vertices). One way to think about a 4D mesh is as a collection of “signals” that describe the (possibly) changing location of the mesh’ vertices over time (that is, their movement!). Importantly, the location is not a single value, but <em>three</em>, because a vertex location can change in three ways: left-right (X), up-down (Y), and forward-backward (Z).</p>
+<p>Let’s plot a couple of time series. We’ll subtract the first frame from each time point to show the relative change in movement (relative to the first frame):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">v_idx</span> <span class="o">=</span> <span class="p">[</span><span class="mi">22</span><span class="p">,</span> <span class="mi">521</span><span class="p">,</span> <span class="mi">4888</span><span class="p">]</span>
+<span class="n">v_numpy</span> <span class="o">=</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">v_numpy</span> <span class="o">-=</span> <span class="n">v_numpy</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">v_numpy</span><span class="p">[:,</span> <span class="n">v_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;X (left-right)&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">v_numpy</span><span class="p">[:,</span> <span class="n">v_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Y (up-down)&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">v_numpy</span><span class="p">[:,</span> <span class="n">v_idx</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Z (forward-back)&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7350016552347d4e923b35fcb7127a31304258962902eb973a603e24fb14b31c.png" src="../_images/7350016552347d4e923b35fcb7127a31304258962902eb973a603e24fb14b31c.png" />
+</div>
+</div>
+<p>It is these “signals” or “time series” that you can use as measurments of facial movement and analyze as such. In the <a class="reference internal" href="analysis.html"><span class="doc std std-doc">analysis tutorial</span></a>, we discuss some ways in which one can go about doing this.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -548,6 +693,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vertices">Vertices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#triangles">Triangles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-3d-to-4d">From 3D to 4D</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
