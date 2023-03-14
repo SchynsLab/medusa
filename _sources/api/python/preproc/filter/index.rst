@@ -10,7 +10,8 @@ Module Contents
 .. py:function:: bw_filter(data, fps, low_pass, high_pass)
 
    Applies a bandpass filter the vertex coordinate time series.
-   Implementation based on `this StackOverflow post <https://stackoverflow.com/questions/12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter>`_.
+   Implementation based on
+   `this StackOverflow post <https://stackoverflow.com/questions/12093594/how-to-implement-band-pass-butterworth-filter-with-scipy-signal-butter>`_.
 
    :param data: Either a path (``str`` or ``pathlib.Path``) to a ``medusa`` hdf5
                 data file or a ``Data`` object (like ``FlameData`` or ``MediapipeData``)
@@ -35,7 +36,8 @@ Module Contents
 .. py:class:: OneEuroFilter(t0, x0, dx0=0.0, min_cutoff=1.0, beta=0.0, d_cutoff=1.0)
 
    A high-pass filter that can be used in real-time applications; based on
-   the implementation by `Jaan Tollander <https://github.com/jaantollander/OneEuroFilter>`_.
+   the implementation by `Jaan Tollander
+   <https://github.com/jaantollander/OneEuroFilter>`_.
 
    :param TODO:
 

@@ -11,4 +11,6 @@ Module Contents
 
 
 
+   This detector is based on Yunet, a face detector based on YOLOv3 {cite}`facedetect-yu`.
+
 

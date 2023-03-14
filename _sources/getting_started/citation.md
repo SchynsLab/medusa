@@ -23,7 +23,7 @@ Snoek, L., Jack, R., & Schyns, P. (2023, January 7). Dynamic face imaging: a nov
 
 Please also cite the following, depending on the reconstruction model you use.
 
-### Mediapipe
+### Mediapipe 
 
 > Kartynnik, Y., Ablavatski, A., Grishchenko, I., & Grundmann, M. (2019). Real-time facial surface geometry from monocular video on mobile GPUs. *arXiv preprint arXiv:1907.06724*
 
@@ -38,3 +38,7 @@ Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
 ### Spectre
 
 > Filntisis, P. P., Retsinas, G., Paraperas-Papantoniou, F., Katsamanis, A., Roussos, A., & Maragos, P. (2022). Visual Speech-Aware Perceptual 3D Facial Expression Reconstruction from Videos. *arXiv preprint arXiv:2207.11094*.
+
+## Website
+
+This website (including documentation) was created using Jupyter Book {cite}`executable_books_community_2020_4539666`.

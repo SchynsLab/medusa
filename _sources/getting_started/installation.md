@@ -27,13 +27,13 @@ environment activated):
 
 ````{tab-item} medusa (CPU)
 ```console
-pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.3/medusa-0.0.3-py3-none-any.whl
+> pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.3/medusa-0.0.3-py3-none-any.whl
 ```
 ````
 
 ````{tab-item} medusa-gpu
 ```console
-pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.3/medusa_gpu-0.0.3-py3-none-any.whl
+> pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.3/medusa_gpu-0.0.3-py3-none-any.whl
 ```
 ````
 
@@ -53,9 +53,10 @@ If you want to build Medusa yourself, you can clone the repository and run the
 ```
 
 At this point, `medusa` can be used, but only the Mediapipe reconstruction model will be
-available. To be able to use the FLAME-based reconstruction models such as DECA, EMOCA, and
-Spectre, you need to download some additional data. Importantly, before you do, you need
-to [register](https://flame.is.tue.mpg.de/register.php) on the [FLAME website](https://flame.is.tue.mpg.de/index.html)
+available. To be able to use the FLAME-based {cite}`li2017learning` reconstruction models such as
+DECA {cite}`feng2021learning`, EMOCA {cite}`danvevcek2022emoca`, and Spectre {cite}`filntisis2022visual`, 
+you need to download some additional data. Importantly, before you do, you need to 
+[register](https://flame.is.tue.mpg.de/register.php) on the [FLAME website](https://flame.is.tue.mpg.de/index.html)
 and accept their [license terms](https://flame.is.tue.mpg.de/modellicense.html).
 
 After creating an account, you can download all external data with the
