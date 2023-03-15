@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Code of Conduct &#8212; Medusa</title>
+    <title>For developers &#8212; Medusa</title>
   
   
   
@@ -62,10 +62,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'misc/conduct';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'misc/for_developers';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Contributing" href="contributing.html" />
+    <link rel="next" title="Bibliography" href="bibliography.html" />
+    <link rel="prev" title="medusa.transforms" href="../api/python/transforms/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -245,10 +246,10 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="for_developers.html">For developers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
 </ul>
 
     </div>
@@ -320,7 +321,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/medusa-4D/medusa/edit/master/misc/conduct.md" target="_blank"
+      <li><a href="https://github.com/medusa-4D/medusa/edit/master/misc/for_developers.md" target="_blank"
    class="btn btn-sm btn-source-edit-button dropdown-item"
    title="Suggest edit"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -337,7 +338,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fmisc/conduct.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fmisc/for_developers.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -367,7 +368,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/misc/conduct.md" target="_blank"
+      <li><a href="../_sources/misc/for_developers.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -449,7 +450,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Code of Conduct</h1>
+    <h1>For developers</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -459,12 +460,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-pledge">Our Pledge</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-standards">Our Standards</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-responsibilities">Our Responsibilities</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scope">Scope</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enforcement">Enforcement</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attribution">Attribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-from-source">Installation from source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-documentation">Building documentation</a></li>
 </ul>
             </nav>
         </div>
@@ -476,48 +474,63 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="code-of-conduct">
-<h1>Code of Conduct<a class="headerlink" href="#code-of-conduct" title="Permalink to this heading">#</a></h1>
-<section id="our-pledge">
-<h2>Our Pledge<a class="headerlink" href="#our-pledge" title="Permalink to this heading">#</a></h2>
-<p>In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="for-developers">
+<h1>For developers<a class="headerlink" href="#for-developers" title="Permalink to this heading">#</a></h1>
+<p>This page outlines some additional information for developers that intend to contribute
+to the package.</p>
+<section id="installation-from-source">
+<h2>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this heading">#</a></h2>
+<p>After cloning or downloading the source code from <a class="reference external" href="https://github.com/medusa-4D/medusa">Github</a> and
+assuming you have a working Python distribution (version==3.9), you need to install a couple
+of dependencies before installing Medusa:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install toml click poetry</span>
+</pre></div>
+</div>
+<p>Then, to determine whether the installer will install the CPU or GPU version of Medusa,
+run the following command in the root of the Medusa repository:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python set_package_version.py {cpu,gpu}</span>
+</pre></div>
+</div>
+<p>where you choose either “cpu” or “gpu”. This will create a customized <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file
+with the correct PyTorch version.</p>
+<p>Finally, install Medusa by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry install</span>
+</pre></div>
+</div>
+<p>This may take a while (especially for the GPU version) as it will resolve and download
+all dependencies. After the command has finished running, Medusa has been installed in
+editable mode. This means that you can edit the code and changes will be effective
+immediately without having to reinstall the package.</p>
 </section>
-<section id="our-standards">
-<h2>Our Standards<a class="headerlink" href="#our-standards" title="Permalink to this heading">#</a></h2>
-<p>Examples of behavior that contributes to creating a positive environment include:</p>
-<ul class="simple">
-<li><p>Using welcoming and inclusive language</p></li>
-<li><p>Being respectful of differing viewpoints and experiences</p></li>
-<li><p>Gracefully accepting constructive criticism</p></li>
-<li><p>Focusing on what is best for the community</p></li>
-<li><p>Showing empathy towards other community members</p></li>
-</ul>
-<p>Examples of unacceptable behavior by participants include:</p>
-<ul class="simple">
-<li><p>The use of sexualized language or imagery and unwelcome sexual attention or advances</p></li>
-<li><p>Trolling, insulting/derogatory comments, and personal or political attacks</p></li>
-<li><p>Public or private harassment</p></li>
-<li><p>Publishing others’ private information, such as a physical or electronic address, without explicit permission</p></li>
-<li><p>Other conduct which could reasonably be considered inappropriate in a professional setting</p></li>
-</ul>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">#</a></h2>
+<p>Medusa contains an extensive set of unit tests in the <em>tests</em> directory (in the repository’s
+root). To execute all tests, run the following command in the repository root:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./ci/run_unittests</span>
+</pre></div>
+</div>
+<p>which clears all previous test outputs and runs the entire test suite with coverage. To
+just run <em>pytest</em> (the testing package that Medusa uses), run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pytest tests/</span>
+</pre></div>
+</div>
 </section>
-<section id="our-responsibilities">
-<h2>Our Responsibilities<a class="headerlink" href="#our-responsibilities" title="Permalink to this heading">#</a></h2>
-<p>Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.</p>
-<p>Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.</p>
-</section>
-<section id="scope">
-<h2>Scope<a class="headerlink" href="#scope" title="Permalink to this heading">#</a></h2>
-<p>This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.</p>
-</section>
-<section id="enforcement">
-<h2>Enforcement<a class="headerlink" href="#enforcement" title="Permalink to this heading">#</a></h2>
-<p>Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.</p>
-<p>Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project’s leadership.</p>
-</section>
-<section id="attribution">
-<h2>Attribution<a class="headerlink" href="#attribution" title="Permalink to this heading">#</a></h2>
-<p>This Code of Conduct is adapted from the <a class="reference external" href="http://contributor-covenant.org/version/1/4">Contributor Covenant, version 1.4</a>.</p>
+<section id="building-documentation">
+<h2>Building documentation<a class="headerlink" href="#building-documentation" title="Permalink to this heading">#</a></h2>
+<p>To build the documentation (website including API docs), run the following in the root
+of the repository:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./docs/build_docs</span>
+</pre></div>
+</div>
+<p>To just build the Python API documentation, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sphinx-build -b html ./docs/autoapi ./docs/autoapi/_build</span>
+</pre></div>
+</div>
+<p>To just build the website without the API docs, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">jupyter-book build ./docs/</span>
+</pre></div>
+</div>
+<p>The website HTML code is deposited in <code class="docutils literal notranslate"><span class="pre">./docs/_build</span></code>.</p>
 </section>
 </section>
 
@@ -550,13 +563,22 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="contributing.html"
+       href="../api/python/transforms/index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Contributing</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.transforms</span></code></p>
       </div>
+    </a>
+    <a class="right-next"
+       href="bibliography.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bibliography</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -573,12 +595,9 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-pledge">Our Pledge</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-standards">Our Standards</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-responsibilities">Our Responsibilities</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scope">Scope</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enforcement">Enforcement</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attribution">Attribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-from-source">Installation from source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-documentation">Building documentation</a></li>
 </ul>
   </nav></div>
 

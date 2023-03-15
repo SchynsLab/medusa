@@ -171,6 +171,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -247,6 +248,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../misc/contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../misc/conduct.html">Code of Conduct</a></li>
@@ -574,7 +576,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function returns the reconstruction data as an object from the custom <a class="reference internal" href="../api/python/containers/fourD/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">Data4D</span></code></span></a> class. In the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> tutorial, we’ll explain the way Medusa represents reconstruction data at length!</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function returns the reconstruction data as an object from the custom <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Data4D</span></code></span> class. In the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> tutorial, we’ll explain the way Medusa represents reconstruction data at length!</p>
 </section>
 </section>
 <section id="the-hard-way">
@@ -582,7 +584,7 @@ document.write(`
 <p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function provides an easy to use, high-level API to reconstuct faces from videos, but it hides much of the intermediate steps between data loading and reconstruction. In you want to know more about these steps or want more flexibility in your analyses, read on!</p>
 <section id="data-loading">
 <h3>Data loading<a class="headerlink" href="#data-loading" title="Permalink to this heading">#</a></h3>
-<p>The first step in the pipeline is to read (part of) a video into memory. (Although Medusa’s reconstruction models work on both single images as well as videos, here we’ll assume you want to reconstruct face data from videos.) As mentioned before, Medusa provides a custom class, <a class="reference internal" href="../api/python/io/index.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code></span></a> to perform easy and fast loading of video frames.</p>
+<p>The first step in the pipeline is to read (part of) a video into memory. (Although Medusa’s reconstruction models work on both single images as well as videos, here we’ll assume you want to reconstruct face data from videos.) As mentioned before, Medusa provides a custom class, <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code></span> to perform easy and fast loading of video frames.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.io</span> <span class="kn">import</span> <span class="n">VideoLoader</span>
@@ -613,27 +615,13 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 1 with 32 frames ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 2 with 32 frames ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 3 with 32 frames ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 4 with 32 frames ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 5 with 32 frames ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 6 with 32 frames ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 7 with 32 frames ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 8 with 8 frames ...
+Loading in batch 2 with 32 frames ...
+Loading in batch 3 with 32 frames ...
+Loading in batch 4 with 32 frames ...
+Loading in batch 5 with 32 frames ...
+Loading in batch 6 with 32 frames ...
+Loading in batch 7 with 32 frames ...
+Loading in batch 8 with 8 frames ...
 </pre></div>
 </div>
 </div>

@@ -18,7 +18,34 @@ underlying methods, check out the video below.
 
 On this website, you can find general information about Medusa (such as how to
 [install](getting_started/installation) and [cite](getting_started/citation) it), as
-well as several tutorials and details on Medusa's [command-line interface](api/cli) and
+well as details on Medusa's [command-line interface](api/cli) and
 [Python interface](api/python).
+
+## Tutorials
+
+On this website you can also find several tutorials on Medusa's features:
+
+::::{grid}
+:gutter: 3
+
+:::{grid-item-card} Quickstart
+:img-background: ./images/quickstart_img.png
+:link: ./getting_started/quickstart
+:link-type: ref
+:::
+
+:::{grid-item-card} 4D reconstruction
+Here's the second card.
+:::
+
+:::{grid-item-card} Data representation
+Here's the third card.
+:::
+
+:::{grid-item-card} Rendering
+Here's the third card.
+:::
+
+::::
 
 A great way to get more familiar with the package is to check out the [quickstart](getting_started/quickstart)!

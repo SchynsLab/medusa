@@ -52,6 +52,8 @@ If you want to build Medusa yourself, you can clone the repository and run the
 (one for `medusa` and one for `medusa-gpu`).
 ```
 
+## Downloading external data
+
 At this point, `medusa` can be used, but only the Mediapipe reconstruction model will be
 available. To be able to use the FLAME-based {cite}`li2017learning` reconstruction models such as
 DECA {cite}`feng2021learning`, EMOCA {cite}`danvevcek2022emoca`, and Spectre {cite}`filntisis2022visual`, 
@@ -70,3 +72,7 @@ medusa_download_ext_data --directory medusa_ext_data --username your_flame_usern
 where `your_flame_username` and `your_flame_passwd` are the username and password associated
 with the account you created on the FLAME website. After all data has been downloaded
 (~1.8GB), all Medusa functionality should be available!
+
+## Installation from source
+
+If you want to install Medusa from source, check out the [for developers](../misc/for_developers) page.
