@@ -48,4 +48,4 @@ Here's the third card.
 
 ::::
 
-A great way to get more familiar with the package is to check out the [quickstart](getting_started/quickstart)!
+A great way to get more familiar with the package is to check out the [quickstart](./getting_started/quickstart)!
