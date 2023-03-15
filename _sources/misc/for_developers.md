@@ -52,7 +52,7 @@ pytest tests/
 
 ## Building documentation
 
-To build the documentation (website including API docs), run the following in the root 
+To build the documentation (website including API docs), run the following in the root
 of the repository:
 
 ```console

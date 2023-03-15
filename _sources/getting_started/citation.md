@@ -25,7 +25,7 @@ Snoek, L., Jack, R., & Schyns, P. (2023, January 7). Dynamic face imaging: a nov
 
 Please also cite the following, depending on the reconstruction model you use.
 
-### Mediapipe 
+### Mediapipe
 
 > Kartynnik, Y., Ablavatski, A., Grishchenko, I., & Grundmann, M. (2019). Real-time facial surface geometry from monocular video on mobile GPUs. *arXiv preprint arXiv:1907.06724*
 

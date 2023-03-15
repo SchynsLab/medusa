@@ -35,15 +35,29 @@ On this website you can also find several tutorials on Medusa's features:
 :::
 
 :::{grid-item-card} 4D reconstruction
-Here's the second card.
+:img-bottom: ./images/recon_gif.gif
+:link: ./tutorials/reconstruction
+:link-type: doc
 :::
 
 :::{grid-item-card} Data representation
-Here's the third card.
+:link: ./tutorials/data_representation
+:link-type: doc
 :::
 
 :::{grid-item-card} Rendering
-Here's the third card.
+:link: ./tutorials/rendering
+:link-type: doc
+:::
+
+:::{grid-item-card} Analysis
+:link: ./tutorials/analysis
+:link-type: doc
+:::
+
+:::{grid-item-card} Face & landmark detection
+:link: ./tutorials/face_and_landmark_detection
+:link-type: doc
 :::
 
 ::::

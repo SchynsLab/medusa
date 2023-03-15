@@ -56,8 +56,8 @@ If you want to build Medusa yourself, you can clone the repository and run the
 
 At this point, `medusa` can be used, but only the Mediapipe reconstruction model will be
 available. To be able to use the FLAME-based {cite}`li2017learning` reconstruction models such as
-DECA {cite}`feng2021learning`, EMOCA {cite}`danvevcek2022emoca`, and Spectre {cite}`filntisis2022visual`, 
-you need to download some additional data. Importantly, before you do, you need to 
+DECA {cite}`feng2021learning`, EMOCA {cite}`danvevcek2022emoca`, and Spectre {cite}`filntisis2022visual`,
+you need to download some additional data. Importantly, before you do, you need to
 [register](https://flame.is.tue.mpg.de/register.php) on the [FLAME website](https://flame.is.tue.mpg.de/index.html)
 and accept their [license terms](https://flame.is.tue.mpg.de/modellicense.html).
 
