@@ -405,7 +405,7 @@ document.write(`
 
     <span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">,</span> <span class="s2">&quot;emoca-coarse&quot;</span><span class="p">]:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
         <span class="n">data</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">vid</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.mp4&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">))</span></div>
 </pre></div>
 

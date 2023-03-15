@@ -25,7 +25,7 @@ well as details on Medusa's [command-line interface](api/cli) and
 
 On this website you can also find several tutorials on Medusa's features:
 
-::::{card-carousel} 1
+::::{card-carousel} 2
 
 :::{card} Quickstart
 :img-bottom: ./images/quickstart_img.png
