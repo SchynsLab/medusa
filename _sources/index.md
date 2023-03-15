@@ -45,6 +45,7 @@ On this website you can also find several tutorials on Medusa's features:
 :::
 
 :::{card} Rendering
+:img-bottom: ./images/render_gif.gif
 :link: ./tutorials/rendering
 :link-type: doc
 :::
