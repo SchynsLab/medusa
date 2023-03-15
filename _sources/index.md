@@ -29,9 +29,9 @@ On this website you can also find several tutorials on Medusa's features:
 :gutter: 3
 
 :::{grid-item-card} Quickstart
-:img-background: ./images/quickstart_img.png
+:img-bottom: ./images/quickstart_img.png
 :link: ./getting_started/quickstart
-:link-type: ref
+:link-type: doc
 :::
 
 :::{grid-item-card} 4D reconstruction

@@ -246,10 +246,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../../../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../misc/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../misc/conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../misc/for_developers.html">For developers</a></li>
 </ul>
 
     </div>
@@ -492,11 +491,11 @@ document.write(`
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.recon.flame.decoders.FLAME">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.decoders.</span></span><span class="sig-name descname"><span class="pre">FLAME</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_exp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.decoders.FLAME" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.decoders.</span></span><span class="sig-name descname"><span class="pre">FLAME</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_exp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/decoders.html#FLAME"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.decoders.FLAME" title="Permalink to this definition">#</a></dt>
 <dd><p>Generates a FLAME-based based on latent parameters.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.flame.decoders.FLAME.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.decoders.FLAME.forward" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/decoders.html#FLAME.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.decoders.FLAME.forward" title="Permalink to this definition">#</a></dt>
 <dd><dl class="simple">
 <dt>Input:</dt><dd><p>shape_params: N X number of shape parameters
 expression_params: N X number of expression parameters
@@ -512,14 +511,14 @@ landmarks: N X number of landmarks X 3</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.recon.flame.decoders.FLAMETex">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.decoders.</span></span><span class="sig-name descname"><span class="pre">FLAMETex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.decoders.FLAMETex" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.decoders.</span></span><span class="sig-name descname"><span class="pre">FLAMETex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/decoders.html#FLAMETex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.decoders.FLAMETex" title="Permalink to this definition">#</a></dt>
 <dd><p>FLAME texture:</p>
 <p><a class="github reference external" href="https://github.com/TimoBolkart/TF_FLAME/blob/ade0ab152300ec5f0e8555d6765411555c5ed43d/sample_texture.py#L64">TimoBolkart/TF_FLAME</a>
 FLAME texture converted from BFM:
 <a class="github reference external" href="https://github.com/TimoBolkart/BFM_to_FLAME">TimoBolkart/BFM_to_FLAME</a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.recon.flame.decoders.FLAMETex.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texcode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.decoders.FLAMETex.forward" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texcode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/decoders.html#FLAMETex.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.decoders.FLAMETex.forward" title="Permalink to this definition">#</a></dt>
 <dd><p>texcode: [batchsize, n_tex]
 texture: [bz, 3, 256, 256], range: 0-1</p>
 </dd></dl>
@@ -528,12 +527,12 @@ texture: [bz, 3, 256, 256], range: 0-1</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.recon.flame.decoders.to_tensor">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.decoders.</span></span><span class="sig-name descname"><span class="pre">to_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.float32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.decoders.to_tensor" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.decoders.</span></span><span class="sig-name descname"><span class="pre">to_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.float32</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/decoders.html#to_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.decoders.to_tensor" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.recon.flame.decoders.to_np">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.decoders.</span></span><span class="sig-name descname"><span class="pre">to_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.float32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.decoders.to_np" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.decoders.</span></span><span class="sig-name descname"><span class="pre">to_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.float32</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/decoders.html#to_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.decoders.to_np" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>

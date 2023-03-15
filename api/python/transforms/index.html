@@ -67,7 +67,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/python/transforms/index';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="For developers" href="../../../misc/for_developers.html" />
+    <link rel="next" title="Bibliography" href="../../../misc/bibliography.html" />
     <link rel="prev" title="medusa.tracking" href="../tracking/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -248,10 +248,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../misc/conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/for_developers.html">For developers</a></li>
 </ul>
 
     </div>
@@ -496,7 +495,7 @@ Medusa.</p>
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.create_viewport_matrix">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">create_viewport_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.create_viewport_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">create_viewport_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#create_viewport_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.create_viewport_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a viewport matrix that transforms vertices in NDC [-1, 1] space
 to viewport (screen) space. Based on a blogpost by Mauricio Poppe:
 <a class="reference external" href="https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport">https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport</a>-
@@ -520,7 +519,7 @@ that the viewport (screen) space origin is in the top left.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.create_ortho_matrix">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">create_ortho_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">znear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zfar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.create_ortho_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">create_ortho_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">znear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zfar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#create_ortho_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.create_ortho_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates an orthographic projection matrix, as used by EMOCA/DECA. Based
 on the pyrender implementation. Assumes an xmag and ymag of 1.</p>
 <dl class="field-list simple">
@@ -543,7 +542,7 @@ on the pyrender implementation. Assumes an xmag and ymag of 1.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.crop_matrix_to_3d">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">crop_matrix_to_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_33</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.crop_matrix_to_3d" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">crop_matrix_to_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_33</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#crop_matrix_to_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.crop_matrix_to_3d" title="Permalink to this definition">#</a></dt>
 <dd><p>Transforms a 3x3 matrix used for cropping (on 2D coordinates) into a 4x4
 matrix that can be used to transform 3D vertices. It assumes that there is
 no rotation element.</p>
@@ -562,7 +561,7 @@ no rotation element.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.apply_perspective_projection">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">apply_perspective_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.apply_perspective_projection" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">apply_perspective_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#apply_perspective_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.apply_perspective_projection" title="Permalink to this definition">#</a></dt>
 <dd><p>” Applies a perspective projection of <code class="docutils literal notranslate"><span class="pre">v</span></code> into NDC space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -576,7 +575,7 @@ no rotation element.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.embed_points_in_mesh">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">embed_points_in_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.embed_points_in_mesh" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">embed_points_in_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#embed_points_in_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.embed_points_in_mesh" title="Permalink to this definition">#</a></dt>
 <dd><p>Embed points in an existing mesh by finding the face it is contained in
 and computing its barycentric coordinates. Works with either 2D or 3D data.</p>
 <dl class="field-list simple">
@@ -599,7 +598,7 @@ and computing its barycentric coordinates. Works with either 2D or 3D data.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.project_points_from_embedding">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">project_points_from_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triangles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bcoords</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.project_points_from_embedding" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">project_points_from_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triangles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bcoords</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#project_points_from_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.project_points_from_embedding" title="Permalink to this definition">#</a></dt>
 <dd><p>Project points (vertices) from an existing embedding into a different
 space.</p>
 <dl class="field-list simple">
@@ -615,7 +614,7 @@ space.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.estimate_similarity_transform">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">estimate_similarity_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.estimate_similarity_transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">estimate_similarity_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#estimate_similarity_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.estimate_similarity_transform" title="Permalink to this definition">#</a></dt>
 <dd><p>Estimate a similarity transformation matrix for two batches of points
 with N observations and M dimensions; reimplementation of the <code class="docutils literal notranslate"><span class="pre">_umeyama</span></code>
 function of the scikit-image package.</p>
@@ -635,7 +634,7 @@ function of the scikit-image package.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.resize_with_pad">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">resize_with_pad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(224,</span> <span class="pre">224)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.uint8</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.resize_with_pad" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">resize_with_pad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(224,</span> <span class="pre">224)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.uint8</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#resize_with_pad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.resize_with_pad" title="Permalink to this definition">#</a></dt>
 <dd><p>Resizes image with right-bottom padding (with zeros), as used in
 insightface’s <code class="docutils literal notranslate"><span class="pre">SCRFD</span></code> detector.</p>
 <dl class="field-list simple">
@@ -658,26 +657,26 @@ insightface’s <code class="docutils literal notranslate"><span class="pre">SCR
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.euler_matrix">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">euler_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ai</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ak</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sxyz'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.euler_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">euler_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ai</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ak</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sxyz'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#euler_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.euler_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>Return homogeneous rotation matrix from Euler angles and axis
 sequence.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.compose_matrix">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">compose_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perspective</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.compose_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">compose_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perspective</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#compose_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.compose_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>Return transformation matrix from sequence of transformations.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.vector_norm">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">vector_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.vector_norm" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">vector_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#vector_norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.vector_norm" title="Permalink to this definition">#</a></dt>
 <dd><p>Return length, i.e. Euclidean norm, of ndarray along axis.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.transforms.decompose_matrix">
-<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">decompose_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.transforms.decompose_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.transforms.</span></span><span class="sig-name descname"><span class="pre">decompose_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/transforms.html#decompose_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.transforms.decompose_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>Return sequence of transformations from transformation matrix.</p>
 </dd></dl>
 
@@ -722,11 +721,11 @@ sequence.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../../../misc/for_developers.html"
+       href="../../../misc/bibliography.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">For developers</p>
+        <p class="prev-next-title">Bibliography</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

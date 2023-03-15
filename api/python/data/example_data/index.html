@@ -246,10 +246,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../misc/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../misc/conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../misc/for_developers.html">For developers</a></li>
 </ul>
 
     </div>
@@ -489,7 +488,7 @@ space.</p>
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.data.example_data.get_example_frame">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_numpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_torch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.example_data.get_example_frame" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_numpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_torch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_frame" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads an example frame from the example video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -524,7 +523,7 @@ a <code class="docutils literal notranslate"><span class="pre">pathlib.Path</spa
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.data.example_data.get_example_video">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_videoloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.example_data.get_example_video" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_videoloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_video" title="Permalink to this definition">#</a></dt>
 <dd><p>Retrieves the path to an example video file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -562,7 +561,7 @@ loaded on and formatted for GPU:</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.data.example_data.get_example_h5">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.data.example_data.get_example_h5" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_h5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_h5" title="Permalink to this definition">#</a></dt>
 <dd><p>Retrieves an example hdf5 file with reconstructed 4D data from the
 example video.</p>
 <dl class="field-list simple">

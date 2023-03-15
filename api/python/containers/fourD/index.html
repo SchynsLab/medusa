@@ -246,10 +246,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../misc/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../misc/conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../misc/for_developers.html">For developers</a></li>
 </ul>
 
     </div>
@@ -499,7 +498,7 @@ using the <code class="docutils literal notranslate"><span class="pre">load</spa
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.containers.fourD.</span></span><span class="sig-name descname"><span class="pre">Data4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'world'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.containers.fourD.</span></span><span class="sig-name descname"><span class="pre">Data4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'world'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D" title="Permalink to this definition">#</a></dt>
 <dd><p>Data class which stores reconstruction data and provides methods to
 preprocess/manipulate them.</p>
 <dl class="field-list simple">
@@ -517,7 +516,7 @@ the ‘world’ (or ‘model’) matrix for each time point</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.save" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.save" title="Permalink to this definition">#</a></dt>
 <dd><p>Saves (meta)data to disk as an HDF5 file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -540,7 +539,7 @@ the ‘world’ (or ‘model’) matrix for each time point</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.apply_vertex_mask">
-<span class="sig-name descname"><span class="pre">apply_vertex_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.apply_vertex_mask" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">apply_vertex_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.apply_vertex_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.apply_vertex_mask" title="Permalink to this definition">#</a></dt>
 <dd><p>Applies a mask to the vertices (and triangles).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -552,7 +551,7 @@ the ‘world’ (or ‘model’) matrix for each time point</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.from_video">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.from_video" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.from_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.from_video" title="Permalink to this definition">#</a></dt>
 <dd><p>Utility method to directly initialize a <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> object by calling
 the <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function.</p>
 <dl class="field-list simple">
@@ -573,7 +572,7 @@ the <code class="docutils literal notranslate"><span class="pre">videorecon</spa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.load">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.load" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.load" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads an HDF5 file from disk, parses its contents, and creates the
 initialization parameters necessary to initialize a <code class="docutils literal notranslate"><span class="pre">*Data</span></code> object.</p>
 <dl class="field-list simple">
@@ -588,19 +587,19 @@ initialization parameters necessary to initialize a <code class="docutils litera
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.to_local">
-<span class="sig-name descname"><span class="pre">to_local</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.to_local" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_local</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.to_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.to_local" title="Permalink to this definition">#</a></dt>
 <dd><p>Converts the data to local space.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.to_world">
-<span class="sig-name descname"><span class="pre">to_world</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.to_world" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_world</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.to_world"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.to_world" title="Permalink to this definition">#</a></dt>
 <dd><p>Converts the data to world space.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.project_to_68_landmarks">
-<span class="sig-name descname"><span class="pre">project_to_68_landmarks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.project_to_68_landmarks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">project_to_68_landmarks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.project_to_68_landmarks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.project_to_68_landmarks" title="Permalink to this definition">#</a></dt>
 <dd><p>Projects to 68 landmark set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -611,7 +610,7 @@ initialization parameters necessary to initialize a <code class="docutils litera
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.get_face">
-<span class="sig-name descname"><span class="pre">get_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.get_face" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.get_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.get_face" title="Permalink to this definition">#</a></dt>
 <dd><p>Get the data from a particular face in the reconstruction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -622,7 +621,7 @@ initialization parameters necessary to initialize a <code class="docutils litera
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.decompose_mats">
-<span class="sig-name descname"><span class="pre">decompose_mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.decompose_mats" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">decompose_mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.decompose_mats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.decompose_mats" title="Permalink to this definition">#</a></dt>
 <dd><p>Decomponses a time series (of length T) 4x4 affine matrices to a
 numpy array (or pandas <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>) with a time series of T x 12
 affine parameters (translation XYZ, rotation XYZ, scale XYZ, shear
@@ -652,7 +651,7 @@ not (in which case it’s returned as a numpy array)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.compose_mats">
-<span class="sig-name descname"><span class="pre">compose_mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.compose_mats" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compose_mats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.compose_mats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.compose_mats" title="Permalink to this definition">#</a></dt>
 <dd><p>Converts a sequence of global (affine) motion parameters into a
 sequence of 4x4 affine matrices and updates the <code class="docutils literal notranslate"><span class="pre">.mat</span></code> attribute.
 Essentially does the opposite of the <code class="docutils literal notranslate"><span class="pre">decompose_mats</span></code> method.</p>
@@ -676,7 +675,7 @@ Essentially does the opposite of the <code class="docutils literal notranslate">
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.containers.fourD.Data4D.filter_faces">
-<span class="sig-name descname"><span class="pre">filter_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">present_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.containers.fourD.Data4D.filter_faces" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">filter_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">present_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/containers/fourD.html#Data4D.filter_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.containers.fourD.Data4D.filter_faces" title="Permalink to this definition">#</a></dt>
 <dd><p>Filters the reconstructed faces by the proportion of frames they are
 present in.</p>
 <dl class="field-list simple">

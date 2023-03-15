@@ -246,10 +246,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../../../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../misc/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../misc/conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../misc/for_developers.html">For developers</a></li>
 </ul>
 
     </div>
@@ -488,12 +487,12 @@ document.write(`
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.recon.flame.lbs.rot_mat_to_euler">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">rot_mat_to_euler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rot_mats</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.lbs.rot_mat_to_euler" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">rot_mat_to_euler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rot_mats</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/lbs.html#rot_mat_to_euler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.lbs.rot_mat_to_euler" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.recon.flame.lbs.lbs">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">lbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">betas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapedirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posedirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J_regressor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lbs_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose2rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.lbs.lbs" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">lbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">betas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapedirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posedirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J_regressor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lbs_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose2rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/lbs.html#lbs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.lbs.lbs" title="Permalink to this definition">#</a></dt>
 <dd><p>Performs Linear Blend Skinning with the given shape and pose parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -528,7 +527,7 @@ displacements.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.recon.flame.lbs.blend_shapes">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">blend_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">betas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape_disps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.lbs.blend_shapes" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">blend_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">betas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape_disps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/lbs.html#blend_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.lbs.blend_shapes" title="Permalink to this definition">#</a></dt>
 <dd><p>Calculates the per vertex displacement due to the blend shapes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -548,7 +547,7 @@ displacements.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.recon.flame.lbs.batch_rodrigues">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">batch_rodrigues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rot_vecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.lbs.batch_rodrigues" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">batch_rodrigues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rot_vecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/lbs.html#batch_rodrigues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.lbs.batch_rodrigues" title="Permalink to this definition">#</a></dt>
 <dd><p>Calculates the rotation matrices for a batch of rotation vectors
 :param rot_vecs: array of N axis-angle vectors
 :type rot_vecs: torch.tensor Nx3</p>
@@ -564,7 +563,7 @@ displacements.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.recon.flame.lbs.transform_mat">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">transform_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.lbs.transform_mat" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">transform_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/lbs.html#transform_mat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.lbs.transform_mat" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a batch of transformation matrices
 :param - R: Bx3x3 array of a batch of rotation matrices
 :param - t: Bx3x1 array of a batch of translation vectors</p>
@@ -583,7 +582,7 @@ displacements.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.recon.flame.lbs.batch_rigid_transform">
-<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">batch_rigid_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rot_mats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.recon.flame.lbs.batch_rigid_transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.recon.flame.lbs.</span></span><span class="sig-name descname"><span class="pre">batch_rigid_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rot_mats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/medusa/recon/flame/lbs.html#batch_rigid_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.flame.lbs.batch_rigid_transform" title="Permalink to this definition">#</a></dt>
 <dd><p>Applies a batch of rigid transformations to the joints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

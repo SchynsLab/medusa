@@ -246,10 +246,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../misc/conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/for_developers.html">For developers</a></li>
 </ul>
 
     </div>
@@ -502,7 +501,7 @@ file, which is used in the reconstruction process (e.g., in the
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.io.VideoLoader">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoLoader" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoLoader" title="Permalink to this definition">#</a></dt>
 <dd><p>Contains (meta)data and functionality associated with video files (mp4
 files only currently).</p>
 <dl class="field-list simple">
@@ -519,7 +518,7 @@ a B x H x W x 3 tensor (if <code class="docutils literal notranslate"><span clas
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.io.VideoLoader.get_metadata">
-<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoLoader.get_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoLoader.get_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoLoader.get_metadata" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns all (meta)data needed for initialization of a Data object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -534,7 +533,7 @@ a B x H x W x 3 tensor (if <code class="docutils literal notranslate"><span clas
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.io.VideoLoader.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoLoader.close" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoLoader.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoLoader.close" title="Permalink to this definition">#</a></dt>
 <dd><p>Closes the opencv videoloader in the underlying pytorch Dataset.</p>
 </dd></dl>
 
@@ -542,7 +541,7 @@ a B x H x W x 3 tensor (if <code class="docutils literal notranslate"><span clas
 
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.io.VideoDataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoDataset" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoDataset" title="Permalink to this definition">#</a></dt>
 <dd><p>A pytorch Dataset class based on loading frames from a single video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -554,7 +553,7 @@ a B x H x W x 3 tensor (if <code class="docutils literal notranslate"><span clas
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.io.VideoDataset.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoDataset.close" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoDataset.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoDataset.close" title="Permalink to this definition">#</a></dt>
 <dd><p>Closes the pyav videoreader and free up memory.</p>
 </dd></dl>
 
@@ -562,7 +561,7 @@ a B x H x W x 3 tensor (if <code class="docutils literal notranslate"><span clas
 
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.io.VideoWriter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'libx264'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pix_fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'yuv420p'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoWriter" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'libx264'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pix_fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'yuv420p'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoWriter" title="Permalink to this definition">#</a></dt>
 <dd><p>A PyAV based images-to-video writer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -579,7 +578,7 @@ is written)</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.io.VideoWriter.write">
-<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoWriter.write" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoWriter.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoWriter.write" title="Permalink to this definition">#</a></dt>
 <dd><p>Writes one or more images to the video stream.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -591,7 +590,7 @@ a single image or batch of images</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.io.VideoWriter.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.VideoWriter.close" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoWriter.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoWriter.close" title="Permalink to this definition">#</a></dt>
 <dd><p>Closes the video stream.</p>
 </dd></dl>
 
@@ -599,7 +598,7 @@ a single image or batch of images</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.io.load_inputs">
-<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'torch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_batch_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.load_inputs" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'torch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_batch_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.load_inputs" title="Permalink to this definition">#</a></dt>
 <dd><p>Generic image loader function, which also performs some basic
 preprocessing and checks. Is used internally for detection, crop, and
 reconstruction models.</p>
@@ -662,7 +661,7 @@ torch.Size([1, 3, 384, 480])</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.io.download_file">
-<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">download_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'post'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.download_file" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">download_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'post'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#download_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.download_file" title="Permalink to this definition">#</a></dt>
 <dd><p>Downloads a file using requests. Used internally to download external
 data.</p>
 <dl class="field-list simple">
@@ -681,7 +680,7 @@ data.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.io.load_obj">
-<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">load_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.load_obj" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">load_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#load_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.load_obj" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads data from obj file, based on the DECA implementation, which in
 turn is based on the pytorch3d implementation.</p>
 <dl class="field-list simple">
@@ -702,7 +701,7 @@ turn is based on the pytorch3d implementation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.io.save_obj">
-<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">save_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.io.save_obj" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">save_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#save_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.save_obj" title="Permalink to this definition">#</a></dt>
 <dd><p>Saves data to an obj file, based on the implementation from PRNet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

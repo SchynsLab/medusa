@@ -246,10 +246,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../misc/conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/for_developers.html">For developers</a></li>
 </ul>
 
     </div>
@@ -485,7 +484,7 @@ document.write(`
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.geometry.compute_tri_normals">
-<span class="sig-prename descclassname"><span class="pre">medusa.geometry.</span></span><span class="sig-name descname"><span class="pre">compute_tri_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tris</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.geometry.compute_tri_normals" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.geometry.</span></span><span class="sig-name descname"><span class="pre">compute_tri_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tris</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/geometry.html#compute_tri_normals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.geometry.compute_tri_normals" title="Permalink to this definition">#</a></dt>
 <dd><p>Computes triangle (surface/face) normals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -508,7 +507,7 @@ unnormalized triangle normals)</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.geometry.compute_vertex_normals">
-<span class="sig-prename descclassname"><span class="pre">medusa.geometry.</span></span><span class="sig-name descname"><span class="pre">compute_vertex_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tris</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.geometry.compute_vertex_normals" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.geometry.</span></span><span class="sig-name descname"><span class="pre">compute_vertex_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tris</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/geometry.html#compute_vertex_normals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.geometry.compute_vertex_normals" title="Permalink to this definition">#</a></dt>
 <dd><p>Computes vertex normals in a vectorized way, based on the <code class="docutils literal notranslate"><span class="pre">pytorch3d</span></code>
 implementation.</p>
 <dl class="field-list simple">
@@ -529,7 +528,7 @@ implementation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.geometry.apply_vertex_mask">
-<span class="sig-prename descclassname"><span class="pre">medusa.geometry.</span></span><span class="sig-name descname"><span class="pre">apply_vertex_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.geometry.apply_vertex_mask" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.geometry.</span></span><span class="sig-name descname"><span class="pre">apply_vertex_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/geometry.html#apply_vertex_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.geometry.apply_vertex_mask" title="Permalink to this definition">#</a></dt>
 <dd><p>Applies a vertex mask to a tensor of vertices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

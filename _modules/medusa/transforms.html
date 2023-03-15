@@ -1,0 +1,995 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>medusa.transforms &#8212; Medusa</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/medusa/transforms';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Medusa: 4D face reconstruction and analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/installation.html">Medusa installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/citation.html">Citation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/reconstruction.html">4D reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/data_representation.html">Data representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/rendering.html">Rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../api/cli.html">Command-line interface</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/python.html">Python interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/python/containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/containers/threeD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.threeD</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/python/crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/crop/align_crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.align_crop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/crop/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/crop/bbox_crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.bbox_crop</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/python/data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/data/example_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.example_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/data/regenerate_example_recon_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.regenerate_example_recon_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/data/template_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.template_data</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/defaults/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.defaults</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/python/detect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/detect/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/detect/scrfd/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.scrfd</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/detect/yunet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.yunet</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/recon/flame/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/recon/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/render/image/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/python/render/image/pytorch3d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.pytorch3d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.tracking</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/python/transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.transforms</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../misc/bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/for_developers.html">For developers</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2F_modules/medusa/transforms.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for medusa.transforms</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module with functions to implement some often used transformations in</span>
+<span class="sd">Medusa.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">kornia.geometry.transform</span> <span class="kn">import</span> <span class="n">resize</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">Delaunay</span>
+
+<span class="kn">from</span> <span class="nn">.defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
+
+
+<div class="viewcode-block" id="create_viewport_matrix"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.create_viewport_matrix">[docs]</a><span class="k">def</span> <span class="nf">create_viewport_matrix</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a viewport matrix that transforms vertices in NDC [-1, 1] space</span>
+<span class="sd">    to viewport (screen) space. Based on a blogpost by Mauricio Poppe:</span>
+<span class="sd">    https://www.mauriciopoppe.com/notes/computer-graphics/viewing/viewport-</span>
+<span class="sd">    transform/ except that I added the minus sign at [1, 1], which makes sure</span>
+<span class="sd">    that the viewport (screen) space origin is in the top left.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nx : int</span>
+<span class="sd">        Number of pixels in the x dimension (width)</span>
+<span class="sd">    ny : int</span>
+<span class="sd">        Number of pixels in the y dimension (height)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mat : torch.tensor</span>
+<span class="sd">        A 4x4 tensor representing the viewport transform</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="n">nx</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">ny</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">],</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mat</span></div>
+
+
+<div class="viewcode-block" id="create_ortho_matrix"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.create_ortho_matrix">[docs]</a><span class="k">def</span> <span class="nf">create_ortho_matrix</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">znear</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">zfar</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates an orthographic projection matrix, as used by EMOCA/DECA. Based</span>
+<span class="sd">    on the pyrender implementation. Assumes an xmag and ymag of 1.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nx : int</span>
+<span class="sd">        Number of pixels in the x-dimension (width)</span>
+<span class="sd">    ny : int</span>
+<span class="sd">        Number of pixels in the y-dimension (height)</span>
+<span class="sd">    znear : float</span>
+<span class="sd">        Near clipping plane distance (from eye/camera)</span>
+<span class="sd">    zfar : float</span>
+<span class="sd">        Far clipping plane distance (from eye/camera)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mat : torch.tensor</span>
+<span class="sd">        A 4x4 affine matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">znear</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">zfar</span>
+
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">/</span> <span class="n">ny</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">f</span><span class="p">),</span> <span class="p">(</span><span class="n">f</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">f</span><span class="p">)],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">],</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">mat</span></div>
+
+
+<div class="viewcode-block" id="crop_matrix_to_3d"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.crop_matrix_to_3d">[docs]</a><span class="k">def</span> <span class="nf">crop_matrix_to_3d</span><span class="p">(</span><span class="n">mat_33</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transforms a 3x3 matrix used for cropping (on 2D coordinates) into a 4x4</span>
+<span class="sd">    matrix that can be used to transform 3D vertices. It assumes that there is</span>
+<span class="sd">    no rotation element.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mat_33 : torch.tensor</span>
+<span class="sd">        A 3x3 affine matrix</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mat_44 : torch.tensor</span>
+<span class="sd">        A 4x4 affine matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Infer device from input (should always be the same)</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">mat_33</span><span class="o">.</span><span class="n">device</span>
+
+    <span class="c1"># Define translation in x, y, &amp; z (z = 0)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">mat_33</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">t_xyz</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">mat_33</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Add column representing z at the diagonal</span>
+    <span class="n">mat_33</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">mat_33</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">],</span>
+        <span class="p">],</span>
+        <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Add back translation</span>
+    <span class="n">mat_34</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">mat_33</span><span class="p">,</span> <span class="n">t_xyz</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Make it a proper 4x4 matrix</span>
+    <span class="n">mat_44</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">mat_34</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">mat_44</span></div>
+
+
+<div class="viewcode-block" id="apply_perspective_projection"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.apply_perspective_projection">[docs]</a><span class="k">def</span> <span class="nf">apply_perspective_projection</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">mat</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot; Applies a perspective projection of ``v`` into NDC space.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v : torch.tensor</span>
+<span class="sd">        A 2D (vertices x XYZ) tensor with vertex data</span>
+<span class="sd">    mat : torch.tensor</span>
+<span class="sd">        A 4x4 perspective projection matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">v_proj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">@</span> <span class="n">mat</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">v_proj</span> <span class="o">/=</span> <span class="n">v_proj</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">v_proj</span></div>
+
+
+<div class="viewcode-block" id="embed_points_in_mesh"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.embed_points_in_mesh">[docs]</a><span class="k">def</span> <span class="nf">embed_points_in_mesh</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Embed points in an existing mesh by finding the face it is contained in</span>
+<span class="sd">    and computing its barycentric coordinates. Works with either 2D or 3D data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v : np.ndarray</span>
+<span class="sd">        Vertices of the existing mesh (a 2D vertices x [2 or 3] array)</span>
+<span class="sd">    f : np.ndarray</span>
+<span class="sd">        Faces (polygons) of the existing mesh (a 2D faces x [2 or 3] array)</span>
+<span class="sd">    p : np.ndarray</span>
+<span class="sd">        Points (vertices) to embed (a 2D vertices x [2 or 3] array)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    triangles : np.ndarray</span>
+<span class="sd">        A 1D array with faces corresponding to the vertices of ``p``</span>
+<span class="sd">    bcoords : np.ndarray</span>
+<span class="sd">        A 2D array (vertices x 3) array with barycentric coordinates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Replace existing Delaunay triangulation with faces (`f`)</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">tri</span> <span class="o">=</span> <span class="n">Delaunay</span><span class="p">(</span><span class="n">v</span><span class="p">[:,</span> <span class="p">:</span><span class="n">dim</span><span class="p">])</span>
+    <span class="n">tri</span><span class="o">.</span><span class="n">simplices</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+    <span class="c1"># `find_simplex` returns, for each vertex in `p`, the triangle it is contained in</span>
+    <span class="n">triangles</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">find_simplex</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="c1"># For some reason, sometimes it returns an index larger than the number of faces</span>
+    <span class="n">triangles</span><span class="p">[</span><span class="n">triangles</span> <span class="o">&gt;=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="c1"># Compute barycentric coordinates; adapted from:</span>
+    <span class="c1"># https://codereview.stackexchange.com/questions/41024/faster-computation-of-barycentric-coordinates-for-many-points</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="n">triangles</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">tri</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="n">triangles</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ijk,ik-&gt;ij&quot;</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">bcoords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">b</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+
+    <span class="c1"># Some vertices in `p` fall outside the mesh (i.e., not contained in a triangle),</span>
+    <span class="c1"># and get the index `-1`</span>
+    <span class="n">outside</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">triangles</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">outside</span><span class="p">:</span>
+        <span class="c1"># Find the closest vertex (euclidean distance)</span>
+        <span class="n">v_closest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(((</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># alternative: nearest neighbors</span>
+        <span class="c1"># (1 / dist) / (1 / dist).sum()</span>
+
+        <span class="c1"># Find the face(s) in which this vertex is contained</span>
+        <span class="n">f_idx</span><span class="p">,</span> <span class="n">v_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">f</span> <span class="o">==</span> <span class="n">v_closest</span><span class="p">)</span>
+
+        <span class="c1"># Pick (for no specific reason) the first triangle to be one its contained in</span>
+        <span class="n">triangles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Set the barycentric coordinates such that it is 1 for the closest vertex and</span>
+        <span class="c1"># zero elsewhere</span>
+        <span class="n">bcoords</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">bcoords</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">v_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">triangles</span><span class="p">,</span> <span class="n">bcoords</span></div>
+
+
+<div class="viewcode-block" id="project_points_from_embedding"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.project_points_from_embedding">[docs]</a><span class="k">def</span> <span class="nf">project_points_from_embedding</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="n">bcoords</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Project points (vertices) from an existing embedding into a different</span>
+<span class="sd">    space.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v : np.ndarray</span>
+<span class="sd">        Points (vertices) to project (:math:`N \times 3`)</span>
+<span class="sd">    f : np.ndarray</span>
+<span class="sd">        Faces of original mesh</span>
+<span class="sd">    triangles : np.ndarray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vf</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="n">triangles</span><span class="p">]]</span>  <span class="c1"># V x 3 x [2 or 3]</span>
+    <span class="n">proj</span> <span class="o">=</span> <span class="p">(</span><span class="n">vf</span> <span class="o">*</span> <span class="n">bcoords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># V x [2 or 3]</span>
+    <span class="k">return</span> <span class="n">proj</span></div>
+
+
+<div class="viewcode-block" id="estimate_similarity_transform"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.estimate_similarity_transform">[docs]</a><span class="k">def</span> <span class="nf">estimate_similarity_transform</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">estimate_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate a similarity transformation matrix for two batches of points</span>
+<span class="sd">    with N observations and M dimensions; reimplementation of the ``_umeyama``</span>
+<span class="sd">    function of the scikit-image package.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    src : torch.Tensor</span>
+<span class="sd">        A tensor with shape batch_size x N x M</span>
+<span class="sd">    dst : torch.Tensor</span>
+<span class="sd">        A tensor with shape batch_size x N x M</span>
+<span class="sd">    estimate_scale : bool</span>
+<span class="sd">        Whether to also estimate a scale parameter</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        When N (number of points) &lt; M (number of dimensions)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">batch</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="n">dim</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot compute (unique) transform with fewer &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;points (</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">) than dimensions (</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">)!&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">device</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">device</span>
+    <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">device</span> <span class="o">!=</span> <span class="n">device</span><span class="p">:</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dst</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Compute mean of src and dst.</span>
+    <span class="n">src_mean</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dst_mean</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Subtract mean from src and dst.</span>
+    <span class="n">src_demean</span> <span class="o">=</span> <span class="n">src</span> <span class="o">-</span> <span class="n">src_mean</span>
+    <span class="n">dst_demean</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">-</span> <span class="n">dst_mean</span>
+
+    <span class="c1"># Eq. (38).</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">dst_demean</span><span class="o">.</span><span class="n">mT</span> <span class="o">@</span> <span class="n">src_demean</span> <span class="o">/</span> <span class="n">num</span>
+
+    <span class="c1"># # Eq. (39).</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">batch</span><span class="p">,</span> <span class="n">dim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">d</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+    <span class="c1"># # Eq. (40) and (43).</span>
+    <span class="n">rank</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">T</span><span class="p">[</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">*=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">det_U</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+    <span class="n">det_V</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">rank</span> <span class="o">==</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">det_U</span> <span class="o">*</span> <span class="n">det_V</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">idx</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">T</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:</span><span class="n">dim</span><span class="p">,</span> <span class="p">:</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">@</span> <span class="n">V</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">rank</span> <span class="o">==</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">det_U</span> <span class="o">*</span> <span class="n">det_V</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">idx</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">T</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:</span><span class="n">dim</span><span class="p">,</span> <span class="p">:</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">@</span> <span class="n">torch</span><span class="o">.</span><span class="n">diag_embed</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:])</span> <span class="o">@</span> <span class="n">V</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">rank</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rank</span> <span class="o">!=</span> <span class="p">(</span><span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">idx</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">T</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:</span><span class="n">dim</span><span class="p">,</span> <span class="p">:</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">@</span> <span class="n">torch</span><span class="o">.</span><span class="n">diag_embed</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">@</span> <span class="n">V</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">estimate_scale</span><span class="p">:</span>
+        <span class="c1"># Eq. (41) and (42).</span>
+        <span class="n">src_var</span> <span class="o">=</span> <span class="n">src_demean</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">src_var</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">S</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">dst_mean</span> <span class="o">=</span> <span class="n">dst_mean</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">src_mean</span> <span class="o">=</span> <span class="n">src_mean</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">T</span><span class="p">[:,</span> <span class="p">:</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">dst_mean</span> <span class="o">-</span> <span class="n">scale</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="n">T</span><span class="p">[:,</span> <span class="p">:</span><span class="n">dim</span><span class="p">,</span> <span class="p">:</span><span class="n">dim</span><span class="p">]</span> <span class="o">@</span> <span class="n">src_mean</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">T</span><span class="p">[:,</span> <span class="p">:</span><span class="n">dim</span><span class="p">,</span> <span class="p">:</span><span class="n">dim</span><span class="p">]</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">T</span></div>
+
+
+<div class="viewcode-block" id="resize_with_pad"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.resize_with_pad">[docs]</a><span class="k">def</span> <span class="nf">resize_with_pad</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">),</span> <span class="n">out_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resizes image with right-bottom padding (with zeros), as used in</span>
+<span class="sd">    insightface&#39;s ``SCRFD`` detector.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    imgs : torch.tensor</span>
+<span class="sd">        Tensor of shape b x 3 x h x w (batch dimension is optional)</span>
+<span class="sd">    output_size : tuple</span>
+<span class="sd">        Desired output shape (width, heigth)</span>
+<span class="sd">    out_dtype : torch dtype</span>
+<span class="sd">        Output datatype</span>
+<span class="sd">    kwargs : dict</span>
+<span class="sd">        Keyword arguments passed to ``kornia.geometry.transform.resize``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    imgs : torch.tensor</span>
+<span class="sd">        Resized images of shape b x 3 x new_h x new_w</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ih</span><span class="p">,</span> <span class="n">iw</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">im_ratio</span> <span class="o">=</span> <span class="n">ih</span> <span class="o">/</span> <span class="n">iw</span>
+
+    <span class="n">mw</span><span class="p">,</span> <span class="n">mh</span> <span class="o">=</span> <span class="n">output_size</span>
+    <span class="n">model_ratio</span> <span class="o">=</span> <span class="n">mh</span> <span class="o">/</span> <span class="n">mw</span>
+
+    <span class="k">if</span> <span class="n">im_ratio</span> <span class="o">&gt;</span> <span class="n">model_ratio</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">mh</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">h</span> <span class="o">/</span> <span class="n">im_ratio</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">mw</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">im_ratio</span>
+
+    <span class="n">out_shape</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">imgs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">out_shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mh</span><span class="p">,</span> <span class="n">mw</span><span class="p">]</span>
+
+    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">h</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">imgs_resized</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">out_shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">imgs</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">out_dtype</span><span class="p">)</span>
+    <span class="n">imgs_resized</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="n">h</span><span class="p">,</span> <span class="p">:</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">out_dtype</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">imgs</span>  <span class="c1"># free up space</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">h</span> <span class="o">/</span> <span class="n">ih</span>
+    <span class="k">return</span> <span class="n">imgs_resized</span><span class="p">,</span> <span class="n">scale</span></div>
+
+
+<span class="c1"># epsilon for testing whether a number is close to zero</span>
+<span class="n">_EPS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span> <span class="o">*</span> <span class="mf">4.0</span>
+
+<span class="c1"># axis sequences for Euler angles</span>
+<span class="n">_NEXT_AXIS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># map axes strings to/from tuples of inner axis, parity, repetition, frame</span>
+<span class="n">_AXES2TUPLE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;sxyz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;sxyx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;sxzy&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;sxzx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;syzx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;syzy&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;syxz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;syxy&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;szxy&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;szxz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;szyx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;szyz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="s1">&#39;rzyx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;rxyx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;ryzx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;rxzx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;rxzy&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;ryzy&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;rzxy&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;ryxy&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;ryxz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;rzxz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;rxyz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;rzyz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span>
+
+<span class="n">_TUPLE2AXES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_AXES2TUPLE</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="euler_matrix"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.euler_matrix">[docs]</a><span class="k">def</span> <span class="nf">euler_matrix</span><span class="p">(</span><span class="n">ai</span><span class="p">,</span> <span class="n">aj</span><span class="p">,</span> <span class="n">ak</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="s1">&#39;sxyz&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return homogeneous rotation matrix from Euler angles and axis</span>
+<span class="sd">    sequence.&quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">firstaxis</span><span class="p">,</span> <span class="n">parity</span><span class="p">,</span> <span class="n">repetition</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">_AXES2TUPLE</span><span class="p">[</span><span class="n">axes</span><span class="p">]</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+        <span class="n">_TUPLE2AXES</span><span class="p">[</span><span class="n">axes</span><span class="p">]</span>  <span class="c1"># validation</span>
+        <span class="n">firstaxis</span><span class="p">,</span> <span class="n">parity</span><span class="p">,</span> <span class="n">repetition</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">axes</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="n">firstaxis</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">_NEXT_AXIS</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">parity</span><span class="p">]</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">_NEXT_AXIS</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">parity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">frame</span><span class="p">:</span>
+        <span class="n">ai</span><span class="p">,</span> <span class="n">ak</span> <span class="o">=</span> <span class="n">ak</span><span class="p">,</span> <span class="n">ai</span>
+    <span class="k">if</span> <span class="n">parity</span><span class="p">:</span>
+        <span class="n">ai</span><span class="p">,</span> <span class="n">aj</span><span class="p">,</span> <span class="n">ak</span> <span class="o">=</span> <span class="o">-</span><span class="n">ai</span><span class="p">,</span> <span class="o">-</span><span class="n">aj</span><span class="p">,</span> <span class="o">-</span><span class="n">ak</span>
+
+    <span class="n">si</span><span class="p">,</span> <span class="n">sj</span><span class="p">,</span> <span class="n">sk</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ai</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">aj</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ak</span><span class="p">)</span>
+    <span class="n">ci</span><span class="p">,</span> <span class="n">cj</span><span class="p">,</span> <span class="n">ck</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ai</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">aj</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ak</span><span class="p">)</span>
+    <span class="n">cc</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">ck</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">sk</span>
+    <span class="n">sc</span><span class="p">,</span> <span class="n">ss</span> <span class="o">=</span> <span class="n">si</span> <span class="o">*</span> <span class="n">ck</span><span class="p">,</span> <span class="n">si</span> <span class="o">*</span> <span class="n">sk</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">repetition</span><span class="p">:</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cj</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">*</span> <span class="n">si</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">*</span> <span class="n">ci</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">*</span> <span class="n">sk</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">cj</span> <span class="o">*</span> <span class="n">ss</span> <span class="o">+</span> <span class="n">cc</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">cj</span> <span class="o">*</span> <span class="n">cs</span> <span class="o">-</span> <span class="n">sc</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sj</span> <span class="o">*</span> <span class="n">ck</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">sc</span> <span class="o">+</span> <span class="n">cs</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">cc</span> <span class="o">-</span> <span class="n">ss</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">ck</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">*</span> <span class="n">sc</span> <span class="o">-</span> <span class="n">cs</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">*</span> <span class="n">cc</span> <span class="o">+</span> <span class="n">ss</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">sk</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">*</span> <span class="n">ss</span> <span class="o">+</span> <span class="n">cc</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">*</span> <span class="n">cs</span> <span class="o">-</span> <span class="n">sc</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sj</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">si</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">ci</span>
+    <span class="k">return</span> <span class="n">M</span></div>
+
+
+<div class="viewcode-block" id="compose_matrix"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.compose_matrix">[docs]</a><span class="k">def</span> <span class="nf">compose_matrix</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">angles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">perspective</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return transformation matrix from sequence of transformations.&quot;&quot;&quot;</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">perspective</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">P</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">perspective</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">translate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">translate</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">angles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">euler_matrix</span><span class="p">(</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">angles</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;sxyz&#39;</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">shear</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">Z</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">shear</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">Z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">shear</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">Z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">shear</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">S</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">S</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">S</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">/=</span> <span class="n">M</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">M</span></div>
+
+
+<div class="viewcode-block" id="vector_norm"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.vector_norm">[docs]</a><span class="k">def</span> <span class="nf">vector_norm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return length, i.e. Euclidean norm, of ndarray along axis.&quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">*=</span> <span class="n">data</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">*=</span> <span class="n">data</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="decompose_matrix"><a class="viewcode-back" href="../../api/python/transforms/index.html#medusa.transforms.decompose_matrix">[docs]</a><span class="k">def</span> <span class="nf">decompose_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return sequence of transformations from transformation matrix.&quot;&quot;&quot;</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">_EPS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;M[3, 3] is zero&quot;</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">/=</span> <span class="n">M</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">P</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;matrix is singular&quot;</span><span class="p">)</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="p">))</span>
+    <span class="n">shear</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+    <span class="n">angles</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">M</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">_EPS</span><span class="p">):</span>
+        <span class="n">perspective</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="n">M</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">perspective</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+
+    <span class="n">translate</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">M</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">row</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_norm</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">shear</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">shear</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_norm</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">shear</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">shear</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">shear</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">shear</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">shear</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">scale</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_norm</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">shear</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/=</span> <span class="n">scale</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">negative</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">negative</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+
+    <span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">asin</span><span class="p">(</span><span class="o">-</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">angles</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="o">-</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">angles</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">return</span> <span class="n">scale</span><span class="p">,</span> <span class="n">shear</span><span class="p">,</span> <span class="n">angles</span><span class="p">,</span> <span class="n">translate</span><span class="p">,</span> <span class="n">perspective</span></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Lukas Snoek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Developed at the University of Glasgow
+</div>
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

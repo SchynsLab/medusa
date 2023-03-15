@@ -246,10 +246,9 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../misc/for_developers.html">For developers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../misc/conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/for_developers.html">For developers</a></li>
 </ul>
 
     </div>
@@ -485,7 +484,7 @@ document.write(`
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.onnx.OnnxModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.onnx.</span></span><span class="sig-name descname"><span class="pre">OnnxModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">onnx_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.onnx.OnnxModel" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.onnx.</span></span><span class="sig-name descname"><span class="pre">OnnxModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">onnx_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/onnx.html#OnnxModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.onnx.OnnxModel" title="Permalink to this definition">#</a></dt>
 <dd><p>Wrapper around an onnxruntime session to make running with an iobinding
 easier.</p>
 <dl class="field-list simple">
@@ -500,7 +499,7 @@ to be set in <cite>_params</cite> (which override those parameters from the onnx
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.onnx.OnnxModel.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs_as_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#medusa.onnx.OnnxModel.run" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs_as_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/onnx.html#OnnxModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.onnx.OnnxModel.run" title="Permalink to this definition">#</a></dt>
 <dd><p>Runs the model with given inputs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
