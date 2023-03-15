@@ -25,37 +25,36 @@ well as details on Medusa's [command-line interface](api/cli) and
 
 On this website you can also find several tutorials on Medusa's features:
 
-::::{grid}
-:gutter: 3
+::::{card-carousel} 1
 
-:::{grid-item-card} Quickstart
+:::{card} Quickstart
 :img-bottom: ./images/quickstart_img.png
 :link: ./getting_started/quickstart
 :link-type: doc
 :::
 
-:::{grid-item-card} 4D reconstruction
+:::{card} 4D reconstruction
 :img-bottom: ./images/recon_gif.gif
 :link: ./tutorials/reconstruction
 :link-type: doc
 :::
 
-:::{grid-item-card} Data representation
+:::{card} Data representation
 :link: ./tutorials/data_representation
 :link-type: doc
 :::
 
-:::{grid-item-card} Rendering
+:::{card} Rendering
 :link: ./tutorials/rendering
 :link-type: doc
 :::
 
-:::{grid-item-card} Analysis
+:::{card} Analysis
 :link: ./tutorials/analysis
 :link-type: doc
 :::
 
-:::{grid-item-card} Face & landmark detection
+:::{card} Face & landmark detection
 :link: ./tutorials/face_and_landmark_detection
 :link-type: doc
 :::
