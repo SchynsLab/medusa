@@ -7,9 +7,9 @@
 Module Contents
 ---------------
 
-.. py:class:: Overlay(v, colormap='bwr', vmin=None, vmax=None, vcenter=0)
+.. py:class:: Overlay(v, colormap='bwr', vmin=None, vmax=None, vcenter=None, dim='normals')
 
-   .. py:method:: to_array(v0=None, dim='normals', alpha=False, tris=None)
+   .. py:method:: to_array()
 
 
 

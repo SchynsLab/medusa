@@ -419,26 +419,13 @@ document.write(`
 <span class="sd">        Lights to use in rendering; if None, a default PointLight will be used</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shading</span><span class="o">=</span><span class="s2">&quot;flat&quot;</span><span class="p">,</span> <span class="n">lights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shading</span><span class="o">=</span><span class="s2">&quot;flat&quot;</span><span class="p">,</span> <span class="n">lights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a VideoRenderer object.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">render_cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_render_cls</span><span class="p">(</span><span class="n">render_cls</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shading</span> <span class="o">=</span> <span class="n">shading</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lights</span> <span class="o">=</span> <span class="n">lights</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># lazy init</span>
-        
-    <span class="k">def</span> <span class="nf">_determine_render_cls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determines the renderer class to use.&quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">render_cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># try importing pytorch3d renderer</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="kn">from</span> <span class="nn">.image</span> <span class="kn">import</span> <span class="n">PytorchRenderer</span>
-            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;pytorch3d not installed!&quot;</span><span class="p">)</span>
-
-            <span class="k">return</span> <span class="n">PytorchRenderer</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">render_cls</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">loglevel</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_out</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders the sequence of 3D meshes from a Data4D object as a video.</span>
@@ -459,6 +446,11 @@ document.write(`
 <span class="sd">            Data4D object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">PytorchRenderer</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;pytorch3d not installed; cannot render!&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">_infer_topo</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;mediapipe&#39;</span><span class="p">:</span>
             <span class="n">cam_type</span> <span class="o">=</span> <span class="s2">&quot;perspective&quot;</span>
         <span class="k">else</span><span class="p">:</span>
@@ -471,7 +463,7 @@ document.write(`
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Initialize renderer</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_cls</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span> <span class="o">=</span> <span class="n">PytorchRenderer</span><span class="p">(</span>
                 <span class="n">viewport</span><span class="p">,</span> <span class="n">cam_mat</span><span class="p">,</span> <span class="n">cam_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shading</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="p">,</span> <span class="n">device</span>
             <span class="p">)</span>
 
@@ -515,8 +507,10 @@ document.write(`
                     <span class="c1"># Check if it&#39;s a single overlay (which should be used for every</span>
                     <span class="c1"># frame) or a batch of overlays (one per frame)</span>
                     <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">overlay</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">overlay</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">overlay</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">data</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                             <span class="n">this_overlay</span> <span class="o">=</span> <span class="n">overlay</span><span class="p">[</span><span class="n">img_idx</span><span class="p">]</span>
+                        <span class="k">elif</span> <span class="n">overlay</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">data</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                            <span class="n">this_overlay</span> <span class="o">=</span> <span class="n">overlay</span>
 
                 <span class="c1"># Render mesh and alpha blend with background</span>
                 <span class="n">this_v</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">img_idx</span><span class="p">]</span>

@@ -410,7 +410,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Closes the currently used renderer.&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">tex</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;numpy&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;numpy&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs some basic preprocessing of the vertices and triangles that</span>
 <span class="sd">        is common to all renderers.</span>
 
@@ -437,6 +437,10 @@ document.write(`
         <span class="k">if</span> <span class="n">tris</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">tris</span> <span class="o">=</span> <span class="n">tris</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">overlay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">overlay</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">overlay</span> <span class="o">=</span> <span class="n">overlay</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;numpy&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
@@ -444,10 +448,10 @@ document.write(`
             <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">tris</span><span class="p">):</span>
                 <span class="n">tris</span> <span class="o">=</span> <span class="n">tris</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">tex</span><span class="p">):</span>
-                <span class="n">tex</span> <span class="o">=</span> <span class="n">tex</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">overlay</span><span class="p">):</span>
+                <span class="n">overlay</span> <span class="o">=</span> <span class="n">overlay</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">tex</span>
+        <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span>
 
 <div class="viewcode-block" id="BaseRenderer.alpha_blend"><a class="viewcode-back" href="../../../../api/python/render/image/base/index.html#medusa.render.image.base.BaseRenderer.alpha_blend">[docs]</a>    <span class="k">def</span> <span class="nf">alpha_blend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">background</span><span class="p">,</span> <span class="n">face_alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple alpha blend of a rendered image and a background. The image</span>

@@ -13,7 +13,7 @@
 Module Contents
 ---------------
 
-.. py:class:: VideoRenderer(render_cls=None, shading='flat', lights=None)
+.. py:class:: VideoRenderer(shading='flat', lights=None, loglevel='INFO')
 
    Renders a 4D mesh to a video.
 
