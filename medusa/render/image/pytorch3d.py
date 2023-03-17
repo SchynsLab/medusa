@@ -196,9 +196,6 @@ class PytorchRenderer(BaseRenderer):
             # Note to self: Meshes *always* needs a texture, so create a dummy one
             overlay = TexturesVertex(torch.ones_like(v, device=self.device))
         elif torch.is_tensor(overlay):
-            if overlay.shape[-2] != v.shape[-2]:
-                raise ValueError("Tensor-based overlays should have the same number of "
-                                 "vertices as the mesh!")
             overlay = TexturesVertex(overlay)
 
         meshes = Meshes(v, tris, textures=overlay)
@@ -231,7 +228,7 @@ class PytorchRenderer(BaseRenderer):
         """
 
         meshes = self._create_meshes(v, tris, overlay, mask=mask)
-        self._fn = meshes.verts_normals_packed()[meshes.faces_packed()]
+        #self._fn = meshes.verts_normals_packed()[meshes.faces_packed()]
         imgs, frags = self._renderer(meshes)
 
         if single_image:

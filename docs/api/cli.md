@@ -21,7 +21,7 @@ Usage: medusa_videorecon [OPTIONS] VIDEO_PATH
 Options:
   -o, --out PATH                  File to save output to (shouldn't have an
                                   extension)
-  -r, --recon-model [spectre-coarse|emoca-dense|emoca-coarse|deca-dense|deca-coarse|mediapipe]
+  -r, --recon-model               [spectre-coarse|emoca-dense|emoca-coarse|deca-dense|deca-coarse|mediapipe]
                                   Name of the reconstruction model
   --device [cpu|cuda]             Device to run the reconstruction on (only
                                   relevant for EMOCA
@@ -32,15 +32,15 @@ Options:
 
 For example, the `medusa_videorecon` command has a single mandatory argument,
 `VIDEO_PATH`, and several (non-mandatory) options, like `--recon-model`.
-If the option accepts an argument, like `--recon-model` or `--out-dir`, then it also
+If the option accepts an argument, like `--recon-model` or `--out`, then it also
 shows the available options (such as "emoca", "mediapipe", in case of `--recon-model`)
-or the expected input type (like "PATH" in case of `--out-dir`).
+or the expected input type (like "PATH" in case of `--out`).
 
 If you, for example, would like to reconstruct your video, `my_vid.mp4`, using the
-"mediapipe" model and store the output in the `recon/` directory, you'd run:
+"mediapipe" model and store the output as `my_vid.h5`, you'd run:
 
 ```console
-$ medusa_videorecon my_vid.mp4 --recon-model mediapipe --out-dir recon/
+$ medusa_videorecon my_vid.mp4 --recon-model mediapipe --out my_vid.h5
 ```
 
 Each CLI command follows its underlying Python function closely in terms of which
@@ -54,25 +54,30 @@ each command's options, run the command with the `--help` flag.
 
 ### `medusa_videorecon`
 
-This command reconstructs the 3D face in each frame of the video. It assumes that the
-video is in MP4 format and has the extension `.mp4`. It also assumes (for now) that
-there is one, and only one, face present in each frame of the video.
+This command reconstructs the 3D face in each frame of the video. It works for a variety
+of video formats and is able to reconstruct videos with multiple faces.
+
+```{note}
+If you're getting out-of-memory errors, try reducing the batch size (< 32).
+```
 
 This CLI command uses the Python function
 [`medusa.recon.videorecon`](./python/recon/recon/index) under the hood.
 
 ### `medusa_videorender`
 
-This command renders the time series of the reconstructed 3D face meshes as an MP4 video
-or GIF (depending on the `--format` flag). It expects as input an HDF5 file with
-reconstruction data and, if you want to render the reconstruction on top of the original
-videon, a video file (e.g., `--video my_video.mp4`).
+This command renders the reconstructed 4D face meshes as an (untextured) MP4 video. It
+expects as input an HDF5 file with reconstruction data and, if you want to render the
+reconstruction on top of the original videon, a video file (e.g., `--video my_video.mp4`).
+For more options, run `medusa_videorender --help`.
 
-This CLI command uses the `render_video` method from the
-[`medusa.core.Data4D`](./python/containers/fourD/index) class.
+This CLI command uses the `VideoRenderer` class from the [`medusa.io`](./python/io/index)
+module.
 
 ### `medusa_download_ext_data`
 
 This command downloads external data necessary for some detection and reconstruction
 models. As explained in the [installation instructions](../getting_started/installation),
 you need to create an account on the [FLAME website](https://flame.is.tue.mpg.de/) first.
+
+Run `medusa_download_ext_data --help` for more information.

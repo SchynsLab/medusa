@@ -23,26 +23,13 @@ class VideoRenderer:
         Lights to use in rendering; if None, a default PointLight will be used
     """
 
-    def __init__(self, render_cls=None, shading="flat", lights=None):
+    def __init__(self, shading="flat", lights=None, loglevel="INFO"):
         """Initializes a VideoRenderer object."""
-        self.render_cls = self._determine_render_cls(render_cls)
         self.shading = shading
         self.lights = lights
         self._renderer = None  # lazy init
 
-    def _determine_render_cls(self, render_cls):
-        """Determines the renderer class to use."""
-
-        if render_cls is None:
-            # try importing pytorch3d renderer
-            try:
-                from .image import PytorchRenderer
-            except ImportError:
-                raise ValueError("pytorch3d not installed!")
-
-            return PytorchRenderer
-        else:
-            return render_cls
+        LOGGER.setLevel(loglevel)
 
     def __call__(self, f_out, data, overlay=None, video=None, **kwargs):
         """Renders the sequence of 3D meshes from a Data4D object as a video.
@@ -63,6 +50,11 @@ class VideoRenderer:
             Data4D object.
         """
 
+        try:
+            from . import PytorchRenderer
+        except ImportError:
+            raise ImportError("pytorch3d not installed; cannot render!")
+
         if data._infer_topo() == 'mediapipe':
             cam_type = "perspective"
         else:
@@ -75,7 +67,7 @@ class VideoRenderer:
 
         if self._renderer is None:
             # Initialize renderer
-            self._renderer = self.render_cls(
+            self._renderer = PytorchRenderer(
                 viewport, cam_mat, cam_type, self.shading, self.lights, device
             )
 
@@ -119,8 +111,10 @@ class VideoRenderer:
                     # Check if it's a single overlay (which should be used for every
                     # frame) or a batch of overlays (one per frame)
                     if torch.is_tensor(overlay):
-                        if overlay.ndim == 3:
+                        if overlay.shape[0] == data.v.shape[0]:
                             this_overlay = overlay[img_idx]
+                        elif overlay.shape[0] == data.v.shape[1]:
+                            this_overlay = overlay
 
                 # Render mesh and alpha blend with background
                 this_v = data.v[img_idx]

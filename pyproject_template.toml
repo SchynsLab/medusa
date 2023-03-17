@@ -1,7 +1,7 @@
 [tool.poetry]
 # filled in by set_package_version.py
 name = "{package_name}"
-version = "0.0.3"
+version = "0.0.4"
 description = "Medusa: 4D face reconstruction and analysis"
 authors = ["Lukas Snoek <lukassnoek@gmail.com>"]
 license = "BSD-3-Clause"

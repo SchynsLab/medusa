@@ -8,14 +8,16 @@ from ..data import get_tris
 
 class Overlay:
 
-    def __init__(self, v, colormap='bwr', vmin=None, vmax=None, vcenter=0):
+    def __init__(self, v, colormap='bwr', vmin=None, vmax=None, vcenter=None,
+                 dim='normals'):
         self.v = v
         self.vmin = vmin
         self.vmax = vmax
         self.vcenter = vcenter
         self._cmap = cm.get_cmap(colormap)
+        self.dim = dim
 
-    def _create_tsn(self, v):
+    def _create_norm(self, v):
 
         if self.vmin is None:
             self.vmin = v.min()
@@ -25,18 +27,21 @@ class Overlay:
 
         return TwoSlopeNorm(vmin=self.vmin, vcenter=self.vcenter, vmax=self.vmax)
 
-    def to_array(self, v0=None, dim='normals', alpha=False, tris=None):
+    def to_array(self):
 
         v = self.v
         device = v.device
 
         if v.shape[-1] == 3:
-            if dim == 'normals':
+            if self.dim == 'normals':
                 # We're dealing with XYZ coordinates; project onto normal
-                if tris is None:
-                    tris = get_tris(topo='flame-coarse', device=device)
+                if v.shape[-2] == 468:
+                    topo = 'mediapipe'
+                else:
+                    topo = 'flame-coarse'
 
-                normals = compute_vertex_normals(v0, tris)
+                tris = get_tris(topo=topo, device=device)
+                normals = compute_vertex_normals(v[0], tris)
                 v = (v * normals).sum(dim=-1)
             elif dim in (0, 1, 2):
                 v = v[..., dim]
@@ -47,15 +52,13 @@ class Overlay:
             pass
 
         # TODO: not only two-slope norm
-        tsn = self._create_tsn(v)
+        tsn = self._create_norm(v)
 
         v = v.cpu().numpy()
         v = self._cmap(tsn(v))
+        v = v[..., :3]  # remove alpha
 
         if device is not None:
             v = torch.as_tensor(v, device=device, dtype=torch.float32)
-
-        if not alpha:
-            v = v[..., :3]
 
         return v

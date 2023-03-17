@@ -11,12 +11,12 @@ sphinx-build -b html docs/autoapi docs/autoapi/_build
 
 # Move the generated rst files to somewhere Jupyter book can find them
 cp -r docs/autoapi/_build/_sources/autoapi/medusa/* docs/api/python/
-rm -r docs/api/python/index.rst.txt
+rm -r docs/api/python/index.rst
 
 # Fix the weird rst.txt extension
-for f in $(find docs/api/python -name \*.rst.txt); do
-    mv $f ${f/.rst.txt/.rst}
-done
+#for f in $(find docs/api/python -name \*.rst.txt); do
+#    mv $f ${f/.rst.txt/.rst}
+#done
 
 # Finally build the entire docs
 jupyter-book build docs/

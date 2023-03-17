@@ -14,7 +14,7 @@ class BaseRenderer(ABC):
         """Closes the currently used renderer."""
         pass
 
-    def _preprocess(self, v, tris, tex, format="numpy"):
+    def _preprocess(self, v, tris, overlay=None, format="numpy"):
         """Performs some basic preprocessing of the vertices and triangles that
         is common to all renderers.
 
@@ -41,6 +41,10 @@ class BaseRenderer(ABC):
         if tris.ndim == 2:
             tris = tris.repeat(v.shape[0], 1, 1)
 
+        if overlay is not None:
+            if overlay.ndim == 2:
+                overlay = overlay.repeat(v.shape[0], 1, 1)
+
         if format == "numpy":
             if torch.is_tensor(v):
                 v = v.cpu().numpy()
@@ -48,10 +52,10 @@ class BaseRenderer(ABC):
             if torch.is_tensor(tris):
                 tris = tris.cpu().numpy()
 
-            if torch.is_tensor(tex):
-                tex = tex.cpu().numpy()
+            if torch.is_tensor(overlay):
+                overlay = overlay.cpu().numpy()
 
-        return v, tris, tex
+        return v, tris, overlay
 
     def alpha_blend(self, img, background, face_alpha=None):
         """Simple alpha blend of a rendered image and a background. The image

@@ -1,7 +1,6 @@
 # Medusa: 4D face reconstruction and analysis
 
 [![CI](https://github.com/medusa-4D/medusa/actions/workflows/tests.yaml/badge.svg)](https://github.com/medusa-4D/medusa/actions/workflows/tests.yaml)
-[![CI](https://github.com/medusa-4D/medusa/actions/workflows/docs.yaml/badge.svg)](https://medusa.lukas-snoek.com/medusa)
 ![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lukassnoek/420039a0fe8fb8c1170e0478cdcd0f26/raw/medusa_coverage_badge.json)
 ![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lukassnoek/cb6da52c965ec24f136b74a1ebad1964/raw/medusa_interrogate_badge.json)
 ![Python](https://img.shields.io/badge/python-3.9-blue.svg)
@@ -19,7 +18,48 @@ underlying methods, check out the video below.
 
 On this website, you can find general information about Medusa (such as how to
 [install](getting_started/installation) and [cite](getting_started/citation) it), as
-well as several tutorials and details on Medusa's [command-line interface](api/cli) and
+well as details on Medusa's [command-line interface](api/cli) and
 [Python interface](api/python).
 
-A great way to get more familiar with the package is to check out the [quickstart](getting_started/quickstart)!
+## Tutorials
+
+On this website you can also find several tutorials on Medusa's features:
+
+::::{card-carousel} 4
+
+:::{card} Quickstart
+:img-bottom: ./images/quickstart_img.png
+:link: ./getting_started/quickstart
+:link-type: doc
+:::
+
+:::{card} 4D reconstruction
+:img-bottom: ./images/recon_gif.gif
+:link: ./tutorials/reconstruction
+:link-type: doc
+:::
+
+:::{card} Data representation
+:link: ./tutorials/data_representation
+:link-type: doc
+:::
+
+:::{card} Rendering
+:img-bottom: ./images/render_gif.gif
+:link: ./tutorials/rendering
+:link-type: doc
+:::
+
+:::{card} Analysis
+:link: ./tutorials/analysis
+:link-type: doc
+:::
+
+:::{card} Face & landmark detection
+:link: ./tutorials/face_and_landmark_detection
+:link-type: doc
+:::
+
+::::
+
+A great way to get more familiar with the package is to check out the [quickstart](./getting_started/quickstart)!

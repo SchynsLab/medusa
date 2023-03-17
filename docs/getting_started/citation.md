@@ -2,12 +2,13 @@
 
 If you use Medusa in your research, please cite it as follows:
 
-````{tab-set}
-```{tab-item} APA
+`````{tab-set}
+````{tab-item} APA
 Snoek, L., Jack, R., & Schyns, P. (2023, January 7). Dynamic face imaging: a novel analysis framework for 4D social face perception and expression. *IEEE 17th International Conference on Automatic Face and Gesture Recognition (FG)*, 1-4. https://doi.org/10.1109/FG57933.2023.10042724.
-```
+````
 
-```{tab-item} BibTeX
+````{tab-item} BibTeX
+```bibtex
 @inproceedings{snoek2023dynamic,
   title={Dynamic face imaging: a novel analysis framework for 4D social face perception and expression},
   author={Snoek, Lukas and Jack, Rachael E and Schyns, Philippe G},
@@ -18,6 +19,7 @@ Snoek, L., Jack, R., & Schyns, P. (2023, January 7). Dynamic face imaging: a nov
 }
 ```
 ````
+`````
 
 ## Citing reconstruction models
 
@@ -38,3 +40,7 @@ Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
 ### Spectre
 
 > Filntisis, P. P., Retsinas, G., Paraperas-Papantoniou, F., Katsamanis, A., Roussos, A., & Maragos, P. (2022). Visual Speech-Aware Perceptual 3D Facial Expression Reconstruction from Videos. *arXiv preprint arXiv:2207.11094*.
+
+## Website
+
+This website (including documentation) was created using Jupyter Book {cite}`executable_books_community_2020_4539666`.

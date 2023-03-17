@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "medusa"
-version = "0.0.3"
+version = "0.0.4"
 description = "Medusa: 4D face reconstruction and analysis"
 authors = [ "Lukas Snoek <lukassnoek@gmail.com>",]
 license = "BSD-3-Clause"

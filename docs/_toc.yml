@@ -7,15 +7,13 @@ parts:
   - file: getting_started/quickstart
   - file: getting_started/citation
     title: Citation
-  - file: getting_started/license
 - caption: Tutorials
   chapters:
   - file: tutorials/reconstruction
   - file: tutorials/data_representation
   - file: tutorials/rendering
   - file: tutorials/analysis
-  - file: tutorials/experimentation
-    title: Experimentation
+  - file: tutorials/face_and_landmark_detection
 #- caption: Examples
 #  chapters:
 #  - glob: examples/*
@@ -29,4 +27,4 @@ parts:
   chapters:
   - file: misc/bibliography
   - file: misc/contributing
-  - file: misc/conduct
+  - file: misc/for_developers

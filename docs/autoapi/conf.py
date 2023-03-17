@@ -31,19 +31,20 @@ author = "Lukas Snoek"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["autoapi.extension", "sphinx.ext.napoleon", "sphinx.ext.linkcode"]
+extensions = ["autoapi.extension", "sphinx.ext.napoleon", "sphinxcontrib.bibtex"]
+bibtex_bibfiles = ['../references.bib']
+bibtex_reference_style = "author_year"
 
+# def linkcode_resolve(domain, info):
+#     """Used by linkcode extension; adds a link to the source code on github."""
+#     if domain != "py":
+#         return None
 
-def linkcode_resolve(domain, info):
-    """Used by linkcode extension; adds a link to the source code on github."""
-    if domain != "py":
-        return None
+#     if not info["module"]:
+#         return None
 
-    if not info["module"]:
-        return None
-
-    filename = info["module"].replace(".", "/")
-    return f"https://github.com/medusa-4D/medusa/blob/master/{filename}.py"
+#     filename = info["module"].replace(".", "/")
+#     return f"https://github.com/medusa-4D/medusa/blob/master/{filename}.py"
 
 
 # Add any paths that contain templates here, relative to this directory.

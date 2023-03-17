@@ -451,3 +451,14 @@ class Data4D:
                     setattr(self, attr, data[keep])
 
         self.face_idx = _ensure_consecutive_face_idx(self.face_idx)
+
+    def __getitem__(self, idx):
+
+        kwargs = self.__dict__
+        kwargs['v'] = self.v[idx]
+        kwargs['mat'] = self.mat[idx]
+        kwargs['img_idx'] = self.img_idx[idx]
+        kwargs['face_idx'] = self.face_idx[idx]
+        kwargs['video_metadata']['n_img'] = kwargs['img_idx'].max()
+
+        return self.__class__(**kwargs)

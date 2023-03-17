@@ -10,7 +10,7 @@ from .base import BaseDetector
 
 
 class YunetDetector(BaseDetector):
-
+    """This detector is based on Yunet, a face detector based on YOLOv3 :cite:p:`facedetect-yu`."""
     def __init__(self, det_threshold=0.9, nms_threshold=0.3, device=DEVICE, **kwargs):
 
         self.det_threshold = det_threshold

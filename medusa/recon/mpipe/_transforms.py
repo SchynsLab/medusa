@@ -1,7 +1,6 @@
-# fmt: off
 """A Python implementation of the C++ transform module in mediapipe by Rasmus
 Jones (https://github.com/Rassibassi), adapted from
-`here.<https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py>`__ and
+`here <https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py>`__ and
 `here <https://github.com/Rassibassi/mediapipeDemos/blob/main/custom/face_geometry.py>`__.
 
 The code in the module is used to estimate the local-to-world matrix of the ``Mediapipe``
@@ -12,7 +11,6 @@ canonical Mediapipe model (which is available
 The class/functions are not documented as they are unlikely to be actually used by
 users of Medusa.
 """
-# fmt: on
 
 import numpy as np
 

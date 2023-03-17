@@ -11,8 +11,8 @@ exclude_patterns            : [_build, Thumbs.db, .DS_Store, "**.ipynb_checkpoin
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: force
-  timeout: 300
+  execute_notebooks: auto #force
+  timeout: 600
 
 # Add a bibtex file so that we can create citations
 bibtex_bibfiles:
@@ -70,8 +70,9 @@ sphinx:
   extra_extensions          : # A list of extra extensions to load by Sphinx (added to those already used by JB).
     - 'autoapi.extension'     # Need to enable autoapi in JB too, otherwise it errors with a specific autoapi directive
     - 'IPython.sphinxext.ipython_console_highlighting'
+    - 'sphinx.ext.viewcode'
   local_extensions          : # A list of local extensions to load by sphinx specified by "name: path" items
-  recursive_update          : false # A boolean indicating whether to overwrite the Sphinx config (true) or recursively update (false)
+  recursive_update          : true # A boolean indicating whether to overwrite the Sphinx config (true) or recursively update (false)
   config                    :
     autoapi_dirs: ["../medusa"]  # needed for top-level module docstrings (but not used)
     autoapi_generate_api_docs: False
