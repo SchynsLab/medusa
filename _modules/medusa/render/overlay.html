@@ -396,7 +396,7 @@ document.write(`
   <h1>Source code for medusa.render.overlay</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">TwoSlopeNorm</span><span class="p">,</span> <span class="n">Normalize</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">TwoSlopeNorm</span>
 
 <span class="kn">from</span> <span class="nn">..geometry</span> <span class="kn">import</span> <span class="n">compute_vertex_normals</span>
 <span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">get_tris</span>
@@ -404,7 +404,28 @@ document.write(`
 
 
 <div class="viewcode-block" id="Overlay"><a class="viewcode-back" href="../../../api/python/render/overlay/index.html#medusa.render.overlay.Overlay">[docs]</a><span class="k">class</span> <span class="nc">Overlay</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for creating color &quot;overlays&quot; to be rendered as vertex colors of a mesh.</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v : torch.Tensor</span>
+<span class="sd">        The values to be mapped to colors</span>
+<span class="sd">    vmin : float, optional</span>
+<span class="sd">        The minimum value of the colormap (default: minimum of v)</span>
+<span class="sd">    vmax : float, optional</span>
+<span class="sd">        The maximum value of the colormap (default: maximum of v)</span>
+<span class="sd">    vcenter : float, optional</span>
+<span class="sd">        The center value of the colormap (default: mean of v)</span>
+<span class="sd">    dim : int or str</span>
+<span class="sd">        If int (0, 1, 2), dimension to be visualized; if &#39;normals&#39;, the values are</span>
+<span class="sd">        projected on the vertex normals</span>
+<span class="sd">    v0 : torch.Tensor, optional</span>
+<span class="sd">        If dim=&#39;normals&#39;, v0 represents the mesh from which the normals are computed</span>
+<span class="sd">    tris : torch.Tensor, optional</span>
+<span class="sd">        If dim=&#39;normals&#39;, tris represents the triangles from which the normals are computed</span>
+<span class="sd">    norm : matplotlib.colors.Normalize, optional</span>
+<span class="sd">        Normalization class (default: `TwoSlopeNorm`)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vcenter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;normals&#39;</span><span class="p">,</span> <span class="n">v0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tris</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">TwoSlopeNorm</span><span class="p">):</span>
 
@@ -417,9 +438,9 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">tris</span> <span class="o">=</span> <span class="n">tris</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_norm</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
-  
-    <span class="k">def</span> <span class="nf">_init_norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Norm</span><span class="p">):</span>
 
+    <span class="k">def</span> <span class="nf">_init_norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Norm</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the normalization object.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 
@@ -432,7 +453,13 @@ document.write(`
         <span class="k">return</span> <span class="n">Norm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vcenter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vcenter</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Overlay.to_rgb"><a class="viewcode-back" href="../../../api/python/render/overlay/index.html#medusa.render.overlay.Overlay.to_rgb">[docs]</a>    <span class="k">def</span> <span class="nf">to_rgb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the RGB colors for the overlay.</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        colors : torch.Tensor</span>
+<span class="sd">            RGB colors (N x V x 3)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span>
         <span class="n">device</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">device</span>
 

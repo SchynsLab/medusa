@@ -484,10 +484,35 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.render.overlay.Overlay">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.render.overlay.</span></span><span class="sig-name descname"><span class="pre">Overlay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bwr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vcenter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normals'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tris</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">TwoSlopeNorm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/render/overlay.html#Overlay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.render.overlay.Overlay" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py method">
+<dd><p>Class for creating color “overlays” to be rendered as vertex colors of a mesh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> (<em>torch.Tensor</em>) – The values to be mapped to colors</p></li>
+<li><p><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum value of the colormap (default: minimum of v)</p></li>
+<li><p><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum value of the colormap (default: maximum of v)</p></li>
+<li><p><strong>vcenter</strong> (<em>float</em><em>, </em><em>optional</em>) – The center value of the colormap (default: mean of v)</p></li>
+<li><p><strong>dim</strong> (<em>int</em><em> or </em><em>str</em>) – If int (0, 1, 2), dimension to be visualized; if ‘normals’, the values are
+projected on the vertex normals</p></li>
+<li><p><strong>v0</strong> (<em>torch.Tensor</em><em>, </em><em>optional</em>) – If dim=’normals’, v0 represents the mesh from which the normals are computed</p></li>
+<li><p><strong>tris</strong> (<em>torch.Tensor</em><em>, </em><em>optional</em>) – If dim=’normals’, tris represents the triangles from which the normals are computed</p></li>
+<li><p><strong>norm</strong> (<em>matplotlib.colors.Normalize</em><em>, </em><em>optional</em>) – Normalization class (default: <cite>TwoSlopeNorm</cite>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="medusa.render.overlay.Overlay.to_rgb">
 <span class="sig-name descname"><span class="pre">to_rgb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/render/overlay.html#Overlay.to_rgb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.render.overlay.Overlay.to_rgb" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the RGB colors for the overlay.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>colors</strong> – RGB colors (N x V x 3)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

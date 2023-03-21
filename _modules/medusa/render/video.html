@@ -470,7 +470,7 @@ document.write(`
             <span class="c1"># cam_mat has changed; we need to re-initialize the renderer!</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span> <span class="o">=</span> <span class="n">PytorchRenderer</span><span class="p">(</span>
                 <span class="n">viewport</span><span class="p">,</span> <span class="n">cam_mat</span><span class="p">,</span> <span class="n">cam_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shading</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="p">,</span> <span class="n">device</span>
-            <span class="p">)</span>        
+            <span class="p">)</span>
 
         <span class="c1"># Define a VideoLoader if we want to render mesh on top of video</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">video</span><span class="p">,</span> <span class="n">VideoLoader</span><span class="p">):</span>

@@ -49,9 +49,3 @@ Module Contents
 
 
 
-.. py:function:: to_tensor(array, dtype=torch.float32)
-
-
-.. py:function:: to_np(array, dtype=np.float32)
-
-

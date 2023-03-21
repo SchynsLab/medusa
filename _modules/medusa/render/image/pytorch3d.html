@@ -525,9 +525,9 @@ document.write(`
 
         <span class="c1"># Convert column-major order (medusa/opengl) to row-major order (pytorch3d)</span>
         <span class="c1"># by transposing the camera matrix; then, flip it to pytorch3d coordinates</span>
-        <span class="n">cam_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="n">cam_mat</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="c1">#cam_mat = flip_mat @ cam_mat.T</span>
+        <span class="c1">#cam_mat[0, 0] *= -1</span>
+        <span class="c1">#cam_mat[2, 2] *= -1</span>
+        <span class="n">cam_mat</span> <span class="o">=</span> <span class="n">flip_mat</span> <span class="o">@</span> <span class="n">cam_mat</span><span class="o">.</span><span class="n">T</span>
 
         <span class="c1"># I&#39;m so confused, but inverting the camera matrix again is necessary...</span>
         <span class="n">cam_mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cam_mat</span><span class="p">)</span>

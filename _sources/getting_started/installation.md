@@ -27,13 +27,13 @@ environment activated):
 
 ````{tab-item} medusa (CPU)
 ```console
-> pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.3/medusa-0.0.3-py3-none-any.whl
+pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.4/medusa-0.0.4-py3-none-any.whl
 ```
 ````
 
 ````{tab-item} medusa-gpu
 ```console
-> pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.3/medusa_gpu-0.0.3-py3-none-any.whl
+pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.4/medusa_gpu-0.0.4-py3-none-any.whl
 ```
 ````
 
