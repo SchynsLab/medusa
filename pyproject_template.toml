@@ -54,12 +54,13 @@ chumpy = {git = "https://github.com/lukassnoek/chumpy.git"}
 av = ">=10.0.0"
 
 [tool.poetry.group.dev.dependencies]
-jupyter-book = ">=0.13.1"
-sphinx-autoapi = ">=2.0.0"
+# Wait until this is resolved: https://github.com/pydata/pydata-sphinx-theme/issues/1253
+#jupyter-book = ">=0.13.1"
+#sphinx-autoapi = ">=2.0.0"
 pytest = ">=7.2.0"
-nbval = ">=0.9.6"
+#nbval = ">=0.9.6"
 coverage = ">=6.5.0"
-pre-commit = ">=2.20.0"
+#pre-commit = ">=2.20.0"
 interrogate = ">=1.5.0"
 
 [tool.poetry.scripts]

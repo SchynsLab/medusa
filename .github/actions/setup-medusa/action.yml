@@ -24,7 +24,7 @@ runs:
     uses: actions/setup-python@v4
     with:
       python-version: ${{ inputs.python-version }}
-      #cache: 'poetry'
+      cache: 'poetry'
   - name: Set package version to GPU
     shell: bash
     run: |
