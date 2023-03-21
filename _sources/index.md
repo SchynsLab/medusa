@@ -40,6 +40,7 @@ On this website you can also find several tutorials on Medusa's features:
 :::
 
 :::{card} Data representation
+:img-bottom: ./images/flame_mesh.png
 :link: ./tutorials/data_representation
 :link-type: doc
 :::

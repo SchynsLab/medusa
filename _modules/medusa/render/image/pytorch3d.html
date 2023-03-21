@@ -433,8 +433,8 @@ document.write(`
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">viewport</span><span class="p">,</span>
-        <span class="n">cam_mat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">cam_type</span><span class="o">=</span><span class="s2">&quot;orthographic&quot;</span><span class="p">,</span>
+        <span class="n">cam_mat</span><span class="p">,</span>
+        <span class="n">cam_type</span><span class="p">,</span>
         <span class="n">shading</span><span class="o">=</span><span class="s2">&quot;flat&quot;</span><span class="p">,</span>
         <span class="n">lights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">,</span>
@@ -442,6 +442,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a PytorchRenderer object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span> <span class="o">=</span> <span class="n">viewport</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam_mat</span> <span class="o">=</span> <span class="n">cam_mat</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cam_type</span> <span class="o">=</span> <span class="n">cam_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setup_settings</span><span class="p">(</span><span class="n">viewport</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cameras</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setup_cameras</span><span class="p">(</span><span class="n">cam_mat</span><span class="p">,</span> <span class="n">cam_type</span><span class="p">)</span>
@@ -524,7 +525,9 @@ document.write(`
 
         <span class="c1"># Convert column-major order (medusa/opengl) to row-major order (pytorch3d)</span>
         <span class="c1"># by transposing the camera matrix; then, flip it to pytorch3d coordinates</span>
-        <span class="n">cam_mat</span> <span class="o">=</span> <span class="n">flip_mat</span> <span class="o">@</span> <span class="n">cam_mat</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">cam_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">cam_mat</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="c1">#cam_mat = flip_mat @ cam_mat.T</span>
 
         <span class="c1"># I&#39;m so confused, but inverting the camera matrix again is necessary...</span>
         <span class="n">cam_mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cam_mat</span><span class="p">)</span>
@@ -584,7 +587,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">shader</span>
 
-    <span class="k">def</span> <span class="nf">_create_meshes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_create_meshes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span><span class="p">):</span>
 
         <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
 
@@ -595,12 +598,10 @@ document.write(`
             <span class="n">overlay</span> <span class="o">=</span> <span class="n">TexturesVertex</span><span class="p">(</span><span class="n">overlay</span><span class="p">)</span>
 
         <span class="n">meshes</span> <span class="o">=</span> <span class="n">Meshes</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">textures</span><span class="o">=</span><span class="n">overlay</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">meshes</span> <span class="o">=</span> <span class="n">meshes</span><span class="o">.</span><span class="n">submeshes</span><span class="p">([[</span><span class="n">mask</span><span class="p">]])</span>
 
         <span class="k">return</span> <span class="n">meshes</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">single_image</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_frags</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">single_image</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_frags</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs the actual rendering for a given (batch of) mesh(es).</span>
 
 <span class="sd">        Parameters</span>
@@ -623,7 +624,7 @@ document.write(`
 <span class="sd">            h and w are defined in the viewport</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">meshes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_meshes</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+        <span class="n">meshes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_meshes</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">tris</span><span class="p">,</span> <span class="n">overlay</span><span class="p">)</span>
         <span class="c1">#self._fn = meshes.verts_normals_packed()[meshes.faces_packed()]</span>
         <span class="n">imgs</span><span class="p">,</span> <span class="n">frags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">(</span><span class="n">meshes</span><span class="p">)</span>
 

@@ -12,7 +12,7 @@
 Module Contents
 ---------------
 
-.. py:class:: PytorchRenderer(viewport, cam_mat=None, cam_type='orthographic', shading='flat', lights=None, device=DEVICE)
+.. py:class:: PytorchRenderer(viewport, cam_mat, cam_type, shading='flat', lights=None, device=DEVICE)
 
 
 
