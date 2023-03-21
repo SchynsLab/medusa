@@ -29,7 +29,7 @@ def test_mica_recon(device):
     # Check visually
     cam_mat = model.get_cam_mat()
     renderer = PytorchRenderer(
-        viewport=(512, 512), shading="flat", cam_mat=cam_mat, device=device
+        viewport=(512, 512), shading="flat", cam_type='orthographic', cam_mat=cam_mat, device=device
     )
 
     v = out["v"]
