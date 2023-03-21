@@ -139,11 +139,7 @@ OLD
 paper
 sandbox
 medusa/data/config.yaml
-
-# demos
-demos/*.gif
-demos/*.mp4
-demos/*.h5
+.vscode
 
 # test output
 tests/test_viz/*/*.png
@@ -157,8 +153,9 @@ tests/test_viz/*/*.obj
 docs/_build
 docs/autoapi/_build
 docs/getting_started/*.mp4
-docs/getting_started/*.gif
 docs/api/python/**/*.rst.txt
+docs/api/python/**/*.rst
+docs/tutorials/*.mp4
 
 # builds
 dist/*tar.gz

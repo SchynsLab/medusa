@@ -21,7 +21,8 @@ def test_shading(shading, device):
     data = get_example_h5(load=True, model="mediapipe", device=device)
     viewport = data.video_metadata["img_size"]
     renderer = PytorchRenderer(
-        viewport, cam_type="perspective", shading=shading, device=device
+        viewport, cam_mat=data.cam_mat, cam_type="perspective", shading=shading,
+        device=device
     )
 
     img = renderer(data.v[0], data.tris)

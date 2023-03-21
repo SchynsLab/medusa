@@ -1,4 +1,9 @@
 import os
+
+os.environ['OPENBLAS_NUM_THREADS'] = '10'
+os.environ['MKL_NUM_THREADS'] = '10'
+os.environ['NUMEXPR_MAX_THREADS'] = '10'
+
 import torch
 from pathlib import Path
 

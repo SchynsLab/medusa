@@ -6,13 +6,13 @@ See ./deca/license.md for conditions for use.
 import pickle
 import warnings
 
-from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 from .lbs import lbs
+from ...data import get_external_data_config
 
 
 class FLAME(nn.Module):
@@ -25,45 +25,43 @@ class FLAME(nn.Module):
             # Silence scipy DeprecationWarning
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", DeprecationWarning)
-                ss = pickle.load(f, encoding="latin1")
+                model = pickle.load(f, encoding="latin1")
 
-            flame_model = _Struct(**ss)
-
-        self.faces = to_np(flame_model.f, dtype=np.int64)
-        self.dtype = torch.float32
-        self.register_buffer("faces_tensor", to_tensor(self.faces, dtype=torch.long))
+        self.faces = _to_np(model['f'], dtype=np.int64)
+        self.register_buffer("faces_tensor", _to_tensor(self.faces, dtype=torch.long))
 
         # The vertices of the template model
         self.register_buffer(
-            "v_template", to_tensor(to_np(flame_model.v_template), dtype=self.dtype)
+            "v_template", _to_tensor(_to_np(model['v_template']), dtype=torch.float32)
         )
         # The shape components and expression
-        shapedirs = to_tensor(to_np(flame_model.shapedirs), dtype=self.dtype)
+        shapedirs = _to_tensor(_to_np(model['shapedirs']), dtype=torch.float32)
         shapedirs = torch.cat(
             [shapedirs[:, :, :n_shape], shapedirs[:, :, 300 : (300 + n_exp)]], 2
         )
         self.register_buffer("shapedirs", shapedirs)
+
         # The pose components
-        num_pose_basis = flame_model.posedirs.shape[-1]
-        posedirs = np.reshape(flame_model.posedirs, [-1, num_pose_basis]).T
-        self.register_buffer("posedirs", to_tensor(to_np(posedirs), dtype=self.dtype))
-        #
+        num_pose_basis = model['posedirs'].shape[-1]
+        posedirs = np.reshape(model['posedirs'], [-1, num_pose_basis]).T
+        self.register_buffer("posedirs", _to_tensor(_to_np(posedirs), dtype=torch.float32))
+
         self.register_buffer(
-            "J_regressor", to_tensor(to_np(flame_model.J_regressor), dtype=self.dtype)
+            "J_regressor", _to_tensor(_to_np(model['J_regressor']), dtype=torch.float32)
         )
-        parents = to_tensor(to_np(flame_model.kintree_table[0])).long()
+        parents = _to_tensor(_to_np(model['kintree_table'][0])).long()
         parents[0] = -1
         self.register_buffer("parents", parents)
         self.register_buffer(
-            "lbs_weights", to_tensor(to_np(flame_model.weights), dtype=self.dtype)
+            "lbs_weights", _to_tensor(_to_np(model['weights']), dtype=torch.float32)
         )
 
         # Fixing Eyeball and neck rotation
-        default_eyball_pose = torch.zeros([1, 6], dtype=self.dtype, requires_grad=False)
+        default_eyball_pose = torch.zeros([1, 6], dtype=torch.float32, requires_grad=False)
         self.register_parameter(
             "eye_pose", nn.Parameter(default_eyball_pose, requires_grad=False)
         )
-        default_neck_pose = torch.zeros([1, 3], dtype=self.dtype, requires_grad=False)
+        default_neck_pose = torch.zeros([1, 3], dtype=torch.float32, requires_grad=False)
         self.register_parameter(
             "neck_pose", nn.Parameter(default_neck_pose, requires_grad=False)
         )
@@ -129,19 +127,24 @@ class FLAMETex(nn.Module):
 
     def __init__(self, model_path=None, n_tex=50):
         super().__init__()
+        self.n_tex = n_tex
         self.tex_space = self._load_model(model_path)
         self._register_buffers(self.tex_space)
 
-    def _load_model(self, model_path):
+    def _load_model(self, tex_model_path):
 
-        if model_path is None:
-            model_path = Path(__file__).parents[2] / "data/flame/FLAME_albedo_from_BFM_tex50.npz"
+        if tex_model_path is None:
+            ext_data_path = get_external_data_config('flame_path').parent
+            tex_model_path = ext_data_path / "FLAME_albedo_from_BFM.npz"
 
-        return np.load(model_path)
+        if not tex_model_path.is_file():
+            raise ValueError("Couldn't find tex model at {tex_model_path}!")
+
+        return np.load(tex_model_path)
 
     def _register_buffers(self, tex_space):
         texture_mean = tex_space["MU"].reshape(1, -1)
-        texture_basis = tex_space["PC"]#.reshape(-1, 50)  # 199 comp
+        texture_basis = tex_space["PC"][:, :self.n_tex]  # 199 comp
 
         texture_mean = torch.from_numpy(texture_mean).float()[None, ...]
         texture_basis = torch.from_numpy(texture_basis).float()[None, ...]
@@ -160,18 +163,12 @@ class FLAMETex(nn.Module):
         return texture
 
 
-def to_tensor(array, dtype=torch.float32):
+def _to_tensor(array, dtype=torch.float32):
     if "torch.tensor" not in str(type(array)):
         return torch.tensor(array, dtype=dtype)
 
 
-def to_np(array, dtype=np.float32):
+def _to_np(array, dtype=np.float32):
     if "scipy.sparse" in str(type(array)):
         array = array.todense()
     return np.array(array, dtype=dtype)
-
-
-class _Struct(object):
-    def __init__(self, **kwargs):
-        for key, val in kwargs.items():
-            setattr(self, key, val)

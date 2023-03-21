@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from timer import FancyTimer
 
 from medusa.crop import AlignCropModel, BboxCropModel

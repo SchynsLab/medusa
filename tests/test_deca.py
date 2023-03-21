@@ -23,7 +23,7 @@ def test_deca_recon_img(imgs_test):
     cam_mat = deca_recon_model.get_cam_mat()
     tris = deca_recon_model.get_tris()
 
-    renderer = PytorchRenderer((img.shape[1], img.shape[0]), cam_mat, shading="smooth")
+    renderer = PytorchRenderer((img.shape[1], img.shape[0]), cam_mat, cam_type='orthographic', shading="smooth")
 
     img_r = renderer(out["v"], tris)
     img_r = renderer.alpha_blend(img_r, img)
@@ -66,7 +66,7 @@ def test_deca_recon(name, type_, already_cropped, device):
     img_size = (224, 224) if already_cropped else metadata['img_size']
     cam_mat = recon_model.get_cam_mat()
     renderer = PytorchRenderer(
-        viewport=img_size, shading="flat", cam_mat=cam_mat, device=device
+        viewport=img_size, shading="flat", cam_type='orthographic', cam_mat=cam_mat, device=device
     )
     img = renderer(out["v"][0], recon_model.get_tris())
     img = renderer.alpha_blend(img=img, background=img_batch[0])

@@ -41,9 +41,14 @@ class BaseRenderer(ABC):
         if tris.ndim == 2:
             tris = tris.repeat(v.shape[0], 1, 1)
 
-        if overlay is not None:
+        if torch.is_tensor(overlay):
+
             if overlay.ndim == 2:
                 overlay = overlay.repeat(v.shape[0], 1, 1)
+
+            if overlay.shape[-1] == 4:
+                # remove alpha channel
+                overlay = overlay[..., :3]
 
         if format == "numpy":
             if torch.is_tensor(v):

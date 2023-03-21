@@ -70,6 +70,11 @@ class VideoRenderer:
             self._renderer = PytorchRenderer(
                 viewport, cam_mat, cam_type, self.shading, self.lights, device
             )
+        elif ~torch.allclose(cam_mat, self._renderer.cam_mat):
+            # cam_mat has changed; we need to re-initialize the renderer!
+            self._renderer = PytorchRenderer(
+                viewport, cam_mat, cam_type, self.shading, self.lights, device
+            )
 
         # Define a VideoLoader if we want to render mesh on top of video
         if isinstance(video, VideoLoader):

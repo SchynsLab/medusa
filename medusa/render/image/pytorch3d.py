@@ -37,8 +37,8 @@ class PytorchRenderer(BaseRenderer):
     def __init__(
         self,
         viewport,
-        cam_mat=None,
-        cam_type="orthographic",
+        cam_mat,
+        cam_type,
         shading="flat",
         lights=None,
         device=DEVICE,
@@ -46,6 +46,7 @@ class PytorchRenderer(BaseRenderer):
         """Initializes a PytorchRenderer object."""
         self.viewport = viewport
         self.device = device
+        self.cam_mat = cam_mat
         self.cam_type = cam_type
         self._settings = self._setup_settings(viewport)
         self._cameras = self._setup_cameras(cam_mat, cam_type)
@@ -128,6 +129,8 @@ class PytorchRenderer(BaseRenderer):
 
         # Convert column-major order (medusa/opengl) to row-major order (pytorch3d)
         # by transposing the camera matrix; then, flip it to pytorch3d coordinates
+        #cam_mat[0, 0] *= -1
+        #cam_mat[2, 2] *= -1
         cam_mat = flip_mat @ cam_mat.T
 
         # I'm so confused, but inverting the camera matrix again is necessary...
@@ -188,7 +191,7 @@ class PytorchRenderer(BaseRenderer):
 
         return shader
 
-    def _create_meshes(self, v, tris, overlay, mask=None):
+    def _create_meshes(self, v, tris, overlay):
 
         v, tris, overlay = self._preprocess(v, tris, overlay, format="torch")
 
@@ -199,12 +202,10 @@ class PytorchRenderer(BaseRenderer):
             overlay = TexturesVertex(overlay)
 
         meshes = Meshes(v, tris, textures=overlay)
-        if mask is not None:
-            meshes = meshes.submeshes([[mask]])
 
         return meshes
 
-    def __call__(self, v, tris, overlay=None, single_image=True, mask=None, return_frags=False):
+    def __call__(self, v, tris, overlay=None, single_image=True, return_frags=False):
         """Performs the actual rendering for a given (batch of) mesh(es).
 
         Parameters
@@ -227,7 +228,7 @@ class PytorchRenderer(BaseRenderer):
             h and w are defined in the viewport
         """
 
-        meshes = self._create_meshes(v, tris, overlay, mask=mask)
+        meshes = self._create_meshes(v, tris, overlay)
         #self._fn = meshes.verts_normals_packed()[meshes.faces_packed()]
         imgs, frags = self._renderer(meshes)
 
