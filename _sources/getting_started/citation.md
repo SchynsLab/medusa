@@ -41,6 +41,20 @@ Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
 
 > Filntisis, P. P., Retsinas, G., Paraperas-Papantoniou, F., Katsamanis, A., Roussos, A., & Maragos, P. (2022). Visual Speech-Aware Perceptual 3D Facial Expression Reconstruction from Videos. *arXiv preprint arXiv:2207.11094*.
 
+### MICA
+
+> Zielonka, W., Bolkart, T., & Thies, J. (2022, November). Towards metrical reconstruction of human faces. In *Computer Vision–ECCV 2022: 17th European Conference, Tel Aviv, Israel, October 23–27, 2022, Proceedings, Part XIII* (pp. 250-269). Cham: Springer Nature Switzerland.
+
+## Misc
+
+If you use Medusa's `SCRFDetector`, please cite the following paper from the InsightFace team:
+
+> Guo, J., Deng, J., Lattas, A., & Zafeiriou, S. (2021). Sample and computation redistribution for efficient face detection. *arXiv preprint arXiv:2105.04714.*
+
+If you use Medusa's `AlignCropModel`, which is based on the landmark detection module of RetinaFace, please cite the following paper:
+
+> Deng, J., Guo, J., Ververas, E., Kotsia, I., & Zafeiriou, S. (2020). Retinaface: Single-shot multi-level face localisation in the wild. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 5203-5212).
+
 ## Website
 
 This website (including documentation) was created using Jupyter Book {cite}`executable_books_community_2020_4539666`.

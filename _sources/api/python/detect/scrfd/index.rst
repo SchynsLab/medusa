@@ -24,8 +24,6 @@ Module Contents
 
    Face detection model based on the ``insightface`` package.
 
-   :param name: Name of underlying insightface model
-   :type name: str
    :param det_size: Size to which the input image(s) will be resized before passing it to the
                     detection model; should be a tuple with two of the same integers (indicating
                     a square image); higher values are more accurate but slower; default is

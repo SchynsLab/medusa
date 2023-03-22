@@ -199,7 +199,7 @@ Module Contents
 
    :param f: Path to save file to
    :type f: str, Path
-   :param data: Dictionary with 3D mesh data
+   :param data: Dictionary with 3D mesh data, with keys 'v', 'tris', and optionally 'vt'
    :type data: dict
 
 
