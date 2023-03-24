@@ -406,7 +406,6 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">....defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
 <span class="kn">from</span> <span class="nn">....io</span> <span class="kn">import</span> <span class="n">load_inputs</span>
-<span class="kn">from</span> <span class="nn">....data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">FlameReconModel</span>
 <span class="kn">from</span> <span class="nn">..decoders</span> <span class="kn">import</span> <span class="n">FLAME</span>
 <span class="kn">from</span> <span class="nn">.encoders</span> <span class="kn">import</span> <span class="n">Arcface</span><span class="p">,</span> <span class="n">MappingNetwork</span>
@@ -425,6 +424,9 @@ document.write(`
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a MicaReconModel object.&quot;&quot;&quot;</span>
+        <span class="c1"># Avoids circular import</span>
+        <span class="kn">from</span> <span class="nn">....data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cfg</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_create_submodels</span><span class="p">()</span>

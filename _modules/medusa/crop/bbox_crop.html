@@ -408,7 +408,6 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">load_inputs</span>
 <span class="kn">from</span> <span class="nn">..detect</span> <span class="kn">import</span> <span class="n">SCRFDetector</span>
-<span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
 <span class="kn">from</span> <span class="nn">..onnx</span> <span class="kn">import</span> <span class="n">OnnxModel</span>
 <span class="kn">from</span> <span class="nn">..transforms</span> <span class="kn">import</span> <span class="n">estimate_similarity_transform</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseCropModel</span>
@@ -447,6 +446,9 @@ document.write(`
 
     <span class="k">def</span> <span class="nf">_init_lms_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the landmark prediction model.&quot;&quot;&quot;</span>
+        <span class="c1"># Avoids circular import</span>
+        <span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
+
         <span class="n">f_in</span> <span class="o">=</span> <span class="n">f_in</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;buffalo_path&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">.onnx&#39;</span>
         <span class="k">return</span> <span class="n">OnnxModel</span><span class="p">(</span><span class="n">f_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 

@@ -409,16 +409,22 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 
+<span class="kn">from</span> <span class="nn">..recon</span> <span class="kn">import</span> <span class="n">videorecon</span>
 <span class="kn">from</span> <span class="nn">..defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
 <span class="kn">from</span> <span class="nn">..containers</span> <span class="kn">import</span> <span class="n">Data4D</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">VideoLoader</span>
 
 
-<div class="viewcode-block" id="get_example_frame"><a class="viewcode-back" href="../../../api/python/data/example_data/index.html#medusa.data.example_data.get_example_frame">[docs]</a><span class="k">def</span> <span class="nf">get_example_frame</span><span class="p">(</span><span class="n">load_numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">load_torch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+<div class="viewcode-block" id="get_example_image"><a class="viewcode-back" href="../../../api/python/data/example_data/index.html#medusa.data.example_data.get_example_image">[docs]</a><span class="k">def</span> <span class="nf">get_example_image</span><span class="p">(</span><span class="n">n_faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">load_numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">load_torch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads an example frame from the example video.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    n_faces : int, list, None</span>
+<span class="sd">        If None, it will return the default (example) image (the first frame from </span>
+<span class="sd">        the example video); if an integer, it will return an image with that many</span>
+<span class="sd">        faces in it (see medusa/data/example_data/images folder); if a list (or tuple),</span>
+<span class="sd">        it will return a list of images with the number of faces specified in the list</span>
 <span class="sd">    load_numpy : bool</span>
 <span class="sd">        Whether to load it as a numpy array</span>
 <span class="sd">    load_torch : bool</span>
@@ -439,11 +445,11 @@ document.write(`
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # Load path to example image frame</span>
-<span class="sd">    &gt;&gt;&gt; img = get_example_frame()</span>
+<span class="sd">    &gt;&gt;&gt; img = get_example_image()</span>
 <span class="sd">    &gt;&gt;&gt; img.is_file()</span>
 <span class="sd">    True</span>
 <span class="sd">    &gt;&gt;&gt; # Load file as numpy array</span>
-<span class="sd">    &gt;&gt;&gt; img = get_example_frame(load_numpy=True)</span>
+<span class="sd">    &gt;&gt;&gt; img = get_example_image(load_numpy=True)</span>
 <span class="sd">    &gt;&gt;&gt; img.shape</span>
 <span class="sd">    (384, 480, 3)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -451,25 +457,45 @@ document.write(`
     <span class="k">if</span> <span class="n">load_numpy</span> <span class="ow">and</span> <span class="n">load_torch</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Set either &#39;load_numpy&#39; or &#39;load_torch&#39; to True, not both!&quot;</span><span class="p">)</span>
 
-    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
-    <span class="n">img_path</span> <span class="o">=</span> <span class="n">here</span> <span class="o">/</span> <span class="s2">&quot;example_data/example_frame.png&quot;</span>
+    <span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;example_data/images&quot;</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">load_torch</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">load_numpy</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">img_path</span>
+    <span class="k">if</span> <span class="n">n_faces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_dir</span> <span class="o">/</span> <span class="s1">&#39;example_frame.png&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_faces</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">img_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">nf</span><span class="si">}</span><span class="s1">_face.jpg&#39;</span> <span class="k">for</span> <span class="n">nf</span> <span class="ow">in</span> <span class="n">n_faces</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_faces</span><span class="si">}</span><span class="s1">_face.jpg&#39;</span><span class="p">]</span>
 
-    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">img_path</span><span class="p">)))</span>
+    <span class="n">imgs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">img_path</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find example image file </span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">load_torch</span><span class="p">:</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">load_torch</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">load_numpy</span><span class="p">:</span>
+            <span class="n">imgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
 
-    <span class="k">return</span> <span class="n">img</span></div>
+            <span class="k">if</span> <span class="n">load_torch</span><span class="p">:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+            <span class="n">imgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">imgs</span></div>
 
 
-<div class="viewcode-block" id="get_example_video"><a class="viewcode-back" href="../../../api/python/data/example_data/index.html#medusa.data.example_data.get_example_video">[docs]</a><span class="k">def</span> <span class="nf">get_example_video</span><span class="p">(</span><span class="n">return_videoloader</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="get_example_video"><a class="viewcode-back" href="../../../api/python/data/example_data/index.html#medusa.data.example_data.get_example_video">[docs]</a><span class="k">def</span> <span class="nf">get_example_video</span><span class="p">(</span><span class="n">n_faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_videoloader</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves the path to an example video file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    n_faces : int, None</span>
+<span class="sd">        If None, it will return the default (example) video; if an integer, it will</span>
+<span class="sd">        return an image with that many faces in it (see medusa/data/example_data/videos folder)</span>
 <span class="sd">    return_videoloader : bool</span>
 <span class="sd">        Returns the video as a ``VideoLoader`` object</span>
 <span class="sd">    kwargs : dict</span>
@@ -500,8 +526,17 @@ document.write(`
 <span class="sd">    torch.Size([32, 384, 480, 3])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
-    <span class="n">vid</span> <span class="o">=</span> <span class="n">here</span> <span class="o">/</span> <span class="s2">&quot;example_data/example_vid.mp4&quot;</span>
+    <span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;example_data/videos&quot;</span>
+
+    <span class="k">if</span> <span class="n">n_faces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">f_name</span> <span class="o">=</span> <span class="s1">&#39;example_vid.mp4&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">f_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_faces</span><span class="si">}</span><span class="s1">_face.mp4&#39;</span>
+    
+    <span class="n">vid</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="n">f_name</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">vid</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find video </span><span class="si">{</span><span class="n">vid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">return_videoloader</span><span class="p">:</span>
         <span class="n">vid</span> <span class="o">=</span> <span class="n">VideoLoader</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -509,12 +544,16 @@ document.write(`
     <span class="k">return</span> <span class="n">vid</span></div>
 
 
-<div class="viewcode-block" id="get_example_h5"><a class="viewcode-back" href="../../../api/python/data/example_data/index.html#medusa.data.example_data.get_example_h5">[docs]</a><span class="k">def</span> <span class="nf">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+<div class="viewcode-block" id="get_example_data4d"><a class="viewcode-back" href="../../../api/python/data/example_data/index.html#medusa.data.example_data.get_example_data4d">[docs]</a><span class="k">def</span> <span class="nf">get_example_data4d</span><span class="p">(</span><span class="n">n_faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves an example hdf5 file with reconstructed 4D data from the</span>
 <span class="sd">    example video.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    n_faces : int, None</span>
+<span class="sd">        If None, it will return the reconstruction from the default (example) video; if</span>
+<span class="sd">        an integer, it will return the recon data from the video with that many faces in</span>
+<span class="sd">        it (see medusa/data/example_data/videos folder)</span>
 <span class="sd">    load : bool</span>
 <span class="sd">        Whether to return the hdf5 file loaded in memory (``True``)</span>
 <span class="sd">        or to just return the path to the file</span>
@@ -531,25 +570,40 @@ document.write(`
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; path = get_example_h5(load=False, as_path=True)</span>
+<span class="sd">    &gt;&gt;&gt; path = get_example_data4d(load=False, as_path=True)</span>
 <span class="sd">    &gt;&gt;&gt; path.is_file()</span>
 <span class="sd">    True</span>
 
 <span class="sd">    # Get hdf5 file already loaded in memory</span>
-<span class="sd">    &gt;&gt;&gt; data = get_example_h5(load=True, model=&#39;mediapipe&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; data = get_example_data4d(load=True, model=&#39;mediapipe&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; data.recon_model</span>
 <span class="sd">    &#39;mediapipe&#39;</span>
 <span class="sd">    &gt;&gt;&gt; data.v.shape  # check out reconstructed vertices</span>
 <span class="sd">    (232, 468, 3)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">here</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;example_data/example_vid_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">.h5&quot;</span>
+    <span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;example_data/recons&quot;</span>
+    
+    <span class="k">if</span> <span class="n">n_faces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">f_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;example_vid_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">.h5&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">f_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_faces</span><span class="si">}</span><span class="s1">_face_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">.h5&#39;</span>
+    
+    <span class="n">recon</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="n">f_name</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">recon</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">(</span><span class="n">n_faces</span><span class="p">)</span>
+        <span class="n">data_4d</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">data_4d</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">recon</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">load</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data_4d</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data_4d</span>
 
     <span class="k">if</span> <span class="n">load</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Data4D</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Data4D</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">path</span></div>
+        <span class="k">return</span> <span class="n">recon</span></div>
 </pre></div>
 
                 </article>

@@ -41,9 +41,9 @@ Module Contents
 
    To crop an image to be used for MICA reconstruction:
 
-   >>> from medusa.data import get_example_frame
+   >>> from medusa.data import get_example_image
    >>> det_model = SCRFDetector()
-   >>> img = get_example_frame()  # path to jpg image
+   >>> img = get_example_image()  # path to jpg image
    >>> det_results = det_model(img)
    >>> list(det_results.keys())
    ['img_idx', 'conf', 'lms', 'bbox', 'n_img']

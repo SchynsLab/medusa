@@ -530,8 +530,8 @@ document.write(`
 <span class="sd">        Save data to disk:</span>
 
 <span class="sd">        &gt;&gt;&gt; import os</span>
-<span class="sd">        &gt;&gt;&gt; from medusa.data import get_example_h5</span>
-<span class="sd">        &gt;&gt;&gt; data = get_example_h5(load=True, model=&quot;mediapipe&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; from medusa.data import get_example_data4d</span>
+<span class="sd">        &gt;&gt;&gt; data = get_example_data4d(load=True, model=&quot;mediapipe&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; data.save(&#39;./my_data.h5&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; os.remove(&#39;./my_data.h5&#39;)  # clean up</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -742,8 +742,8 @@ document.write(`
 <span class="sd">        --------</span>
 <span class="sd">        Convert the sequences of affine matrices to a 2D numpy array:</span>
 
-<span class="sd">        &gt;&gt;&gt; from medusa.data import get_example_h5</span>
-<span class="sd">        &gt;&gt;&gt; data = get_example_h5(load=True, model=&quot;mediapipe&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; from medusa.data import get_example_data4d</span>
+<span class="sd">        &gt;&gt;&gt; data = get_example_data4d(load=True, model=&quot;mediapipe&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; params = data.decompose_mats(to_df=False)</span>
 <span class="sd">        &gt;&gt;&gt; params.shape</span>
 <span class="sd">        (232, 12)</span>
@@ -808,8 +808,8 @@ document.write(`
 <span class="sd">        Convert the sequences of affine matrices to a 2D numpy array and uses the</span>
 <span class="sd">        ``compose_mats`` function to reverse it.</span>
 
-<span class="sd">        &gt;&gt;&gt; from medusa.data import get_example_h5</span>
-<span class="sd">        &gt;&gt;&gt; data = get_example_h5(load=True, model=&quot;mediapipe&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; from medusa.data import get_example_data4d</span>
+<span class="sd">        &gt;&gt;&gt; data = get_example_data4d(load=True, model=&quot;mediapipe&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; orig_mats = data.mat.copy()</span>
 <span class="sd">        &gt;&gt;&gt; params = data.decompose_mats(to_df=False)</span>
 <span class="sd">        &gt;&gt;&gt; data.compose_mats(params)</span>

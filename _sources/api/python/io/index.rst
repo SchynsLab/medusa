@@ -129,8 +129,8 @@ Module Contents
    .. rubric:: Examples
 
    Load a single image as a torch Tensor:
-   >>> from medusa.data import get_example_frame
-   >>> path = get_example_frame()
+   >>> from medusa.data import get_example_image
+   >>> path = get_example_image()
    >>> img = load_inputs(path, device='cpu')
    >>> img.shape
    torch.Size([1, 3, 384, 480])

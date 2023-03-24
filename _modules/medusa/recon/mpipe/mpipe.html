@@ -408,7 +408,6 @@ document.write(`
 <span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">...defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
-<span class="kn">from</span> <span class="nn">...data</span> <span class="kn">import</span> <span class="n">get_template_mediapipe</span>
 <span class="kn">from</span> <span class="nn">...io</span> <span class="kn">import</span> <span class="n">load_inputs</span>
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseReconModel</span>
 <span class="kn">from</span> <span class="nn">._transforms</span> <span class="kn">import</span> <span class="n">PCF</span><span class="p">,</span> <span class="n">image2world</span>
@@ -460,7 +459,8 @@ document.write(`
     <span class="k">def</span> <span class="nf">_load_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads the vertices and faces of the references template in world</span>
 <span class="sd">        space.&quot;&quot;&quot;</span>
-
+        <span class="c1"># Avoids circular import</span>
+        <span class="kn">from</span> <span class="nn">...data</span> <span class="kn">import</span> <span class="n">get_template_mediapipe</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">get_template_mediapipe</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_v_world_ref</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_f_world_ref</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;tris&quot;</span><span class="p">]</span>
@@ -499,9 +499,9 @@ document.write(`
 <span class="sd">        --------</span>
 <span class="sd">        To reconstruct an example, simply call the ``Mediapipe`` object:</span>
 
-<span class="sd">        &gt;&gt;&gt; from medusa.data import get_example_frame</span>
+<span class="sd">        &gt;&gt;&gt; from medusa.data import get_example_image</span>
 <span class="sd">        &gt;&gt;&gt; model = Mediapipe()</span>
-<span class="sd">        &gt;&gt;&gt; img = get_example_frame()</span>
+<span class="sd">        &gt;&gt;&gt; img = get_example_image()</span>
 <span class="sd">        &gt;&gt;&gt; out = model(img)  # reconstruct!</span>
 <span class="sd">        &gt;&gt;&gt; out[&#39;v&#39;].shape    # vertices</span>
 <span class="sd">        (1, 468, 3)</span>

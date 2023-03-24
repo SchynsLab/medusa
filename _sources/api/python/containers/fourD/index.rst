@@ -52,8 +52,8 @@ Module Contents
       Save data to disk:
 
       >>> import os
-      >>> from medusa.data import get_example_h5
-      >>> data = get_example_h5(load=True, model="mediapipe")
+      >>> from medusa.data import get_example_data4d
+      >>> data = get_example_data4d(load=True, model="mediapipe")
       >>> data.save('./my_data.h5')
       >>> os.remove('./my_data.h5')  # clean up
 
@@ -136,8 +136,8 @@ Module Contents
 
       Convert the sequences of affine matrices to a 2D numpy array:
 
-      >>> from medusa.data import get_example_h5
-      >>> data = get_example_h5(load=True, model="mediapipe")
+      >>> from medusa.data import get_example_data4d
+      >>> data = get_example_data4d(load=True, model="mediapipe")
       >>> params = data.decompose_mats(to_df=False)
       >>> params.shape
       (232, 12)
@@ -157,8 +157,8 @@ Module Contents
       Convert the sequences of affine matrices to a 2D numpy array and uses the
       ``compose_mats`` function to reverse it.
 
-      >>> from medusa.data import get_example_h5
-      >>> data = get_example_h5(load=True, model="mediapipe")
+      >>> from medusa.data import get_example_data4d
+      >>> data = get_example_data4d(load=True, model="mediapipe")
       >>> orig_mats = data.mat.copy()
       >>> params = data.decompose_mats(to_df=False)
       >>> data.compose_mats(params)

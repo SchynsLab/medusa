@@ -423,8 +423,8 @@ document.write(`
 <span class="sd">    --------</span>
 <span class="sd">    Filter the data wit a high-pass of 0.005 Hz and a low-pass of 4 Hz:</span>
 
-<span class="sd">    &gt;&gt;&gt; from medusa.data import get_example_h5</span>
-<span class="sd">    &gt;&gt;&gt; data = get_example_h5(load=True, model=&#39;mediapipe&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; from medusa.data import get_example_data4d</span>
+<span class="sd">    &gt;&gt;&gt; data = get_example_data4d(load=True, model=&#39;mediapipe&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; data = bw_filter(data, low_pass=4., high_pass=0.005)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># fmt: on</span>

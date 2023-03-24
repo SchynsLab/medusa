@@ -411,7 +411,6 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseDetector</span>
 <span class="kn">from</span> <span class="nn">..defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">load_inputs</span>
-<span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
 <span class="kn">from</span> <span class="nn">..onnx</span> <span class="kn">import</span> <span class="n">OnnxModel</span>
 <span class="kn">from</span> <span class="nn">..transforms</span> <span class="kn">import</span> <span class="n">resize_with_pad</span>
 
@@ -438,9 +437,9 @@ document.write(`
 <span class="sd">    --------</span>
 <span class="sd">    To crop an image to be used for MICA reconstruction:</span>
 
-<span class="sd">    &gt;&gt;&gt; from medusa.data import get_example_frame</span>
+<span class="sd">    &gt;&gt;&gt; from medusa.data import get_example_image</span>
 <span class="sd">    &gt;&gt;&gt; det_model = SCRFDetector()</span>
-<span class="sd">    &gt;&gt;&gt; img = get_example_frame()  # path to jpg image</span>
+<span class="sd">    &gt;&gt;&gt; img = get_example_image()  # path to jpg image</span>
 <span class="sd">    &gt;&gt;&gt; det_results = det_model(img)</span>
 <span class="sd">    &gt;&gt;&gt; list(det_results.keys())</span>
 <span class="sd">    [&#39;img_idx&#39;, &#39;conf&#39;, &#39;lms&#39;, &#39;bbox&#39;, &#39;n_img&#39;]</span>
@@ -459,6 +458,8 @@ document.write(`
         <span class="k">return</span> <span class="s2">&quot;scrfd&quot;</span>
 
     <span class="k">def</span> <span class="nf">_init_det_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Avoids circular import</span>
+        <span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Param ``det_size`` should indicate a square image, &quot;</span>

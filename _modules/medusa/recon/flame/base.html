@@ -398,7 +398,6 @@ document.write(`
 <span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseReconModel</span>
-<span class="kn">from</span> <span class="nn">...data</span> <span class="kn">import</span> <span class="n">get_template_flame</span>
 
 
 <div class="viewcode-block" id="FlameReconModel"><a class="viewcode-back" href="../../../../api/python/recon/flame/base/index.html#medusa.recon.flame.base.FlameReconModel">[docs]</a><span class="k">class</span> <span class="nc">FlameReconModel</span><span class="p">(</span><span class="n">BaseReconModel</span><span class="p">):</span>
@@ -445,6 +444,8 @@ document.write(`
 <div class="viewcode-block" id="FlameReconModel.get_tris"><a class="viewcode-back" href="../../../../api/python/recon/flame/base/index.html#medusa.recon.flame.base.FlameReconModel.get_tris">[docs]</a>    <span class="k">def</span> <span class="nf">get_tris</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieves the triangles (tris) associated with the predicted vertex</span>
 <span class="sd">        mesh.&quot;&quot;&quot;</span>
+        <span class="c1"># Avoids circular import</span>
+        <span class="kn">from</span> <span class="nn">...data</span> <span class="kn">import</span> <span class="n">get_template_flame</span>
 
         <span class="n">topo</span> <span class="o">=</span> <span class="s1">&#39;dense&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dense</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;coarse&#39;</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">get_template_flame</span><span class="p">(</span><span class="n">topo</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tris&#39;</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>

@@ -18,10 +18,15 @@
 Module Contents
 ---------------
 
-.. py:function:: get_example_frame(load_numpy=False, load_torch=False, device=DEVICE)
+.. py:function:: get_example_image(n_faces=None, load_numpy=False, load_torch=False, device=DEVICE)
 
    Loads an example frame from the example video.
 
+   :param n_faces: If None, it will return the default (example) image (the first frame from
+                   the example video); if an integer, it will return an image with that many
+                   faces in it (see medusa/data/example_data/images folder); if a list (or tuple),
+                   it will return a list of images with the number of faces specified in the list
+   :type n_faces: int, list, None
    :param load_numpy: Whether to load it as a numpy array
    :type load_numpy: bool
    :param load_torch: Whether to load it as a torch array
@@ -40,19 +45,22 @@ Module Contents
    .. rubric:: Examples
 
    >>> # Load path to example image frame
-   >>> img = get_example_frame()
+   >>> img = get_example_image()
    >>> img.is_file()
    True
    >>> # Load file as numpy array
-   >>> img = get_example_frame(load_numpy=True)
+   >>> img = get_example_image(load_numpy=True)
    >>> img.shape
    (384, 480, 3)
 
 
-.. py:function:: get_example_video(return_videoloader=False, **kwargs)
+.. py:function:: get_example_video(n_faces=None, return_videoloader=False, **kwargs)
 
    Retrieves the path to an example video file.
 
+   :param n_faces: If None, it will return the default (example) video; if an integer, it will
+                   return an image with that many faces in it (see medusa/data/example_data/videos folder)
+   :type n_faces: int, None
    :param return_videoloader: Returns the video as a ``VideoLoader`` object
    :type return_videoloader: bool
    :param kwargs: Extra parameters passed to the ``VideoLoader`` initialization;
@@ -81,11 +89,15 @@ Module Contents
    torch.Size([32, 384, 480, 3])
 
 
-.. py:function:: get_example_h5(load=False, model='mediapipe', device=DEVICE)
+.. py:function:: get_example_data4d(n_faces=None, load=False, model='mediapipe', device=DEVICE)
 
    Retrieves an example hdf5 file with reconstructed 4D data from the
    example video.
 
+   :param n_faces: If None, it will return the reconstruction from the default (example) video; if
+                   an integer, it will return the recon data from the video with that many faces in
+                   it (see medusa/data/example_data/videos folder)
+   :type n_faces: int, None
    :param load: Whether to return the hdf5 file loaded in memory (``True``)
                 or to just return the path to the file
    :type load: bool
@@ -100,12 +112,12 @@ Module Contents
 
    .. rubric:: Examples
 
-   >>> path = get_example_h5(load=False, as_path=True)
+   >>> path = get_example_data4d(load=False, as_path=True)
    >>> path.is_file()
    True
 
    # Get hdf5 file already loaded in memory
-   >>> data = get_example_h5(load=True, model='mediapipe')
+   >>> data = get_example_data4d(load=True, model='mediapipe')
    >>> data.recon_model
    'mediapipe'
    >>> data.v.shape  # check out reconstructed vertices

@@ -460,9 +460,9 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_frame">get_example_frame</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_image">get_example_image</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_video">get_example_video</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_h5">get_example_h5</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_data4d">get_example_data4d</a></li>
 </ul>
 </li>
 </ul>
@@ -487,12 +487,16 @@ space.</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="medusa.data.example_data.get_example_frame">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_numpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_torch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_frame" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="medusa.data.example_data.get_example_image">
+<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_faces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_numpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_torch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_image" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads an example frame from the example video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>n_faces</strong> (<em>int</em><em>, </em><em>list</em><em>, </em><em>None</em>) – If None, it will return the default (example) image (the first frame from
+the example video); if an integer, it will return an image with that many
+faces in it (see medusa/data/example_data/images folder); if a list (or tuple),
+it will return a list of images with the number of faces specified in the list</p></li>
 <li><p><strong>load_numpy</strong> (<em>bool</em>) – Whether to load it as a numpy array</p></li>
 <li><p><strong>load_torch</strong> (<em>bool</em>) – Whether to load it as a torch array</p></li>
 <li><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ or ‘cpu’; ignored when <code class="docutils literal notranslate"><span class="pre">load_torch</span></code> is False</p></li>
@@ -510,11 +514,11 @@ space.</p>
 a <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code> object is returned.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load path to example image frame</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_image</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">img</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load file as numpy array</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_frame</span><span class="p">(</span><span class="n">load_numpy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">get_example_image</span><span class="p">(</span><span class="n">load_numpy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">img</span><span class="o">.</span><span class="n">shape</span>
 <span class="go">(384, 480, 3)</span>
 </pre></div>
@@ -523,11 +527,13 @@ a <code class="docutils literal notranslate"><span class="pre">pathlib.Path</spa
 
 <dl class="py function">
 <dt class="sig sig-object py" id="medusa.data.example_data.get_example_video">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_videoloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_video" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_faces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_videoloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_video" title="Permalink to this definition">#</a></dt>
 <dd><p>Retrieves the path to an example video file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>n_faces</strong> (<em>int</em><em>, </em><em>None</em>) – If None, it will return the default (example) video; if an integer, it will
+return an image with that many faces in it (see medusa/data/example_data/videos folder)</p></li>
 <li><p><strong>return_videoloader</strong> (<em>bool</em>) – Returns the video as a <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> object</p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – Extra parameters passed to the <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> initialization;
 ignored when <code class="docutils literal notranslate"><span class="pre">return_videoloader</span></code> is False</p></li>
@@ -560,13 +566,16 @@ loaded on and formatted for GPU:</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="medusa.data.example_data.get_example_h5">
-<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_h5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_h5" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="medusa.data.example_data.get_example_data4d">
+<span class="sig-prename descclassname"><span class="pre">medusa.data.example_data.</span></span><span class="sig-name descname"><span class="pre">get_example_data4d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_faces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mediapipe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/data/example_data.html#get_example_data4d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.data.example_data.get_example_data4d" title="Permalink to this definition">#</a></dt>
 <dd><p>Retrieves an example hdf5 file with reconstructed 4D data from the
 example video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>n_faces</strong> (<em>int</em><em>, </em><em>None</em>) – If None, it will return the reconstruction from the default (example) video; if
+an integer, it will return the recon data from the video with that many faces in
+it (see medusa/data/example_data/videos folder)</p></li>
 <li><p><strong>load</strong> (<em>bool</em>) – Whether to return the hdf5 file loaded in memory (<code class="docutils literal notranslate"><span class="pre">True</span></code>)
 or to just return the path to the file</p></li>
 <li><p><strong>model</strong> (<em>str</em>) – Model used to reconstruct the data; either ‘mediapipe’ or
@@ -583,13 +592,13 @@ object to the file</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_h5</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">get_example_data4d</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_path</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 <p># Get hdf5 file already loaded in memory
-&gt;&gt;&gt; data = get_example_h5(load=True, model=’mediapipe’)
+&gt;&gt;&gt; data = get_example_data4d(load=True, model=’mediapipe’)
 &gt;&gt;&gt; data.recon_model
 ‘mediapipe’
 &gt;&gt;&gt; data.v.shape  # check out reconstructed vertices
@@ -661,9 +670,9 @@ object to the file</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_frame">get_example_frame</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_image">get_example_image</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_video">get_example_video</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_h5">get_example_h5</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.data.example_data.get_example_data4d">get_example_data4d</a></li>
 </ul>
 </li>
 </ul>
