@@ -197,12 +197,12 @@ def get_example_data4d(n_faces=None, load=False, model="mediapipe", device=DEVIC
 
     if not recon.is_file():
         vid = get_example_video(n_faces)
-        data_4d = videorecon(vid, model=model)
+        data_4d = videorecon(vid, recon_model=model, device=device)
         data_4d.save(recon)
         if load:
             return data_4d
         else:
-            return data_4d
+            return recon
 
     if load:
         return Data4D.load(recon, device=device)

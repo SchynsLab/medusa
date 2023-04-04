@@ -44,6 +44,7 @@ def test_shading(shading, device):
 @pytest.mark.parametrize("recon_model_name", ["mediapipe", "emoca-coarse"])
 def test_multiple_faces(n_faces, recon_model_name):
     img = get_example_image(n_faces)
+    n_exp = n_faces
 
     img = PytorchRenderer.load_image(img)
     viewport = (img.shape[1], img.shape[0])

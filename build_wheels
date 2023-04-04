@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+rm ./medusa/data/example_data/recons/?_face*.h5
 for device in cpu gpu; do
     python ./set_package_version.py $device
     poetry update

@@ -115,7 +115,7 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
     init_kwargs = recon_results.to_dict(
         exclude=["lms", "device", "n_img", "conf", "bbox", "tex", "sh_coeff"]
     )
-    data = Data4D(video_metadata=metadata, tris=tris, cam_mat=cam_mat, **init_kwargs)
+    data = Data4D(video_metadata=metadata, tris=tris, cam_mat=cam_mat, device=device, **init_kwargs)
 
     # Mediapipe (and maybe future models) need to be closed in order to avoid
     # opening too many threads
