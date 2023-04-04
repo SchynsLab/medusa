@@ -1,6 +1,6 @@
 # Medusa installation
 
-Medusa is a Python package which works with Python version 3.9 and on Linux and and Mac (except Mac with M1/M2 chips). Most of Medusa's functionality will in fact also work on Windows, with the exception of rendering (as [pytorch3d](https://pytorch3d.org/) cannot be automatically installed on Windows). 
+Medusa is a Python package which works with Python version 3.9 and on Linux and and Mac (except Mac with M1/M2 chips). Most of Medusa's functionality will in fact also work on Windows, with the exception of rendering (as [pytorch3d](https://pytorch3d.org/) cannot be automatically installed on Windows).
 
 We strongly recommend to install the `medusa` package in a separate Python environment, using for example [conda](https://anaconda.org/anaconda/conda). If you'd use *conda*, you can create a new environment named "medusa" with Python 3.9 as follows:
 
@@ -29,13 +29,13 @@ environment activated):
 
 ````{tab-item} medusa (CPU)
 ```console
-pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.4/medusa-0.0.4-py3-none-any.whl
+pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.5/medusa-0.0.5-py3-none-any.whl
 ```
 ````
 
 ````{tab-item} medusa-gpu
 ```console
-pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.4/medusa_gpu-0.0.4-py3-none-any.whl
+pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.5/medusa_gpu-0.0.5-py3-none-any.whl
 ```
 ````
 

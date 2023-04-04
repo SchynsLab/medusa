@@ -421,7 +421,7 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    n_faces : int, list, None</span>
-<span class="sd">        If None, it will return the default (example) image (the first frame from </span>
+<span class="sd">        If None, it will return the default (example) image (the first frame from</span>
 <span class="sd">        the example video); if an integer, it will return an image with that many</span>
 <span class="sd">        faces in it (see medusa/data/example_data/images folder); if a list (or tuple),</span>
 <span class="sd">        it will return a list of images with the number of faces specified in the list</span>
@@ -532,7 +532,7 @@ document.write(`
         <span class="n">f_name</span> <span class="o">=</span> <span class="s1">&#39;example_vid.mp4&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">f_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_faces</span><span class="si">}</span><span class="s1">_face.mp4&#39;</span>
-    
+
     <span class="n">vid</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="n">f_name</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">vid</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
@@ -583,22 +583,22 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;example_data/recons&quot;</span>
-    
+
     <span class="k">if</span> <span class="n">n_faces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">f_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;example_vid_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">.h5&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">f_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_faces</span><span class="si">}</span><span class="s1">_face_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">.h5&#39;</span>
-    
+
     <span class="n">recon</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="n">f_name</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">recon</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
         <span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">(</span><span class="n">n_faces</span><span class="p">)</span>
-        <span class="n">data_4d</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">data_4d</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
         <span class="n">data_4d</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">recon</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">load</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">data_4d</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">data_4d</span>
+            <span class="k">return</span> <span class="n">recon</span>
 
     <span class="k">if</span> <span class="n">load</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Data4D</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
