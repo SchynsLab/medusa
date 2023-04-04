@@ -51,9 +51,9 @@ class AlignCropModel(BaseCropModel):
     --------
     To crop an image to be used for MICA reconstruction:
 
-    >>> from medusa.data import get_example_frame
+    >>> from medusa.data import get_example_image
     >>> crop_model = AlignCropModel()
-    >>> img = get_example_frame()  # path to jpg image
+    >>> img = get_example_image()  # path to jpg image
     >>> out = crop_model(img)
     """
 

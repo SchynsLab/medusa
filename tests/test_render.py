@@ -7,7 +7,7 @@ from conftest import _is_gha_compatible
 
 from medusa.defaults import DEVICE
 from medusa.crop import BboxCropModel
-from medusa.data import get_example_frame, get_example_h5
+from medusa.data import get_example_image, get_example_data4d, get_example_video
 from medusa.recon import DecaReconModel, Mediapipe, videorecon
 from medusa.render import PytorchRenderer, VideoRenderer
 
@@ -18,7 +18,7 @@ def test_shading(shading, device):
     if not _is_gha_compatible(device):
         return
 
-    data = get_example_h5(load=True, model="mediapipe", device=device)
+    data = get_example_data4d(load=True, model="mediapipe", device=device)
     viewport = data.video_metadata["img_size"]
     renderer = PytorchRenderer(
         viewport, cam_mat=data.cam_mat, cam_type="perspective", shading=shading,
@@ -30,7 +30,7 @@ def test_shading(shading, device):
     assert img.shape[-3] == viewport[1]  # height
     assert img.shape[-2] == viewport[0]  # width
 
-    img_orig = get_example_frame(load_numpy=True)
+    img_orig = get_example_image(load_numpy=True)
     img = renderer.alpha_blend(img, img_orig)
     f_out = (
         Path(__file__).parent
@@ -40,10 +40,11 @@ def test_shading(shading, device):
 
 
 
-@pytest.mark.parametrize("imgs_test", [2, 3, 4], indirect=True)
+@pytest.mark.parametrize("n_faces", [2, 3, 4])
 @pytest.mark.parametrize("recon_model_name", ["mediapipe", "emoca-coarse"])
-def test_multiple_faces(imgs_test, recon_model_name):
-    img, n_exp = imgs_test
+def test_multiple_faces(n_faces, recon_model_name):
+    img = get_example_image(n_faces)
+
     img = PytorchRenderer.load_image(img)
     viewport = (img.shape[1], img.shape[0])
 
@@ -76,17 +77,18 @@ def test_multiple_faces(imgs_test, recon_model_name):
     recon_model.close()
 
 
-@pytest.mark.parametrize("video_test", [1, 4], indirect=True)
-def test_render_video(video_test, device=DEVICE):
+@pytest.mark.parametrize("n_faces", [1, 4])
+def test_render_video(n_faces, device=DEVICE):
     if 'GITHUB_ACTIONS' in os.environ:
         # Too slow for Github Actions
         return
 
-    data = videorecon(video_test, "emoca-coarse", device=device)
+    vid = get_example_video(n_faces)
+    data = get_example_data4d(n_faces, load=True, model='emoca-coarse', device=device)
     data.apply_vertex_mask('face')
     f_out = (
         Path(__file__).parent
-        / f"test_viz/render/{video_test.stem}.mp4"
+        / f"test_viz/render/f{n_faces}_face.mp4"
     )
     renderer = VideoRenderer()
-    renderer(f_out, data, video=video_test)
+    renderer(f_out, data, video=vid)

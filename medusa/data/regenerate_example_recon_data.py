@@ -7,7 +7,10 @@ def main():
     from ..recon import videorecon
     from . import get_example_video
 
-    vid = get_example_video()
-    for model in ["mediapipe", "emoca-coarse"]:
-        data = videorecon(vid, recon_model=model, loglevel='WARNING')
-        data.save(str(vid).replace(".mp4", f"_{model}.h5"))
+    for f in [None, 1, 2, 3, 4]:
+        vid = get_example_video(n_faces=f)
+
+        for model in ["mediapipe", "emoca-coarse"]:
+            data = videorecon(vid, recon_model=model, loglevel='INFO')
+            f_out = vid.parents[1] / 'recons' / (vid.stem + f'_{model}.h5')
+            data.save(f_out)

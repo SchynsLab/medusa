@@ -2,7 +2,7 @@ from pathlib import Path
 
 from timer import FancyTimer
 
-from medusa.data import get_example_frame
+from medusa.data import get_example_image
 from medusa.detect import SCRFDetector, YunetDetector
 
 timer_ = FancyTimer()
@@ -21,10 +21,10 @@ for p in timer_.iter(params):
     model = p["model_cls"](device=p["device"])
 
     if p["includes_loading"]:
-        img = get_example_frame(load_numpy=False, load_torch=False)
+        img = get_example_image(load_numpy=False, load_torch=False)
         img = [img] * p["batch_size"]
     else:
-        img = get_example_frame(load_torch=True, device=p["device"])
+        img = get_example_image(load_torch=True, device=p["device"])
         img = img.repeat(p["batch_size"], 1, 1, 1)
 
     timer_.time(model, [img], n_warmup=2, repeats=10, params=p)

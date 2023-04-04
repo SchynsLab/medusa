@@ -10,7 +10,6 @@ import torch.nn.functional as F
 
 from ....defaults import DEVICE
 from ....io import load_inputs
-from ....data import get_external_data_config
 from ..base import FlameReconModel
 from ..decoders import FLAME
 from .encoders import Arcface, MappingNetwork
@@ -29,6 +28,9 @@ class MicaReconModel(FlameReconModel):
 
     def __init__(self, device=DEVICE):
         """Initializes a MicaReconModel object."""
+        # Avoids circular import
+        from ....data import get_external_data_config
+
         self.device = device
         self._cfg = get_external_data_config()
         self._create_submodels()

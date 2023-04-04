@@ -156,6 +156,10 @@ docs/getting_started/*.mp4
 docs/api/python/**/*.rst.txt
 docs/api/python/**/*.rst
 docs/tutorials/*.mp4
+docs/tutorials/*.png
+
+# Data
+medusa/data/example_data/recons/?_face_*.h5
 
 # builds
 dist/*tar.gz

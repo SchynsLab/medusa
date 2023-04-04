@@ -27,8 +27,8 @@ def bw_filter(data, fps, low_pass, high_pass):
     --------
     Filter the data wit a high-pass of 0.005 Hz and a low-pass of 4 Hz:
 
-    >>> from medusa.data import get_example_h5
-    >>> data = get_example_h5(load=True, model='mediapipe')
+    >>> from medusa.data import get_example_data4d
+    >>> data = get_example_data4d(load=True, model='mediapipe')
     >>> data = bw_filter(data, low_pass=4., high_pass=0.005)
     """
     # fmt: on

@@ -12,7 +12,6 @@ import numpy as np
 import torch
 
 from ...defaults import DEVICE
-from ...data import get_template_mediapipe
 from ...io import load_inputs
 from ..base import BaseReconModel
 from ._transforms import PCF, image2world
@@ -64,7 +63,8 @@ class Mediapipe(BaseReconModel):
     def _load_reference(self):
         """Loads the vertices and faces of the references template in world
         space."""
-
+        # Avoids circular import
+        from ...data import get_template_mediapipe
         out = get_template_mediapipe()
         self._v_world_ref = out["v"]
         self._f_world_ref = out["tris"]
@@ -103,9 +103,9 @@ class Mediapipe(BaseReconModel):
         --------
         To reconstruct an example, simply call the ``Mediapipe`` object:
 
-        >>> from medusa.data import get_example_frame
+        >>> from medusa.data import get_example_image
         >>> model = Mediapipe()
-        >>> img = get_example_frame()
+        >>> img = get_example_image()
         >>> out = model(img)  # reconstruct!
         >>> out['v'].shape    # vertices
         (1, 468, 3)

@@ -8,8 +8,7 @@ from conftest import _is_gha_compatible
 
 from medusa.defaults import DEVICE
 from medusa.containers import Data4D
-from medusa.data import get_example_h5
-from medusa.recon import videorecon
+from medusa.data import get_example_data4d, get_example_video
 
 
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
@@ -28,16 +27,16 @@ def test_init(device):
     data = Data4D(v, mat, tris, img_idx, face_idx, metadata, device=device)
 
 
-@pytest.mark.parametrize("video_test", [1], indirect=True)
 @pytest.mark.parametrize("kwargs", [{}, {'recon_model': 'emoca-coarse'}])
-def test_from_video(video_test, kwargs):
+def test_from_video(kwargs):
+    video_test = get_example_video()
     data = Data4D.from_video(video_test, **kwargs)
     if kwargs:
         assert(data.v.shape[1:] == (5023, 3))
 
 
 def test_apply_mask():
-    data = get_example_h5(load=True, model='emoca-coarse')
+    data = get_example_data4d(load=True, model='emoca-coarse')
     data.apply_vertex_mask('face')
     assert(data.v.shape[1] == 1787)
     assert(data.tris.shape[0] == 3408)
@@ -51,7 +50,7 @@ def test_load_and_save(model, device):
     if not _is_gha_compatible(device):
         return
 
-    h5 = get_example_h5(load=False, model=model)
+    h5 = get_example_data4d(load=False, model=model)
     data = Data4D.load(h5, device=device)
     assert isinstance(data, Data4D)
 
@@ -64,14 +63,14 @@ def test_load_and_save(model, device):
 def test_project68(model):
     """Tests projection of vertices onto a subset of 68 canonical vertices."""
     # Need to specify DEVICE here because otherwise Github Action tests error
-    data = get_example_h5(load=True, model=model, device=DEVICE)
+    data = get_example_data4d(load=True, model=model, device=DEVICE)
     v68 = data.project_to_68_landmarks()
     assert v68.shape == (data.v.shape[0], 68, 3)
 
 
 @pytest.mark.parametrize("model", ["mediapipe", "emoca-coarse"])
 def test_to_local_and_to_world(model):
-    data = get_example_h5(load=True, model=model, device=DEVICE)
+    data = get_example_data4d(load=True, model=model, device=DEVICE)
     data.to_local()
     assert(data.space == 'local')
     data.to_world()
@@ -79,14 +78,13 @@ def test_to_local_and_to_world(model):
 
 
 @pytest.mark.parametrize("pad_missing", [True, False])
-@pytest.mark.parametrize("video_test", [1, 3], indirect=True)
-def test_get_face(pad_missing, video_test):
+@pytest.mark.parametrize("n_faces", [1, 3])
+def test_get_face(pad_missing, n_faces):
     """Tests the extraction of faces from a Data4D object which has multiple
     faces."""
-    data = videorecon(video_test, "emoca-coarse")
 
-    n_exp = int(video_test.stem[0])
-    for index in range(n_exp):
+    data = get_example_data4d(n_faces, load=True, model='emoca-coarse')
+    for index in range(n_faces):
         d = data.get_face(index, pad_missing)
 
         # Check if ``d`` is actually a Data4D object
@@ -105,17 +103,18 @@ def test_get_face(pad_missing, video_test):
         data.get_face(100)
 
 
-@pytest.mark.parametrize("video_test", [1, 3], indirect=True)
-def test_decompose_mats(video_test):
+@pytest.mark.parametrize("n_faces", [1, 3])
+def test_decompose_mats(n_faces):
     """Tests decomposition of affine matrices into affine parameters."""
-    data = videorecon(video_test, recon_model="mediapipe")
+
+    data = get_example_data4d(n_faces, load=True, model='mediapipe')
     dfs = data.decompose_mats(to_df=True)
 
     if not isinstance(dfs, list):
         dfs = [dfs]
 
     for i, df in enumerate(dfs):
-        f_out = f"./tests/test_viz/misc/{video_test.stem}_id-{i}.tsv"
+        f_out = f"./tests/test_viz/misc/{n_faces}_face_id-{i}.tsv"
         df.to_csv(f_out, sep="\t", index=False)
 
         fig, axes = plt.subplots(nrows=4, sharex=True, figsize=(12, 6))

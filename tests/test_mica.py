@@ -5,7 +5,7 @@ from conftest import _is_gha_compatible
 
 from medusa.render import PytorchRenderer
 from medusa.crop import AlignCropModel
-from medusa.data import get_example_frame
+from medusa.data import get_example_image
 from medusa.recon.flame import MicaReconModel
 
 
@@ -16,7 +16,7 @@ def test_mica_recon(device):
     if not _is_gha_compatible(device):
         return
 
-    img = get_example_frame()
+    img = get_example_image()
     crop_model = AlignCropModel(device=device)
     out_crop = crop_model(img)
 

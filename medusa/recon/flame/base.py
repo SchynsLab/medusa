@@ -2,7 +2,6 @@
 import torch
 
 from ..base import BaseReconModel
-from ...data import get_template_flame
 
 
 class FlameReconModel(BaseReconModel):
@@ -49,6 +48,8 @@ class FlameReconModel(BaseReconModel):
     def get_tris(self):
         """Retrieves the triangles (tris) associated with the predicted vertex
         mesh."""
+        # Avoids circular import
+        from ...data import get_template_flame
 
         topo = 'dense' if self.is_dense() else 'coarse'
         template = get_template_flame(topo, keys=['tris'], device=self.device)

@@ -15,7 +15,6 @@ from torchvision.ops import nms
 from .base import BaseDetector
 from ..defaults import DEVICE
 from ..io import load_inputs
-from ..data import get_external_data_config
 from ..onnx import OnnxModel
 from ..transforms import resize_with_pad
 
@@ -25,8 +24,6 @@ class SCRFDetector(BaseDetector):
 
     Parameters
     ----------
-    name : str
-        Name of underlying insightface model
     det_size : tuple
         Size to which the input image(s) will be resized before passing it to the
         detection model; should be a tuple with two of the same integers (indicating
@@ -44,9 +41,9 @@ class SCRFDetector(BaseDetector):
     --------
     To crop an image to be used for MICA reconstruction:
 
-    >>> from medusa.data import get_example_frame
+    >>> from medusa.data import get_example_image
     >>> det_model = SCRFDetector()
-    >>> img = get_example_frame()  # path to jpg image
+    >>> img = get_example_image()  # path to jpg image
     >>> det_results = det_model(img)
     >>> list(det_results.keys())
     ['img_idx', 'conf', 'lms', 'bbox', 'n_img']
@@ -65,6 +62,8 @@ class SCRFDetector(BaseDetector):
         return "scrfd"
 
     def _init_det_model(self):
+        # Avoids circular import
+        from ..data import get_external_data_config
 
         if self.det_size[0] != self.det_size[1]:
             return ValueError("Param ``det_size`` should indicate a square image, "

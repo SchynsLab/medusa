@@ -2,7 +2,7 @@ from pathlib import Path
 from timer import FancyTimer
 
 from medusa.crop import AlignCropModel, BboxCropModel
-from medusa.data import get_example_frame
+from medusa.data import get_example_image
 
 timer_ = FancyTimer()
 params = {
@@ -13,7 +13,7 @@ params = {
 
 for p in timer_.iter(params):
     model = p["model_cls"](device=p["device"])
-    img = get_example_frame(load_torch=True, device=p["device"])
+    img = get_example_image(load_torch=True, device=p["device"])
     img = img.repeat(p["batch_size"], 1, 1, 1)
     timer_.time(model, [img], n_warmup=2, repeats=20, params=p)
 

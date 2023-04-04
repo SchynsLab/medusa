@@ -1,7 +1,7 @@
 [tool.poetry]
 # filled in by set_package_version.py
 name = "{package_name}"
-version = "0.0.4"
+version = "0.0.5"
 description = "Medusa: 4D face reconstruction and analysis"
 authors = ["Lukas Snoek <lukassnoek@gmail.com>"]
 license = "BSD-3-Clause"
@@ -48,7 +48,6 @@ gdown = ">=4.5.3"
 kornia = ">=0.6.8"
 mediapipe = { version = ">=0.8.11", markers = "sys_platform != 'darwin' and platform_machine != 'arm64'" }
 #mediapipe-silicon = { version = ">=0.8.11", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
-onnxruntime-gpu = { version = "1.14.0", markers = "sys_platform != 'darwin' and platform_machine != 'arm64'" }
 #onnxruntime-silicon = { version = "1.14.0", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
 chumpy = {git = "https://github.com/lukassnoek/chumpy.git"}
 av = ">=10.0.0"

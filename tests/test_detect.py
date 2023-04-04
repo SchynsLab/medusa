@@ -8,7 +8,7 @@ from conftest import _is_gha_compatible
 from medusa.containers.results import BatchResults
 from medusa.detect import SCRFDetector, YunetDetector
 from medusa.io import VideoLoader
-from medusa.data import get_example_frame
+from medusa.data import get_example_image, get_example_video
 
 
 @pytest.mark.parametrize("Detector", [SCRFDetector, YunetDetector])
@@ -17,7 +17,7 @@ def test_detector_device(Detector, device):
     if not _is_gha_compatible(device):
         return
 
-    img = get_example_frame()
+    img = get_example_image()
     model = Detector(device=device)
     out_det = model(img)
     assert(out_det['lms'].device.type == device)
@@ -25,18 +25,23 @@ def test_detector_device(Detector, device):
 
 @pytest.mark.parametrize('det_size', [(224, 224), (640, 640)])
 def test_scrfd_det_size(det_size):
-    img = get_example_frame()
+    img = get_example_image()
     model = SCRFDetector(det_size=det_size)
     _ = model(img)
 
 
 @pytest.mark.parametrize("Detector", [SCRFDetector, YunetDetector])
-@pytest.mark.parametrize(
-    "imgs_test", [0, 1, 2, 3, 4, [0, 1], [1, 2], [1, 2, 3, 4]], indirect=True
-)
-def test_detector_imgs(Detector, imgs_test):
+@pytest.mark.parametrize("n_faces", [0, 1, 2, 3, 4, [0, 1], [1, 2], [1, 2, 3, 4]])
+def test_detector_imgs(Detector, n_faces):
+
+    imgs = get_example_image(n_faces)
+    if isinstance(n_faces, int):
+        n_exp = n_faces
+    else:
+        n_exp = sum(n_faces)
+
     model = Detector()
-    imgs, n_exp = imgs_test
+
     out_det = model(imgs)
     out_det = BatchResults(**out_det)
 
@@ -54,8 +59,10 @@ def test_detector_imgs(Detector, imgs_test):
 
 
 @pytest.mark.parametrize("Detector", [SCRFDetector, YunetDetector])
-@pytest.mark.parametrize("video_test", [0, 1, 2, 3, 4], indirect=True)
-def test_detector_vid(Detector, video_test):
+@pytest.mark.parametrize("n_faces", [0, 1, 2, 3, 4])
+def test_detector_vid(Detector, n_faces):
+
+    video_test = get_example_video(n_faces)
     loader = VideoLoader(video_test, batch_size=8)
     model = Detector()
 

@@ -12,7 +12,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from .lbs import lbs
-from ...data import get_external_data_config
 
 
 class FLAME(nn.Module):
@@ -132,6 +131,8 @@ class FLAMETex(nn.Module):
         self._register_buffers(self.tex_space)
 
     def _load_model(self, tex_model_path):
+        # Avoids circular import
+        from ...data import get_external_data_config
 
         if tex_model_path is None:
             ext_data_path = get_external_data_config('flame_path').parent

@@ -2,13 +2,15 @@ import pytest
 import torch
 
 from medusa.detect import SCRFDetector
+from medusa.data import get_example_video
 from medusa.tracking import (_ensure_consecutive_face_idx, filter_faces,
                              sort_faces)
 
 
-@pytest.mark.parametrize("video_test", [1, 2, 3, 4], indirect=True)
-def test_tracking_from_detections(video_test):
+@pytest.mark.parametrize("n_faces", [1, 2, 3, 4])
+def test_tracking_from_detections(n_faces):
     detector = SCRFDetector()
+    video_test = get_example_video(n_faces)
     results = detector.detect_faces_video(video_test)
 
     face_idx = sort_faces(results.lms, results.img_idx, dist_threshold=250)

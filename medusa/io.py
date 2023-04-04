@@ -258,8 +258,8 @@ def load_inputs(inputs, load_as="torch", channels_first=True, with_batch_dim=Tru
     Examples
     --------
     Load a single image as a torch Tensor:
-    >>> from medusa.data import get_example_frame
-    >>> path = get_example_frame()
+    >>> from medusa.data import get_example_image
+    >>> path = get_example_image()
     >>> img = load_inputs(path, device='cpu')
     >>> img.shape
     torch.Size([1, 3, 384, 480])
@@ -464,7 +464,7 @@ def save_obj(f, data):
     f : str, Path
         Path to save file to
     data : dict
-        Dictionary with 3D mesh data
+        Dictionary with 3D mesh data, with keys 'v', 'tris', and optionally 'vt'
     """
 
     for k in data.keys():

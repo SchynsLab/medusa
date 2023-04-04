@@ -6,16 +6,16 @@ from conftest import _is_gha_compatible
 
 from medusa.render import VideoRenderer
 from medusa.containers import Data4D
-from medusa.data import get_example_video
+from medusa.data import get_example_video, get_example_image
 from medusa.recon import DecaReconModel
 from medusa.crop import BboxCropModel
 from medusa.render import PytorchRenderer
 
 
-@pytest.mark.parametrize("imgs_test", [1, 2, 3, 4], indirect=True)
-def test_deca_recon_img(imgs_test):
+@pytest.mark.parametrize("n_faces", [1, 2, 3, 4])
+def test_deca_recon_img(n_faces):
     """Test DECA-based recon models with single image."""
-    img, n_exp = imgs_test
+    img = get_example_image(n_faces)
     img = PytorchRenderer.load_image(img)
     deca_recon_model = DecaReconModel("emoca-coarse", orig_img_size=(img.shape[1], img.shape[0]))
 
@@ -27,7 +27,7 @@ def test_deca_recon_img(imgs_test):
 
     img_r = renderer(out["v"], tris)
     img_r = renderer.alpha_blend(img_r, img)
-    renderer.save_image(Path(__file__).parent / f'test_viz/recon/test_emoca-coarse_exp-{n_exp}.png', img_r)
+    renderer.save_image(Path(__file__).parent / f'test_viz/recon/test_emoca-coarse_exp-{n_faces}.png', img_r)
     renderer.close()
 
 

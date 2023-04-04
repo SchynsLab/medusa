@@ -23,7 +23,6 @@ import torch
 
 from ....defaults import DEVICE, LOGGER
 from ....io import load_inputs
-from ....data import get_external_data_config, get_template_flame
 from ....transforms import (create_ortho_matrix, create_viewport_matrix,
                             crop_matrix_to_3d)
 from ..base import FlameReconModel
@@ -78,6 +77,8 @@ class DecaReconModel(FlameReconModel):
 
     def _load_data(self):
         """Loads necessary data."""
+        # Avoid circular import
+        from ....data import get_external_data_config, get_template_flame
 
         self._template = {
             'coarse': get_template_flame('coarse', keys=['tris'], device=self.device)
@@ -415,9 +416,9 @@ class DecaReconModel(FlameReconModel):
         To reconstruct an example, call the ``EMOCA`` object, but make sure to set the
         ``crop_mat`` attribute first:
 
-        >>> from medusa.data import get_example_frame
+        >>> from medusa.data import get_example_image
         >>> from medusa.crop import FanCropModel
-        >>> img = get_example_frame()
+        >>> img = get_example_image()
         >>> crop_model = FanCropModel(device='cpu')
         >>> cropped_img, crop_mat = crop_model(img)
         >>> recon_model = DecaReconModel(name='emoca-coarse', device='cpu')

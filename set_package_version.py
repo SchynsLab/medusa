@@ -34,6 +34,15 @@ def main(device_type, device):
     #else:
     #    cfg['tool']['poetry']['dependencies']['pytorch3d'][0] = cfg['tool']['poetry']['dependencies']['pytorch3d'][0]['url'].format(device=device)
 
+    if device_type == 'cpu':
+        onnx_version = 'onnxruntime'
+    else:
+        onnx_version = 'onnxruntime-gpu'
+
+    cfg['tool']['poetry']['dependencies'][onnx_version] = dict(
+        version = "1.14.0", markers = "sys_platform != 'darwin' and platform_machine != 'arm64'"
+    )
+
     with open('./pyproject.toml', 'w') as f_out:
         toml.dump(f=f_out, o=cfg)
 

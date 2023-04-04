@@ -4,13 +4,19 @@ import pytest
 
 from medusa.render import PytorchRenderer
 from medusa.recon import Mediapipe
+from medusa.data import get_example_image
 
 
-@pytest.mark.parametrize(
-    "imgs_test", [0, 1, 2, 3, 4, [0, 1], [0, 1, 2], [0, 1, 2, 3, 4]], indirect=True
-)
-def test_mediapipe_recon(imgs_test):
-    imgs, n_exp = imgs_test
+@pytest.mark.parametrize("n_faces", [0, 1, 2, 3, 4, [0, 1], [0, 1, 2], [0, 1, 2, 3, 4]])
+def test_mediapipe_recon(n_faces):
+
+    imgs = get_example_image(n_faces)
+
+    if isinstance(n_faces, int):
+        n_exp = n_faces
+    else:
+        n_exp = sum(n_faces)
+
     recon_model = Mediapipe(static_image_mode=True)
     out = recon_model(imgs)
 

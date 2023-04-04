@@ -12,7 +12,6 @@ from kornia.geometry.transform import warp_affine
 from ..defaults import DEVICE
 from ..io import load_inputs
 from ..detect import SCRFDetector
-from ..data import get_external_data_config
 from ..onnx import OnnxModel
 from ..transforms import estimate_similarity_transform
 from .base import BaseCropModel
@@ -51,6 +50,9 @@ class BboxCropModel(BaseCropModel):
 
     def _init_lms_model(self):
         """Initializes the landmark prediction model."""
+        # Avoids circular import
+        from ..data import get_external_data_config
+
         f_in = f_in = get_external_data_config('buffalo_path') / f'{self.name}.onnx'
         return OnnxModel(f_in, self.device)
 

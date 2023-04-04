@@ -13,16 +13,22 @@ import torch
 import numpy as np
 from PIL import Image
 
+from ..recon import videorecon
 from ..defaults import DEVICE
 from ..containers import Data4D
 from ..io import VideoLoader
 
 
-def get_example_frame(load_numpy=False, load_torch=False, device=DEVICE):
+def get_example_image(n_faces=None, load_numpy=False, load_torch=False, device=DEVICE):
     """Loads an example frame from the example video.
 
     Parameters
     ----------
+    n_faces : int, list, None
+        If None, it will return the default (example) image (the first frame from
+        the example video); if an integer, it will return an image with that many
+        faces in it (see medusa/data/example_data/images folder); if a list (or tuple),
+        it will return a list of images with the number of faces specified in the list
     load_numpy : bool
         Whether to load it as a numpy array
     load_torch : bool
@@ -43,11 +49,11 @@ def get_example_frame(load_numpy=False, load_torch=False, device=DEVICE):
     Examples
     --------
     >>> # Load path to example image frame
-    >>> img = get_example_frame()
+    >>> img = get_example_image()
     >>> img.is_file()
     True
     >>> # Load file as numpy array
-    >>> img = get_example_frame(load_numpy=True)
+    >>> img = get_example_image(load_numpy=True)
     >>> img.shape
     (384, 480, 3)
     """
@@ -55,25 +61,45 @@ def get_example_frame(load_numpy=False, load_torch=False, device=DEVICE):
     if load_numpy and load_torch:
         raise ValueError("Set either 'load_numpy' or 'load_torch' to True, not both!")
 
-    here = Path(__file__).parent
-    img_path = here / "example_data/example_frame.png"
+    data_dir = Path(__file__).parent / "example_data/images"
 
-    if not load_torch and not load_numpy:
-        return img_path
+    if n_faces is None:
+        img_path = [data_dir / 'example_frame.png']
+    else:
+        if isinstance(n_faces, (list, tuple)):
+            img_path = [data_dir / f'{nf}_face.jpg' for nf in n_faces]
+        else:
+            img_path = [data_dir / f'{n_faces}_face.jpg']
 
-    img = np.array(Image.open(str(img_path)))
+    imgs = []
+    for f in img_path:
+        if not f.is_file():
+            raise FileNotFoundError(f"Could not find example image file {f}!")
 
-    if load_torch:
-        img = torch.from_numpy(img).to(device)
+        if not load_torch and not load_numpy:
+            imgs.append(f)
+        else:
+            img = np.array(Image.open(str(f)))
 
-    return img
+            if load_torch:
+                img = torch.from_numpy(img).to(device)
+
+            imgs.append(img)
+
+    if len(imgs) == 1:
+        imgs = imgs[0]
+
+    return imgs
 
 
-def get_example_video(return_videoloader=False, **kwargs):
+def get_example_video(n_faces=None, return_videoloader=False, **kwargs):
     """Retrieves the path to an example video file.
 
     Parameters
     ----------
+    n_faces : int, None
+        If None, it will return the default (example) video; if an integer, it will
+        return an image with that many faces in it (see medusa/data/example_data/videos folder)
     return_videoloader : bool
         Returns the video as a ``VideoLoader`` object
     kwargs : dict
@@ -104,8 +130,17 @@ def get_example_video(return_videoloader=False, **kwargs):
     torch.Size([32, 384, 480, 3])
     """
 
-    here = Path(__file__).parent
-    vid = here / "example_data/example_vid.mp4"
+    data_dir = Path(__file__).parent / "example_data/videos"
+
+    if n_faces is None:
+        f_name = 'example_vid.mp4'
+    else:
+        f_name = f'{n_faces}_face.mp4'
+
+    vid = data_dir / f_name
+
+    if not vid.is_file():
+        raise FileNotFoundError(f"Could not find video {vid}")
 
     if return_videoloader:
         vid = VideoLoader(vid, **kwargs)
@@ -113,12 +148,16 @@ def get_example_video(return_videoloader=False, **kwargs):
     return vid
 
 
-def get_example_h5(load=False, model="mediapipe", device=DEVICE):
+def get_example_data4d(n_faces=None, load=False, model="mediapipe", device=DEVICE):
     """Retrieves an example hdf5 file with reconstructed 4D data from the
     example video.
 
     Parameters
     ----------
+    n_faces : int, None
+        If None, it will return the reconstruction from the default (example) video; if
+        an integer, it will return the recon data from the video with that many faces in
+        it (see medusa/data/example_data/videos folder)
     load : bool
         Whether to return the hdf5 file loaded in memory (``True``)
         or to just return the path to the file
@@ -135,22 +174,37 @@ def get_example_h5(load=False, model="mediapipe", device=DEVICE):
 
     Examples
     --------
-    >>> path = get_example_h5(load=False, as_path=True)
+    >>> path = get_example_data4d(load=False, as_path=True)
     >>> path.is_file()
     True
 
     # Get hdf5 file already loaded in memory
-    >>> data = get_example_h5(load=True, model='mediapipe')
+    >>> data = get_example_data4d(load=True, model='mediapipe')
     >>> data.recon_model
     'mediapipe'
     >>> data.v.shape  # check out reconstructed vertices
     (232, 468, 3)
     """
 
-    here = Path(__file__).parent
-    path = here / f"example_data/example_vid_{model}.h5"
+    data_dir = Path(__file__).parent / "example_data/recons"
+
+    if n_faces is None:
+        f_name = f'example_vid_{model}.h5'
+    else:
+        f_name = f'{n_faces}_face_{model}.h5'
+
+    recon = data_dir / f_name
+
+    if not recon.is_file():
+        vid = get_example_video(n_faces)
+        data_4d = videorecon(vid, model=model)
+        data_4d.save(recon)
+        if load:
+            return data_4d
+        else:
+            return data_4d
 
     if load:
-        return Data4D.load(path, device=device)
+        return Data4D.load(recon, device=device)
     else:
-        return path
+        return recon
