@@ -12,12 +12,10 @@ import numpy as np
 import torch
 
 from ...defaults import DEVICE
-from ...io import load_inputs
-from ..base import BaseReconModel
 from ._transforms import PCF, image2world
 
 
-class Mediapipe(BaseReconModel):
+class Mediapipe(torch.nn.Module):
     """A Mediapipe face mesh reconstruction model.
 
     Parameters
@@ -38,8 +36,9 @@ class Mediapipe(BaseReconModel):
     """
 
     def __init__(self, static_image_mode=False, det_threshold=0.1, device=DEVICE,
-                 **kwargs):
+                 lm_space='world', **kwargs):
         """Initializes a Mediapipe recon model."""
+        super().__init__()
 
         # Importing here speeds up CLI
         import mediapipe as mp
@@ -54,8 +53,10 @@ class Mediapipe(BaseReconModel):
 
         self.model.__enter__()  # enter context manually
         self.device = device
+        self.lm_space = lm_space
         self._pcf = None  # initialized later
         self._load_reference()  # sets self.{v,f}_world_ref
+        self.to(device).eval()
 
     def __str__(self):
         return "mediapipe"
@@ -77,7 +78,7 @@ class Mediapipe(BaseReconModel):
         """Returns a default camera matrix."""
         return torch.eye(4, device=self.device)
 
-    def __call__(self, imgs):
+    def forward(self, imgs):
         """Performs reconstruction of the face as a list of landmarks
         (vertices).
 
@@ -113,13 +114,11 @@ class Mediapipe(BaseReconModel):
         (1, 4, 4)
         """
 
-        imgs = load_inputs(
-            imgs,
-            load_as="numpy",
-            channels_first=False,
-            with_batch_dim=True,
-            dtype="uint8",
-        )
+        imgs = imgs.cpu().numpy()
+        if imgs.shape[1] == 3:
+            imgs = imgs.transpose(0, 2, 3, 1)  # b x w x h x 3
+
+        imgs = np.ascontiguousarray(imgs.astype(np.uint8))
 
         outputs = defaultdict(list)
         for i in range(imgs.shape[0]):
@@ -152,12 +151,16 @@ class Mediapipe(BaseReconModel):
                 # so remove these before inputting it into function
                 v_ = v_[:468, :]
 
-                # Project vertices back into world space using a Python implementation by
-                # Rasmus Jones (https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py)
-                v_, mat_ = image2world(v_.T.copy(), self._pcf, self._v_world_ref.T)
+                if self.lm_space == 'world':
 
-                # Add back translation and rotation to the vertices
-                v_ = np.c_[v_.T, np.ones(468)] @ mat_.T
+                    # Project vertices back into world space using a Python implementation by
+                    # Rasmus Jones (https://github.com/Rassibassi/mediapipeDemos/blob/main/head_posture.py)
+                    v_, mat_ = image2world(v_.T.copy(), self._pcf, self._v_world_ref.T)
+
+                    # Add back translation and rotation to the vertices
+                    v_ = np.c_[v_.T, np.ones(468)] @ mat_.T
+                else:
+                    mat_ = np.eye(4)
 
                 outputs["v"].append(v_[:, :3])
                 outputs["mat"].append(mat_)
@@ -170,7 +173,7 @@ class Mediapipe(BaseReconModel):
             outputs["img_idx"] = np.array(outputs["img_idx"])
 
             for attr, data in outputs.items():
-                outputs[attr] = torch.as_tensor(data, device=self.device)
+                outputs[attr] = torch.as_tensor(data, device=self.device, dtype=torch.float32)
 
         return outputs
 

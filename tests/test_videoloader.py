@@ -30,5 +30,16 @@ def test_videoloader_params(batch_size, device):
     img_batch = next(iter(loader))
 
     assert img_batch.shape[0] == batch_size
-    assert img_batch.device.type == device
-    assert img_batch.shape[1:3] == metadata["img_size"][::-1]
+    assert img_batch.shape[2:] == metadata["img_size"][::-1]
+
+
+@pytest.mark.parametrize("frames", [[0, 10], [0, 1, 2, 3], [10, 20, 30, 40, 50]])
+def test_videoloader_subset(frames):
+
+    vid = get_example_video()
+    loader = VideoLoader(vid, dataset_type='subset', frames=frames, batch_size=2)
+    i = 0
+    for batch in loader:
+        i += batch.shape[0]
+
+    assert(i == len(frames))

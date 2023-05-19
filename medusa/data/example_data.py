@@ -10,8 +10,7 @@ space.
 from pathlib import Path
 
 import torch
-import numpy as np
-from PIL import Image
+from torchvision.io import read_image
 
 from ..recon import videorecon
 from ..defaults import DEVICE
@@ -19,7 +18,8 @@ from ..containers import Data4D
 from ..io import VideoLoader
 
 
-def get_example_image(n_faces=None, load_numpy=False, load_torch=False, device=DEVICE):
+def get_example_image(n_faces=None, load=True, device=DEVICE, channels_last=False,
+                      dtype=torch.float32):
     """Loads an example frame from the example video.
 
     Parameters
@@ -58,9 +58,6 @@ def get_example_image(n_faces=None, load_numpy=False, load_torch=False, device=D
     (384, 480, 3)
     """
 
-    if load_numpy and load_torch:
-        raise ValueError("Set either 'load_numpy' or 'load_torch' to True, not both!")
-
     data_dir = Path(__file__).parent / "example_data/images"
 
     if n_faces is None:
@@ -76,18 +73,22 @@ def get_example_image(n_faces=None, load_numpy=False, load_torch=False, device=D
         if not f.is_file():
             raise FileNotFoundError(f"Could not find example image file {f}!")
 
-        if not load_torch and not load_numpy:
+        if not load:
             imgs.append(f)
         else:
-            img = np.array(Image.open(str(f)))
-
-            if load_torch:
-                img = torch.from_numpy(img).to(device)
+            img = read_image(str(f)).to(device)
+            if channels_last:
+                img = img.permute(1, 2, 0)
 
             imgs.append(img)
 
-    if len(imgs) == 1:
-        imgs = imgs[0]
+    if load:
+        if len(imgs) == 1:
+            imgs = imgs[0].unsqueeze(0)
+        else:
+            imgs = torch.stack(imgs)
+
+        imgs = imgs.to(dtype)
 
     return imgs
 

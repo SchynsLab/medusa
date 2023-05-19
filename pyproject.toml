@@ -1,0 +1,86 @@
+[build-system]
+requires = [ "poetry-core",]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "medusa"
+version = "0.0.6"
+description = "Medusa: 4D face reconstruction and analysis"
+authors = [ "Lukas Snoek <lukassnoek@gmail.com>",]
+license = "BSD-3-Clause"
+readme = "README.md"
+homepage = "https://medusa.lukas-snoek.com/medusa"
+repository = "https://github.com/medusa-4D/medusa"
+documentation = "https://medusa.lukas-snoek.com/medusa"
+keywords = [ "face reconstruction", "face detection", "face movement",]
+classifiers = [ "Intended Audience :: Science/Research", "License :: Free for non-commercial use", "Programming Language :: Python :: 3", "Topic :: Scientific/Engineering :: Artificial Intelligence",]
+
+[tool.poetry.dependencies]
+python = "3.10.*"
+click = ">=8.1.3"
+pytorch-lightning = ">=2.0.2"
+pandas = ">=2.0.1"
+numpy = ">=1.23.4"
+tqdm = ">=4.64.1"
+PyYAML = ">=6.0"
+h5py = ">=3.7.0"
+matplotlib = ">=3.6.2"
+gdown = ">=4.5.3"
+kornia = ">=0.6.8"
+av = ">=10.0.0"
+[[tool.poetry.dependencies.torch]]
+markers = "sys_platform == 'linux'"
+url = "https://download.pytorch.org/whl/cpu/torch-2.0.1%2Bcpu-cp310-cp310-linux_x86_64.whl"
+
+[[tool.poetry.dependencies.torch]]
+markers = "sys_platform == 'win32'"
+url = "https://download.pytorch.org/whl/cpu/torch-2.0.1%2Bcpu-cp310-cp310-win_amd64.whl"
+
+[[tool.poetry.dependencies.torch]]
+markers = "sys_platform == 'darwin'"
+version = "2.0.1"
+
+[[tool.poetry.dependencies.torchvision]]
+markers = "sys_platform == 'linux'"
+url = "https://download.pytorch.org/whl/cpu/torchvision-0.15.2%2Bcpu-cp310-cp310-linux_x86_64.whl"
+
+[[tool.poetry.dependencies.torchvision]]
+markers = "sys_platform == 'win32'"
+url = "https://download.pytorch.org/whl/cpu/torchvision-0.15.2%2Bcpu-cp310-cp310-win_amd64.whl"
+
+[[tool.poetry.dependencies.torchvision]]
+markers = "sys_platform == 'darwin'"
+version = "0.15.2"
+
+[[tool.poetry.dependencies.pytorch3d]]
+markers = "sys_platform == 'linux'"
+url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py310_cpu_pyt201/pytorch3d-0.7.4-cp310-cp310-linux_x86_64.whl"
+
+[[tool.poetry.dependencies.pytorch3d]]
+markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'"
+version = "0.7.4"
+
+[tool.poetry.scripts]
+medusa_download_ext_data = "medusa.cli:download_ext_data"
+medusa_videorecon = "medusa.cli:videorecon_cmd"
+medusa_videorender = "medusa.cli:videorender_cmd"
+medusa_regenerate_example_recon_data = "medusa.data.regenerate_example_recon_data:main"
+
+[tool.poetry.dependencies.mediapipe]
+version = ">=0.8.11"
+markers = "sys_platform != 'darwin' and platform_machine != 'arm64'"
+
+[tool.poetry.dependencies.chumpy]
+git = "https://github.com/lukassnoek/chumpy.git"
+
+[tool.poetry.dependencies.onnxruntime-gpu]
+version = "1.14.0"
+markers = "sys_platform != 'darwin' and platform_machine != 'arm64'"
+
+[tool.poetry.group.dev.dependencies]
+jupyter-book = ">=0.15.1"
+sphinx-autoapi = ">=2.0.0"
+pytest = ">=7.2.0"
+nbval = ">=0.9.6"
+coverage = ">=6.5.0"
+interrogate = ">=1.5.0"

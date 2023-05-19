@@ -5,72 +5,90 @@ See ./deca/license.md for conditions for use.
 
 import pickle
 import warnings
+from pathlib import Path
 
+from scipy.sparse import csc_matrix
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from chumpy.ch import Ch
+from pytorch3d.transforms import rotation_6d_to_matrix, matrix_to_rotation_6d, euler_angles_to_matrix
 
 from .lbs import lbs
+from ...defaults import DEVICE
 
 
-class FLAME(nn.Module):
-    """Generates a FLAME-based based on latent parameters."""
+class FlameShape(nn.Module):
+    """Generates a FLAME-based mesh (shape only) from 3DMM parameters.
 
-    def __init__(self, model_path, n_shape, n_exp):
+    Parameters
+    ----------
+    """
+
+    def __init__(self, n_shape=300, n_expr=100, parameters=None, device=DEVICE,
+                 **init_parameters):
+        """Initializes the FLAME decoder."""
         super().__init__()
-        # print("creating the FLAME Decoder")
-        with open(model_path, "rb") as f:
-            # Silence scipy DeprecationWarning
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", DeprecationWarning)
-                model = pickle.load(f, encoding="latin1")
 
-        self.faces = _to_np(model['f'], dtype=np.int64)
-        self.register_buffer("faces_tensor", _to_tensor(self.faces, dtype=torch.long))
+        self.n_shape = n_shape
+        self.n_expr = n_expr
+        self.parameters_ = [] if parameters is None else parameters
 
-        # The vertices of the template model
-        self.register_buffer(
-            "v_template", _to_tensor(_to_np(model['v_template']), dtype=torch.float32)
-        )
+        model = _load_flame_model()
+        self.register_buffer('tris', _to_tensor(model['f']))
+        self.register_buffer('v_template', _to_tensor(model['v_template']))
+
         # The shape components and expression
-        shapedirs = _to_tensor(_to_np(model['shapedirs']), dtype=torch.float32)
-        shapedirs = torch.cat(
-            [shapedirs[:, :, :n_shape], shapedirs[:, :, 300 : (300 + n_exp)]], 2
-        )
-        self.register_buffer("shapedirs", shapedirs)
+        shape_dirs = _to_tensor(model['shapedirs'])
+        shape_dirs = torch.cat([shape_dirs[:, :, :n_shape], shape_dirs[:, :, 300:(300 + n_expr)]], dim=2)
+        self.register_buffer('shape_dirs', shape_dirs)
 
         # The pose components
-        num_pose_basis = model['posedirs'].shape[-1]
-        posedirs = np.reshape(model['posedirs'], [-1, num_pose_basis]).T
-        self.register_buffer("posedirs", _to_tensor(_to_np(posedirs), dtype=torch.float32))
+        num_poses = model['posedirs'].shape[2]
+        pose_dirs = _to_tensor(model['posedirs'].reshape([-1, num_poses]).T)
+        self.register_buffer('pose_dirs', pose_dirs)
 
-        self.register_buffer(
-            "J_regressor", _to_tensor(_to_np(model['J_regressor']), dtype=torch.float32)
-        )
-        parents = _to_tensor(_to_np(model['kintree_table'][0])).long()
+        self.register_buffer('J_regressor', _to_tensor(model['J_regressor']))
+        parents = _to_tensor(model['kintree_table'][0])
         parents[0] = -1
-        self.register_buffer("parents", parents)
-        self.register_buffer(
-            "lbs_weights", _to_tensor(_to_np(model['weights']), dtype=torch.float32)
-        )
+        self.register_buffer('parents', parents)
 
-        # Fixing Eyeball and neck rotation
-        default_eyball_pose = torch.zeros([1, 6], dtype=torch.float32, requires_grad=False)
-        self.register_parameter(
-            "eye_pose", nn.Parameter(default_eyball_pose, requires_grad=False)
-        )
-        default_neck_pose = torch.zeros([1, 3], dtype=torch.float32, requires_grad=False)
-        self.register_parameter(
-            "neck_pose", nn.Parameter(default_neck_pose, requires_grad=False)
-        )
+        self.register_buffer('lbs_weights', _to_tensor(model['weights']))
 
-    def forward(
-        self,
-        shape_params=None,
-        expression_params=None,
-        pose_params=None,
-    ):
+        batch_size = 1
+
+        self.shape = nn.Parameter(torch.zeros([batch_size, n_shape]))
+        self.expr = nn.Parameter(torch.zeros((batch_size, n_expr)))
+        self.eye_pose = nn.Parameter(torch.zeros([batch_size, 6]))
+        self.neck_pose = nn.Parameter(torch.zeros([batch_size, 3]))
+        self.jaw_pose = nn.Parameter(torch.zeros([batch_size, 3]))
+        self.global_pose = nn.Parameter(torch.zeros([batch_size, 3]))
+
+        for p_name, p in init_parameters.items():
+            setattr(self, p_name, nn.Parameter(p))
+
+        for p_name, p in self.named_parameters():
+            # nn.Parameter objects are always trainable by default, but we start with
+            # the assumption that they're not trainable
+            if p_name not in self.parameters_:
+                p.requires_grad_(False)
+
+        self.to(device)
+
+    def _has_parameter(self, param_name):
+
+        for name, _ in self.named_parameters():
+            if name == param_name:
+                return True
+
+        return False
+
+    def get_full_pose(self):
+        """Returns the full pose vector."""
+        return torch.cat([self.global_pose, self.neck_pose, self.jaw_pose, self.eye_pose], dim=1)
+
+    def forward(self, batch_size=None, **inputs):
         """
         Input:
             shape_params: N X number of shape parameters
@@ -80,43 +98,170 @@ class FLAME(nn.Module):
             vertices: N X V X 3
             landmarks: N X number of landmarks X 3
         """
-        batch_size = shape_params.shape[0]
-        eye_pose_params = self.eye_pose.expand(batch_size, -1)
 
-        if expression_params is None:
-            betas = shape_params
+        if not inputs and batch_size is None:
+            # We need to infer batch size from either the inputs or from the explicitly
+            # set batch_size (in case there are no inputs at all)
+            raise ValueError("Either inputs or batch_size must be provided!")
+        elif batch_size is None:
+            # Infer batch_size from inputs (any will do; assumed to be Bx{dim})
+            batch_size = next(iter(inputs.values())).shape[0]
+
+        # Fix existing parameters
+        poses = ['global_pose', 'neck_pose', 'jaw_pose', 'eye_pose']
+        for param in ['shape', 'expr'] + poses:
+            if param in inputs and param in self.parameters_:
+                # param should be either part of the inputs or of the trainable parameters
+                raise ValueError(f"Parameter {param} is also part of inputs!")
+
+            if param not in inputs:
+                existing_param = self.get_parameter(param)
+                if existing_param.shape[0] != batch_size:
+                    # Fix batch size
+                    existing_param = existing_param.expand(batch_size, -1)
+                    #existing_param = nn.Parameter(existing_param)
+
+                    #if param not in self.parameters_:
+                        # Do not train parameter is part of parameters_
+                    #    existing_param.requires_grad_(False)
+
+                    # We only need to re-register the parameter if we actually changed it
+                    #self.register_parameter(param, existing_param)
+
+                inputs[param] = existing_param
+
+                #inputs[param] = self.get_parameter(param)
+
+        shape_expr = torch.cat([inputs['shape'], inputs['expr']], dim=1)
+        full_pose = torch.cat([*[inputs.get(k) for k in poses]], dim=1)
+        v_template = self.v_template.unsqueeze(0).expand(batch_size, -1, -1)
+
+        v, R, _ = lbs(shape_expr, full_pose, v_template, self.shape_dirs, self.pose_dirs,
+                      self.J_regressor, self.parents, self.lbs_weights)
+
+        return v, R
+
+
+class FlameLandmark(nn.Module):
+
+    def __init__(self, lm_type='68', lm_dim='2d', device=DEVICE):
+        super().__init__()
+        self.lm_type = lm_type
+        self.lm_dim = lm_dim
+        self._load_data_and_register_buffers()
+        self.device = device
+        self.to(device)
+
+    def _load_data_and_register_buffers(self):
+
+        flame_model = _load_flame_model()
+        self.register_buffer('tris', _to_tensor(flame_model['f']))
+
+        parents = flame_model['kintree_table'][0]
+        parents[0] = -1
+
+        # kinetic chain
+        neck_kin_chain = []
+        curr_idx = 1
+        while curr_idx != -1:
+            neck_kin_chain.append(curr_idx)
+            curr_idx = parents[curr_idx]
+
+        neck_kin_chain = torch.as_tensor(neck_kin_chain)
+        self.register_buffer('neck_kin_chain', neck_kin_chain)
+
+        if self.lm_type == '68':
+            lms_path = Path(__file__).parents[2] / 'data' / 'flame' / 'landmark_embedding.npy'
+            lms = np.load(lms_path, allow_pickle=True)[()]
+            lms['lmk_faces_idx'] = lms.pop('static_lmk_faces_idx')
+            lms['lmk_bary_coords'] = lms.pop('static_lmk_bary_coords')
+        elif self.lm_type == 'mp':
+            lms_path = Path(__file__).parents[2] / 'data' / 'flame' / 'mediapipe_landmark_embedding.npz'
+            lms = dict(np.load(lms_path))
+            lms['lmk_faces_idx'] = lms.pop('lmk_face_idx').astype(np.int64)
+            lms['lmk_bary_coords'] = lms.pop('lmk_b_coords')
         else:
-            betas = torch.cat([shape_params, expression_params], dim=1)
+            raise ValueError("Choose `lm_type` from '68' or 'mp'")
 
-        if pose_params is None:
-            pose_params = torch.zeros((batch_size, 6)).to(shape_params.device)
+        lms['lmk_faces_idx'] = torch.tensor(lms['lmk_faces_idx'], dtype=torch.long)
+        lms['lmk_bary_coords'] = torch.tensor(lms['lmk_bary_coords'], dtype=torch.float32)
+        self.register_buffer('lmk_faces_idx', lms['lmk_faces_idx'])
+        self.register_buffer('lmk_bary_coords', lms['lmk_bary_coords'])
 
-        full_pose = torch.cat(
-            [
-                pose_params[:, :3],
-                self.neck_pose.expand(batch_size, -1),
-                pose_params[:, 3:],
-                eye_pose_params,
-            ],
-            dim=1,
-        )
-        template_vertices = self.v_template.unsqueeze(0).expand(batch_size, -1, -1)
+        if self.lm_type == '68':
+            #lms['dynamic_lmk_faces_idx'] = torch.tensor(lms['dynamic_lmk_faces_idx'], dtype=torch.long)
+            #lms['dynamic_lmk_bary_coords'] = torch.tensor(lms['dynamic_lmk_bary_coords'], dtype=torch.float32)
+            self.register_buffer('dynamic_lmk_faces_idx', lms['dynamic_lmk_faces_idx'])
+            self.register_buffer('dynamic_lmk_bary_coords', lms['dynamic_lmk_bary_coords'])
+        else:
+            self.register_buffer('landmark_indices', _to_tensor(lms['landmark_indices']))
 
-        vertices, T, _ = lbs(
-            betas,
-            full_pose,
-            template_vertices,
-            self.shapedirs,
-            self.posedirs,
-            self.J_regressor,
-            self.parents,
-            self.lbs_weights,
-        )
+    def forward(self, v, poses):
 
-        return vertices, T
+        batch_size = v.shape[0]
+        lmk_faces_idx = self.lmk_faces_idx.unsqueeze(dim=0).expand(batch_size, -1)
+        lmk_bary_coords = self.lmk_bary_coords.unsqueeze(dim=0).expand(batch_size, -1, -1)
+
+        if self.lm_type == 'mp':
+            lmk_faces_idx = lmk_faces_idx.contiguous()
+            lmk_bary_coords = lmk_bary_coords.contiguous()
+
+        if self.lm_type == '68':
+            chunks = []
+            for chunk in torch.chunk(poses, poses.shape[1] // 3, dim=1):
+                chunks.append(matrix_to_rotation_6d(euler_angles_to_matrix(chunk, 'XYZ')))
+
+            poses = torch.cat(chunks, dim=1)
+            with torch.no_grad():
+                dyn_lmk_faces_idx, dyn_lmk_bary_coords = self._find_dynamic_lmk_idx_and_bcoords(
+                    poses
+                )
+
+            dyn_lmk_faces_idx = dyn_lmk_faces_idx.expand(batch_size, -1)
+            dyn_lmk_bary_coords = dyn_lmk_bary_coords.expand(batch_size, -1, -1)
+
+            lmk_faces_idx = torch.cat([dyn_lmk_faces_idx, lmk_faces_idx], 1)
+            lmk_bary_coords = torch.cat([dyn_lmk_bary_coords, lmk_bary_coords], 1)
+
+        lmk_tris = torch.index_select(self.tris, 0, lmk_faces_idx.view(-1).to(torch.long)).view(batch_size, -1, 3)
+        lmk_tris += torch.arange(batch_size, dtype=torch.long, device=self.device).view(-1, 1, 1) * v.shape[1]
+        lmk_v = v.view(-1, 3)[lmk_tris].view(batch_size, -1, 3, 3)
+        lmk = torch.einsum('blfi,blf->bli', [lmk_v, lmk_bary_coords])
+
+        return lmk
+
+    def _find_dynamic_lmk_idx_and_bcoords(self, pose):
+
+        batch_size = pose.shape[0]
+        aa_pose = torch.index_select(pose.view(batch_size, -1, 6), 1, self.neck_kin_chain)
+        rot_mats = rotation_6d_to_matrix(aa_pose.view(-1, 6)).view([batch_size, -1, 3, 3])
+
+        rel_rot_mat = torch.eye(3, device=self.device).unsqueeze(dim=0).expand(batch_size, -1, -1)
+
+        for idx in range(len(self.neck_kin_chain)):
+            rel_rot_mat = torch.bmm(rot_mats[:, idx], rel_rot_mat)
+
+        y_rot_angle = torch.round(torch.clamp(-self._rot_mat_to_euler(rel_rot_mat) * 180.0 / np.pi, max=39)).to(dtype=torch.long)
+        neg_mask = y_rot_angle.lt(0).to(dtype=torch.long)
+        mask = y_rot_angle.lt(-39).to(dtype=torch.long)
+        neg_vals = mask * 78 + (1 - mask) * (39 - y_rot_angle)
+        y_rot_angle = (neg_mask * neg_vals + (1 - neg_mask) * y_rot_angle)
+
+        dyn_lmk_faces_idx = torch.index_select(self.dynamic_lmk_faces_idx, 0, y_rot_angle)
+        dyn_lmk_bary_coords = torch.index_select(self.dynamic_lmk_bary_coords, 0, y_rot_angle)
+
+        return dyn_lmk_faces_idx, dyn_lmk_bary_coords
+
+    def _rot_mat_to_euler(self, rot_mats):
+        # Calculates rotation matrix to euler angles
+        # Careful for extreme cases of eular angles like [0.0, pi, 0.0]
+
+        sy = torch.sqrt(rot_mats[:, 0, 0] * rot_mats[:, 0, 0] +
+                        rot_mats[:, 1, 0] * rot_mats[:, 1, 0])
+        return torch.atan2(-rot_mats[:, 2, 0], sy)
 
 
-class FLAMETex(nn.Module):
+class FlameTex(nn.Module):
     """FLAME texture:
 
     https://github.com/TimoBolkart/TF_FLAME/blob/ade0ab152300ec5f0e8555d6765411555c5ed43d/sample_texture.py#L64
@@ -164,12 +309,35 @@ class FLAMETex(nn.Module):
         return texture
 
 
-def _to_tensor(array, dtype=torch.float32):
-    if "torch.tensor" not in str(type(array)):
-        return torch.tensor(array, dtype=dtype)
+def _load_flame_model():
+
+    from ...data import get_external_data_config
+    model_path = get_external_data_config('flame_path')
+
+    with open(model_path, "rb") as f:
+        # Silence scipy DeprecationWarning
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            model = pickle.load(f, encoding="latin1")
+
+    return model
 
 
-def _to_np(array, dtype=np.float32):
-    if "scipy.sparse" in str(type(array)):
-        array = array.todense()
-    return np.array(array, dtype=dtype)
+def _to_tensor(x):
+    """Converts a numpy array to a torch tensor."""
+    if isinstance(x, Ch):
+        x = np.asarray(x)
+
+    if isinstance(x, csc_matrix):
+        x = x.todense()
+
+    if x.dtype in (np.uint32, np.int32):
+        x = x.astype(np.int64)
+
+    elif x.dtype == np.float64:
+        x = x.astype(np.float32)
+
+    x = torch.from_numpy(x)
+    x.requires_grad_(False)
+
+    return x

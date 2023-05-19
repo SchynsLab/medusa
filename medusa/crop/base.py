@@ -1,10 +1,12 @@
+import torch
+from torch import nn
 from pathlib import Path
 
 from ..containers import BatchResults
 from ..io import VideoLoader
 
 
-class BaseCropModel:
+class BaseCropModel(nn.Module):
     """Base crop model, from which all crop models inherit."""
 
     def crop_faces_video(self, vid, batch_size=32, save_imgs=False):
@@ -20,11 +22,13 @@ class BaseCropModel:
         results : BatchResults
             A BatchResults object with all crop information/results
         """
+
         if isinstance(vid, (str, Path)):
-            vid = VideoLoader(vid, batch_size, self.device)
+            vid = VideoLoader(vid, batch_size=batch_size, device=self.device)
 
         results = BatchResults(0, self.device)
         for batch in vid:
+            batch = batch.to(self.device, dtype=torch.float32)
             out = self(batch)
             results.add(**out)
 

@@ -4,7 +4,7 @@ import numpy as np
 import torch
 
 from ..data import get_template_flame, get_external_data_config
-from ..recon.flame.decoders import FLAME
+from ..recon.flame.decoders import FlameShape
 from .fourD import Data4D
 from ..data import get_template_mediapipe
 from ..io import save_obj
@@ -12,7 +12,7 @@ from ..io import save_obj
 from ..defaults import DEVICE
 
 flame_path = get_external_data_config(key='flame_path')
-flame_generator = FLAME(flame_path, 300, 100)
+flame_generator = FlameShape(300, 100)
 
 
 class Base3D:

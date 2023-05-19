@@ -1,6 +1,6 @@
 """Module with canonical ``videorecon`` function that takes in a video and
 returns a ``Data4D`` object."""
-
+import torch
 from ..defaults import DEVICE, FLAME_MODELS, LOGGER
 from ..containers.fourD import Data4D
 from ..containers.results import BatchResults
@@ -11,6 +11,7 @@ from .flame import DecaReconModel
 from .mpipe import Mediapipe
 
 
+@torch.inference_mode()
 def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None,
                batch_size=32, loglevel="INFO", **kwargs):
     """Reconstruction of all frames of a video.
@@ -21,8 +22,7 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
         Path to video file to reconstruct, or an already initialized VideoLoader
     recon_model : str
         Name of reconstruction model, options are: 'deca-coarse', 'deca-dense',
-        'emoca-coarse', 'emoca-dense', 'spectre-coarse', 'spectre-dense', and
-        'mediapipe'
+        'emoca-coarse', 'emoca-dense', and 'mediapipe'
     device : str
         Either "cuda" (for GPU) or "cpu"
     n_frames : int
@@ -77,18 +77,17 @@ def videorecon(video_path, recon_model="mediapipe", device=DEVICE, n_frames=None
     # Loop across frames of video, store results in `recon_data`
     recon_results = BatchResults(device=device)
     for batch in tqdm_log(video, LOGGER, desc="Recon images"):
+        batch = batch.to(device, dtype=torch.float32)
         inputs = {"imgs": batch}
-
         if recon_model in FLAME_MODELS:
-
-            out_crop = crop_model(batch)
-            del batch
+            out_crop = crop_model(inputs.pop('imgs'))
             inputs["imgs"] = out_crop.pop("imgs_crop")
+
             inputs["crop_mat"] = out_crop.pop("crop_mat")
             recon_results.add(**out_crop)
 
-        # Reconstruct and store whatever `recon_model`` returns
-        # in `recon_data`
+        # Reconstruct images if there are detected faces (may be None if the crop model
+        # did not detect any)
         if inputs["imgs"] is not None:
             outputs = reconstructor(**inputs)
             recon_results.add(**outputs)

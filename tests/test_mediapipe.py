@@ -48,5 +48,3 @@ def test_mediapipe_recon(n_faces):
         img = renderer.alpha_blend(recon_img, img)
         f_out = Path(__file__).parent / f"test_viz/recon/test_mediapipe_exp-{n_exp}.png"
         renderer.save_image(f_out, img)
-
-        renderer.close()

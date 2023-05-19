@@ -1,10 +1,9 @@
 """Module with a base class for FLAME-based reconstruction models."""
 import torch
+from torch import nn
 
-from ..base import BaseReconModel
 
-
-class FlameReconModel(BaseReconModel):
+class FlameReconModel(nn.Module):
     """A reconstruction model which outputs data based on the FLAME-
     topology."""
 

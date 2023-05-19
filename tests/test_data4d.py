@@ -31,6 +31,7 @@ def test_init(device):
 def test_from_video(kwargs):
     video_test = get_example_video()
     data = Data4D.from_video(video_test, **kwargs)
+
     if kwargs:
         assert(data.v.shape[1:] == (5023, 3))
 

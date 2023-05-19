@@ -1,6 +1,6 @@
 """Module with different FLAME-based 3D reconstruction models, including DECA.
 
-[1]_, EMOCA [2]_, and spectre [3]_.
+[1]_, EMOCA [2]_
 
 All model classes inherit from a common base class, ``FlameReconModel`` (see
 ``flame.base`` module).
@@ -9,9 +9,6 @@ All model classes inherit from a common base class, ``FlameReconModel`` (see
        3D face model from in-the-wild images. ACM Transactions on Graphics (ToG), 40(4), 1-13.
 .. [2] Danecek, R., Black, M. J., & Bolkart, T. (2022). EMOCA: Emotion Driven Monocular
        Face Capture and Animation. arXiv preprint arXiv:2204.11312.
-.. [3] Filntisis, P. P., Retsinas, G., Paraperas-Papantoniou, F., Katsamanis, A., Roussos, A., & Maragos, P. (2022).
-       Visual Speech-Aware Perceptual 3D Facial Expression Reconstruction from Videos.
-       arXiv preprint arXiv:2207.11094.
 
 For the associated license, see license.md.
 """
@@ -20,36 +17,37 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from kornia.geometry.linalg import transform_points
 
-from ....defaults import DEVICE, LOGGER
-from ....io import load_inputs
+from ....defaults import LOGGER
 from ....transforms import (create_ortho_matrix, create_viewport_matrix,
                             crop_matrix_to_3d)
 from ..base import FlameReconModel
-from ..decoders import FLAME, FLAMETex
-from ..utils import upsample_mesh, vertex_normals
+from ..decoders import FlameShape, FlameTex
 from .decoders import DetailGenerator
-from .encoders import PerceptualEncoder, ResnetEncoder
+from .encoders import ResnetEncoder
 from ....crop import BboxCropModel
-from ....defaults import FLAME_MODELS
+from ....defaults import FLAME_MODELS, DEVICE
+from ....geometry import compute_vertex_normals
 
 
 class DecaReconModel(FlameReconModel):
     """A 3D face reconstruction model that uses the FLAME topology.
 
     At the moment, six different models are supported: 'deca-coarse', 'deca-dense',
-    'emoca-coarse', 'emoca-dense', 'spectre-coarse', and 'spectre-dense'
+    'emoca-coarse', 'emoca-dense'
 
     Parameters
     ----------
     name : str
         Either 'deca-coarse', 'deca-dense', 'emoca-coarse', or 'emoca-dense'
+    extract_lms : None, str
+        If ``None``, no landmarks are extracted; if '68', 68 landmarks are extracted;
+        if 'mp', 468 mediapipe landmarks are extracted
     orig_img_size : tuple
         Original (before cropping!) image dimensions of video frame (width, height);
         needed for baking in translation due to cropping; if not set, it is assumed
         that the image is not cropped!
-    device : str
-        Either 'cuda' (uses GPU) or 'cpu'
     """
 
     def __init__(self, name, extract_tex=False, orig_img_size=None, device=DEVICE):
@@ -64,7 +62,8 @@ class DecaReconModel(FlameReconModel):
         self._check()
         self._load_data()
         self._create_submodels()
-        self._crop_model = None
+        self._crop_model = BboxCropModel("2d106det", (224, 224), device=device)
+        self.to(device)
 
     def __str__(self):
         return self.name
@@ -86,9 +85,9 @@ class DecaReconModel(FlameReconModel):
         data_dir = Path(__file__).parents[3] / 'data/flame'
 
         if self._dense:
-            self._template['dense'] = get_template_flame(topo='dense', device=None)
+            self._template['dense'] = get_template_flame(topo='dense', device=self.device)
             self._fixed_uv_dis = np.load(data_dir / "fixed_displacement_256.npy")
-            self._fixed_uv_dis = torch.as_tensor(self._fixed_uv_dis, device=self.device)
+            self._fixed_uv_dis = torch.as_tensor(self._fixed_uv_dis, device=self.device).float()
 
         self._cfg = get_external_data_config()
 
@@ -115,26 +114,21 @@ class DecaReconModel(FlameReconModel):
 
         # Flame encoder: image -> n_param FLAME parameters
         n_param = sum([n for n in self.param_dict.values()])
-        self.E_flame = ResnetEncoder(outsize=n_param).to(self.device)
+        self.E_flame = ResnetEncoder(outsize=n_param)
 
         if self._dense:
             # Detail map encoder: image -> 128 detail latents
-            self.E_detail = ResnetEncoder(outsize=128).to(self.device)
+            self.E_detail = ResnetEncoder(outsize=128)
 
         if "emoca" in self.name:
             # Expression encoder: image -> 50 expression parameters
-            self.E_expression = ResnetEncoder(self.param_dict["n_exp"]).to(self.device)
-        elif "spectre" in self.name:
-            # Expression encoder: image -> 50 exp. params + 3 jaw params
-            self.E_expression = PerceptualEncoder().to(self.device)
+            self.E_expression = ResnetEncoder(self.param_dict["n_exp"])
 
         # Flame decoder: n_param Flame parameters -> vertices / affine matrix
-        self.D_flame_shape = FLAME(self._cfg["flame_path"], n_shape=100, n_exp=50).to(
-            self.device
-        )
+        self.D_flame_shape = FlameShape(n_shape=100, n_expr=50)
 
         if self.extract_tex:
-            self.D_flame_tex = FLAMETex(n_tex=self.param_dict['n_tex']).to(self.device)
+            self.D_flame_tex = FlameTex(n_tex=self.param_dict['n_tex'])
 
         if self._dense:
             # Detail decoder: (detail, exp, cam params) -> detail map
@@ -143,35 +137,19 @@ class DecaReconModel(FlameReconModel):
                 out_channels=1,
                 out_scale=0.01,
                 sample_mode="bilinear",
-            ).to(self.device)
+            )
 
         # Load weights from checkpoint and apply to models
-        checkpoint = torch.load(
-            self._cfg[self.name.split("-")[0] + "_path"], map_location=self.device
-        )
-
+        checkpoint = torch.load(self._cfg[self.name.split("-")[0] + "_path"])
         self.E_flame.load_state_dict(checkpoint["E_flame"])
-        self.E_flame.eval()
 
         if self._dense:
-
-            if "E_detail" not in checkpoint:
-                # For spectre, there are no specific E/D_detail
-                # weights
-                deca_ckpt = torch.load(self._cfg["deca_path"], map_location=self.device)
-                checkpoint["E_detail"] = deca_ckpt["E_detail"]
-                checkpoint["D_detail"] = deca_ckpt["D_detail"]
-
             self.E_detail.load_state_dict(checkpoint["E_detail"])
             self.D_detail.load_state_dict(checkpoint["D_detail"])
-            self.E_detail.eval()
-            self.D_detail.eval()
 
-        if "emoca" in self.name or "spectre" in self.name:
+        if "emoca" in self.name:
             self.E_expression.load_state_dict(checkpoint["E_expression"])
             # for some reason E_exp should be explicitly cast to cuda
-            self.E_expression.to(self.device)
-            self.E_expression.eval()
 
     def _encode(self, imgs):
         """"Encodes" the image into FLAME parameters, i.e., predict FLAME
@@ -219,13 +197,6 @@ class DecaReconModel(FlameReconModel):
         if "emoca" in self.name:
             enc_dict["exp"] = self.E_expression(imgs)
 
-        # Replace "DECA" expression parameters with sum of original
-        # and spectre parameters (as well as 'jaw' parameters)
-        if "spectre" in self.name:
-            exp, jaw = self.E_expression(imgs)
-            enc_dict["exp"] += exp
-            enc_dict["pose"][:, 3:] += jaw
-
         return enc_dict
 
     def _decompose_params(self, parameters, num_dict):
@@ -271,8 +242,9 @@ class DecaReconModel(FlameReconModel):
         """
 
         # Decode vertices (`v`) and rotation params (`R`) from the shape/exp/pose params
-        v, R = self.D_flame_shape(
-            enc_dict["shape"], enc_dict["exp"], pose_params=enc_dict["pose"]
+        v, R = self.D_flame_shape(shape=enc_dict['shape'], expr=enc_dict['exp'],
+                                  global_pose=enc_dict['pose'][:, :3],
+                                  jaw_pose=enc_dict['pose'][:, 3:]
         )
         b = v.shape[0]  # batch dim
 
@@ -281,26 +253,12 @@ class DecaReconModel(FlameReconModel):
                 [enc_dict["pose"][:, 3:], enc_dict["exp"], enc_dict["detail"]], dim=1
             )
             uv_z = self.D_detail(input_detail)
-            disp_map = uv_z + self._fixed_uv_dis[None, None, :, :]
-            tris = self._template['coarse']['tris'].expand(b, -1, -1)
-            normals = vertex_normals(v, tris)
+            disp_map = uv_z.squeeze(1) + self._fixed_uv_dis[None, :, :]
+            normals = compute_vertex_normals(v, self._template['coarse']['tris'])
 
             # Upsample mesh to 'dense' format given (coarse) vertices and displacement map
             # For now, this is done in numpy format, and cast back to torch Tensor afterwards
-            v_dense = []
-            for i in range(uv_z.shape[0]):
-                # Haven't found a way to vectorize this
-                v_ = upsample_mesh(
-                    v[i, ...].cpu().numpy().squeeze(),
-                    normals[i, ...].cpu().numpy().squeeze(),
-                    disp_map[i, ...].cpu().numpy().squeeze(),
-                    self._template["dense"],
-                )
-                v_dense.append(v_)
-
-            v = torch.from_numpy(np.stack(v_dense)).to(
-                dtype=torch.float32, device=self.device
-            )
+            v = self._upsample_mesh(v, normals, disp_map)
 
         # Note that `v` is in world space, but pose (global rotation only)
         # is already applied
@@ -329,7 +287,7 @@ class DecaReconModel(FlameReconModel):
         if crop_mat is None:
 
             # Setting crop matrix to identity matrix
-            crop_mat = torch.eye(3).repeat(b, 1, 1).to(self.device)
+            crop_mat = torch.eye(3, device=self.device).repeat(b, 1, 1)
 
             if not self._warned_about_crop_mat:
                 LOGGER.warning(
@@ -365,30 +323,70 @@ class DecaReconModel(FlameReconModel):
         backward = torch.inverse((VP_ @ OP_))
         mat = backward @ forward @ pose
 
-        # Change to homogenous (hmg) coordinates and apply transformation
-        hmg = torch.ones(b, v.shape[1], 1, device=self.device, dtype=torch.float32)
-        v = torch.cat([v, hmg], dim=2) @ mat.mT
-        v = v[:, :, :3]
+        v = transform_points(mat, v)
+        out = {"v": v}
 
         # To complete the full transformation matrix, we need to also
         # add the rotation (which was already applied to the data by the
         # FLAME model)
         mat = mat @ R
+        out['mat'] = mat
 
-        if "spectre" in self.name:
-            # The spectre model pads the input (like: [0, 0, 0, 1, 2, 3, ..., n, n, n]),
-            # so trim off these frames (first two & last two) here
-            v = v[2:-2, ...]
-            mat = mat[2:-2, ...]
-
-        out = {"v": v, "mat": mat}
         if self.extract_tex:
             # Note to self: this makes reconstruction very slow!
             out['tex'] = self.D_flame_tex(enc_dict['tex'])
 
         return out
 
-    def __call__(self, imgs, crop_mat=None):
+    def _upsample_mesh(self, v, normals, disp_map):
+        """Upsamples a 'coarse' mesh to a 'dense' mesh given a displacement map;
+        a pytorch-based implementation of the original code by the MPI (which used numpy).
+
+        Parameters
+        ----------
+        v : torch.Tensor
+            A tensor of shape (B, V, 3) containing the vertices of the mesh
+        normals : torch.Tensor
+            A tensor of shape (B, V, 3) containing the normals of the mesh
+        disp_map : torch.Tensor
+            A tensor of shape (B, H, W) containing the displacement map
+
+        Returns
+        -------
+        v_dense : torch.Tensor
+            A tensor of shape (B, Vd, 3) containing the vertices of the dense mesh
+        """
+
+        dense_template = self._template['dense']
+        x_coords = dense_template["x_coords"]
+        y_coords = dense_template["y_coords"]
+        valid_pix_idx = dense_template["valid_pix_idx"]
+        valid_pix_tris = dense_template["valid_pix_tris"]
+        valid_pix_b_coords = dense_template["valid_pix_b_coords"]
+
+        pixel_3d_points = (
+            v[:, valid_pix_tris[:, 0], :] * valid_pix_b_coords[:, 0, None]
+            + v[:, valid_pix_tris[:, 1], :] * valid_pix_b_coords[:, 1, None]
+            + v[:, valid_pix_tris[:, 2], :] * valid_pix_b_coords[:, 2, None]
+        )
+
+        pixel_3d_normals = (
+            normals[:, valid_pix_tris[:, 0], :]
+            * valid_pix_b_coords[:, 0, None]
+            + normals[:, valid_pix_tris[:, 1], :]
+            * valid_pix_b_coords[:, 1, None]
+            + normals[:, valid_pix_tris[:, 2], :]
+            * valid_pix_b_coords[:, 2, None]
+        )
+
+        pixel_3d_normals /= torch.linalg.norm(pixel_3d_normals, axis=-1, keepdims=True)
+        displacements = disp_map[:, y_coords[valid_pix_idx].long(), x_coords[valid_pix_idx].long()]
+        offsets = displacements[:, :, None] * pixel_3d_normals
+        v_dense = pixel_3d_points + offsets
+
+        return v_dense
+
+    def forward(self, imgs, crop_mat=None):
         """Performs reconstruction of the face as a list of landmarks
         (vertices).
 
@@ -430,17 +428,16 @@ class DecaReconModel(FlameReconModel):
         (1, 4, 4)
         """
 
-        imgs = load_inputs(imgs, device=self.device)
-
         out = {}
         if imgs.shape[2:] != (224, 224):
             # Extract width (imgs.shape[3]) and height (img.shape[2])
-            self.orig_img_size = imgs.shape[2:][::-1]
-            self._crop_model = BboxCropModel("2d106det", (224, 224), device=self.device)
+            if self.orig_img_size is None:
+                self.orig_img_size = imgs.shape[2:][::-1]
+
             crop_results = self._crop_model(imgs)
-            imgs = crop_results["imgs_crop"]
-            crop_mat = crop_results["crop_mat"]
-            out["img_idx"] = crop_results["img_idx"]
+            crop_mat = crop_results.pop("crop_mat")
+            out["img_idx"] = crop_results.pop("img_idx")
+            imgs = crop_results.pop("imgs_crop")
         else:
             # Must be already cropped!
             if self.orig_img_size is None or crop_mat is None:
@@ -451,25 +448,6 @@ class DecaReconModel(FlameReconModel):
                 LOGGER.warning("Original image size unkown, rendering in cropped space!")
 
         imgs = self._preprocess(imgs)
-
-        if "spectre" in self.name:
-            if imgs.shape[0] == 1:
-                raise ValueError(
-                    "Spectre only works with video sequences, not " "single images!"
-                )
-
-            if imgs.shape[0] < 5:
-                raise ValueError("Each batch should be >= 5!")
-
-            pre = imgs[None, 0, ...]
-            post = imgs[None, -1, ...]
-            imgs = torch.cat([pre, pre, imgs, post, post])
-
-            if crop_mat is not None:
-                pre = crop_mat[None, 0, ...]
-                post = crop_mat[None, -1, ...]
-                crop_mat = torch.cat([pre, pre, crop_mat, post, post])
-
         enc_dict = self._encode(imgs)
         dec_dict = self._decode(enc_dict, crop_mat)
         out = {**out, **dec_dict}

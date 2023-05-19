@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 rm ./medusa/data/example_data/recons/?_face*.h5
 for device in cpu gpu; do
-    python ./set_package_version.py $device
+    echo "Building wheel for ${device}"
+    if [ "$device" == "cpu" ]; then
+        sed -i 's/cu118/cpu/g' ./pyproject.toml
+    fi
     poetry update
     poetry build --format wheel
-    mv ./pyproject.toml ./pyproject_${device}.toml
-    mv ./poetry.lock ./poetry_${device}.lock
+
+    #if [ "$device" == "cpu" ]; then
+    #    mv ./dist/medusa-*.whl
+    #    sed -i 's/cpu/cu118/g' ./pyproject.toml
+    #fi
 done

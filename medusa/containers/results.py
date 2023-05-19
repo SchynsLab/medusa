@@ -280,12 +280,12 @@ class BatchResults:
             # (because for cropped images, borders = bbox)
             if hasattr(self, "bbox") and not show_cropped:
                 bbox = self.bbox[det_idx]
+                font_size = int((box_area(bbox).min().sqrt() / 8).item())
 
                 # Check for confidence of detection, which
                 # we'll draw if available
                 if hasattr(self, "conf"):
                     # Heuristic for scaling font size
-                    font_size = int((box_area(bbox).min().sqrt() / 8).item())
                     labels = [str(round(lab.item(), 3)) for lab in self.conf[det_idx]]
                 else:
                     labels = None

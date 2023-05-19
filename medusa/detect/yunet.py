@@ -12,11 +12,12 @@ from .base import BaseDetector
 class YunetDetector(BaseDetector):
     """This detector is based on Yunet, a face detector based on YOLOv3 :cite:p:`facedetect-yu`."""
     def __init__(self, det_threshold=0.9, nms_threshold=0.3, device=DEVICE, **kwargs):
-
+        super().__init__()
         self.det_threshold = det_threshold
         self.nms_threshold = nms_threshold
         self.device = device
         self._model = self._init_model(**kwargs)
+        self.to(device).eval()
 
     def __str__(self):
         return "yunet"
@@ -35,7 +36,7 @@ class YunetDetector(BaseDetector):
 
         return model
 
-    def __call__(self, imgs):
+    def forward(self, imgs):
 
         imgs = load_inputs(imgs, load_as="numpy", channels_first=False)
         # cv2 needs BGR (not RGB)

@@ -21,24 +21,32 @@ class VideoRenderer:
         'pyrender')
     lights : None, str, or pytorch3d Lights class
         Lights to use in rendering; if None, a default PointLight will be used
+    background : str, Path, VideoLoader, tuple
+        Either a path to a video to be used as a background (or an initialized
+        ``VideoLoader``) or a 3-tuple of RGB values (between 0 and 255) to use as uniform
+        color background; default is a uniform black background
+    loglevel : str
+        Logging level (e.g., "INFO", "DEBUG", etc.)
     """
 
-    def __init__(self, shading="flat", lights=None, loglevel="INFO"):
+    def __init__(self, shading="flat", lights=None, background=(0, 0, 0),
+                 loglevel="INFO"):
         """Initializes a VideoRenderer object."""
         self.shading = shading
         self.lights = lights
+        self.background = background
         self._renderer = None  # lazy init
 
         LOGGER.setLevel(loglevel)
 
-    def __call__(self, f_out, data, overlay=None, video=None, **kwargs):
+    def render(self, f_out, data4d, overlay=None, **kwargs):
         """Renders the sequence of 3D meshes from a Data4D object as a video.
 
         Parameters
         ----------
         f_out: str
             Filename of output
-        data : Data4D
+        data4d : Data4D
             A ``Data4D`` object
         overlay : torch.tensor, TextureVertex
             Optional overlay to render on top of rendered mesh
@@ -55,15 +63,15 @@ class VideoRenderer:
         except ImportError:
             raise ImportError("pytorch3d not installed; cannot render!")
 
-        if data._infer_topo() == 'mediapipe':
+        if data4d._infer_topo() == 'mediapipe':
             cam_type = "perspective"
         else:
             cam_type = "orthographic"
 
         # If parameters are defined in kwargs, use those; otherwise get from data4d
-        device = kwargs.get("device", data.device)
-        cam_mat = kwargs.get("cam_mat", data.cam_mat)
-        viewport = kwargs.get("viewport", data.video_metadata.get('img_size'))
+        device = kwargs.get("device", data4d.device)
+        cam_mat = kwargs.get("cam_mat", data4d.cam_mat)
+        viewport = kwargs.get("viewport", data4d.video_metadata.get('img_size'))
 
         if self._renderer is None:
             # Initialize renderer
@@ -77,34 +85,35 @@ class VideoRenderer:
             )
 
         # Define a VideoLoader if we want to render mesh on top of video
-        if isinstance(video, VideoLoader):
-            reader = video
+        if isinstance(self.background, VideoLoader):
+            reader = self.background
             if reader.batch_size != 1:
                 raise ValueError("Batch size of VideoLoader must be 1 for rendering!")
-        elif isinstance(video, (str, Path)):
+        elif isinstance(self.background, (str, Path)):
             # assume path to video
-            reader = VideoLoader(video, batch_size=1, device=device)
+            reader = VideoLoader(self.background, batch_size=1, device=device)
         else:
             reader = None
+            if not torch.is_tensor(self.background):
+                self.background = torch.as_tensor(self.background, device=device)
 
-        fps = kwargs.get("fps", data.video_metadata["fps"])
-        n_frames = kwargs.get("n_frames", data.video_metadata["n_img"])
+        fps = kwargs.get("fps", data4d.video_metadata["fps"])
+        n_frames = kwargs.get("n_frames", data4d.video_metadata["n_img"])
         writer = VideoWriter(str(f_out), fps=fps)  # writes out images to video stream
 
         # Loop of number of frames from original video (or n_frames if specified)
         iter_ = tqdm_log(range(n_frames), LOGGER, desc="Render mesh")
         for i_img in iter_:
 
-            if video is not None:
+            if reader is not None:
                 # Get background from video
-                background = next(iter(reader))
+                background = next(iter(reader)).to(data4d.device)
             else:
-                # Blank background is white by default; make parameter?
                 w, h = viewport
-                background = torch.full((h, w, 3), 255, dtype=torch.uint8, device=device)
+                background = torch.ones((h, w, 3), dtype=torch.uint8, device=device) * self.background
 
             # Which meshes belong to this frame?
-            img_idx = data.img_idx == i_img
+            img_idx = data4d.img_idx == i_img
 
             if img_idx.sum() == 0:
                 # No faces in this frame! Just render background
@@ -116,14 +125,14 @@ class VideoRenderer:
                     # Check if it's a single overlay (which should be used for every
                     # frame) or a batch of overlays (one per frame)
                     if torch.is_tensor(overlay):
-                        if overlay.shape[0] == data.v.shape[0]:
+                        if overlay.shape[0] == data4d.v.shape[0]:
                             this_overlay = overlay[img_idx]
-                        elif overlay.shape[0] == data.v.shape[1]:
+                        elif overlay.shape[0] == data4d.v.shape[1]:
                             this_overlay = overlay
 
                 # Render mesh and alpha blend with background
-                this_v = data.v[img_idx]
-                img = self._renderer(this_v, data.tris, overlay=this_overlay)
+                this_v = data4d.v[img_idx]
+                img = self._renderer(this_v, data4d.tris, overlay=this_overlay)
                 img = self._renderer.alpha_blend(img, background, face_alpha=1)
 
             # Add rendered image to video writer
@@ -131,10 +140,5 @@ class VideoRenderer:
 
         writer.close()
 
-        if video is not None:
+        if reader is not None:
             reader.close()
-
-    def close(self):
-        """Closes the renderer."""
-        if self._renderer is not None:
-            self._renderer.close()

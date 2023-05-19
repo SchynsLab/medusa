@@ -5,7 +5,6 @@ For now only contains functions to compute vertex and triangle normals.
 
 import torch
 import pickle
-from .data import get_external_data_config
 
 
 def compute_tri_normals(v, tris, normalize=True):
@@ -89,6 +88,9 @@ def apply_vertex_mask(name, **attrs):
     v_masked : torch.tensor
         A float tensor with masked vertices of shape B (batch size) x V (vertices) x 3
     """
+
+    # Lazy import to avoid circular imports
+    from .data import get_external_data_config
 
     if not attrs:
         raise ValueError("No attributes to apply mask to!")

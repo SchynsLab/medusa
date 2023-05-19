@@ -9,9 +9,8 @@ import torch
 import torch.nn.functional as F
 
 from ....defaults import DEVICE
-from ....io import load_inputs
 from ..base import FlameReconModel
-from ..decoders import FLAME
+from ..decoders import FlameShape
 from .encoders import Arcface, MappingNetwork
 from ....crop import AlignCropModel
 
@@ -28,9 +27,10 @@ class MicaReconModel(FlameReconModel):
 
     def __init__(self, device=DEVICE):
         """Initializes a MicaReconModel object."""
+        super().__init__()
+
         # Avoids circular import
         from ....data import get_external_data_config
-
         self.device = device
         self._cfg = get_external_data_config()
         self._create_submodels()
@@ -51,9 +51,7 @@ class MicaReconModel(FlameReconModel):
         self.E_arcface.eval()
         self.E_flame = MappingNetwork(512, 300, 300).to(self.device)
         self.E_flame.eval()
-        self.D_flame = FLAME(self._cfg["flame_path"], n_shape=300, n_exp=0).to(
-            self.device
-        )
+        self.D_flame = FlameShape(n_shape=300, n_expr=0).to(self.device)
         self.D_flame.eval()
 
     def _load_submodels(self):
@@ -85,7 +83,7 @@ class MicaReconModel(FlameReconModel):
     def _decode(self, shape_code):
         """Decodes the shape code into a set of vertices following the (coarse)
         FLAME topology."""
-        v, _ = self.D_flame(shape_code)
+        v, _ = self.D_flame(shape=shape_code)
         return v
 
     def get_cam_mat(self):
@@ -96,7 +94,7 @@ class MicaReconModel(FlameReconModel):
         cam_mat[2, 3] = 4
         return cam_mat
 
-    def __call__(self, imgs):
+    def forward(self, imgs):
         """Performs 3D reconstruction on the supplied image.
 
         Parameters
@@ -114,7 +112,6 @@ class MicaReconModel(FlameReconModel):
             matrix, which is in the case of MICA the identity matrix
         """
 
-        imgs = load_inputs(imgs, device=self.device)
         out = {}
 
         if imgs.shape[2:] != (112, 122):

@@ -7,13 +7,12 @@ import torch
 from kornia.geometry.transform import warp_affine
 
 from .base import BaseCropModel
-from ..io import load_inputs
 from ..defaults import DEVICE
 from ..detect import SCRFDetector
 from ..transforms import estimate_similarity_transform
 
 
-TEMPLATE = torch.Tensor(
+TEMPLATE = torch.from_numpy(
     np.array(
         [
             [38.2946, 51.6963],
@@ -57,19 +56,14 @@ class AlignCropModel(BaseCropModel):
     >>> out = crop_model(img)
     """
 
-    def __init__(
-        self,
-        output_size=(112, 112),
-        template=TEMPLATE,
-        detector=SCRFDetector,
-        device=DEVICE,
-        **kwargs
-    ):
-
+    def __init__(self, output_size=(112, 112), template=TEMPLATE, detector=SCRFDetector,
+                 device=DEVICE, **kwargs):
+        super().__init__()
         self.output_size = output_size  # h, w
         self.template = template * (output_size[0] / 112.0)
         self._det_model = detector(device=device, **kwargs)
         self.device = device
+        self.to(device).eval()
 
         if output_size[0] != output_size[1]:
             raise ValueError("Output size should be square!")
@@ -77,7 +71,7 @@ class AlignCropModel(BaseCropModel):
     def __str__(self):
         return "aligncrop"
 
-    def __call__(self, imgs):
+    def forward(self, imgs):
         """Aligns and crops images to the desired size.
 
         Parameters
@@ -93,10 +87,7 @@ class AlignCropModel(BaseCropModel):
             images) and "crop_mat" (3x3 crop matrices)
         """
         # Load images here instead of in detector to avoid loading them twice
-        imgs = load_inputs(
-            imgs, load_as="torch", channels_first=True, device=self.device
-        )
-        b, c, h, w = imgs.shape
+
         out_det = self._det_model(imgs)
 
         if out_det.get("conf", None) is None:
@@ -110,7 +101,6 @@ class AlignCropModel(BaseCropModel):
         imgs_crop = warp_affine(
             imgs_stacked, crop_mat[:, :2, :], dsize=self.output_size
         )
-
         out_crop = {"imgs_crop": imgs_crop, "crop_mat": crop_mat, **out_det}
 
         return out_crop

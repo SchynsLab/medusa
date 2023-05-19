@@ -23,7 +23,7 @@ def test_videorecon_cmd():
 def test_videorender_cli():
     """Tests the videorender command line interface."""
 
-    data_file = str(get_example_data4d(load=False))
+    data_file = str(get_example_data4d())
     runner = CliRunner()
     out = Path(__file__).parent / 'test_viz/misc/test_videorender_cmd.mp4'
 

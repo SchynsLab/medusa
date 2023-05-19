@@ -7,6 +7,42 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
+from ....defaults import DEVICE
+
+
+class MicaEncoder(nn.Module):
+    """A FLAME-based encoder for MICA models.
+
+    Parameters
+    ----------
+    device : str
+        Name for the device to use
+    """
+    def __init__(self, device=DEVICE):
+        super().__init__()
+        self.E_arcface = Arcface()
+        self.E_flame = MappingNetwork(512, 300, 300)
+        self.to(device)
+
+    def forward(self, imgs):
+        """Predicts FLAME shape components for a batch of images.
+
+        Parameters
+        ----------
+        imgs : torch.tensor
+            A batch of images of shape (N, C, H, W)
+
+        Returns
+        -------
+        shape_code : torch.tensor
+            A batch of shape codes of shape (N, 300)
+        """
+        out_af = self.E_arcface(imgs)
+        out_af = F.normalize(out_af)
+        shape_code = self.E_flame(out_af)
+
+        return shape_code
+
 
 def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
     """3x3 convolution with padding."""

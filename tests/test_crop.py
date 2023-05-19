@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import torch
 import pytest
 from conftest import _is_gha_compatible
 
@@ -18,7 +19,8 @@ def test_crop_model(Model, lm_name, n_faces, device):
     if not _is_gha_compatible(device):
         return
 
-    imgs = get_example_image(n_faces)
+    imgs = get_example_image(n_faces, device=device)
+
     if isinstance(n_faces, int):
         n_exp = n_faces
     else:
@@ -52,6 +54,7 @@ def test_crop_model(Model, lm_name, n_faces, device):
     out_crop.visualize(f_out, imgs, template=template)
 
 
+@torch.inference_mode()
 @pytest.mark.parametrize("Model", [AlignCropModel, BboxCropModel])
 @pytest.mark.parametrize("n_faces", [0, 1, 2, 3, 4])
 def test_crop_model_vid(Model, n_faces):
@@ -87,3 +90,5 @@ def test_crop_model_vid(Model, n_faces):
         crop_size=crop_size,
         show_cropped=True,
     )
+
+    torch.cuda.empty_cache()

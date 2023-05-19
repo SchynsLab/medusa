@@ -84,6 +84,10 @@ class OnnxModel:
         if not isinstance(inputs, list):
             inputs = [inputs]
 
+        for inp in inputs:
+            if inp.device.type != self.device:
+                raise ValueError(f"Input tensor is on {inp.device}, but model on {self.device}!")
+
         to_iter = zip(inputs, self._params["in_names"], self._params["in_shapes"])
         for inp, name, shape in to_iter:
 

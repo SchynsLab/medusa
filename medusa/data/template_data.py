@@ -102,9 +102,18 @@ def get_template_flame(topo='coarse', keys=None, device=None):
         for topo_ in template.keys():
             for key in template[topo_].keys():
                 d = template[topo_][key]
+
                 if d.dtype == np.uint32:
                     d = d.astype(np.int64)
-                template[topo_][key] = torch.as_tensor(d, device=device)
+
+                if d.dtype in [np.float32, np.float64]:
+                    dtype = torch.float32
+                elif d.dtype == np.int64:
+                    dtype = torch.int64
+                else:
+                    raise ValueError(f"Unknown dtype {d.dtype}")
+
+                template[topo_][key] = torch.as_tensor(d, device=device, dtype=dtype)
 
     if len(topo) == 1:
         template = template[topo[0]]

@@ -12,7 +12,7 @@ import numpy as np
 import requests
 import torch
 from PIL import Image
-from torch.utils.data import DataLoader, IterableDataset
+from torch.utils.data import DataLoader, IterableDataset, Dataset, Subset
 from torchvision.transforms.functional import crop
 
 from .defaults import DEVICE
@@ -24,32 +24,46 @@ class VideoLoader(DataLoader):
 
     Parameters
     ----------
-    path : str, Path
+    video_path : str, Path
         Path to mp4 file
+    dataset_type : str
+        One of 'iterable', 'map', or 'subset'. If 'iterable', batches are loaded
+        sequentially from the video file. If 'map', frames can be loaded in any order
+        and 'subset' allows for loading a subset of frames (using the 'frames' arg)
     batch_size : int
         Batch size to use when loading frames
-    channels_first : bool
-        Whether to return a B x 3 x H x W tensor (if ``True``) or
-        a B x H x W x 3 tensor (if ``False``)
     device : str
         Either 'cpu' or 'cuda'
+    frames : list
+        List of frame indices to loaded; only relevant when dataset_type is 'subset'
     **kwargs
         Extra keyword arguments passed to the initialization of the parent class
     """
 
-    def __init__(self, video_path, batch_size=32, channels_first=False, device=DEVICE,
-                 crop=None, **kwargs):
-
+    def __init__(self, video_path, dataset_type='iterable', batch_size=32, device=DEVICE,
+                 frames=None, **kwargs):
         """Initializes a VideoLoader object."""
+
         self.video_path = video_path
-        self.channels_first = channels_first
         self.device = device
         self.crop = crop
         self._validate(video_path)
-        dataset = VideoDataset(video_path, device)
 
-        super().__init__(dataset, batch_size, num_workers=0, pin_memory=True, **kwargs)
-        self._metadata = self._extract_metadata()
+        if dataset_type == 'iterable':
+            dataset = VideoIterableDataset(video_path)
+        elif dataset_type in ['map', 'subset']:
+            dataset = VideoMapDataset(video_path)
+        else:
+            raise ValueError("dataset_type must be one of 'iterable', 'map', or 'subset'")
+
+        self._metadata = self._extract_metadata(dataset)
+
+        if dataset_type == 'subset':
+            dataset = Subset(dataset, frames)
+
+        pin_memory = True if device == 'cuda' else False
+        super().__init__(dataset, batch_size, num_workers=0, pin_memory=pin_memory,
+                         *kwargs)
 
     def get_metadata(self):
         """Returns all (meta)data needed for initialization of a Data object.
@@ -75,49 +89,36 @@ class VideoLoader(DataLoader):
         if not path.is_file():
             raise ValueError(f"File {path} does not exist!")
 
-    def _extract_metadata(self):
+    def _extract_metadata(self, dataset):
         """Extracts some metadata from Dataset and exposes it to the loader."""
-        metadata = self.dataset.metadata
-        if self.crop is not None:
-            metadata["img_size"] = (self.crop[2], self.crop[3])
+        return dataset.metadata
 
-        return metadata
+    def crop(self, batch, crop_params):
+        """Crops an image batch.
 
-    def __iter__(self):
-        """Little hack to put data on device automatically."""
-        for batch in super().__iter__():
-            batch = batch.to(self.device, non_blocking=True)
-            if self.channels_first:
-                batch = batch.permute(0, 3, 1, 2)
+        Parameters
+        ----------
+        batch : torch.tensor
+            A B x H x W x 3 tensor with image data
+        crop_params : tuple
+            A tuple of (x0, y0, x1, y1) crop parameters
+        """
 
-            if self.crop is not None:
-
-                if len(self.crop) != 4:
-                    raise ValueError("crop parameter should be an iterable of length 4!")
-
-                # top, left, height, width
-                if self.channels_first:
-                    batch = crop(batch, *self.crop)
-                else:
-                    batch = crop(batch.permute(0, 3, 1, 2), *self.crop).permute(0, 2, 3, 1)
-
-            yield batch
+        self.metadata["img_size"] = (crop_params[2], crop_params[3])
+        return crop(batch.permute(0, 3, 1, 2), *crop_params).permute(0, 2, 3, 1)
 
 
-class VideoDataset(IterableDataset):
-    """A pytorch Dataset class based on loading frames from a single video.
+class _VideoDatasetMixin:
+    """A mixin class for VideoIterableDataset and VideoMapDataset.
 
     Parameters
     ----------
-    video : pathlib.Path, str
-        A video file (any format that pyav can handle)
-    device : str
-        Either 'cuda' (for GPU) or 'cpu'
+    video_path : Path, str
+        Path to a video file
     """
-
-    def __init__(self, video_path, device=DEVICE):
+    def __init__(self, video_path):
         """Initializes a VideoDataset object."""
-        self.device = device
+
         self.video_path = video_path
         self._container = av.open(str(video_path), mode="r")
         self._container.streams.video[0].thread_type = "AUTO"  # thread_type
@@ -138,6 +139,27 @@ class VideoDataset(IterableDataset):
         """Returns the number of frames in the video."""
         return self.metadata["n_img"]
 
+    def close(self):
+        """Closes the pyav videoreader and free up memory."""
+        self._container.close()
+
+
+class VideoIterableDataset(IterableDataset, _VideoDatasetMixin):
+    """A pytorch Dataset class based on loading frames from a single video.
+
+    Parameters
+    ----------
+    video_path : Path, str
+        A video file (any format that pyav can handle)
+    device : str
+        Either 'cuda' (for GPU) or 'cpu'
+    """
+
+    def __init__(self, video_path):
+        """Initializes a VideoDataset object."""
+        IterableDataset.__init__(self)
+        _VideoDatasetMixin.__init__(self, video_path)
+
     def __iter__(self):
         """Overrides parent method to make sure each image is a numpy array.
 
@@ -145,11 +167,38 @@ class VideoDataset(IterableDataset):
         later is way faster.
         """
         for img in self._reader:
-            yield img.to_ndarray(format="rgb24")
+            # CxHxW format
+            yield img.to_ndarray(format="rgb24").transpose(2, 0, 1).astype(np.float32)
 
-    def close(self):
-        """Closes the pyav videoreader and free up memory."""
-        self._container.close()
+
+class VideoMapDataset(Dataset, _VideoDatasetMixin):
+    """A pytorch Dataset class based on loading frames from a single video.
+
+    Parameters
+    ----------
+    video_path : Path, str
+        A video file (any format that pyav can handle)
+    device : str
+        Either 'cuda' (for GPU) or 'cpu'
+    """
+
+    def __init__(self, video_path):
+        """Initializes a VideoDataset object."""
+        Dataset.__init__(self)
+        _VideoDatasetMixin.__init__(self, video_path)
+        self.counter = 0
+
+    def __getitem__(self, idx):
+
+        if idx < self.counter:
+            raise ValueError(f"Indices ({idx}) passed to VideoMapDataset should be consecutive!")
+
+        for img in self._reader:
+            self.counter += 1
+            if (self.counter - 1) == idx:
+                return img.to_ndarray(format="rgb24").transpose(2, 0, 1).astype(np.float32)
+        else:
+            raise ValueError(f"Something went wrong for index {idx}!")
 
 
 class VideoWriter:

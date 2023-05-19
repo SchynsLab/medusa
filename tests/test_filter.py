@@ -13,4 +13,4 @@ def test_filter(low_pass, high_pass):
     data.mat = bw_filter(data.mat, fps, low_pass, high_pass)
     f_out = Path(__file__).parent / f'test_viz/preproc/test_filt_lp-{low_pass}_hp-{high_pass}.mp4'
     renderer = VideoRenderer()
-    renderer(f_out, data, video=get_example_video())
+    renderer.render(f_out, data, video=get_example_video())

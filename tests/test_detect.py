@@ -9,16 +9,19 @@ from medusa.containers.results import BatchResults
 from medusa.detect import SCRFDetector, YunetDetector
 from medusa.io import VideoLoader
 from medusa.data import get_example_image, get_example_video
+from medusa.defaults import DEVICE
 
 
 @pytest.mark.parametrize("Detector", [SCRFDetector, YunetDetector])
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_detector_device(Detector, device):
+
     if not _is_gha_compatible(device):
         return
 
-    img = get_example_image()
+    img = get_example_image(device=device)
     model = Detector(device=device)
+    model.to(device)
     out_det = model(img)
     assert(out_det['lms'].device.type == device)
 
@@ -68,6 +71,7 @@ def test_detector_vid(Detector, n_faces):
 
     results = BatchResults()
     for batch in loader:
+        batch = batch.to(DEVICE)
         out_det = model(batch)
         results.add(imgs=batch, **out_det)
 

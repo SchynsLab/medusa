@@ -4,4 +4,3 @@ emoca_path: ~/.medusa_ext_data/emoca.ckpt
 flame_masks_path: ~/.medusa_ext_data/FLAME/FLAME_masks.pkl
 flame_path: ~/.medusa_ext_data/FLAME/generic_model.pkl
 mica_path: ~/.medusa_ext_data/mica.tar
-spectre_path: ~/.medusa_ext_data/spectre_model.tar

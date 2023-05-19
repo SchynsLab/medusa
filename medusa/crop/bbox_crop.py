@@ -6,15 +6,13 @@ Based on the implementation in DECA (see
 """
 
 import torch
-from kornia.geometry.linalg import transform_points
 from kornia.geometry.transform import warp_affine
 
 from ..defaults import DEVICE
-from ..io import load_inputs
 from ..detect import SCRFDetector
-from ..onnx import OnnxModel
 from ..transforms import estimate_similarity_transform
 from .base import BaseCropModel
+from ..landmark import RetinafaceLandmarkModel
 
 
 class BboxCropModel(BaseCropModel):
@@ -33,28 +31,14 @@ class BboxCropModel(BaseCropModel):
     device : str
         Either 'cuda' (GPU) or 'cpu'
     """
-    def __init__(
-        self,
-        name="2d106det",
-        output_size=(224, 224),
-        detector=SCRFDetector,
-        device=DEVICE,
-        **kwargs,
-    ):
+    def __init__(self, lms_model_name="2d106det", output_size=(224, 224), detector=SCRFDetector,
+                 device=DEVICE):
         # alternative: 1k3d68, 2d106det
-        self.name = name
+        super().__init__()
         self.output_size = output_size  # h, w
-        self._detector = detector(device=device, **kwargs)
         self.device = device
-        self._lms_model = self._init_lms_model()
-
-    def _init_lms_model(self):
-        """Initializes the landmark prediction model."""
-        # Avoids circular import
-        from ..data import get_external_data_config
-
-        f_in = f_in = get_external_data_config('buffalo_path') / f'{self.name}.onnx'
-        return OnnxModel(f_in, self.device)
+        self._lms_model = RetinafaceLandmarkModel(lms_model_name, detector, device)
+        self.to(device).eval()
 
     def __str__(self):
         return "bboxcrop"
@@ -96,7 +80,7 @@ class BboxCropModel(BaseCropModel):
 
         return bbox
 
-    def __call__(self, imgs):
+    def forward(self, imgs):
         """Crops images to the desired size.
 
         Parameters
@@ -111,59 +95,12 @@ class BboxCropModel(BaseCropModel):
             Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
             images) and "crop_mat" (3x3 crop matrices)
         """
-        # Load images here instead of in detector to avoid loading them twice
+        out_lms = self._lms_model(imgs)
+        lms = out_lms['lms']
 
-        imgs = load_inputs(
-            imgs, load_as="torch", channels_first=True, device=self.device
-        )
-        b, c, h, w = imgs.shape
-        out_det = self._detector(imgs)
+        if lms is None:
+            return {**out_lms, "imgs_crop": None, "crop_mat": None}
 
-        if out_det.get("conf", None) is None:
-            return {**out_det, "imgs_crop": None, "crop_mat": None}
-
-        n_det = out_det["lms"].shape[0]
-        bbox = out_det["bbox"]
-        imgs_stack = imgs[out_det["img_idx"]]
-
-        bw, bh = (bbox[:, 2] - bbox[:, 0]), (bbox[:, 3] - bbox[:, 1])
-        center = torch.stack(
-            [(bbox[:, 2] + bbox[:, 0]) / 2, (bbox[:, 3] + bbox[:, 1]) / 2], dim=1
-        )
-
-        onnx_input_shape = self._lms_model._params["in_shapes"][0]
-        scale = onnx_input_shape[3] / (torch.maximum(bw, bh) * 1.5)
-
-        # Construct initial crop matrix based on rough bounding box,
-        # then crop images to size 192 x 192
-        M = torch.eye(3, device=self.device).repeat(n_det, 1, 1) * scale[:, None, None]
-        M[:, 2, 2] = 1
-        M[:, :2, 2] = -1 * center * scale[:, None] + onnx_input_shape[3] / 2
-        imgs_crop = warp_affine(imgs_stack, M[:, :2, :], dsize=onnx_input_shape[2:])
-
-        # Need to set batch dimension in output shape
-        self._lms_model._params["out_shapes"][0][0] = n_det
-        lms = self._lms_model.run(imgs_crop)["fc1"]  # fc1 = output (layer) name
-
-        if lms.shape[1] == 3309:  # 3D data!
-            # Reshape to n_det x n_lms x 3
-            lms = lms.reshape((n_det, -1, 3))
-            lms = lms[:, -68:, :]
-        else:  # 2D data!
-            # Reshape to n_det x n_lms x 2
-            lms = lms.reshape((n_det, -1, 2))
-
-        # Convert to cropped image coordinates
-        lms[:, :, :2] = (lms[:, :, :2] + 1) * (onnx_input_shape[3] // 2)
-        if lms.shape[2] == 3:
-            lms[:, :, 2] *= onnx_input_shape[3] // 2
-
-        lms = lms[:, :, :2]  # don't need 3rd dim
-
-        # Warp landmarks from initial crop space (192 x 192) to
-        # the original image space (?, ?), and create a new
-        # "DECA style" bbox
-        lms = transform_points(torch.inverse(M), lms)
         bbox = self._create_bbox(lms)
 
         # Estimate a transform from the new bbox to the final
@@ -174,19 +111,19 @@ class BboxCropModel(BaseCropModel):
             dtype=torch.float32,
             device=self.device,
         )
-        dst = dst.repeat(n_det, 1, 1)
+        dst = dst.repeat(lms.shape[0], 1, 1)
         crop_mat = estimate_similarity_transform(
             bbox[:, :3, :], dst, estimate_scale=True
         )
 
         # Finally, warp the original images (uncropped) images to the final
         # cropped space
+        imgs_stack = imgs[out_lms["img_idx"]]
         imgs_crop = warp_affine(imgs_stack, crop_mat[:, :2, :], dsize=(h_out, w_out))
         out_crop = {
-            **out_det,
-            "imgs_crop": imgs_crop,
+            **out_lms,
+            "imgs_crop": imgs_crop.to(dtype=torch.uint8),
             "crop_mat": crop_mat,
-            "lms": lms,
         }
 
         return out_crop

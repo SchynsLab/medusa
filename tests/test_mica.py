@@ -16,7 +16,7 @@ def test_mica_recon(device):
     if not _is_gha_compatible(device):
         return
 
-    img = get_example_image()
+    img = get_example_image(device=device)
     crop_model = AlignCropModel(device=device)
     out_crop = crop_model(img)
 
@@ -34,7 +34,7 @@ def test_mica_recon(device):
 
     v = out["v"]
     img = renderer(v[0, ...], model.get_tris())
-    f_out = Path(__file__).parent / "test_viz/recon/test_mica.png"
+    f_out = Path(__file__).parent / "test_viz/recon/test_mica.jpg"
     renderer.save_image(f_out, img)
 
     # Check batch image recon

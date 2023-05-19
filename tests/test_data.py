@@ -10,36 +10,22 @@ from conftest import _is_gha_compatible
 
 
 @pytest.mark.parametrize('n_faces', [None, 0, 1, 2, 3, 4, [1, 3], (2, 4)])
-@pytest.mark.parametrize('load_torch', [True, False])
-@pytest.mark.parametrize('load_numpy', [True, False])
+@pytest.mark.parametrize('load', [True, False])
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
-def test_get_example_image(n_faces, load_torch, load_numpy, device):
+def test_get_example_image(n_faces, load, device):
 
     if not _is_gha_compatible(device):
         return
 
-    if load_numpy and load_torch:
-        return
+    img = get_example_image(n_faces, load=load, device=device)
 
-    img = get_example_image(n_faces, load_numpy, load_torch, device=device)
-
-    if isinstance(n_faces, (list, tuple)):
-        assert(isinstance(img, list))
-    else:
-        img = [img]
-
-    if not load_torch and not load_numpy:
+    if not load:
         for img_ in img:
             assert(isinstance(img_, Path))
-
-    if load_torch:
+    else:
         for img_ in img:
             assert(torch.is_tensor(img_))
             assert(img_.device.type == device)
-
-    if load_numpy:
-        for img_ in img:
-            assert(isinstance(img_, np.ndarray))
 
 
 @pytest.mark.parametrize('n_faces', [None, 0, 1, 2, 3, 4])

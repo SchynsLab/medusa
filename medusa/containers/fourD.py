@@ -179,6 +179,7 @@ class Data4D:
         self.tris = out['tris']
 
     @staticmethod
+    @torch.inference_mode()
     def from_video(path, **kwargs):
         """Utility method to directly initialize a ``Data4D`` object by calling
         the ``videorecon`` function.

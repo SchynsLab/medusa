@@ -13,4 +13,4 @@ def test_estimate_alignment(model, topo):
     f_out = Path(__file__).parent / f"test_viz/preproc/test_align_estimate_model-{model}.mp4"
 
     renderer = VideoRenderer()
-    renderer(f_out, data)
+    renderer.render(f_out, data)

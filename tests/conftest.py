@@ -19,18 +19,11 @@ def _is_gha_compatible(device):
     else:
         return True
 
-
-def _is_pytorch3d_installed():
-    try:
-        import pytorch3d
-        return True
-    except:
-        return False
-
-
-@pytest.fixture(autouse=True)
-def run_around_tests():
-    yield
+#@pytest.fixture(autouse=True)
+#def run_around_tests():
+    #with torch.inference_mode():
+    #    yield
+    #yield
     # Code that will run after your test, for example:
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+    #if torch.cuda.is_available():
+    #    torch.cuda.empty_cache()

@@ -75,7 +75,7 @@ def videorender_cmd(data_file, out, video, renderer, shading, device):
         out = data_file.replace('.h5', '.mp4')
 
     renderer = VideoRenderer(shading=shading)
-    renderer(Path(out), data=data, video=video)
+    renderer.render(Path(out), data, video=video)
 
 
 @click.command()
@@ -160,12 +160,6 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         url = "https://keeper.mpdl.mpg.de/f/db172dc4bd4f4c0f96de/?dl=1"
         f_out = directory / "mica.tar"
         download_file(url, f_out, overwrite=overwrite, cmd_type="get")
-
-    f_out = directory / "spectre_model.tar"
-    if not f_out.is_file() or overwrite:
-        LOGGER.info("SPECTRE: starting download ...")
-        url = "https://drive.google.com/u/0/uc?id=1vmWX6QmXGPnXTXWFgj67oHzOoOmxBh6B&export=download"
-        gdown.download(url, str(f_out), quiet=True)
 
     f_out = directory / 'buffalo_l/det_10g.onnx'
     if not f_out.is_file() or overwrite:
@@ -277,13 +271,6 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         cfg["mica_path"] = str(mica_model_path)
     else:
         LOGGER.warning(f"File {mica_model_path} does not exist!")
-
-    spectre_model_path = data_dir / "spectre_model.tar"
-    if spectre_model_path.is_file():
-        LOGGER.info("Spectre model is ready to use!")
-        cfg["spectre_path"] = str(spectre_model_path)
-    else:
-        LOGGER.warning(f"File {spectre_model_path} does not exist!")
 
     buffalo_path = data_dir / 'buffalo_l'
     if buffalo_path.is_dir():

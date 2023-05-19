@@ -3,7 +3,7 @@ description: "Sets up environment for Medusa"
 inputs:
   python-version:
     description: "Python version to install"
-    default: 3.9
+    default: 3.10
 
 runs:
   using: "composite"
@@ -13,11 +13,6 @@ runs:
     run: sudo apt install -y freeglut3-dev
   - name: Get Medusa repository
     uses: actions/checkout@v3
-  - name: Set current pyproject.toml and lockfile
-    shell: bash
-    run: |
-      cp ./pyproject_gpu.toml ./pyproject.toml
-      cp ./poetry_gpu.lock ./poetry.lock
   - name: Install Poetry Action
     uses: snok/install-poetry@v1.3.3
   - name: Set up Python ${{ inputs.python-version }}
@@ -25,11 +20,6 @@ runs:
     with:
       python-version: ${{ inputs.python-version }}
       cache: 'poetry'
-  - name: Set package version to GPU
-    shell: bash
-    run: |
-      pip install toml click
-      python ./set_package_version.py gpu
   - name: Install Medusa
     shell: bash
     run: poetry install

@@ -14,7 +14,6 @@ from torchvision.ops import nms
 
 from .base import BaseDetector
 from ..defaults import DEVICE
-from ..io import load_inputs
 from ..onnx import OnnxModel
 from ..transforms import resize_with_pad
 
@@ -49,19 +48,19 @@ class SCRFDetector(BaseDetector):
     ['img_idx', 'conf', 'lms', 'bbox', 'n_img']
     """
 
-    def __init__(self, det_size=(224, 224), det_threshold=0.5, nms_threshold=0.3,
+    def __init__(self, det_size=(224, 224), det_threshold=0.3, nms_threshold=0.3,
                  device=DEVICE):
-
+        super().__init__()
         self.det_size = det_size
-        self.det_threshold = det_threshold
-        self.nms_threshold = nms_threshold
+        self._det_model = self._init_det_model(device)
+        self._postproc_model = SCRFDPostproc(det_size, det_threshold, nms_threshold, device)
         self.device = device
-        self._det_model = self._init_det_model()
+        self.to(device).eval()
 
     def __str__(self):
         return "scrfd"
 
-    def _init_det_model(self):
+    def _init_det_model(self, device):
         # Avoids circular import
         from ..data import get_external_data_config
 
@@ -81,19 +80,14 @@ class SCRFDetector(BaseDetector):
 
         return OnnxModel(
             f_in,
-            device=self.device,
             in_shapes=[[1, 3, *self.det_size]],
             out_shapes=output_shapes,
+            device=device
         )
 
-    def __call__(self, imgs):
+    def forward(self, imgs):
 
-        # B x C x H x W
-        imgs = load_inputs(
-            imgs, load_as="torch", channels_first=True, device=self.device
-        )
         b = imgs.shape[0]  # batch size
-
         imgs, det_scale = resize_with_pad(
             imgs, output_size=self.det_size, out_dtype=torch.float32
         )
@@ -104,64 +98,91 @@ class SCRFDetector(BaseDetector):
             # add batch dim
             img = imgs[i, ...].unsqueeze(0)
             det_outputs = self._det_model.run(img, outputs_as_list=True)
+            postproc_outputs = self._postproc_model(det_outputs, det_scale)
 
-            fmc, num_anchors = 3, 2
-            feat_stride_fpn = [8, 16, 32]
-            outputs_ = defaultdict(list)
-            for idx, stride in enumerate(feat_stride_fpn):
-                scores = det_outputs[idx].flatten()  # (n_det,)
-                bbox = det_outputs[idx + fmc] * stride  # (n_det, 4)
-                lms = det_outputs[idx + fmc * 2] * stride  # (n_det, 10)
-                keep = torch.where(scores >= self.det_threshold)[0]
-
-                if len(keep) == 0:
-                    continue
-
-                scores = scores[keep]
-                bbox = bbox[keep]
-                lms = lms[keep]
-
-                # (h, w, 2) -> (h * w, 2) -> (h * w * 2, 2)
-                grid = torch.arange(0, self.det_size[0] // stride, device=self.device)
-                anchor_centers = torch.stack(
-                    torch.meshgrid(grid, grid, indexing="xy"), dim=-1
-                )
-                anchor_centers = (anchor_centers * stride).reshape((-1, 2))
-                anchor_centers = torch.stack(
-                    [anchor_centers] * num_anchors, dim=1
-                ).reshape((-1, 2))
-                anchor_centers = anchor_centers[keep]
-
-                # Distance-to-bbox/lms
-                bbox = torch.hstack(
-                    [
-                        anchor_centers[:, :2] - bbox[:, :2],
-                        anchor_centers[:, [0, 1]] + bbox[:, [2, 3]],
-                    ]
-                )
-                lms = anchor_centers[:, None, :] + lms.reshape((lms.shape[0], -1, 2))
-                outputs_["scores"].append(scores)
-                outputs_["bbox"].append(bbox)
-                outputs_["lms"].append(lms)
-
-            if len(outputs_["scores"]) == 0:
+            if postproc_outputs is None:
+                # No detections (that survive nms)
                 continue
 
-            scores = torch.cat(outputs_["scores"])
-            bbox = torch.vstack(outputs_["bbox"]) / det_scale
-            lms = torch.vstack(outputs_["lms"]) / det_scale
-            keep = nms(bbox, scores, self.nms_threshold)
+            n_det = postproc_outputs['conf'].shape[0]
+            postproc_outputs['img_idx'] = torch.ones(n_det, device=self.device, dtype=torch.int64) * i
 
-            n_keep = len(keep)
-            if n_keep > 0:
-                img_idx = torch.ones(n_keep, device=self.device, dtype=torch.int64) * i
-                outputs["img_idx"].append(img_idx)
-                outputs["conf"].append(scores[keep])
-                outputs["lms"].append(lms[keep])
-                outputs["bbox"].append(bbox[keep])
+            for attr, data in postproc_outputs.items():
+                outputs[attr].append(data)
 
         for attr, data in outputs.items():
             outputs[attr] = torch.cat(data)
 
         outputs["n_img"] = b
+        return outputs
+
+
+class SCRFDPostproc(torch.nn.Module):
+    """Postprocessing for the SCRFD face detection model."""
+    def __init__(self, det_size, det_threshold, nms_threshold, device=DEVICE):
+        super().__init__()
+        self.det_size = det_size
+        self.det_threshold = det_threshold
+        self.nms_threshold = nms_threshold
+        self.device = device
+        self.to(device).eval()
+
+    def forward(self, det_outputs, det_scale):
+
+        fmc, num_anchors = 3, 2
+        feat_stride_fpn = [8, 16, 32]
+        outputs = defaultdict(list)
+        for idx, stride in enumerate(feat_stride_fpn):
+            conf = det_outputs[idx].flatten()  # (n_det,)
+            bbox = det_outputs[idx + fmc] * stride  # (n_det, 4)
+            lms = det_outputs[idx + fmc * 2] * stride  # (n_det, 10)
+            keep = torch.where(conf >= self.det_threshold)[0]
+
+            if len(keep) == 0:
+                # No detections that survive confidence threshold
+                continue
+
+            conf = conf[keep]
+            bbox = bbox[keep]
+            lms = lms[keep]
+
+            # (h, w, 2) -> (h * w, 2) -> (h * w * 2, 2)
+            grid = torch.arange(0, self.det_size[0] // stride, device=self.device)
+            anchor_centers = torch.stack(
+                torch.meshgrid(grid, grid, indexing="xy"), dim=-1
+            )
+
+            anchor_centers = (anchor_centers * stride).reshape((-1, 2))
+            anchor_centers = torch.stack(
+                [anchor_centers] * num_anchors, dim=1
+            ).reshape((-1, 2))
+            anchor_centers = anchor_centers[keep]
+
+            # Distance-to-bbox/lms
+            bbox = torch.hstack(
+                [
+                    anchor_centers[:, :2] - bbox[:, :2],
+                    anchor_centers[:, [0, 1]] + bbox[:, [2, 3]],
+                ]
+            )
+            lms = anchor_centers[:, None, :] + lms.reshape((lms.shape[0], -1, 2))
+            outputs["conf"].append(conf)
+            outputs["bbox"].append(bbox)
+            outputs["lms"].append(lms)
+
+        if len(outputs["conf"]) == 0:
+            return
+
+        outputs['conf'] = torch.cat(outputs["conf"])
+        outputs['bbox'] = torch.vstack(outputs["bbox"]) / det_scale
+        outputs['lms'] = torch.vstack(outputs["lms"]) / det_scale
+        keep = nms(outputs['bbox'], outputs['conf'], self.nms_threshold)
+
+        if len(keep) == 0:
+            # No detections that survive NMS
+            return
+
+        for attr, data in outputs.items():
+            outputs[attr] = data[keep]
+
         return outputs

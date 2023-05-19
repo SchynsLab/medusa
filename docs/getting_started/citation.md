@@ -37,10 +37,6 @@ Face Capture and Animation. *arXiv preprint arXiv:2204.11312*.
 
 > Feng, Y., Feng, H., Black, M. J., & Bolkart, T. (2021). Learning an animatable detailed 3D face model from in-the-wild images. *ACM Transactions on Graphics (TOG), 40*(4), 1-13.
 
-### Spectre
-
-> Filntisis, P. P., Retsinas, G., Paraperas-Papantoniou, F., Katsamanis, A., Roussos, A., & Maragos, P. (2022). Visual Speech-Aware Perceptual 3D Facial Expression Reconstruction from Videos. *arXiv preprint arXiv:2207.11094*.
-
 ### MICA
 
 > Zielonka, W., Bolkart, T., & Thies, J. (2022, November). Towards metrical reconstruction of human faces. In *Computer Vision–ECCV 2022: 17th European Conference, Tel Aviv, Israel, October 23–27, 2022, Proceedings, Part XIII* (pp. 250-269). Cham: Springer Nature Switzerland.
