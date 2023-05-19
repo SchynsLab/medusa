@@ -3,7 +3,7 @@ description: "Sets up environment for Medusa"
 inputs:
   python-version:
     description: "Python version to install"
-    default: 3.10
+    default: "3.10"
 
 runs:
   using: "composite"
