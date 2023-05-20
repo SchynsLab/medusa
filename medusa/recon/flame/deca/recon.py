@@ -140,7 +140,7 @@ class DecaReconModel(FlameReconModel):
             )
 
         # Load weights from checkpoint and apply to models
-        checkpoint = torch.load(self._cfg[self.name.split("-")[0] + "_path"])
+        checkpoint = torch.load(self._cfg[self.name.split("-")[0] + "_path"], map_location=self.device)
         self.E_flame.load_state_dict(checkpoint["E_flame"])
 
         if self._dense:
