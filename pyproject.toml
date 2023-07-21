@@ -28,54 +28,36 @@ matplotlib = ">=3.6.2"
 gdown = ">=4.5.3"
 kornia = ">=0.6.8"
 av = ">=10.0.0"
-[[tool.poetry.dependencies.torch]]
-markers = "sys_platform == 'linux'"
-url = "https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl"
-
-[[tool.poetry.dependencies.torch]]
-markers = "sys_platform == 'win32'"
-url = "https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-win_amd64.whl"
-
-[[tool.poetry.dependencies.torch]]
-markers = "sys_platform == 'darwin'"
-version = "2.0.1"
-
-[[tool.poetry.dependencies.torchvision]]
-markers = "sys_platform == 'linux'"
-url = "https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-linux_x86_64.whl"
-
-[[tool.poetry.dependencies.torchvision]]
-markers = "sys_platform == 'win32'"
-url = "https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-win_amd64.whl"
-
-[[tool.poetry.dependencies.torchvision]]
-markers = "sys_platform == 'darwin'"
-version = "0.15.2"
-
-[[tool.poetry.dependencies.pytorch3d]]
-markers = "sys_platform == 'linux'"
-url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py310_cu118_pyt201/pytorch3d-0.7.4-cp310-cp310-linux_x86_64.whl"
-
-[[tool.poetry.dependencies.pytorch3d]]
-markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'"
-version = "0.7.4"
+torch = [
+    { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl" },
+    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-win_amd64.whl" },
+    { markers = "sys_platform == 'darwin'", version = "2.0.1" }
+]
+torchvision = [
+    { markers = "sys_platform == 'linux'", url = "https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-linux_x86_64.whl" },
+    { markers = "sys_platform == 'win32'", url = "https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-win_amd64.whl" },
+    { markers = "sys_platform == 'darwin'", version = "0.15.2" }
+]
+pytorch3d = [
+    { markers = "sys_platform == 'linux'", url = "https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py310_cu118_pyt201/pytorch3d-0.7.4-cp310-cp310-linux_x86_64.whl" },
+    { markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "0.7.4" }
+]
+mediapipe = [
+    { markers = "sys_platform != 'darwin' and platform_machine != 'arm64'", version = ">=0.8.11" }
+]
+chumpy = { git = "https://github.com/lukassnoek/chumpy.git" }
+onnxruntime-gpu = [
+    { markers = "sys_platform != 'darwin' and platform_machine != 'arm64'", version = ">=1.15.1" }
+]
+onnxruntime = [
+    { markers = "sys_platform == 'darwin' and platform_machine == 'arm64'", version = ">=1.15.1" }
+]
 
 [tool.poetry.scripts]
 medusa_download_ext_data = "medusa.cli:download_ext_data"
 medusa_videorecon = "medusa.cli:videorecon_cmd"
 medusa_videorender = "medusa.cli:videorender_cmd"
 medusa_regenerate_example_recon_data = "medusa.data.regenerate_example_recon_data:main"
-
-[tool.poetry.dependencies.mediapipe]
-version = ">=0.8.11"
-markers = "sys_platform != 'darwin' and platform_machine != 'arm64'"
-
-[tool.poetry.dependencies.chumpy]
-git = "https://github.com/lukassnoek/chumpy.git"
-
-[tool.poetry.dependencies.onnxruntime-gpu]
-version = "1.14.0"
-markers = "sys_platform != 'darwin' and platform_machine != 'arm64'"
 
 [tool.poetry.group.dev.dependencies]
 jupyter-book = ">=0.15.1"
