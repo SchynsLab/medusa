@@ -1,6 +1,6 @@
 # Medusa: 4D face reconstruction and analysis
 
-[![CI](https://github.com/medusa-4D/medusa/actions/workflows/tests.yaml/badge.svg)](https://github.com/medusa-4D/medusa/actions/workflows/tests.yaml)
+[![CI](https://github.com/SchynsLab/medusa/actions/workflows/tests.yaml/badge.svg)](https://github.com/SchynsLab/medusa/actions/workflows/tests.yaml)
 ![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lukassnoek/420039a0fe8fb8c1170e0478cdcd0f26/raw/medusa_coverage_badge.json)
 ![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lukassnoek/cb6da52c965ec24f136b74a1ebad1964/raw/medusa_interrogate_badge.json)
 ![Python](https://img.shields.io/badge/python-3.9-blue.svg)
