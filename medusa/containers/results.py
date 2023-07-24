@@ -222,7 +222,7 @@ class BatchResults:
                 # otherwise, append a unique identifier (_face-xx)
                 if n_face > 1:
                     recursive_kwargs["f_out"] = Path(
-                        str(f_out.with_suffix("")) + f"_face-{face_id+1}.mp4"
+                        str(f_out.with_suffix("")) + f"_face-{face_id+1}{f_out.suffix}"
                     )
 
                 # Set current face id in inputs

@@ -241,10 +241,13 @@ class DecaReconModel(FlameReconModel):
         """
 
         # Decode vertices (`v`) and rotation params (`R`) from the shape/exp/pose params
-        v, R = self.D_flame_shape(shape=enc_dict['shape'], #expr=enc_dict['exp'],
+        print(enc_dict['exp'][[0]])
+        print(enc_dict['pose'][0])
+        v, R = self.D_flame_shape(shape=enc_dict['shape'], expr=enc_dict['exp'],
                                   global_pose=enc_dict['pose'][:, :3],
                                   jaw_pose=enc_dict['pose'][:, 3:]
         )
+
         b = v.shape[0]  # batch dim
 
         if self._dense:

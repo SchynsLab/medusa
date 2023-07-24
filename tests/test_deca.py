@@ -4,6 +4,7 @@ from pathlib import Path
 import torch
 import pytest
 from conftest import _is_gha_compatible
+from torchvision.utils import save_image
 
 from medusa.render import VideoRenderer
 from medusa.containers import Data4D
@@ -15,14 +16,17 @@ from medusa.defaults import DEVICE
 
 
 @torch.inference_mode()
-@pytest.mark.parametrize("n_faces", [1, 2, 3, 4])
+@pytest.mark.parametrize("n_faces", [2, 1, 3, 4])
 def test_deca_recon_img(n_faces):
     """Test DECA-based recon models with single image."""
     img = get_example_image(n_faces)
     viewport = (img.shape[3], img.shape[2])
     deca_recon_model = DecaReconModel("emoca-coarse", orig_img_size=viewport)
+    crop_model = BboxCropModel()
+    crop_results = crop_model(img)
+    img_crop, crop_mat = crop_results["imgs_crop"], crop_results["crop_mat"]
 
-    out = deca_recon_model(img)
+    out = deca_recon_model(img_crop, crop_mat)
     cam_mat = deca_recon_model.get_cam_mat()
     tris = deca_recon_model.get_tris()
 
@@ -31,6 +35,8 @@ def test_deca_recon_img(n_faces):
     img_r = renderer(out["v"], tris)
     img_r = renderer.alpha_blend(img_r, img)
     renderer.save_image(Path(__file__).parent / f'test_viz/recon/test_emoca-coarse_exp-{n_faces}.png', img_r)
+    save_image(img_crop.float(), Path(__file__).parent / f'test_viz/recon/test_emoca-coarse_exp-{n_faces}_cropped.jpg', normalize=True)
+    exit()
 
 
 @torch.inference_mode()
