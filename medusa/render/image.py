@@ -5,7 +5,7 @@ from torch import nn
 import numpy as np
 
 from pytorch3d.renderer import (FoVOrthographicCameras, FoVPerspectiveCameras,
-                                HardFlatShader, HardPhongShader,
+                                HardFlatShader, HardPhongShader, MeshRendererWithFragments,
                                 MeshRasterizer, MeshRenderer, PointLights,
                                 RasterizationSettings, TexturesVertex, BlendParams)
 from pytorch3d.structures import Meshes
@@ -47,7 +47,7 @@ class PytorchRenderer(nn.Module):
         self._lights = self._setup_lights(lights)
         self._rasterizer = MeshRasterizer(self._cameras, self._settings)
         self._shader = self._setup_shader(shading)
-        self._renderer = MeshRenderer(self._rasterizer, self._shader)
+        self._renderer = MeshRendererWithFragments(self._rasterizer, self._shader)
         self.to(device)
 
     def _setup_settings(self, viewport):
@@ -354,10 +354,10 @@ class PytorchRenderer(nn.Module):
         """
 
         meshes = self._create_meshes(v, tris, overlay)
-        imgs = self._renderer(meshes)
+        imgs, frag = self._renderer(meshes)
 
         if single_image:
             imgs = torch.amax(imgs, dim=0, keepdim=True)
 
         imgs = (imgs * 255).to(torch.uint8)
-        return imgs
+        return imgs, frag
