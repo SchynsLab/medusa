@@ -25,7 +25,7 @@ class FlameReconModel(nn.Module):
             imgs = imgs.float()
 
         if imgs.max() >= 1.0:
-            imgs = imgs.div_(255.0)
+            imgs = imgs.div(255.0)
 
         return imgs
 
