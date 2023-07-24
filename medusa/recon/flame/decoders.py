@@ -119,18 +119,8 @@ class FlameShape(nn.Module):
                 if existing_param.shape[0] != batch_size:
                     # Fix batch size
                     existing_param = existing_param.expand(batch_size, -1)
-                    #existing_param = nn.Parameter(existing_param)
-
-                    #if param not in self.parameters_:
-                        # Do not train parameter is part of parameters_
-                    #    existing_param.requires_grad_(False)
-
-                    # We only need to re-register the parameter if we actually changed it
-                    #self.register_parameter(param, existing_param)
 
                 inputs[param] = existing_param
-
-                #inputs[param] = self.get_parameter(param)
 
         shape_expr = torch.cat([inputs['shape'], inputs['expr']], dim=1)
         full_pose = torch.cat([*[inputs.get(k) for k in poses]], dim=1)

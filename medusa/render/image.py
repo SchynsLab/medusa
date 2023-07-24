@@ -35,19 +35,20 @@ class PytorchRenderer(nn.Module):
         Device to store the image on ('cuda' or 'cpu')
     """
     def __init__(self, viewport, cam_mat, cam_type, shading="flat", lights=None,
-                 device=DEVICE):
+                 background=(0, 0, 0), device=DEVICE):
         """Initializes a PytorchRenderer object."""
         super().__init__()
         self.viewport = viewport
         self.device = device
         self.cam_mat = cam_mat
         self.cam_type = cam_type
+        self.background = background
         self._settings = self._setup_settings(viewport)
         self._cameras = self._setup_cameras(cam_mat, cam_type)
         self._lights = self._setup_lights(lights)
         self._rasterizer = MeshRasterizer(self._cameras, self._settings)
         self._shader = self._setup_shader(shading)
-        self._renderer = MeshRendererWithFragments(self._rasterizer, self._shader)
+        self._renderer = MeshRenderer(self._rasterizer, self._shader)
         self.to(device)
 
     def _setup_settings(self, viewport):
@@ -166,7 +167,7 @@ class PytorchRenderer(nn.Module):
     def _setup_shader(self, shading):
         """Sets of the shader according to the ``shading`` parameter."""
 
-        blend_params = BlendParams(background_color=(0, 0, 0))
+        blend_params = BlendParams(background_color=self.background)
 
         if shading == "flat":
             shader = HardFlatShader(
@@ -354,10 +355,10 @@ class PytorchRenderer(nn.Module):
         """
 
         meshes = self._create_meshes(v, tris, overlay)
-        imgs, frag = self._renderer(meshes)
+        imgs = self._renderer(meshes)
 
         if single_image:
             imgs = torch.amax(imgs, dim=0, keepdim=True)
 
         imgs = (imgs * 255).to(torch.uint8)
-        return imgs, frag
+        return imgs

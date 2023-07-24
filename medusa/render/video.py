@@ -14,8 +14,6 @@ class VideoRenderer:
 
     Parameters
     ----------
-    render_cls : PytorchRenderer
-        Renderer class to use (at the moment, only PytorchRenderer is supported)
     shading : str
         Type of shading ('flat', 'smooth', or 'wireframe'; latter only when using
         'pyrender')
@@ -76,12 +74,12 @@ class VideoRenderer:
         if self._renderer is None:
             # Initialize renderer
             self._renderer = PytorchRenderer(
-                viewport, cam_mat, cam_type, self.shading, self.lights, device
+                viewport, cam_mat, cam_type, self.shading, self.lights, device=device
             )
         elif ~torch.allclose(cam_mat, self._renderer.cam_mat):
             # cam_mat has changed; we need to re-initialize the renderer!
             self._renderer = PytorchRenderer(
-                viewport, cam_mat, cam_type, self.shading, self.lights, device
+                viewport, cam_mat, cam_type, self.shading, self.lights, device=device
             )
 
         # Define a VideoLoader if we want to render mesh on top of video

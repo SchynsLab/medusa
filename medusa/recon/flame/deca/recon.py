@@ -149,7 +149,6 @@ class DecaReconModel(FlameReconModel):
 
         if "emoca" in self.name:
             self.E_expression.load_state_dict(checkpoint["E_expression"])
-            # for some reason E_exp should be explicitly cast to cuda
 
     def _encode(self, imgs):
         """"Encodes" the image into FLAME parameters, i.e., predict FLAME
@@ -242,7 +241,7 @@ class DecaReconModel(FlameReconModel):
         """
 
         # Decode vertices (`v`) and rotation params (`R`) from the shape/exp/pose params
-        v, R = self.D_flame_shape(shape=enc_dict['shape'], expr=enc_dict['exp'],
+        v, R = self.D_flame_shape(shape=enc_dict['shape'], #expr=enc_dict['exp'],
                                   global_pose=enc_dict['pose'][:, :3],
                                   jaw_pose=enc_dict['pose'][:, 3:]
         )

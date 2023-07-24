@@ -13,7 +13,8 @@ parts:
   - file: tutorials/data_representation
   - file: tutorials/rendering
   - file: tutorials/analysis
-  - file: tutorials/face_and_landmark_detection
+  - file: tutorials/face_detection
+  - file: tutorials/landmark_detection_and_cropping
 #- caption: Examples
 #  chapters:
 #  - glob: examples/*
