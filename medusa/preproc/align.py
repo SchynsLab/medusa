@@ -38,19 +38,3 @@ def estimate_alignment(v, topo, target=None, estimate_scale=False, device=DEVICE
     mat = torch.linalg.inv(mat)
 
     return mat
-
-
-# def apply_alignment(v, mat, cam_mat, reference_index=0):
-#     """Applies the estimated """
-#     v = transform_points(torch.linalg.inv(mat), v)
-#     # Because the object space changed (world --> local) and we assume
-#     # the object will be visualized on top of the video frames, we need
-#     # to update the camera matrix with the world-to-local matrix; this ensure
-#     # the rendering will be in the "right" pixel space; note that we only do
-#     # this for the first frame (otherwise we 're-introduce' the global motion,
-#     # but this time in the camera, and we assume a fixed camera of course)
-#     cam_mat = torch.linalg.inv(mat[reference_index]) @ cam_mat
-#     # Fix floating point inaccuracy
-#     cam_mat[3, :] = torch.tensor([0., 0., 0., 1.], device=cam_mat.device)
-
-#     return v, cam_mat

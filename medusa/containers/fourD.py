@@ -16,8 +16,6 @@ import torch
 from kornia.geometry.linalg import transform_points
 
 from ..defaults import DEVICE, LOGGER
-from ..io import VideoLoader, VideoWriter
-from ..log import tqdm_log
 from ..tracking import filter_faces, _ensure_consecutive_face_idx
 from ..transforms import compose_matrix, decompose_matrix
 
@@ -173,7 +171,7 @@ class Data4D:
             Name of masks (one of 'face', 'lips', 'neck', 'nose', 'boundary', 'forehead',
             'scalp')
         """
-        from ..geometry import apply_vertex_mask
+        from ..geometry import apply_vertex_mask  # avoid circular import
         out = apply_vertex_mask(name, v=self.v, tris=self.tris)
         self.v = out['v']
         self.tris = out['tris']

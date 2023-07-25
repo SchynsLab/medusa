@@ -36,6 +36,7 @@ class MicaReconModel(FlameReconModel):
         self._create_submodels()
         self._load_submodels()
         self._crop_model = AlignCropModel((112, 112), device=device)
+        self.to(self.device).eval()
 
     def __str__(self):
         return "mica"

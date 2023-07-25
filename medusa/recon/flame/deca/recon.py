@@ -63,7 +63,7 @@ class DecaReconModel(FlameReconModel):
         self._load_data()
         self._create_submodels()
         self._crop_model = BboxCropModel("2d106det", (224, 224), device=device)
-        self.to(device)
+        self.to(device).eval()
 
     def __str__(self):
         return self.name
@@ -241,8 +241,6 @@ class DecaReconModel(FlameReconModel):
         """
 
         # Decode vertices (`v`) and rotation params (`R`) from the shape/exp/pose params
-        print(enc_dict['exp'][[0]])
-        print(enc_dict['pose'][0])
         v, R = self.D_flame_shape(shape=enc_dict['shape'], expr=enc_dict['exp'],
                                   global_pose=enc_dict['pose'][:, :3],
                                   jaw_pose=enc_dict['pose'][:, 3:]

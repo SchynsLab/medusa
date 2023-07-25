@@ -36,7 +36,6 @@ def test_deca_recon_img(n_faces):
     img_r = renderer.alpha_blend(img_r, img)
     renderer.save_image(Path(__file__).parent / f'test_viz/recon/test_emoca-coarse_exp-{n_faces}.png', img_r)
     save_image(img_crop.float(), Path(__file__).parent / f'test_viz/recon/test_emoca-coarse_exp-{n_faces}_cropped.jpg', normalize=True)
-    exit()
 
 
 @torch.inference_mode()
