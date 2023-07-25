@@ -49,7 +49,7 @@ class PytorchRenderer(nn.Module):
         self._rasterizer = MeshRasterizer(self._cameras, self._settings)
         self._shader = self._setup_shader(shading)
         self._renderer = MeshRenderer(self._rasterizer, self._shader)
-        self.to(device)
+        self.to(device).eval()
 
     def _setup_settings(self, viewport):
         """Creates a ``RasterizationSettings`` object.
