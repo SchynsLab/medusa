@@ -25,7 +25,6 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   base/index.rst
    recon/index.rst
 
 

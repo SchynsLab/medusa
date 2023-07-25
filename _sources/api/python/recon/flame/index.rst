@@ -28,6 +28,5 @@ Submodules
    base/index.rst
    decoders/index.rst
    lbs/index.rst
-   utils/index.rst
 
 

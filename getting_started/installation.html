@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -169,7 +169,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/face_detection.html">Face detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/landmark_detection_and_cropping.html">Landmark detection and cropping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -204,37 +205,35 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.utils</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../api/python/recon/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api/python/render/image/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.base</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api/python/render/image/pytorch3d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.pytorch3d</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
 </ul>
@@ -474,7 +473,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="medusa-installation">
 <h1>Medusa installation<a class="headerlink" href="#medusa-installation" title="Permalink to this heading">#</a></h1>
-<p>Medusa is a Python package which works with Python version 3.9 and on Linux and and Mac (except Mac with M1/M2 chips). Most of Medusa’s functionality will in fact also work on Windows, with the exception of rendering (as <a class="reference external" href="https://pytorch3d.org/">pytorch3d</a> cannot be automatically installed on Windows).</p>
+<p>Medusa is a Python package which works with Python version 3.9 and on Linux and and Mac (x86_64 architectures only). Most of Medusa’s functionality will in fact also work on Windows and M1/M2 Macs (arm64 architecture), with the exception of rendering (as <a class="reference external" href="https://pytorch3d.org/">pytorch3d</a> cannot be automatically installed on Windows and Mac M1/M2).</p>
 <p>We strongly recommend to install the <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package in a separate Python environment, using for example <a class="reference external" href="https://anaconda.org/anaconda/conda">conda</a>. If you’d use <em>conda</em>, you can create a new environment named “medusa” with Python 3.9 as follows:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda create -n medusa python=3.9</span>
 </pre></div>
@@ -483,30 +482,13 @@ document.write(`
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda activate medusa</span>
 </pre></div>
 </div>
-<p>The next step is to install Medusa. Medusa actually offers two version of the package:
-<code class="docutils literal notranslate"><span class="pre">medusa</span></code> and <code class="docutils literal notranslate"><span class="pre">medusa-gpu</span></code>, where the latter can be used instead of the former if you
-have access to an NVIDIA GPU; apart from the installation, both versions contain exactly
-the same functionality. Actually, <code class="docutils literal notranslate"><span class="pre">medusa-gpu</span></code> can also be installed and used on systems
-without a GPU, but the installation is noticeably larger (~2GB, instead of 300MB for the
-CPU version). When you’re not sure whether you have access to an appropriate GPU, we
-recommend installing the regular (cpu) <code class="docutils literal notranslate"><span class="pre">medusa</span></code> package.</p>
-<p>To install Medusa, run one of the commands listed below in your terminal (with the right
-environment activated):</p>
-<div class="sd-tab-set docutils">
-<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
-</input><label class="sd-tab-label" for="sd-tab-item-0">
-medusa (CPU)</label><div class="sd-tab-content docutils">
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.5/medusa-0.0.5-py3-none-any.whl</span>
+<p>The next step is to install Medusa. Medusa’s install will be relatively large (~2GB) as
+it will also install PyTorch with CUDA support, even if your system does not have access
+to a GPU (which makes automatic installation a lot easier); Medusa will make sure set
+the default ‘device’ to ‘cpu’ so PyTorch will work as expected.</p>
+<p>Medusa can be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code> as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.6/medusa-0.0.6-py3-none-any.whl</span>
 </pre></div>
-</div>
-</div>
-<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
-</input><label class="sd-tab-label" for="sd-tab-item-1">
-medusa-gpu</label><div class="sd-tab-content docutils">
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.5/medusa_gpu-0.0.5-py3-none-any.whl</span>
-</pre></div>
-</div>
-</div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -517,14 +499,14 @@ Medusa depends on a specific version of <a class="reference external" href="http
 is not available on PyPI (only as a wheel). Listing non-PyPI dependencies in packages
 is not permitted by PyPI, which is why Medusa wheels are hosted on Github.</p>
 <p>If you want to build Medusa yourself, you can clone the repository and run the
-<code class="docutils literal notranslate"><span class="pre">build_wheels</span></code> script, which will create a directory <code class="docutils literal notranslate"><span class="pre">dist</span></code> with two wheel files
-(one for <code class="docutils literal notranslate"><span class="pre">medusa</span></code> and one for <code class="docutils literal notranslate"><span class="pre">medusa-gpu</span></code>).</p>
+<code class="docutils literal notranslate"><span class="pre">build_wheel</span></code> script, which will create a directory <code class="docutils literal notranslate"><span class="pre">dist</span></code> with a wheel file that can
+then be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code> as usual.</p>
 </div>
 <section id="downloading-external-data">
 <h2>Downloading external data<a class="headerlink" href="#downloading-external-data" title="Permalink to this heading">#</a></h2>
 <p>At this point, <code class="docutils literal notranslate"><span class="pre">medusa</span></code> can be used, but only the Mediapipe reconstruction model will be
 available. To be able to use the FLAME-based <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id6" title="Tianye Li, Timo Bolkart, Michael J Black, Hao Li, and Javier Romero. Learning a model of facial shape and expression from 4d scans. ACM Trans. Graph., 36(6):194–1, 2017.">Li <em>et al.</em>, 2017</a>]</span> reconstruction models such as
-DECA <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id7" title="Yao Feng, Haiwen Feng, Michael J Black, and Timo Bolkart. Learning an animatable detailed 3d face model from in-the-wild images. ACM Transactions on Graphics (ToG), 40(4):1–13, 2021.">Feng <em>et al.</em>, 2021</a>]</span>, EMOCA <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id8" title="Radek Daněček, Michael J Black, and Timo Bolkart. Emoca: emotion driven monocular face capture and animation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 20311–20322. 2022.">Daněček <em>et al.</em>, 2022</a>]</span>, and Spectre <span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id9" title="Panagiotis P Filntisis, George Retsinas, Foivos Paraperas-Papantoniou, Athanasios Katsamanis, Anastasios Roussos, and Petros Maragos. Visual speech-aware perceptual 3d facial expression reconstruction from videos. arXiv preprint arXiv:2207.11094, 2022.">Filntisis <em>et al.</em>, 2022</a>]</span>,
+DECA <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id7" title="Yao Feng, Haiwen Feng, Michael J Black, and Timo Bolkart. Learning an animatable detailed 3d face model from in-the-wild images. ACM Transactions on Graphics (ToG), 40(4):1–13, 2021.">Feng <em>et al.</em>, 2021</a>]</span>, and EMOCA <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id8" title="Radek Daněček, Michael J Black, and Timo Bolkart. Emoca: emotion driven monocular face capture and animation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 20311–20322. 2022.">Daněček <em>et al.</em>, 2022</a>]</span>,
 you need to download some additional data. Importantly, before you do, you need to
 <a class="reference external" href="https://flame.is.tue.mpg.de/register.php">register</a> on the <a class="reference external" href="https://flame.is.tue.mpg.de/index.html">FLAME website</a>
 and accept their <a class="reference external" href="https://flame.is.tue.mpg.de/modellicense.html">license terms</a>.</p>
@@ -570,7 +552,10 @@ with the account you created on the FLAME website. After all data has been downl
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../index.html"
@@ -590,7 +575,10 @@ with the account you created on the FLAME website. After all data has been downl
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -615,7 +603,7 @@ with the account you created on the FLAME website. After all data has been downl
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -648,7 +636,7 @@ By Lukas Snoek
 </div>
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -657,8 +645,8 @@ By Lukas Snoek
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

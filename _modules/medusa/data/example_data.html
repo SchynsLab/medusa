@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,8 +38,8 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -166,7 +166,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/face_detection.html">Face detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/landmark_detection_and_cropping.html">Landmark detection and cropping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -201,37 +202,35 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../../../api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/python/landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../api/python/recon/flame/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.utils</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/python/recon/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../api/python/render/image/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.base</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../api/python/render/image/pytorch3d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.pytorch3d</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
 </ul>
@@ -406,8 +405,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">torchvision.io</span> <span class="kn">import</span> <span class="n">read_image</span>
 
 <span class="kn">from</span> <span class="nn">..recon</span> <span class="kn">import</span> <span class="n">videorecon</span>
 <span class="kn">from</span> <span class="nn">..defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
@@ -415,7 +413,8 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">VideoLoader</span>
 
 
-<div class="viewcode-block" id="get_example_image"><a class="viewcode-back" href="../../../api/python/data/example_data/index.html#medusa.data.example_data.get_example_image">[docs]</a><span class="k">def</span> <span class="nf">get_example_image</span><span class="p">(</span><span class="n">n_faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">load_numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">load_torch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+<div class="viewcode-block" id="get_example_image"><a class="viewcode-back" href="../../../api/python/data/example_data/index.html#medusa.data.example_data.get_example_image">[docs]</a><span class="k">def</span> <span class="nf">get_example_image</span><span class="p">(</span><span class="n">n_faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">,</span> <span class="n">channels_last</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                      <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads an example frame from the example video.</span>
 
 <span class="sd">    Parameters</span>
@@ -454,9 +453,6 @@ document.write(`
 <span class="sd">    (384, 480, 3)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="n">load_numpy</span> <span class="ow">and</span> <span class="n">load_torch</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Set either &#39;load_numpy&#39; or &#39;load_torch&#39; to True, not both!&quot;</span><span class="p">)</span>
-
     <span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;example_data/images&quot;</span>
 
     <span class="k">if</span> <span class="n">n_faces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -472,18 +468,22 @@ document.write(`
         <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find example image file </span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">load_torch</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">load_numpy</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">load</span><span class="p">:</span>
             <span class="n">imgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
-
-            <span class="k">if</span> <span class="n">load_torch</span><span class="p">:</span>
-                <span class="n">img</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">read_image</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">channels_last</span><span class="p">:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
             <span class="n">imgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">load</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">imgs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+
+        <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">imgs</span></div>
 
@@ -593,7 +593,7 @@ document.write(`
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">recon</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
         <span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">(</span><span class="n">n_faces</span><span class="p">)</span>
-        <span class="n">data_4d</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">data_4d</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
         <span class="n">data_4d</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">recon</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">load</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">data_4d</span>
@@ -612,9 +612,15 @@ document.write(`
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -624,7 +630,7 @@ document.write(`
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -657,7 +663,7 @@ By Lukas Snoek
 </div>
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -666,8 +672,8 @@ By Lukas Snoek
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

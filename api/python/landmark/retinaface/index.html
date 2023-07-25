@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>medusa.recon.base &#8212; Medusa</title>
+    <title>medusa.landmark.retinaface &#8212; Medusa</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,8 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
@@ -62,11 +62,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../../../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/python/recon/base/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/python/landmark/retinaface/index';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="medusa.recon.recon" href="../recon/index.html" />
-    <link rel="prev" title="medusa.recon.mpipe.mpipe" href="../mpipe/mpipe/index.html" />
+    <link rel="next" title="medusa.log" href="../../log/index.html" />
+    <link rel="prev" title="medusa.landmark" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -169,7 +169,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/face_detection.html">Face detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/landmark_detection_and_cropping.html">Landmark detection and cropping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="current nav bd-sidenav">
@@ -204,37 +205,35 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../../epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 current active has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l3 has-children"><a class="reference internal" href="../flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../flame/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.utils</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../render/image/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.base</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../render/image/pytorch3d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.pytorch3d</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
 </ul>
@@ -320,7 +319,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/medusa-4D/medusa/edit/master/api/python/recon/base/index.rst" target="_blank"
+      <li><a href="https://github.com/medusa-4D/medusa/edit/master/api/python/landmark/retinaface/index.rst" target="_blank"
    class="btn btn-sm btn-source-edit-button dropdown-item"
    title="Suggest edit"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -337,7 +336,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/recon/base/index.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Fapi/python/landmark/retinaface/index.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -367,7 +366,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../../../../_sources/api/python/recon/base/index.rst" target="_blank"
+      <li><a href="../../../../_sources/api/python/landmark/retinaface/index.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -449,7 +448,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>medusa.recon.base</h1>
+    <h1>medusa.landmark.retinaface</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -460,10 +459,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recon.base.BaseReconModel">BaseReconModel</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recon.base.BaseReconModel.get_tris">get_tris</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recon.base.BaseReconModel.close">close</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recon.base.BaseReconModel.get_cam_mat">get_cam_mat</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.landmark.retinaface.RetinafaceLandmarkModel">RetinafaceLandmarkModel</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.landmark.retinaface.RetinafaceLandmarkModel.forward">forward</a></li>
 </ul>
 </li>
 </ul>
@@ -479,32 +476,42 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="module-medusa.recon.base">
-<span id="medusa-recon-base"></span><h1><a class="reference internal" href="#module-medusa.recon.base" title="medusa.recon.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a><a class="headerlink" href="#module-medusa.recon.base" title="Permalink to this heading">#</a></h1>
-<p>Module with a base reconstruction model class.</p>
+  <section id="module-medusa.landmark.retinaface">
+<span id="medusa-landmark-retinaface"></span><h1><a class="reference internal" href="#module-medusa.landmark.retinaface" title="medusa.landmark.retinaface"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a><a class="headerlink" href="#module-medusa.landmark.retinaface" title="Permalink to this heading">#</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="medusa.recon.base.BaseReconModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recon.base.</span></span><span class="sig-name descname"><span class="pre">BaseReconModel</span></span><a class="reference internal" href="../../../../_modules/medusa/recon/base.html#BaseReconModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.base.BaseReconModel" title="Permalink to this definition">#</a></dt>
-<dd><p>Base class for reconstruction models.</p>
-<p>Implements some abstract methods that should be implemented by
-classes that inherent from it (such as <code class="docutils literal notranslate"><span class="pre">get_tris</span></code>) and some
-default methods (such as <code class="docutils literal notranslate"><span class="pre">close</span></code>).</p>
+<dt class="sig sig-object py" id="medusa.landmark.retinaface.RetinafaceLandmarkModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.landmark.retinaface.</span></span><span class="sig-name descname"><span class="pre">RetinafaceLandmarkModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d106det'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">SCRFDetector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/landmark/retinaface.html#RetinafaceLandmarkModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.landmark.retinaface.RetinafaceLandmarkModel" title="Permalink to this definition">#</a></dt>
+<dd><p>Landmark detection model based on Insightface’s Retinaface model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_name</strong> (<em>str</em>) – Name of the landmark model from Insightface that should be used; options are
+‘2d106det’ (106 landmarks, 2D) or ‘1k3d68’ (68 landmarks, 3D)</p></li>
+<li><p><strong>detector</strong> (<a class="reference internal" href="../../detect/base/index.html#medusa.detect.base.BaseDetector" title="medusa.detect.base.BaseDetector"><em>BaseDetector</em></a>) – Which detector to use; options are <code class="docutils literal notranslate"><span class="pre">SCRFDetector</span></code> or <code class="docutils literal notranslate"><span class="pre">YunetDetector</span></code></p></li>
+<li><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ (GPU) or ‘cpu’</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="medusa.recon.base.BaseReconModel.get_tris">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_tris</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/recon/base.html#BaseReconModel.get_tris"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.base.BaseReconModel.get_tris" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.recon.base.BaseReconModel.close">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/recon/base.html#BaseReconModel.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.base.BaseReconModel.close" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.recon.base.BaseReconModel.get_cam_mat">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_cam_mat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/recon/base.html#BaseReconModel.get_cam_mat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recon.base.BaseReconModel.get_cam_mat" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="medusa.landmark.retinaface.RetinafaceLandmarkModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/landmark/retinaface.html#RetinafaceLandmarkModel.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.landmark.retinaface.RetinafaceLandmarkModel.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs the landmark model on a set of images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>imgs</strong> (<em>list</em><em>, </em><em>str</em><em>, </em><em>Path</em><em>, </em><em>torch.tensor</em>) – Either a list of images, a path to a directory containing images, or an
+already loaded torch.tensor of shape N (batch) x C x H x W</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>out_lms</strong> – Dictionary with the following keys: ‘lms’ (landmarks), ‘conf’ (confidence),
+‘img_idx’ (image index), ‘bbox’ (bounding box)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -524,7 +531,7 @@ default methods (such as <code class="docutils literal notranslate"><span class=
         },
         kernelOptions: {
             name: "python3",
-            path: "./api/python/recon/base"
+            path: "./api/python/landmark/retinaface"
         },
         predefinedOutput: true
     }
@@ -537,27 +544,33 @@ default methods (such as <code class="docutils literal notranslate"><span class=
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../mpipe/mpipe/index.html"
+       href="../index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></p>
       </div>
     </a>
     <a class="right-next"
-       href="../recon/index.html"
+       href="../../log/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -573,10 +586,8 @@ default methods (such as <code class="docutils literal notranslate"><span class=
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recon.base.BaseReconModel">BaseReconModel</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recon.base.BaseReconModel.get_tris">get_tris</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recon.base.BaseReconModel.close">close</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recon.base.BaseReconModel.get_cam_mat">get_cam_mat</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.landmark.retinaface.RetinafaceLandmarkModel">RetinafaceLandmarkModel</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.landmark.retinaface.RetinafaceLandmarkModel.forward">forward</a></li>
 </ul>
 </li>
 </ul>
@@ -589,7 +600,7 @@ default methods (such as <code class="docutils literal notranslate"><span class=
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -622,7 +633,7 @@ By Lukas Snoek
 </div>
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -631,8 +642,8 @@ By Lukas Snoek
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

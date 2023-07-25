@@ -47,4 +47,17 @@ Module Contents
    >>> img = get_example_image()  # path to jpg image
    >>> out = crop_model(img)
 
+   .. py:method:: forward(imgs)
+
+      Aligns and crops images to the desired size.
+
+      :param imgs: A path to an image, or a tuple/list of them, or already loaded images
+                   as a torch.tensor or numpy array
+      :type imgs: str, Path, tuple, list, array_like, torch.tensor
+
+      :returns: **out_crop** -- Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
+                images) and "crop_mat" (3x3 crop matrices)
+      :rtype: dict
+
+
 

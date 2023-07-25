@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,8 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -168,7 +168,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="tutorials/data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/face_detection.html">Face detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/landmark_detection_and_cropping.html">Landmark detection and cropping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -203,37 +204,35 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/python/landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.utils</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="api/python/recon/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/python/render/image/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.base</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/python/render/image/pytorch3d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.pytorch3d</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
 </ul>
@@ -473,7 +472,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="medusa-4d-face-reconstruction-and-analysis">
 <h1>Medusa: 4D face reconstruction and analysis<a class="headerlink" href="#medusa-4d-face-reconstruction-and-analysis" title="Permalink to this heading">#</a></h1>
-<p><a class="reference external" href="https://github.com/medusa-4D/medusa/actions/workflows/tests.yaml"><img alt="CI" src="https://github.com/medusa-4D/medusa/actions/workflows/tests.yaml/badge.svg" /></a>
+<p><a class="reference external" href="https://github.com/SchynsLab/medusa/actions/workflows/tests.yaml"><img alt="CI" src="https://github.com/SchynsLab/medusa/actions/workflows/tests.yaml/badge.svg" /></a>
 <img alt="coverage" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lukassnoek/420039a0fe8fb8c1170e0478cdcd0f26/raw/medusa_coverage_badge.json" />
 <img alt="coverage" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lukassnoek/cb6da52c965ec24f136b74a1ebad1964/raw/medusa_interrogate_badge.json" />
 <img alt="Python" src="https://img.shields.io/badge/python-3.9-blue.svg" /></p>
@@ -535,7 +534,7 @@ Analysis</div>
 Face &amp; landmark detection</div>
 </div>
 <img alt="card-img-bottom" class="sd-card-img-bottom" src="_images/bbox.png" />
-<a class="sd-stretched-link reference internal" href="tutorials/face_and_landmark_detection.html"><span class="doc"></span></a></div>
+<span class="sd-stretched-link"></span></div>
 </div>
 <p>A great way to get more familiar with the package is to check out the <a class="reference internal" href="getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a>!</p>
 </section>
@@ -575,7 +574,10 @@ Face &amp; landmark detection</div>
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="right-next"
        href="getting_started/installation.html"
@@ -586,7 +588,10 @@ Face &amp; landmark detection</div>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -611,7 +616,7 @@ Face &amp; landmark detection</div>
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -644,7 +649,7 @@ By Lukas Snoek
 </div>
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -653,8 +658,8 @@ By Lukas Snoek
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

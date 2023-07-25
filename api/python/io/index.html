@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,8 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/python/io/index';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="medusa.log" href="../log/index.html" />
+    <link rel="next" title="medusa.landmark" href="../landmark/index.html" />
     <link rel="prev" title="medusa.geometry" href="../geometry/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -169,7 +169,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/face_detection.html">Face detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/landmark_detection_and_cropping.html">Landmark detection and cropping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="current nav bd-sidenav">
@@ -204,37 +205,35 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../recon/flame/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.utils</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../recon/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../render/image/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.base</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../render/image/pytorch3d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.pytorch3d</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
 </ul>
@@ -463,12 +462,11 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoLoader">VideoLoader</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoLoader.get_metadata">get_metadata</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoLoader.close">close</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoLoader.crop">crop</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoDataset">VideoDataset</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoDataset.close">close</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoIterableDataset">VideoIterableDataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoMapDataset">VideoMapDataset</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoWriter">VideoWriter</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoWriter.write">write</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoWriter.close">close</a></li>
@@ -501,17 +499,19 @@ file, which is used in the reconstruction process (e.g., in the
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.io.VideoLoader">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoLoader" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'iterable'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoLoader" title="Permalink to this definition">#</a></dt>
 <dd><p>Contains (meta)data and functionality associated with video files (mp4
 files only currently).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to mp4 file</p></li>
+<li><p><strong>video_path</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to mp4 file</p></li>
+<li><p><strong>dataset_type</strong> (<em>str</em>) – One of ‘iterable’, ‘map’, or ‘subset’. If ‘iterable’, batches are loaded
+sequentially from the video file. If ‘map’, frames can be loaded in any order
+and ‘subset’ allows for loading a subset of frames (using the ‘frames’ arg)</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – Batch size to use when loading frames</p></li>
-<li><p><strong>channels_first</strong> (<em>bool</em>) – Whether to return a B x 3 x H x W tensor (if <code class="docutils literal notranslate"><span class="pre">True</span></code>) or
-a B x H x W x 3 tensor (if <code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
 <li><p><strong>device</strong> (<em>str</em>) – Either ‘cpu’ or ‘cuda’</p></li>
+<li><p><strong>frames</strong> (<em>list</em>) – List of frame indices to loaded; only relevant when dataset_type is ‘subset’</p></li>
 <li><p><strong>**kwargs</strong> – Extra keyword arguments passed to the initialization of the parent class</p></li>
 </ul>
 </dd>
@@ -537,26 +537,48 @@ a B x H x W x 3 tensor (if <code class="docutils literal notranslate"><span clas
 <dd><p>Closes the opencv videoloader in the underlying pytorch Dataset.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="medusa.io.VideoLoader.crop">
+<span class="sig-name descname"><span class="pre">crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop_params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoLoader.crop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoLoader.crop" title="Permalink to this definition">#</a></dt>
+<dd><p>Crops an image batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>torch.tensor</em>) – A B x H x W x 3 tensor with image data</p></li>
+<li><p><strong>crop_params</strong> (<em>tuple</em>) – A tuple of (x0, y0, x1, y1) crop parameters</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="medusa.io.VideoDataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoDataset" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="medusa.io.VideoIterableDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoIterableDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoIterableDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoIterableDataset" title="Permalink to this definition">#</a></dt>
 <dd><p>A pytorch Dataset class based on loading frames from a single video.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>video</strong> (<em>pathlib.Path</em><em>, </em><em>str</em>) – A video file (any format that pyav can handle)</p></li>
+<li><p><strong>video_path</strong> (<em>Path</em><em>, </em><em>str</em>) – A video file (any format that pyav can handle)</p></li>
 <li><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ (for GPU) or ‘cpu’</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="medusa.io.VideoDataset.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoDataset.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoDataset.close" title="Permalink to this definition">#</a></dt>
-<dd><p>Closes the pyav videoreader and free up memory.</p>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="medusa.io.VideoMapDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.io.</span></span><span class="sig-name descname"><span class="pre">VideoMapDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/io.html#VideoMapDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.io.VideoMapDataset" title="Permalink to this definition">#</a></dt>
+<dd><p>A pytorch Dataset class based on loading frames from a single video.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_path</strong> (<em>Path</em><em>, </em><em>str</em>) – A video file (any format that pyav can handle)</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ (for GPU) or ‘cpu’</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -742,7 +764,10 @@ turn is based on the pytorch3d implementation.</p>
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../geometry/index.html"
@@ -754,15 +779,18 @@ turn is based on the pytorch3d implementation.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../log/index.html"
+       href="../landmark/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -781,12 +809,11 @@ turn is based on the pytorch3d implementation.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoLoader">VideoLoader</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoLoader.get_metadata">get_metadata</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoLoader.close">close</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoLoader.crop">crop</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoDataset">VideoDataset</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoDataset.close">close</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoIterableDataset">VideoIterableDataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoMapDataset">VideoMapDataset</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoWriter">VideoWriter</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoWriter.write">write</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.io.VideoWriter.close">close</a></li>
@@ -806,7 +833,7 @@ turn is based on the pytorch3d implementation.</p>
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -839,7 +866,7 @@ By Lukas Snoek
 </div>
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -848,8 +875,8 @@ By Lukas Snoek
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

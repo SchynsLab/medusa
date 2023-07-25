@@ -23,13 +23,13 @@ Module Contents
    Default font used in Medusa (DejaVuSans).
 
 .. py:data:: FLAME_MODELS
-   :value: ['deca-coarse', 'deca-dense', 'emoca-coarse', 'emoca-dense', 'spectre-coarse', 'spectre-dense']
+   :value: ['deca-coarse', 'deca-dense', 'emoca-coarse', 'emoca-dense']
 
    Names of available FLAME-based models, which can be used when initializing a
    ``DecaReconModel``.
 
 .. py:data:: RECON_MODELS
-   :value: ['spectre-coarse', 'emoca-dense', 'emoca-coarse', 'deca-dense', 'deca-coarse', 'mediapipe']
+   :value: ['emoca-dense', 'emoca-coarse', 'deca-dense', 'deca-coarse', 'mediapipe']
 
    Names of all available reconstruction models.
 

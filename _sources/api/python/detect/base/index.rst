@@ -7,7 +7,11 @@
 Module Contents
 ---------------
 
-.. py:class:: BaseDetector
+.. py:class:: BaseDetector(*args, **kwargs)
+
+
+
+   Base class for face detection models.
 
    .. py:method:: detect_faces_video(vid, batch_size=32)
 

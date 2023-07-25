@@ -12,7 +12,7 @@
 Module Contents
 ---------------
 
-.. py:class:: FlameReconModel
+.. py:class:: FlameReconModel(*args, **kwargs)
 
 
 

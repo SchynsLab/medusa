@@ -21,7 +21,7 @@ Usage: medusa_videorecon [OPTIONS] VIDEO_PATH
 Options:
   -o, --out PATH                  File to save output to (shouldn't have an
                                   extension)
-  -r, --recon-model               [spectre-coarse|emoca-dense|emoca-coarse|deca-dense|deca-coarse|mediapipe]
+  -r, --recon-model               [emoca-dense|emoca-coarse|deca-dense|deca-coarse|mediapipe]
                                   Name of the reconstruction model
   --device [cpu|cuda]             Device to run the reconstruction on (only
                                   relevant for EMOCA

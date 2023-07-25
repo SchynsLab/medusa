@@ -16,7 +16,7 @@
 Module Contents
 ---------------
 
-.. py:class:: BboxCropModel(name='2d106det', output_size=(224, 224), detector=SCRFDetector, device=DEVICE, **kwargs)
+.. py:class:: BboxCropModel(lms_model_name='2d106det', output_size=(224, 224), detector=SCRFDetector, device=DEVICE)
 
 
 
@@ -32,5 +32,18 @@ Module Contents
    :type detector: BaseDetector
    :param device: Either 'cuda' (GPU) or 'cpu'
    :type device: str
+
+   .. py:method:: forward(imgs)
+
+      Crops images to the desired size.
+
+      :param imgs: A path to an image, or a tuple/list of them, or already loaded images
+                   as a torch.tensor or numpy array
+      :type imgs: str, Path, tuple, list, array_like, torch.tensor
+
+      :returns: **out_crop** -- Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
+                images) and "crop_mat" (3x3 crop matrices)
+      :rtype: dict
+
 
 

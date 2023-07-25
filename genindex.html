@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,8 +38,8 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -166,7 +166,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="tutorials/data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/face_detection.html">Face detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/landmark_detection_and_cropping.html">Landmark detection and cropping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -201,37 +202,35 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/python/landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/python/recon/flame/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.utils</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="api/python/recon/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/python/render/image/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.base</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/python/render/image/pytorch3d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.pytorch3d</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
 </ul>
@@ -408,7 +407,6 @@ document.write(`
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
- | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -425,11 +423,9 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/containers/results/index.html#medusa.containers.results.BatchResults.add">add() (medusa.containers.results.BatchResults method)</a>
 </li>
-      <li><a href="api/python/render/image/pytorch3d/index.html#medusa.render.image.pytorch3d.PytorchRenderer.add_sh_light">add_sh_light() (medusa.render.image.pytorch3d.PytorchRenderer method)</a>
-</li>
       <li><a href="api/python/crop/align_crop/index.html#medusa.crop.align_crop.AlignCropModel">AlignCropModel (class in medusa.crop.align_crop)</a>
 </li>
-      <li><a href="api/python/render/image/base/index.html#medusa.render.image.base.BaseRenderer.alpha_blend">alpha_blend() (medusa.render.image.base.BaseRenderer method)</a>
+      <li><a href="api/python/render/image/index.html#medusa.render.image.PytorchRenderer.alpha_blend">alpha_blend() (medusa.render.image.PytorchRenderer method)</a>
 </li>
       <li><a href="api/python/containers/threeD/index.html#medusa.containers.threeD.Base3D.animate">animate() (medusa.containers.threeD.Base3D method)</a>
 
@@ -463,16 +459,12 @@ document.write(`
 </li>
       <li><a href="api/python/epoch/index.html#medusa.epoch.EpochsArray.baseline_normalize">baseline_normalize() (medusa.epoch.EpochsArray method)</a>
 </li>
-      <li><a href="api/python/recon/base/index.html#medusa.recon.base.BaseReconModel">BaseReconModel (class in medusa.recon.base)</a>
-</li>
-      <li><a href="api/python/render/image/base/index.html#medusa.render.image.base.BaseRenderer">BaseRenderer (class in medusa.render.image.base)</a>
-</li>
       <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.BasicBlock">BasicBlock (class in medusa.recon.flame.deca.encoders)</a>
+</li>
+      <li><a href="api/python/recon/flame/lbs/index.html#medusa.recon.flame.lbs.batch_rigid_transform">batch_rigid_transform() (in module medusa.recon.flame.lbs)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/recon/flame/lbs/index.html#medusa.recon.flame.lbs.batch_rigid_transform">batch_rigid_transform() (in module medusa.recon.flame.lbs)</a>
-</li>
       <li><a href="api/python/recon/flame/lbs/index.html#medusa.recon.flame.lbs.batch_rodrigues">batch_rodrigues() (in module medusa.recon.flame.lbs)</a>
 </li>
       <li><a href="api/python/containers/results/index.html#medusa.containers.results.BatchResults">BatchResults (class in medusa.containers.results)</a>
@@ -493,38 +485,30 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.change_handedness">change_handedness() (in module medusa.recon.mpipe._transforms)</a>
 </li>
-      <li><a href="api/python/io/index.html#medusa.io.VideoDataset.close">close() (medusa.io.VideoDataset method)</a>
+      <li><a href="api/python/io/index.html#medusa.io.VideoLoader.close">close() (medusa.io.VideoLoader method)</a>
 
       <ul>
-        <li><a href="api/python/io/index.html#medusa.io.VideoLoader.close">(medusa.io.VideoLoader method)</a>
-</li>
         <li><a href="api/python/io/index.html#medusa.io.VideoWriter.close">(medusa.io.VideoWriter method)</a>
-</li>
-        <li><a href="api/python/recon/base/index.html#medusa.recon.base.BaseReconModel.close">(medusa.recon.base.BaseReconModel method)</a>
 </li>
         <li><a href="api/python/recon/flame/base/index.html#medusa.recon.flame.base.FlameReconModel.close">(medusa.recon.flame.base.FlameReconModel method)</a>
 </li>
         <li><a href="api/python/recon/mpipe/mpipe/index.html#medusa.recon.mpipe.mpipe.Mediapipe.close">(medusa.recon.mpipe.mpipe.Mediapipe method)</a>
 </li>
-        <li><a href="api/python/render/image/base/index.html#medusa.render.image.base.BaseRenderer.close">(medusa.render.image.base.BaseRenderer method)</a>
-</li>
-        <li><a href="api/python/render/image/pytorch3d/index.html#medusa.render.image.pytorch3d.PytorchRenderer.close">(medusa.render.image.pytorch3d.PytorchRenderer method)</a>
-</li>
-        <li><a href="api/python/render/video/index.html#medusa.render.video.VideoRenderer.close">(medusa.render.video.VideoRenderer method)</a>
-</li>
       </ul></li>
+      <li><a href="api/python/analysis/index.html#medusa.analysis.LinearRegression.coef_">coef_ (medusa.analysis.LinearRegression attribute)</a>
+</li>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.combine_transform_matrix">combine_transform_matrix() (in module medusa.recon.mpipe._transforms)</a>
 </li>
       <li><a href="api/python/transforms/index.html#medusa.transforms.compose_matrix">compose_matrix() (in module medusa.transforms)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/containers/fourD/index.html#medusa.containers.fourD.Data4D.compose_mats">compose_mats() (medusa.containers.fourD.Data4D method)</a>
 </li>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.compute_optimal_rotation">compute_optimal_rotation() (in module medusa.recon.mpipe._transforms)</a>
 </li>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.compute_optimal_scale">compute_optimal_scale() (in module medusa.recon.mpipe._transforms)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/geometry/index.html#medusa.geometry.compute_tri_normals">compute_tri_normals() (in module medusa.geometry)</a>
 </li>
       <li><a href="api/python/geometry/index.html#medusa.geometry.compute_vertex_normals">compute_vertex_normals() (in module medusa.geometry)</a>
@@ -542,6 +526,8 @@ document.write(`
       <li><a href="api/python/transforms/index.html#medusa.transforms.create_ortho_matrix">create_ortho_matrix() (in module medusa.transforms)</a>
 </li>
       <li><a href="api/python/transforms/index.html#medusa.transforms.create_viewport_matrix">create_viewport_matrix() (in module medusa.transforms)</a>
+</li>
+      <li><a href="api/python/io/index.html#medusa.io.VideoLoader.crop">crop() (medusa.io.VideoLoader method)</a>
 </li>
       <li><a href="api/python/crop/base/index.html#medusa.crop.base.BaseCropModel.crop_faces_video">crop_faces_video() (medusa.crop.base.BaseCropModel method)</a>
 </li>
@@ -570,6 +556,8 @@ document.write(`
       <li><a href="api/python/defaults/index.html#medusa.defaults.DEVICE">DEVICE (in module medusa.defaults)</a>
 </li>
       <li><a href="api/python/io/index.html#medusa.io.download_file">download_file() (in module medusa.io)</a>
+</li>
+      <li><a href="api/python/render/image/index.html#medusa.render.image.PytorchRenderer.draw_landmarks">draw_landmarks() (medusa.render.image.PytorchRenderer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -607,8 +595,6 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/recon/flame/utils/index.html#medusa.recon.flame.utils.face_vertices">face_vertices() (in module medusa.recon.flame.utils)</a>
-</li>
       <li><a href="api/python/recon/flame/mica/encoders/index.html#medusa.recon.flame.mica.encoders.IResNet.fc_scale">fc_scale (medusa.recon.flame.mica.encoders.IResNet attribute)</a>
 </li>
       <li><a href="api/python/tracking/index.html#medusa.tracking.filter_faces">filter_faces() (in module medusa.tracking)</a>
@@ -621,8 +607,6 @@ document.write(`
       </ul></li>
       <li><a href="api/python/analysis/index.html#medusa.analysis.LinearRegression.fit">fit() (medusa.analysis.LinearRegression method)</a>
 </li>
-      <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FLAME">FLAME (class in medusa.recon.flame.decoders)</a>
-</li>
       <li><a href="api/python/containers/threeD/index.html#medusa.containers.threeD.Flame3D">Flame3D (class in medusa.containers.threeD)</a>
 </li>
       <li><a href="api/python/containers/threeD/index.html#medusa.containers.threeD.flame_generator">flame_generator (in module medusa.containers.threeD)</a>
@@ -631,28 +615,46 @@ document.write(`
 </li>
       <li><a href="api/python/containers/threeD/index.html#medusa.containers.threeD.flame_path">flame_path (in module medusa.containers.threeD)</a>
 </li>
+      <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameLandmark">FlameLandmark (class in medusa.recon.flame.decoders)</a>
+</li>
       <li><a href="api/python/recon/flame/base/index.html#medusa.recon.flame.base.FlameReconModel">FlameReconModel (class in medusa.recon.flame.base)</a>
 </li>
-      <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FLAMETex">FLAMETex (class in medusa.recon.flame.decoders)</a>
+      <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameShape">FlameShape (class in medusa.recon.flame.decoders)</a>
+</li>
+      <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameTex">FlameTex (class in medusa.recon.flame.decoders)</a>
 </li>
       <li><a href="api/python/defaults/index.html#medusa.defaults.FONT">FONT (in module medusa.defaults)</a>
 </li>
-      <li><a href="api/python/recon/flame/deca/decoders/index.html#medusa.recon.flame.deca.decoders.DetailGenerator.forward">forward() (medusa.recon.flame.deca.decoders.DetailGenerator method)</a>
+      <li><a href="api/python/crop/align_crop/index.html#medusa.crop.align_crop.AlignCropModel.forward">forward() (medusa.crop.align_crop.AlignCropModel method)</a>
 
       <ul>
+        <li><a href="api/python/crop/bbox_crop/index.html#medusa.crop.bbox_crop.BboxCropModel.forward">(medusa.crop.bbox_crop.BboxCropModel method)</a>
+</li>
+        <li><a href="api/python/detect/scrfd/index.html#medusa.detect.scrfd.SCRFDetector.forward">(medusa.detect.scrfd.SCRFDetector method)</a>
+</li>
+        <li><a href="api/python/detect/scrfd/index.html#medusa.detect.scrfd.SCRFDPostproc.forward">(medusa.detect.scrfd.SCRFDPostproc method)</a>
+</li>
+        <li><a href="api/python/detect/yunet/index.html#medusa.detect.yunet.YunetDetector.forward">(medusa.detect.yunet.YunetDetector method)</a>
+</li>
+        <li><a href="api/python/landmark/retinaface/index.html#medusa.landmark.retinaface.RetinafaceLandmarkModel.forward">(medusa.landmark.retinaface.RetinafaceLandmarkModel method)</a>
+</li>
+        <li><a href="api/python/recon/flame/deca/decoders/index.html#medusa.recon.flame.deca.decoders.DetailGenerator.forward">(medusa.recon.flame.deca.decoders.DetailGenerator method)</a>
+</li>
         <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.BasicBlock.forward">(medusa.recon.flame.deca.encoders.BasicBlock method)</a>
 </li>
         <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.Bottleneck.forward">(medusa.recon.flame.deca.encoders.Bottleneck method)</a>
-</li>
-        <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.PerceptualEncoder.forward">(medusa.recon.flame.deca.encoders.PerceptualEncoder method)</a>
 </li>
         <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.ResNet.forward">(medusa.recon.flame.deca.encoders.ResNet method)</a>
 </li>
         <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.ResnetEncoder.forward">(medusa.recon.flame.deca.encoders.ResnetEncoder method)</a>
 </li>
-        <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FLAME.forward">(medusa.recon.flame.decoders.FLAME method)</a>
+        <li><a href="api/python/recon/flame/deca/recon/index.html#medusa.recon.flame.deca.recon.DecaReconModel.forward">(medusa.recon.flame.deca.recon.DecaReconModel method)</a>
 </li>
-        <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FLAMETex.forward">(medusa.recon.flame.decoders.FLAMETex method)</a>
+        <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameLandmark.forward">(medusa.recon.flame.decoders.FlameLandmark method)</a>
+</li>
+        <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameShape.forward">(medusa.recon.flame.decoders.FlameShape method)</a>
+</li>
+        <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameTex.forward">(medusa.recon.flame.decoders.FlameTex method)</a>
 </li>
         <li><a href="api/python/recon/flame/mica/encoders/index.html#medusa.recon.flame.mica.encoders.Arcface.forward">(medusa.recon.flame.mica.encoders.Arcface method)</a>
 </li>
@@ -661,6 +663,14 @@ document.write(`
         <li><a href="api/python/recon/flame/mica/encoders/index.html#medusa.recon.flame.mica.encoders.IResNet.forward">(medusa.recon.flame.mica.encoders.IResNet method)</a>
 </li>
         <li><a href="api/python/recon/flame/mica/encoders/index.html#medusa.recon.flame.mica.encoders.MappingNetwork.forward">(medusa.recon.flame.mica.encoders.MappingNetwork method)</a>
+</li>
+        <li><a href="api/python/recon/flame/mica/encoders/index.html#medusa.recon.flame.mica.encoders.MicaEncoder.forward">(medusa.recon.flame.mica.encoders.MicaEncoder method)</a>
+</li>
+        <li><a href="api/python/recon/flame/mica/recon/index.html#medusa.recon.flame.mica.recon.MicaReconModel.forward">(medusa.recon.flame.mica.recon.MicaReconModel method)</a>
+</li>
+        <li><a href="api/python/recon/mpipe/mpipe/index.html#medusa.recon.mpipe.mpipe.Mediapipe.forward">(medusa.recon.mpipe.mpipe.Mediapipe method)</a>
+</li>
+        <li><a href="api/python/render/image/index.html#medusa.render.image.PytorchRenderer.forward">(medusa.render.image.PytorchRenderer method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -683,11 +693,9 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/recon/base/index.html#medusa.recon.base.BaseReconModel.get_cam_mat">get_cam_mat() (medusa.recon.base.BaseReconModel method)</a>
+      <li><a href="api/python/recon/flame/base/index.html#medusa.recon.flame.base.FlameReconModel.get_cam_mat">get_cam_mat() (medusa.recon.flame.base.FlameReconModel method)</a>
 
       <ul>
-        <li><a href="api/python/recon/flame/base/index.html#medusa.recon.flame.base.FlameReconModel.get_cam_mat">(medusa.recon.flame.base.FlameReconModel method)</a>
-</li>
         <li><a href="api/python/recon/flame/mica/recon/index.html#medusa.recon.flame.mica.recon.MicaReconModel.get_cam_mat">(medusa.recon.flame.mica.recon.MicaReconModel method)</a>
 </li>
         <li><a href="api/python/recon/mpipe/mpipe/index.html#medusa.recon.mpipe.mpipe.Mediapipe.get_cam_mat">(medusa.recon.mpipe.mpipe.Mediapipe method)</a>
@@ -702,6 +710,8 @@ document.write(`
       <li><a href="api/python/data/template_data/index.html#medusa.data.template_data.get_external_data_config">get_external_data_config() (in module medusa.data.template_data)</a>
 </li>
       <li><a href="api/python/containers/fourD/index.html#medusa.containers.fourD.Data4D.get_face">get_face() (medusa.containers.fourD.Data4D method)</a>
+</li>
+      <li><a href="api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameShape.get_full_pose">get_full_pose() (medusa.recon.flame.decoders.FlameShape method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -718,8 +728,6 @@ document.write(`
       <li><a href="api/python/data/template_data/index.html#medusa.data.template_data.get_tris">get_tris() (in module medusa.data.template_data)</a>
 
       <ul>
-        <li><a href="api/python/recon/base/index.html#medusa.recon.base.BaseReconModel.get_tris">(medusa.recon.base.BaseReconModel method)</a>
-</li>
         <li><a href="api/python/recon/flame/base/index.html#medusa.recon.flame.base.FlameReconModel.get_tris">(medusa.recon.flame.base.FlameReconModel method)</a>
 </li>
         <li><a href="api/python/recon/mpipe/mpipe/index.html#medusa.recon.mpipe.mpipe.Mediapipe.get_tris">(medusa.recon.mpipe.mpipe.Mediapipe method)</a>
@@ -765,11 +773,9 @@ document.write(`
 </li>
       <li><a href="api/python/analysis/index.html#medusa.analysis.LinearRegression">LinearRegression (class in medusa.analysis)</a>
 </li>
-      <li><a href="api/python/containers/fourD/index.html#medusa.containers.fourD.Data4D.load">load() (medusa.containers.fourD.Data4D class method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/render/image/base/index.html#medusa.render.image.base.BaseRenderer.load_image">load_image() (medusa.render.image.base.BaseRenderer static method)</a>
+      <li><a href="api/python/containers/fourD/index.html#medusa.containers.fourD.Data4D.load">load() (medusa.containers.fourD.Data4D class method)</a>
 </li>
       <li><a href="api/python/io/index.html#medusa.io.load_inputs">load_inputs() (in module medusa.io)</a>
 </li>
@@ -939,6 +945,20 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    medusa.landmark
+
+      <ul>
+        <li><a href="api/python/landmark/index.html#module-medusa.landmark">module</a>
+</li>
+      </ul></li>
+      <li>
+    medusa.landmark.retinaface
+
+      <ul>
+        <li><a href="api/python/landmark/retinaface/index.html#module-medusa.landmark.retinaface">module</a>
+</li>
+      </ul></li>
+      <li>
     medusa.log
 
       <ul>
@@ -978,13 +998,6 @@ document.write(`
 
       <ul>
         <li><a href="api/python/recon/index.html#module-medusa.recon">module</a>
-</li>
-      </ul></li>
-      <li>
-    medusa.recon.base
-
-      <ul>
-        <li><a href="api/python/recon/base/index.html#module-medusa.recon.base">module</a>
 </li>
       </ul></li>
       <li>
@@ -1050,6 +1063,8 @@ document.write(`
         <li><a href="api/python/recon/flame/mica/index.html#module-medusa.recon.flame.mica">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     medusa.recon.flame.mica.encoders
 
@@ -1062,15 +1077,6 @@ document.write(`
 
       <ul>
         <li><a href="api/python/recon/flame/mica/recon/index.html#module-medusa.recon.flame.mica.recon">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    medusa.recon.flame.utils
-
-      <ul>
-        <li><a href="api/python/recon/flame/utils/index.html#module-medusa.recon.flame.utils">module</a>
 </li>
       </ul></li>
       <li>
@@ -1116,20 +1122,6 @@ document.write(`
 </li>
       </ul></li>
       <li>
-    medusa.render.image.base
-
-      <ul>
-        <li><a href="api/python/render/image/base/index.html#module-medusa.render.image.base">module</a>
-</li>
-      </ul></li>
-      <li>
-    medusa.render.image.pytorch3d
-
-      <ul>
-        <li><a href="api/python/render/image/pytorch3d/index.html#module-medusa.render.image.pytorch3d">module</a>
-</li>
-      </ul></li>
-      <li>
     medusa.render.overlay
 
       <ul>
@@ -1157,6 +1149,8 @@ document.write(`
         <li><a href="api/python/transforms/index.html#module-medusa.transforms">module</a>
 </li>
       </ul></li>
+      <li><a href="api/python/recon/flame/mica/encoders/index.html#medusa.recon.flame.mica.encoders.MicaEncoder">MicaEncoder (class in medusa.recon.flame.mica.encoders)</a>
+</li>
       <li><a href="api/python/recon/flame/mica/recon/index.html#medusa.recon.flame.mica.recon.MicaReconModel">MicaReconModel (class in medusa.recon.flame.mica.recon)</a>
 </li>
       <li><a href="api/python/recon/mpipe/mpipe/index.html#medusa.recon.mpipe.mpipe.Mediapipe.model">model (medusa.recon.mpipe.mpipe.Mediapipe attribute)</a>
@@ -1207,6 +1201,10 @@ document.write(`
 </li>
         <li><a href="api/python/io/index.html#module-medusa.io">medusa.io</a>
 </li>
+        <li><a href="api/python/landmark/index.html#module-medusa.landmark">medusa.landmark</a>
+</li>
+        <li><a href="api/python/landmark/retinaface/index.html#module-medusa.landmark.retinaface">medusa.landmark.retinaface</a>
+</li>
         <li><a href="api/python/log/index.html#module-medusa.log">medusa.log</a>
 </li>
         <li><a href="api/python/onnx/index.html#module-medusa.onnx">medusa.onnx</a>
@@ -1218,8 +1216,6 @@ document.write(`
         <li><a href="api/python/preproc/filter/index.html#module-medusa.preproc.filter">medusa.preproc.filter</a>
 </li>
         <li><a href="api/python/recon/index.html#module-medusa.recon">medusa.recon</a>
-</li>
-        <li><a href="api/python/recon/base/index.html#module-medusa.recon.base">medusa.recon.base</a>
 </li>
         <li><a href="api/python/recon/flame/index.html#module-medusa.recon.flame">medusa.recon.flame</a>
 </li>
@@ -1243,8 +1239,6 @@ document.write(`
 </li>
         <li><a href="api/python/recon/flame/mica/recon/index.html#module-medusa.recon.flame.mica.recon">medusa.recon.flame.mica.recon</a>
 </li>
-        <li><a href="api/python/recon/flame/utils/index.html#module-medusa.recon.flame.utils">medusa.recon.flame.utils</a>
-</li>
         <li><a href="api/python/recon/mpipe/index.html#module-medusa.recon.mpipe">medusa.recon.mpipe</a>
 </li>
         <li><a href="api/python/recon/mpipe/_transforms/index.html#module-medusa.recon.mpipe._transforms">medusa.recon.mpipe._transforms</a>
@@ -1257,10 +1251,6 @@ document.write(`
 </li>
         <li><a href="api/python/render/image/index.html#module-medusa.render.image">medusa.render.image</a>
 </li>
-        <li><a href="api/python/render/image/base/index.html#module-medusa.render.image.base">medusa.render.image.base</a>
-</li>
-        <li><a href="api/python/render/image/pytorch3d/index.html#module-medusa.render.image.pytorch3d">medusa.render.image.pytorch3d</a>
-</li>
         <li><a href="api/python/render/overlay/index.html#module-medusa.render.overlay">medusa.render.overlay</a>
 </li>
         <li><a href="api/python/render/video/index.html#module-medusa.render.video">medusa.render.video</a>
@@ -1271,14 +1261,6 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.move_and_rescale_z">move_and_rescale_z() (in module medusa.recon.mpipe._transforms)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="N">N</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/render/image/pytorch3d/index.html#medusa.render.image.pytorch3d.PytorchRenderer.normal_map">normal_map() (medusa.render.image.pytorch3d.PytorchRenderer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1302,23 +1284,21 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.PCF">PCF (class in medusa.recon.mpipe._transforms)</a>
 </li>
-      <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.PerceptualEncoder">PerceptualEncoder (class in medusa.recon.flame.deca.encoders)</a>
-</li>
       <li><a href="api/python/analysis/index.html#medusa.analysis.LinearRegression.predict">predict() (medusa.analysis.LinearRegression method)</a>
 </li>
       <li><a href="api/python/analysis/index.html#medusa.analysis.LinearRegression.predict_from_range">predict_from_range() (medusa.analysis.LinearRegression method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.procrustes_landmark_basis">procrustes_landmark_basis (in module medusa.recon.mpipe._transforms)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/transforms/index.html#medusa.transforms.project_points_from_embedding">project_points_from_embedding() (in module medusa.transforms)</a>
 </li>
       <li><a href="api/python/containers/fourD/index.html#medusa.containers.fourD.Data4D.project_to_68_landmarks">project_to_68_landmarks() (medusa.containers.fourD.Data4D method)</a>
 </li>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.project_xy">project_xy() (in module medusa.recon.mpipe._transforms)</a>
 </li>
-      <li><a href="api/python/render/image/pytorch3d/index.html#medusa.render.image.pytorch3d.PytorchRenderer">PytorchRenderer (class in medusa.render.image.pytorch3d)</a>
+      <li><a href="api/python/render/image/index.html#medusa.render.image.PytorchRenderer">PytorchRenderer (class in medusa.render.image)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1330,6 +1310,8 @@ document.write(`
 </li>
       <li><a href="api/python/defaults/index.html#medusa.defaults.RECON_MODELS">RECON_MODELS (in module medusa.defaults)</a>
 </li>
+      <li><a href="api/python/render/video/index.html#medusa.render.video.VideoRenderer.render">render() (medusa.render.video.VideoRenderer method)</a>
+</li>
       <li><a href="api/python/transforms/index.html#medusa.transforms.resize_with_pad">resize_with_pad() (in module medusa.transforms)</a>
 </li>
   </ul></td>
@@ -1337,6 +1319,8 @@ document.write(`
       <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.ResNet">ResNet (class in medusa.recon.flame.deca.encoders)</a>
 </li>
       <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.ResnetEncoder">ResnetEncoder (class in medusa.recon.flame.deca.encoders)</a>
+</li>
+      <li><a href="api/python/landmark/retinaface/index.html#medusa.landmark.retinaface.RetinafaceLandmarkModel">RetinafaceLandmarkModel (class in medusa.landmark.retinaface)</a>
 </li>
       <li><a href="api/python/recon/flame/lbs/index.html#medusa.recon.flame.lbs.rot_mat_to_euler">rot_mat_to_euler() (in module medusa.recon.flame.lbs)</a>
 </li>
@@ -1354,13 +1338,15 @@ document.write(`
         <li><a href="api/python/containers/threeD/index.html#medusa.containers.threeD.Base3D.save">(medusa.containers.threeD.Base3D method)</a>
 </li>
       </ul></li>
-      <li><a href="api/python/render/image/base/index.html#medusa.render.image.base.BaseRenderer.save_image">save_image() (medusa.render.image.base.BaseRenderer static method)</a>
+      <li><a href="api/python/render/image/index.html#medusa.render.image.PytorchRenderer.save_image">save_image() (medusa.render.image.PytorchRenderer static method)</a>
 </li>
       <li><a href="api/python/io/index.html#medusa.io.save_obj">save_obj() (in module medusa.io)</a>
 </li>
+      <li><a href="api/python/detect/scrfd/index.html#medusa.detect.scrfd.SCRFDetector">SCRFDetector (class in medusa.detect.scrfd)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/detect/scrfd/index.html#medusa.detect.scrfd.SCRFDetector">SCRFDetector (class in medusa.detect.scrfd)</a>
+      <li><a href="api/python/detect/scrfd/index.html#medusa.detect.scrfd.SCRFDPostproc">SCRFDPostproc (class in medusa.detect.scrfd)</a>
 </li>
       <li><a href="api/python/preproc/filter/index.html#medusa.preproc.filter.OneEuroFilter.smoothing_factor">smoothing_factor() (medusa.preproc.filter.OneEuroFilter static method)</a>
 </li>
@@ -1407,10 +1393,6 @@ document.write(`
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.unproject_xy">unproject_xy() (in module medusa.recon.mpipe._transforms)</a>
 </li>
   </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/recon/flame/utils/index.html#medusa.recon.flame.utils.upsample_mesh">upsample_mesh() (in module medusa.recon.flame.utils)</a>
-</li>
-  </ul></td>
 </tr></table>
 
 <h2 id="V">V</h2>
@@ -1418,11 +1400,11 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/transforms/index.html#medusa.transforms.vector_norm">vector_norm() (in module medusa.transforms)</a>
 </li>
-      <li><a href="api/python/recon/flame/utils/index.html#medusa.recon.flame.utils.vertex_normals">vertex_normals() (in module medusa.recon.flame.utils)</a>
-</li>
-      <li><a href="api/python/io/index.html#medusa.io.VideoDataset">VideoDataset (class in medusa.io)</a>
+      <li><a href="api/python/io/index.html#medusa.io.VideoIterableDataset">VideoIterableDataset (class in medusa.io)</a>
 </li>
       <li><a href="api/python/io/index.html#medusa.io.VideoLoader">VideoLoader (class in medusa.io)</a>
+</li>
+      <li><a href="api/python/io/index.html#medusa.io.VideoMapDataset">VideoMapDataset (class in medusa.io)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1461,9 +1443,15 @@ document.write(`
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -1473,7 +1461,7 @@ document.write(`
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -1506,7 +1494,7 @@ By Lukas Snoek
 </div>
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -1515,8 +1503,8 @@ By Lukas Snoek
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

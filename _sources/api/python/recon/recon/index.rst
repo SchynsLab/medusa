@@ -20,8 +20,7 @@ Module Contents
    :param video_path: Path to video file to reconstruct, or an already initialized VideoLoader
    :type video_path: str, Path, VideoLoader
    :param recon_model: Name of reconstruction model, options are: 'deca-coarse', 'deca-dense',
-                       'emoca-coarse', 'emoca-dense', 'spectre-coarse', 'spectre-dense', and
-                       'mediapipe'
+                       'emoca-coarse', 'emoca-dense', and 'mediapipe'
    :type recon_model: str
    :param device: Either "cuda" (for GPU) or "cpu"
    :type device: str

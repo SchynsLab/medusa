@@ -5,17 +5,10 @@
 
 .. autoapi-nested-parse::
 
-   Top-level render package.
+   Top-level render package with a PyTorch-based renderer for (batches of) image(s)
+   and a utility class ``VideoRenderer`` for easy rendering of videos from ``Data4D`` objects,
+   as well as a class ``Overlay`` for creating vertex-based overlays.
 
-
-
-Subpackages
------------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   image/index.rst
 
 
 Submodules
@@ -24,6 +17,7 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   image/index.rst
    overlay/index.rst
    video/index.rst
 

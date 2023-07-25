@@ -16,22 +16,25 @@
 Module Contents
 ---------------
 
-.. py:class:: VideoLoader(video_path, batch_size=32, channels_first=False, device=DEVICE, crop=None, **kwargs)
+.. py:class:: VideoLoader(video_path, dataset_type='iterable', batch_size=32, device=DEVICE, frames=None, **kwargs)
 
 
 
    Contains (meta)data and functionality associated with video files (mp4
    files only currently).
 
-   :param path: Path to mp4 file
-   :type path: str, Path
+   :param video_path: Path to mp4 file
+   :type video_path: str, Path
+   :param dataset_type: One of 'iterable', 'map', or 'subset'. If 'iterable', batches are loaded
+                        sequentially from the video file. If 'map', frames can be loaded in any order
+                        and 'subset' allows for loading a subset of frames (using the 'frames' arg)
+   :type dataset_type: str
    :param batch_size: Batch size to use when loading frames
    :type batch_size: int
-   :param channels_first: Whether to return a B x 3 x H x W tensor (if ``True``) or
-                          a B x H x W x 3 tensor (if ``False``)
-   :type channels_first: bool
    :param device: Either 'cpu' or 'cuda'
    :type device: str
+   :param frames: List of frame indices to loaded; only relevant when dataset_type is 'subset'
+   :type frames: list
    :param \*\*kwargs: Extra keyword arguments passed to the initialization of the parent class
 
    .. py:method:: get_metadata()
@@ -47,22 +50,39 @@ Module Contents
       Closes the opencv videoloader in the underlying pytorch Dataset.
 
 
+   .. py:method:: crop(batch, crop_params)
 
-.. py:class:: VideoDataset(video_path, device=DEVICE)
+      Crops an image batch.
+
+      :param batch: A B x H x W x 3 tensor with image data
+      :type batch: torch.tensor
+      :param crop_params: A tuple of (x0, y0, x1, y1) crop parameters
+      :type crop_params: tuple
+
+
+
+.. py:class:: VideoIterableDataset(video_path)
 
 
 
    A pytorch Dataset class based on loading frames from a single video.
 
-   :param video: A video file (any format that pyav can handle)
-   :type video: pathlib.Path, str
+   :param video_path: A video file (any format that pyav can handle)
+   :type video_path: Path, str
    :param device: Either 'cuda' (for GPU) or 'cpu'
    :type device: str
 
-   .. py:method:: close()
 
-      Closes the pyav videoreader and free up memory.
+.. py:class:: VideoMapDataset(video_path)
 
+
+
+   A pytorch Dataset class based on loading frames from a single video.
+
+   :param video_path: A video file (any format that pyav can handle)
+   :type video_path: Path, str
+   :param device: Either 'cuda' (for GPU) or 'cpu'
+   :type device: str
 
 
 .. py:class:: VideoWriter(path, fps, codec='libx264', pix_fmt='yuv420p', size=None)

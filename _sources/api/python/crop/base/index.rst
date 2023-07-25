@@ -7,7 +7,9 @@
 Module Contents
 ---------------
 
-.. py:class:: BaseCropModel
+.. py:class:: BaseCropModel(*args, **kwargs)
+
+
 
    Base crop model, from which all crop models inherit.
 

@@ -18,7 +18,7 @@
 Module Contents
 ---------------
 
-.. py:function:: get_example_image(n_faces=None, load_numpy=False, load_torch=False, device=DEVICE)
+.. py:function:: get_example_image(n_faces=None, load=True, device=DEVICE, channels_last=False, dtype=torch.float32)
 
    Loads an example frame from the example video.
 

@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,8 +38,8 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
@@ -166,7 +166,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/data_representation.html">Data representation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/rendering.html">Rendering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/face_detection.html">Face detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/landmark_detection_and_cropping.html">Landmark detection and cropping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -201,37 +202,35 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/python/landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/python/landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../api/python/recon/flame/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.utils</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../api/python/recon/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../../api/python/render/image/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.base</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../api/python/render/image/pytorch3d/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image.pytorch3d</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
 </ul>
@@ -401,72 +400,90 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csc_matrix</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">chumpy.ch</span> <span class="kn">import</span> <span class="n">Ch</span>
+<span class="kn">from</span> <span class="nn">pytorch3d.transforms</span> <span class="kn">import</span> <span class="n">rotation_6d_to_matrix</span><span class="p">,</span> <span class="n">matrix_to_rotation_6d</span><span class="p">,</span> <span class="n">euler_angles_to_matrix</span>
 
 <span class="kn">from</span> <span class="nn">.lbs</span> <span class="kn">import</span> <span class="n">lbs</span>
+<span class="kn">from</span> <span class="nn">...defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
 
 
-<div class="viewcode-block" id="FLAME"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FLAME">[docs]</a><span class="k">class</span> <span class="nc">FLAME</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a FLAME-based based on latent parameters.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FlameShape"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameShape">[docs]</a><span class="k">class</span> <span class="nc">FlameShape</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a FLAME-based mesh (shape only) from 3DMM parameters.</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="p">,</span> <span class="n">n_shape</span><span class="p">,</span> <span class="n">n_exp</span><span class="p">):</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_shape</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">n_expr</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">init_parameters</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the FLAME decoder.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="c1"># print(&quot;creating the FLAME Decoder&quot;)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="c1"># Silence scipy DeprecationWarning</span>
-            <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
-                <span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin1&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">_to_np</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;faces_tensor&quot;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_shape</span> <span class="o">=</span> <span class="n">n_shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_expr</span> <span class="o">=</span> <span class="n">n_expr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">parameters</span>
 
-        <span class="c1"># The vertices of the template model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
-            <span class="s2">&quot;v_template&quot;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">_to_np</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;v_template&#39;</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">_load_flame_model</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;tris&#39;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;v_template&#39;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;v_template&#39;</span><span class="p">]))</span>
+
         <span class="c1"># The shape components and expression</span>
-        <span class="n">shapedirs</span> <span class="o">=</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">_to_np</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;shapedirs&#39;</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">shapedirs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">shapedirs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">n_shape</span><span class="p">],</span> <span class="n">shapedirs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">300</span> <span class="p">:</span> <span class="p">(</span><span class="mi">300</span> <span class="o">+</span> <span class="n">n_exp</span><span class="p">)]],</span> <span class="mi">2</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;shapedirs&quot;</span><span class="p">,</span> <span class="n">shapedirs</span><span class="p">)</span>
+        <span class="n">shape_dirs</span> <span class="o">=</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;shapedirs&#39;</span><span class="p">])</span>
+        <span class="n">shape_dirs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">shape_dirs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">n_shape</span><span class="p">],</span> <span class="n">shape_dirs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">300</span><span class="p">:(</span><span class="mi">300</span> <span class="o">+</span> <span class="n">n_expr</span><span class="p">)]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;shape_dirs&#39;</span><span class="p">,</span> <span class="n">shape_dirs</span><span class="p">)</span>
 
         <span class="c1"># The pose components</span>
-        <span class="n">num_pose_basis</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;posedirs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">posedirs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;posedirs&#39;</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_pose_basis</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;posedirs&quot;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">_to_np</span><span class="p">(</span><span class="n">posedirs</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+        <span class="n">num_poses</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;posedirs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">pose_dirs</span> <span class="o">=</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;posedirs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_poses</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;pose_dirs&#39;</span><span class="p">,</span> <span class="n">pose_dirs</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
-            <span class="s2">&quot;J_regressor&quot;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">_to_np</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;J_regressor&#39;</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">parents</span> <span class="o">=</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">_to_np</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;kintree_table&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;J_regressor&#39;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;J_regressor&#39;</span><span class="p">]))</span>
+        <span class="n">parents</span> <span class="o">=</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;kintree_table&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;parents&quot;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
-            <span class="s2">&quot;lbs_weights&quot;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">_to_np</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;parents&#39;</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
 
-        <span class="c1"># Fixing Eyeball and neck rotation</span>
-        <span class="n">default_eyball_pose</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span>
-            <span class="s2">&quot;eye_pose&quot;</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">default_eyball_pose</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">default_neck_pose</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span>
-            <span class="s2">&quot;neck_pose&quot;</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">default_neck_pose</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;lbs_weights&#39;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">]))</span>
 
-<div class="viewcode-block" id="FLAME.forward"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FLAME.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">shape_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">expression_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">pose_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">n_shape</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expr</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">n_expr</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eye_pose</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">6</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neck_pose</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jaw_pose</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_pose</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">p_name</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">init_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_name</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">p_name</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
+            <span class="c1"># nn.Parameter objects are always trainable by default, but we start with</span>
+            <span class="c1"># the assumption that they&#39;re not trainable</span>
+            <span class="k">if</span> <span class="n">p_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_</span><span class="p">:</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_has_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">param_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="FlameShape.get_full_pose"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameShape.get_full_pose">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the full pose vector.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">global_pose</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neck_pose</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">jaw_pose</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eye_pose</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlameShape.forward"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameShape.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">inputs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Input:</span>
 <span class="sd">            shape_params: N X number of shape parameters</span>
@@ -476,43 +493,160 @@ document.write(`
 <span class="sd">            vertices: N X V X 3</span>
 <span class="sd">            landmarks: N X number of landmarks X 3</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">shape_params</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">eye_pose_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eye_pose</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">expression_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">betas</span> <span class="o">=</span> <span class="n">shape_params</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inputs</span> <span class="ow">and</span> <span class="n">batch_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># We need to infer batch size from either the inputs or from the explicitly</span>
+            <span class="c1"># set batch_size (in case there are no inputs at all)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either inputs or batch_size must be provided!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">batch_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Infer batch_size from inputs (any will do; assumed to be Bx{dim})</span>
+            <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Fix existing parameters</span>
+        <span class="n">poses</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;global_pose&#39;</span><span class="p">,</span> <span class="s1">&#39;neck_pose&#39;</span><span class="p">,</span> <span class="s1">&#39;jaw_pose&#39;</span><span class="p">,</span> <span class="s1">&#39;eye_pose&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="s1">&#39;expr&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">poses</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">inputs</span> <span class="ow">and</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_</span><span class="p">:</span>
+                <span class="c1"># param should be either part of the inputs or of the trainable parameters</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2"> is also part of inputs!&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">param</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+                <span class="n">existing_param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">existing_param</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">batch_size</span><span class="p">:</span>
+                    <span class="c1"># Fix batch size</span>
+                    <span class="n">existing_param</span> <span class="o">=</span> <span class="n">existing_param</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">inputs</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="n">existing_param</span>
+
+        <span class="n">shape_expr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;expr&#39;</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">full_pose</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="o">*</span><span class="p">[</span><span class="n">inputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">poses</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">v_template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_template</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">v</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lbs</span><span class="p">(</span><span class="n">shape_expr</span><span class="p">,</span> <span class="n">full_pose</span><span class="p">,</span> <span class="n">v_template</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_dirs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_dirs</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">J_regressor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbs_weights</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">R</span></div></div>
+
+
+<div class="viewcode-block" id="FlameLandmark"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameLandmark">[docs]</a><span class="k">class</span> <span class="nc">FlameLandmark</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lm_type</span><span class="o">=</span><span class="s1">&#39;68&#39;</span><span class="p">,</span> <span class="n">lm_dim</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lm_type</span> <span class="o">=</span> <span class="n">lm_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lm_dim</span> <span class="o">=</span> <span class="n">lm_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_data_and_register_buffers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_load_data_and_register_buffers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">flame_model</span> <span class="o">=</span> <span class="n">_load_flame_model</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;tris&#39;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">flame_model</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]))</span>
+
+        <span class="n">parents</span> <span class="o">=</span> <span class="n">flame_model</span><span class="p">[</span><span class="s1">&#39;kintree_table&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># kinetic chain</span>
+        <span class="n">neck_kin_chain</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">curr_idx</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">curr_idx</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">neck_kin_chain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_idx</span><span class="p">)</span>
+            <span class="n">curr_idx</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="n">curr_idx</span><span class="p">]</span>
+
+        <span class="n">neck_kin_chain</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">neck_kin_chain</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;neck_kin_chain&#39;</span><span class="p">,</span> <span class="n">neck_kin_chain</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm_type</span> <span class="o">==</span> <span class="s1">&#39;68&#39;</span><span class="p">:</span>
+            <span class="n">lms_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="s1">&#39;data&#39;</span> <span class="o">/</span> <span class="s1">&#39;flame&#39;</span> <span class="o">/</span> <span class="s1">&#39;landmark_embedding.npy&#39;</span>
+            <span class="n">lms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">lms_path</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)[()]</span>
+            <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_faces_idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lms</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;static_lmk_faces_idx&#39;</span><span class="p">)</span>
+            <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_bary_coords&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lms</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;static_lmk_bary_coords&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm_type</span> <span class="o">==</span> <span class="s1">&#39;mp&#39;</span><span class="p">:</span>
+            <span class="n">lms_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="s1">&#39;data&#39;</span> <span class="o">/</span> <span class="s1">&#39;flame&#39;</span> <span class="o">/</span> <span class="s1">&#39;mediapipe_landmark_embedding.npz&#39;</span>
+            <span class="n">lms</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">lms_path</span><span class="p">))</span>
+            <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_faces_idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lms</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;lmk_face_idx&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_bary_coords&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lms</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;lmk_b_coords&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">betas</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">shape_params</span><span class="p">,</span> <span class="n">expression_params</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Choose `lm_type` from &#39;68&#39; or &#39;mp&#39;&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">pose_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">pose_params</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">shape_params</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_faces_idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_faces_idx&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+        <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_bary_coords&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_bary_coords&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;lmk_faces_idx&#39;</span><span class="p">,</span> <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_faces_idx&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;lmk_bary_coords&#39;</span><span class="p">,</span> <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;lmk_bary_coords&#39;</span><span class="p">])</span>
 
-        <span class="n">full_pose</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="n">pose_params</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">neck_pose</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
-                <span class="n">pose_params</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:],</span>
-                <span class="n">eye_pose_params</span><span class="p">,</span>
-            <span class="p">],</span>
-            <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">template_vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_template</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm_type</span> <span class="o">==</span> <span class="s1">&#39;68&#39;</span><span class="p">:</span>
+            <span class="c1">#lms[&#39;dynamic_lmk_faces_idx&#39;] = torch.tensor(lms[&#39;dynamic_lmk_faces_idx&#39;], dtype=torch.long)</span>
+            <span class="c1">#lms[&#39;dynamic_lmk_bary_coords&#39;] = torch.tensor(lms[&#39;dynamic_lmk_bary_coords&#39;], dtype=torch.float32)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;dynamic_lmk_faces_idx&#39;</span><span class="p">,</span> <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;dynamic_lmk_faces_idx&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;dynamic_lmk_bary_coords&#39;</span><span class="p">,</span> <span class="n">lms</span><span class="p">[</span><span class="s1">&#39;dynamic_lmk_bary_coords&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;landmark_indices&#39;</span><span class="p">,</span> <span class="n">_to_tensor</span><span class="p">(</span><span class="n">lms</span><span class="p">[</span><span class="s1">&#39;landmark_indices&#39;</span><span class="p">]))</span>
 
-        <span class="n">vertices</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lbs</span><span class="p">(</span>
-            <span class="n">betas</span><span class="p">,</span>
-            <span class="n">full_pose</span><span class="p">,</span>
-            <span class="n">template_vertices</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">shapedirs</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">posedirs</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">J_regressor</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parents</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lbs_weights</span><span class="p">,</span>
-        <span class="p">)</span>
+<div class="viewcode-block" id="FlameLandmark.forward"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameLandmark.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">poses</span><span class="p">):</span>
 
-        <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">T</span></div></div>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lmk_faces_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmk_faces_idx</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">lmk_bary_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmk_bary_coords</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm_type</span> <span class="o">==</span> <span class="s1">&#39;mp&#39;</span><span class="p">:</span>
+            <span class="n">lmk_faces_idx</span> <span class="o">=</span> <span class="n">lmk_faces_idx</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+            <span class="n">lmk_bary_coords</span> <span class="o">=</span> <span class="n">lmk_bary_coords</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm_type</span> <span class="o">==</span> <span class="s1">&#39;68&#39;</span><span class="p">:</span>
+            <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">torch</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">poses</span><span class="p">,</span> <span class="n">poses</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">3</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matrix_to_rotation_6d</span><span class="p">(</span><span class="n">euler_angles_to_matrix</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="s1">&#39;XYZ&#39;</span><span class="p">)))</span>
+
+            <span class="n">poses</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">chunks</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">dyn_lmk_faces_idx</span><span class="p">,</span> <span class="n">dyn_lmk_bary_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_dynamic_lmk_idx_and_bcoords</span><span class="p">(</span>
+                    <span class="n">poses</span>
+                <span class="p">)</span>
+
+            <span class="n">dyn_lmk_faces_idx</span> <span class="o">=</span> <span class="n">dyn_lmk_faces_idx</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">dyn_lmk_bary_coords</span> <span class="o">=</span> <span class="n">dyn_lmk_bary_coords</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">lmk_faces_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">dyn_lmk_faces_idx</span><span class="p">,</span> <span class="n">lmk_faces_idx</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">lmk_bary_coords</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">dyn_lmk_bary_coords</span><span class="p">,</span> <span class="n">lmk_bary_coords</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">lmk_tris</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tris</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lmk_faces_idx</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">))</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lmk_tris</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">lmk_v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)[</span><span class="n">lmk_tris</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lmk</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;blfi,blf-&gt;bli&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">lmk_v</span><span class="p">,</span> <span class="n">lmk_bary_coords</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">lmk</span></div>
+
+    <span class="k">def</span> <span class="nf">_find_dynamic_lmk_idx_and_bcoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pose</span><span class="p">):</span>
+
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">pose</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">aa_pose</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="n">pose</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neck_kin_chain</span><span class="p">)</span>
+        <span class="n">rot_mats</span> <span class="o">=</span> <span class="n">rotation_6d_to_matrix</span><span class="p">(</span><span class="n">aa_pose</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">view</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+        <span class="n">rel_rot_mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neck_kin_chain</span><span class="p">)):</span>
+            <span class="n">rel_rot_mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">rot_mats</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">],</span> <span class="n">rel_rot_mat</span><span class="p">)</span>
+
+        <span class="n">y_rot_angle</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_rot_mat_to_euler</span><span class="p">(</span><span class="n">rel_rot_mat</span><span class="p">)</span> <span class="o">*</span> <span class="mf">180.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">39</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+        <span class="n">neg_mask</span> <span class="o">=</span> <span class="n">y_rot_angle</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">y_rot_angle</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="o">-</span><span class="mi">39</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+        <span class="n">neg_vals</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">*</span> <span class="mi">78</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">mask</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">39</span> <span class="o">-</span> <span class="n">y_rot_angle</span><span class="p">)</span>
+        <span class="n">y_rot_angle</span> <span class="o">=</span> <span class="p">(</span><span class="n">neg_mask</span> <span class="o">*</span> <span class="n">neg_vals</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">neg_mask</span><span class="p">)</span> <span class="o">*</span> <span class="n">y_rot_angle</span><span class="p">)</span>
+
+        <span class="n">dyn_lmk_faces_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dynamic_lmk_faces_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y_rot_angle</span><span class="p">)</span>
+        <span class="n">dyn_lmk_bary_coords</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dynamic_lmk_bary_coords</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y_rot_angle</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dyn_lmk_faces_idx</span><span class="p">,</span> <span class="n">dyn_lmk_bary_coords</span>
+
+    <span class="k">def</span> <span class="nf">_rot_mat_to_euler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rot_mats</span><span class="p">):</span>
+        <span class="c1"># Calculates rotation matrix to euler angles</span>
+        <span class="c1"># Careful for extreme cases of eular angles like [0.0, pi, 0.0]</span>
+
+        <span class="n">sy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rot_mats</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">rot_mats</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span>
+                        <span class="n">rot_mats</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">rot_mats</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="o">-</span><span class="n">rot_mats</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sy</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="FLAMETex"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FLAMETex">[docs]</a><span class="k">class</span> <span class="nc">FLAMETex</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="FlameTex"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameTex">[docs]</a><span class="k">class</span> <span class="nc">FlameTex</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;FLAME texture:</span>
 
 <span class="sd">    https://github.com/TimoBolkart/TF_FLAME/blob/ade0ab152300ec5f0e8555d6765411555c5ed43d/sample_texture.py#L64</span>
@@ -548,7 +682,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;texture_mean&quot;</span><span class="p">,</span> <span class="n">texture_mean</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;texture_basis&quot;</span><span class="p">,</span> <span class="n">texture_basis</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FLAMETex.forward"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FLAMETex.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texcode</span><span class="p">):</span>
+<div class="viewcode-block" id="FlameTex.forward"><a class="viewcode-back" href="../../../../api/python/recon/flame/decoders/index.html#medusa.recon.flame.decoders.FlameTex.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texcode</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        texcode: [batchsize, n_tex]</span>
 <span class="sd">        texture: [bz, 3, 256, 256], range: 0-1</span>
@@ -560,15 +694,38 @@ document.write(`
         <span class="k">return</span> <span class="n">texture</span></div></div>
 
 
-<span class="k">def</span> <span class="nf">_to_tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
-    <span class="k">if</span> <span class="s2">&quot;torch.tensor&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">array</span><span class="p">)):</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_load_flame_model</span><span class="p">():</span>
+
+    <span class="kn">from</span> <span class="nn">...data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;flame_path&#39;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="c1"># Silence scipy DeprecationWarning</span>
+        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin1&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span>
 
 
-<span class="k">def</span> <span class="nf">_to_np</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
-    <span class="k">if</span> <span class="s2">&quot;scipy.sparse&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">array</span><span class="p">)):</span>
-        <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_to_tensor</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a numpy array to a torch tensor.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Ch</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">csc_matrix</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span>
 </pre></div>
 
                 </article>
@@ -577,9 +734,15 @@ document.write(`
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -589,7 +752,7 @@ document.write(`
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -622,7 +785,7 @@ By Lukas Snoek
 </div>
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -631,8 +794,8 @@ By Lukas Snoek
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

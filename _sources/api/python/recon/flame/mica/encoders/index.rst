@@ -14,6 +14,27 @@
 Module Contents
 ---------------
 
+.. py:class:: MicaEncoder(device=DEVICE)
+
+
+
+   A FLAME-based encoder for MICA models.
+
+   :param device: Name for the device to use
+   :type device: str
+
+   .. py:method:: forward(imgs)
+
+      Predicts FLAME shape components for a batch of images.
+
+      :param imgs: A batch of images of shape (N, C, H, W)
+      :type imgs: torch.tensor
+
+      :returns: **shape_code** -- A batch of shape codes of shape (N, 300)
+      :rtype: torch.tensor
+
+
+
 .. py:function:: conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1)
 
    3x3 convolution with padding.

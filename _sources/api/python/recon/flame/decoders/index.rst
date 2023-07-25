@@ -14,13 +14,19 @@
 Module Contents
 ---------------
 
-.. py:class:: FLAME(model_path, n_shape, n_exp)
+.. py:class:: FlameShape(n_shape=300, n_expr=100, parameters=None, device=DEVICE, **init_parameters)
 
 
 
-   Generates a FLAME-based based on latent parameters.
+   Generates a FLAME-based mesh (shape only) from 3DMM parameters.
 
-   .. py:method:: forward(shape_params=None, expression_params=None, pose_params=None)
+
+   .. py:method:: get_full_pose()
+
+      Returns the full pose vector.
+
+
+   .. py:method:: forward(batch_size=None, **inputs)
 
       Input:
           shape_params: N X number of shape parameters
@@ -32,7 +38,46 @@ Module Contents
 
 
 
-.. py:class:: FLAMETex(model_path=None, n_tex=50)
+.. py:class:: FlameLandmark(lm_type='68', lm_dim='2d', device=DEVICE)
+
+
+
+   Base class for all neural network modules.
+
+   Your models should also subclass this class.
+
+   Modules can also contain other Modules, allowing to nest them in
+   a tree structure. You can assign the submodules as regular attributes::
+
+       import torch.nn as nn
+       import torch.nn.functional as F
+
+       class Model(nn.Module):
+           def __init__(self):
+               super().__init__()
+               self.conv1 = nn.Conv2d(1, 20, 5)
+               self.conv2 = nn.Conv2d(20, 20, 5)
+
+           def forward(self, x):
+               x = F.relu(self.conv1(x))
+               return F.relu(self.conv2(x))
+
+   Submodules assigned in this way will be registered, and will have their
+   parameters converted too when you call :meth:`to`, etc.
+
+   .. note::
+       As per the example above, an ``__init__()`` call to the parent class
+       must be made before assignment on the child.
+
+   :ivar training: Boolean represents whether this module is in training or
+                   evaluation mode.
+   :vartype training: bool
+
+   .. py:method:: forward(v, poses)
+
+
+
+.. py:class:: FlameTex(model_path=None, n_tex=50)
 
 
 

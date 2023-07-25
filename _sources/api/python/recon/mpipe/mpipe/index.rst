@@ -17,7 +17,7 @@
 Module Contents
 ---------------
 
-.. py:class:: Mediapipe(static_image_mode=False, det_threshold=0.1, device=DEVICE, **kwargs)
+.. py:class:: Mediapipe(static_image_mode=False, det_threshold=0.1, device=DEVICE, lm_space='world', **kwargs)
 
 
 
@@ -46,6 +46,39 @@ Module Contents
    .. py:method:: get_cam_mat()
 
       Returns a default camera matrix.
+
+
+   .. py:method:: forward(imgs)
+
+      Performs reconstruction of the face as a list of landmarks
+      (vertices).
+
+      :param imgs: A 4D (b x w x h x 3) numpy array representing a batch of RGB images
+      :type imgs: np.ndarray
+
+      :returns: **out** -- A dictionary with two keys: ``"v"``, the reconstructed vertices (468 in
+                total) and ``"mat"``, a 4x4 Numpy array representing the local-to-world
+                matrix
+      :rtype: dict
+
+      .. rubric:: Notes
+
+      This implementation returns 468 vertices instead of the original 478, because
+      the last 10 vertices (representing the irises) are not present in the canonical
+      model.
+
+      .. rubric:: Examples
+
+      To reconstruct an example, simply call the ``Mediapipe`` object:
+
+      >>> from medusa.data import get_example_image
+      >>> model = Mediapipe()
+      >>> img = get_example_image()
+      >>> out = model(img)  # reconstruct!
+      >>> out['v'].shape    # vertices
+      (1, 468, 3)
+      >>> out['mat'].shape  # local-to-world matrix
+      (1, 4, 4)
 
 
    .. py:method:: close()

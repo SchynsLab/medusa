@@ -18,7 +18,7 @@
 Module Contents
 ---------------
 
-.. py:class:: SCRFDetector(det_size=(224, 224), det_threshold=0.5, nms_threshold=0.3, device=DEVICE)
+.. py:class:: SCRFDetector(det_size=(224, 224), det_threshold=0.3, nms_threshold=0.3, device=DEVICE)
 
 
 
@@ -47,5 +47,18 @@ Module Contents
    >>> det_results = det_model(img)
    >>> list(det_results.keys())
    ['img_idx', 'conf', 'lms', 'bbox', 'n_img']
+
+   .. py:method:: forward(imgs)
+
+
+
+.. py:class:: SCRFDPostproc(det_size, det_threshold, nms_threshold, device=DEVICE)
+
+
+
+   Postprocessing for the SCRFD face detection model.
+
+   .. py:method:: forward(det_outputs, det_scale)
+
 
 
