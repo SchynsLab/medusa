@@ -69,7 +69,12 @@ class SCRFDetector(BaseDetector):
                              f"e.g., (224, 224), but got {self.det_size}!")
         h = self.det_size[0]
 
-        f_in = get_external_data_config('buffalo_path') / 'det_10g.onnx'
+        isf_path = get_external_data_config('insightface_path')
+        if isf_path.parent.stem == 'buffalo_l':
+            f_in = isf_path / 'det_10g.onnx'
+        else:
+            f_in = isf_path / 'scrfd_10g_bnkps.onnx'
+
         if not f_in.is_file():
             raise ValueError(f"Could not find model at {f_in}; run `medusa_download_external_data`")
 

@@ -1,3 +1,7 @@
+"""A landmark detection model based on Insightface's Retinaface model, but implemented
+in PyTorch (but parts of it run with ONNX model), so can be fully run on GPU (no numpy
+necessary)."""
+
 import torch
 from torch import nn
 
@@ -34,7 +38,7 @@ class RetinafaceLandmarkModel(nn.Module):
         """Initializes the landmark model by loading the ONNX model from disk."""
         from ..data import get_external_data_config
 
-        f_in = f_in = get_external_data_config('buffalo_path') / f'{self.model_name}.onnx'
+        f_in = get_external_data_config('insightface_path') / f'{self.model_name}.onnx'
         return OnnxModel(f_in, self.device)
 
     def forward(self, imgs):

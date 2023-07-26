@@ -116,12 +116,16 @@ class BboxCropModel(BaseCropModel):
             bbox[:, :3, :], dst, estimate_scale=True
         )
 
+        # Convert to torchvision format (xmin, ymin, xmax, ymax)
+        bbox = bbox[:, [0, 3], :].reshape(-1, 4)
+
         # Finally, warp the original images (uncropped) images to the final
         # cropped space
         imgs_stack = imgs[out_lms["img_idx"]]
         imgs_crop = warp_affine(imgs_stack, crop_mat[:, :2, :], dsize=(h_out, w_out))
         out_crop = {
             **out_lms,
+            "bbox": bbox,
             "imgs_crop": imgs_crop.to(dtype=torch.uint8),
             "crop_mat": crop_mat,
         }

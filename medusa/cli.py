@@ -88,8 +88,10 @@ def videorender_cmd(data_file, out, video, renderer, shading, device):
     "--password", default=None, type=click.STRING, help="Password for FLAME website"
 )
 @click.option("--device", default=DEVICE, type=click.STRING)
+@click.option("--insightface-model", default='buffalo_l', type=click.Choice(['buffalo_l', 'antelopev2']))
 @click.option("--no-validation", is_flag=True)
-def download_ext_data(directory, overwrite, username, password, device, no_validation):
+def download_ext_data(directory, overwrite, username, password, device,
+                      insightface_model, no_validation):
     """Command-line utility to download external data."""
 
     click.secho(
@@ -161,11 +163,15 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
         f_out = directory / "mica.tar"
         download_file(url, f_out, overwrite=overwrite, cmd_type="get")
 
-    f_out = directory / 'buffalo_l/det_10g.onnx'
+    f_out = directory / f'{insightface_model}/det_10g.onnx'
     if not f_out.is_file() or overwrite:
-        LOGGER.info("INSIGHTFACE: starting download 'buffalo_l.zip' ...")
-        f_out = f_out.parents[1] / "buffalo_l.zip"
-        url = "https://drive.google.com/u/0/uc?id=1qXsQJ8ZT42_xSmWIYy85IcidpiZudOCB&export=download"
+        LOGGER.info(f"INSIGHTFACE: starting download '{insightface_model}.zip' ...")
+        f_out = f_out.parents[1] / f"{insightface_model}.zip"
+        if insightface_model == 'buffalo_l':
+            url = "https://drive.google.com/u/0/uc?id=1qXsQJ8ZT42_xSmWIYy85IcidpiZudOCB&export=download"
+        else:  # antelopev2
+            url = "https://drive.google.com/u/0/uc?id=18wEUfMNohBJ4K3Ly5wpTejPfDzp-8fI8&export=download"
+
         gdown.download(url, str(f_out), quiet=True)
         gdown.extractall(str(f_out))
         f_out.unlink()
@@ -272,12 +278,12 @@ def download_ext_data(directory, overwrite, username, password, device, no_valid
     else:
         LOGGER.warning(f"File {mica_model_path} does not exist!")
 
-    buffalo_path = data_dir / 'buffalo_l'
-    if buffalo_path.is_dir():
+    isf_path = data_dir / insightface_model
+    if isf_path.is_dir():
         LOGGER.info("Insightface models are ready to use!")
-        cfg["buffalo_path"] = str(buffalo_path)
+        cfg["insightface_path"] = str(isf_path)
     else:
-        LOGGER.warning(f"Insightface buffalo data do not exist!")
+        LOGGER.warning(f"Insightface models do not exist!")
 
     cfg_path = Path(__file__).parent / "data/config.yaml"
     with open(cfg_path, "w") as f_out:

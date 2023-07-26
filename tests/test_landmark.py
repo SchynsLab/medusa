@@ -1,7 +1,5 @@
 from pathlib import Path
-import torch
 import pytest
-
 
 from medusa.landmark import RetinafaceLandmarkModel
 from medusa.data import get_example_image

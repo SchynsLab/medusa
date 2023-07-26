@@ -56,9 +56,14 @@ On this website you can also find several tutorials on Medusa's features:
 :link-type: doc
 :::
 
-:::{card} Face & landmark detection
+:::{card} Face detection
 :img-bottom: ./images/bbox.png
-:link: ./tutorials/face_and_landmark_detection
+:link: ./tutorials/face_detection
+:link-type: doc
+:::
+
+:::{card} Landmark detection & cropping
+:link: ./tutorials/landmark_detection_and_cropping
 :link-type: doc
 :::
 
