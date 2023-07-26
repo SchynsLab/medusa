@@ -469,7 +469,7 @@ document.write(`
                              <span class="sa">f</span><span class="s2">&quot;e.g., (224, 224), but got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">det_size</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
         <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">isf_path</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;insightface_path&#39;</span><span class="p">)</span> 
+        <span class="n">isf_path</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;insightface_path&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">isf_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s1">&#39;buffalo_l&#39;</span><span class="p">:</span>
             <span class="n">f_in</span> <span class="o">=</span> <span class="n">isf_path</span> <span class="o">/</span> <span class="s1">&#39;det_10g.onnx&#39;</span>
         <span class="k">else</span><span class="p">:</span>

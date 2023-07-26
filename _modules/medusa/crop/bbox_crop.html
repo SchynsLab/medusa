@@ -518,7 +518,7 @@ document.write(`
 
         <span class="c1"># Convert to torchvision format (xmin, ymin, xmax, ymax)</span>
         <span class="n">bbox</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-        
+
         <span class="c1"># Finally, warp the original images (uncropped) images to the final</span>
         <span class="c1"># cropped space</span>
         <span class="n">imgs_stack</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[</span><span class="n">out_lms</span><span class="p">[</span><span class="s2">&quot;img_idx&quot;</span><span class="p">]]</span>

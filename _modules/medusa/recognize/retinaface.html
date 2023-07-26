@@ -457,7 +457,7 @@ document.write(`
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No faces detected in image(s)!&quot;</span><span class="p">)</span>
 
         <span class="c1"># By default, the ONNX model expects to return a single embedding of shape</span>
-        <span class="c1"># (1, 512), so adjust the output shape to match the number of faces detected        </span>
+        <span class="c1"># (1, 512), so adjust the output shape to match the number of faces detected</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s1">&#39;out_shapes&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">imgs_crop</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># Normalize images</span>

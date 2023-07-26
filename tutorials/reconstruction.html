@@ -578,6 +578,69 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">vid_path</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># We&#39;ll also set the logging level to WARNING to avoid printing too much information</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># Set this to &#39;INFO&#39; (the default) to see more information</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">data_recon</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid_path</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
+
+<span class="nn">File ~/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.10/lib/python3.10/site-packages/torch/utils/_contextlib.py:115,</span> in <span class="ni">context_decorator.&lt;locals&gt;.decorate_context</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">112</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">113</span> <span class="k">def</span> <span class="nf">decorate_context</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">114</span>     <span class="k">with</span> <span class="n">ctx_factory</span><span class="p">():</span>
+<span class="ne">--&gt; </span><span class="mi">115</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/recon/recon.py:68,</span> in <span class="ni">videorecon</span><span class="nt">(video_path, recon_model, device, n_frames, batch_size, loglevel, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="c1"># Initialize reconstruction model</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="k">if</span> <span class="n">recon_model</span> <span class="ow">in</span> <span class="n">FLAME_MODELS</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">68</span>     <span class="n">crop_model</span> <span class="o">=</span> <span class="n">BboxCropModel</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># for face detection / cropping</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span>     <span class="n">reconstructor</span> <span class="o">=</span> <span class="n">DecaReconModel</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span>         <span class="n">recon_model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">orig_img_size</span><span class="o">=</span><span class="n">video_metadata</span><span class="p">[</span><span class="s2">&quot;img_size&quot;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="k">elif</span> <span class="n">recon_model</span> <span class="o">==</span> <span class="s2">&quot;mediapipe&quot;</span><span class="p">:</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/crop/bbox_crop.py:40,</span> in <span class="ni">BboxCropModel.__init__</span><span class="nt">(self, lms_model_name, output_size, detector, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>  <span class="c1"># h, w</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+<span class="ne">---&gt; </span><span class="mi">40</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lms_model</span> <span class="o">=</span> <span class="n">RetinafaceLandmarkModel</span><span class="p">(</span><span class="n">lms_model_name</span><span class="p">,</span> <span class="n">detector</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/landmark/retinaface.py:33,</span> in <span class="ni">RetinafaceLandmarkModel.__init__</span><span class="nt">(self, model_name, detector, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+<span class="g g-Whitespace">     </span><span class="mi">32</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+<span class="ne">---&gt; </span><span class="mi">33</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span> <span class="o">=</span> <span class="n">detector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">34</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_model</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/detect/scrfd.py:55,</span> in <span class="ni">SCRFDetector.__init__</span><span class="nt">(self, det_size, det_threshold, nms_threshold, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span> <span class="o">=</span> <span class="n">det_size</span>
+<span class="ne">---&gt; </span><span class="mi">55</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_det_model</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="bp">self</span><span class="o">.</span><span class="n">_postproc_model</span> <span class="o">=</span> <span class="n">SCRFDPostproc</span><span class="p">(</span><span class="n">det_size</span><span class="p">,</span> <span class="n">det_threshold</span><span class="p">,</span> <span class="n">nms_threshold</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/detect/scrfd.py:72,</span> in <span class="ni">SCRFDetector._init_det_model</span><span class="nt">(self, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Param ``det_size`` should indicate a square image, &quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span>                      <span class="sa">f</span><span class="s2">&quot;e.g., (224, 224), but got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">det_size</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="ne">---&gt; </span><span class="mi">72</span> <span class="n">isf_path</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;insightface_path&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span> <span class="k">if</span> <span class="n">isf_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s1">&#39;buffalo_l&#39;</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span>     <span class="n">f_in</span> <span class="o">=</span> <span class="n">isf_path</span> <span class="o">/</span> <span class="s1">&#39;det_10g.onnx&#39;</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/data/template_data.py:169,</span> in <span class="ni">get_external_data_config</span><span class="nt">(key)</span>
+<span class="g g-Whitespace">    </span><span class="mi">167</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">168</span>     <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">169</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not in config!&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">170</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">171</span>         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+<span class="ne">ValueError</span>: Key insightface_path not in config!
+</pre></div>
+</div>
+</div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function returns the reconstruction data as an object from the custom <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Data4D</span></code></span> class. In the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> tutorial, we’ll explain the way Medusa represents reconstruction data at length!</p>
 </section>
@@ -616,20 +679,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 1 with 32 frames ...
-Loading in batch 2 with 32 frames ...
-Loading in batch 3 with 32 frames ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 4 with 32 frames ...
-Loading in batch 5 with 32 frames ...
-Loading in batch 6 with 32 frames ...
-Loading in batch 7 with 32 frames ...
-Loading in batch 8 with 8 frames ...
-</pre></div>
-</div>
-</div>
 </div>
 <p>As you can see, each iteration returns a batch of 32 frames, except the last batch which only contains the last 8 frames, after which the loader stops automatically.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">batch</span></code> variable returned each iteration contains video frame data as a <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code> object with unsigned integers (with values ranging from 0-255):</p>
@@ -639,21 +688,11 @@ Loading in batch 8 with 8 frames ...
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;torch.Tensor&#39;&gt; torch.float32
-</pre></div>
-</div>
-</div>
 </div>
 <p>The tensor is organized as a four dimensional array with dimensions <span class="math notranslate nohighlight">\(N\)</span> (number of frames) <span class="math notranslate nohighlight">\(\times H\)</span> (height) <span class="math notranslate nohighlight">\(\times W\)</span> (width) <span class="math notranslate nohighlight">\(\times 3\)</span> (RGB), which is the format in which the Medusa pipeline expects the loaded video data to be.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 3, 384, 480)
 </pre></div>
 </div>
 </div>
@@ -689,86 +728,6 @@ Loading in batch 8 with 8 frames ...
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_crop</span> <span class="o">=</span> <span class="n">crop_model</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">out_crop</span> <span class="o">=</span> <span class="n">crop_model</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
-
-<span class="nn">File /analyse/Project0257/lukas/code/miniconda3/envs/medusa/lib/python3.10/site-packages/torch/nn/modules/module.py:1501,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1496</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1497</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1498</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1499</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1500</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1501</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1502</span> <span class="c1"># Do not call functions when jit is used</span>
-<span class="g g-Whitespace">   </span><span class="mi">1503</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-
-<span class="nn">File /analyse/Project0257/lukas/projects/medusa/medusa/medusa/crop/bbox_crop.py:98,</span> in <span class="ni">BboxCropModel.forward</span><span class="nt">(self, imgs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">83</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imgs</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">84</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Crops images to the desired size.</span>
-<span class="g g-Whitespace">     </span><span class="mi">85</span><span class="sd"> </span>
-<span class="g g-Whitespace">     </span><span class="mi">86</span><span class="sd">     Parameters</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">     </span><span class="mi">96</span><span class="sd">         images) and &quot;crop_mat&quot; (3x3 crop matrices)</span>
-<span class="g g-Whitespace">     </span><span class="mi">97</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">---&gt; </span><span class="mi">98</span>     <span class="n">out_lms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lms_model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">99</span>     <span class="n">lms</span> <span class="o">=</span> <span class="n">out_lms</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">101</span>     <span class="k">if</span> <span class="n">lms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-
-<span class="nn">File /analyse/Project0257/lukas/code/miniconda3/envs/medusa/lib/python3.10/site-packages/torch/nn/modules/module.py:1501,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1496</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1497</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1498</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1499</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1500</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1501</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1502</span> <span class="c1"># Do not call functions when jit is used</span>
-<span class="g g-Whitespace">   </span><span class="mi">1503</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-
-<span class="nn">File /analyse/Project0257/lukas/projects/medusa/medusa/medusa/landmark/retinaface.py:60,</span> in <span class="ni">RetinafaceLandmarkModel.forward</span><span class="nt">(self, imgs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">44</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imgs</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Runs the landmark model on a set of images.</span>
-<span class="g g-Whitespace">     </span><span class="mi">46</span><span class="sd"> </span>
-<span class="g g-Whitespace">     </span><span class="mi">47</span><span class="sd">     Parameters</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">     </span><span class="mi">57</span><span class="sd">         &#39;img_idx&#39; (image index), &#39;bbox&#39; (bounding box)</span>
-<span class="g g-Whitespace">     </span><span class="mi">58</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">---&gt; </span><span class="mi">60</span>     <span class="n">out_det</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">62</span>     <span class="k">if</span> <span class="n">out_det</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conf&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">63</span>         <span class="n">out_lms</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">out_det</span><span class="p">,</span> <span class="s2">&quot;lms&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
-
-<span class="nn">File /analyse/Project0257/lukas/code/miniconda3/envs/medusa/lib/python3.10/site-packages/torch/nn/modules/module.py:1501,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1496</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1497</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1498</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1499</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1500</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1501</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1502</span> <span class="c1"># Do not call functions when jit is used</span>
-<span class="g g-Whitespace">   </span><span class="mi">1503</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-
-<span class="nn">File /analyse/Project0257/lukas/projects/medusa/medusa/medusa/detect/scrfd.py:105,</span> in <span class="ni">SCRFDetector.forward</span><span class="nt">(self, imgs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">102</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">103</span>     <span class="c1"># add batch dim</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span>     <span class="n">img</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">105</span>     <span class="n">det_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">outputs_as_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span>     <span class="n">postproc_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_postproc_model</span><span class="p">(</span><span class="n">det_outputs</span><span class="p">,</span> <span class="n">det_scale</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">108</span>     <span class="k">if</span> <span class="n">postproc_outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">109</span>         <span class="c1"># No detections (that survive nms)</span>
-
-<span class="nn">File /analyse/Project0257/lukas/projects/medusa/medusa/medusa/onnx.py:89,</span> in <span class="ni">OnnxModel.run</span><span class="nt">(self, inputs, outputs_as_list)</span>
-<span class="g g-Whitespace">     </span><span class="mi">87</span> <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">88</span>     <span class="k">if</span> <span class="n">inp</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">89</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input tensor is on </span><span class="si">{</span><span class="n">inp</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">, but model on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">91</span> <span class="n">to_iter</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;in_names&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;in_shapes&quot;</span><span class="p">])</span>
-<span class="g g-Whitespace">     </span><span class="mi">92</span> <span class="k">for</span> <span class="n">inp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">to_iter</span><span class="p">:</span>
-
-<span class="ne">ValueError</span>: Input tensor is on cpu, but model on cuda!
 </pre></div>
 </div>
 </div>
