@@ -18,6 +18,7 @@ Submodules
    :maxdepth: 1
 
    image/index.rst
+   lights/index.rst
    overlay/index.rst
    video/index.rst
 

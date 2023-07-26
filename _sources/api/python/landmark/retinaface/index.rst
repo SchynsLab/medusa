@@ -3,6 +3,13 @@
 
 .. py:module:: medusa.landmark.retinaface
 
+.. autoapi-nested-parse::
+
+   A landmark detection model based on Insightface's Retinaface model, but implemented
+   in PyTorch (but parts of it run with ONNX model), so can be fully run on GPU (no numpy
+   necessary).
+
+
 
 Module Contents
 ---------------

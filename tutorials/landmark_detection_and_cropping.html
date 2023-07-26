@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/landmark_detection_and_cropping';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -216,8 +218,12 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/recognize/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recognize</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/recognize/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recognize.retinaface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
@@ -225,15 +231,16 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/lights/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.lights</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
 </ul>
@@ -466,7 +473,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -482,6 +491,19 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#landmark-detection">Landmark detection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cropping">Cropping</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bounding-box-based-cropping">Bounding-box based cropping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alignment-based-cropping">Alignment-based cropping</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -493,6 +515,360 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="landmark-detection-and-cropping">
 <h1>Landmark detection and cropping<a class="headerlink" href="#landmark-detection-and-cropping" title="Permalink to this heading">#</a></h1>
+<p>As discussed in the face detection tutorial, there is a lot of preprocessing needed before we can feed images to the reconstruction models. One important step is <em>cropping</em>, which crops out the detected face(s) from the image standarizes the output into a new image with prespecified dimensions. Some models crop the image by specifying a bounding box, which is often constructed by creating a rectangular box around a set of estimated facial features (also called face <em>landmarks</em>).</p>
+<p>Other models (like MICA, or any model based on Arcface for that matter) expect images not only to be cropped, but also <em>aligned</em>. Here, alignment means that certain key  facial landmarks of a cropped face are as close as possible relative to a template set of landmarks.</p>
+<p>Medusa includes implementation of both bounding-box based as well as alignment-based “crop models”, <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> (used for DECA-based reconstruction models) and <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code> (used for MICA). Note that the <code class="docutils literal notranslate"><span class="pre">Mediapipe</span></code> reconstruction model does not need cropping (which is performed by the <code class="docutils literal notranslate"><span class="pre">Mediapipe</span></code> model itself).</p>
+<p>But before we discuss cropping, let’s discuss facial landmark detection, as it is central to both types of crop models.</p>
+<section id="landmark-detection">
+<h2>Landmark detection<a class="headerlink" href="#landmark-detection" title="Permalink to this heading">#</a></h2>
+<p>Landmark detection usually detects a fixed set of key facial landmarks in images, like the tip of the nose, mouth corners, and face outline. In fact, in the detection tutorial, we have seen that Medusa’s detectors in fact also return a set of landmarks, albeit just five: left eye, right eye, left mouth corner, right mouth corner, and tip of the nose.</p>
+<p>We’ll shown these landmarks (returned by the detection model) below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_image</span>
+<span class="kn">from</span> <span class="nn">medusa.detect</span> <span class="kn">import</span> <span class="n">SCRFDetector</span>
+<span class="kn">from</span> <span class="nn">torchvision.utils</span> <span class="kn">import</span> <span class="n">draw_keypoints</span><span class="p">,</span> <span class="n">save_image</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">Video</span>
+
+<span class="n">detector</span> <span class="o">=</span> <span class="n">SCRFDetector</span><span class="p">()</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">get_example_image</span><span class="p">()</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">detector</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_keypoints</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">byte</span><span class="p">(),</span> <span class="n">out</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;lms5.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;lms5.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f36c19cac309ff791750c39b43fdebd6d799c0f107d70aef2aac9057570b880e.png" src="../_images/f36c19cac309ff791750c39b43fdebd6d799c0f107d70aef2aac9057570b880e.png" />
+</div>
+</div>
+<p>Although these five landmarks are sufficient for alignment (and is in fact used in the <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code> class, as we’ll see later), they’re not ideal to base a bounding box on (as in the <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> class), because from the landmarks alone you do not know the full width and height of the face and therefore do not know how wide/tall the bounding box should be!</p>
+<p>Fortunately, the kind folks at <a class="reference external" href="https://insightface.ai/">Insightface</a> did not only make their face detection model (used for Medusa’s <code class="docutils literal notranslate"><span class="pre">SCRFDectector</span></code> class) open source, but also their 2D and 3D landmark models, which output either 106 (2D) or 68 (3D) landmarks!</p>
+<p>Medusa contains an efficient wrapper around these landmark models: <code class="docutils literal notranslate"><span class="pre">RetinafaceLandmarkModel</span></code>. Using the <code class="docutils literal notranslate"><span class="pre">model_name</span></code> parameter, you can determine whether you want to return 106 or 68 landmarks (use ‘1k3d68’ for 68 landmarks, or ‘2d106det’ for 106 landmarks); note that we discard the depth dimension for the 3D landmark model, so that the output is always <span class="math notranslate nohighlight">\(L\)</span> (number of landmarks) <span class="math notranslate nohighlight">\(\times 2\)</span>.</p>
+<p>Let’s checkout the ‘2d106det’ model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.landmark</span> <span class="kn">import</span> <span class="n">RetinafaceLandmarkModel</span>
+
+<span class="n">lm_model</span> <span class="o">=</span> <span class="n">RetinafaceLandmarkModel</span><span class="p">(</span><span class="s1">&#39;2d106det&#39;</span><span class="p">)</span>
+<span class="n">out_106</span> <span class="o">=</span> <span class="n">lm_model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">out_106</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;conf&#39;, &#39;bbox&#39;, &#39;lms&#39;, &#39;img_idx&#39;, &#39;n_img&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, the landmark model outputs the face detection results (which it applied before landmark detection), but replaces the ‘lms’ data with the new landmarks:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">out_106</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (batch, n_landmarks, XY)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1, 106, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize these landmarks as before:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">draw</span> <span class="o">=</span> <span class="n">draw_keypoints</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">byte</span><span class="p">(),</span> <span class="n">out_106</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;lms106.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;lms106.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8a2d6f89829c41aa716a3aa1c49c577cbb4b1a66bf55de546637b2c589f54b57.png" src="../_images/8a2d6f89829c41aa716a3aa1c49c577cbb4b1a66bf55de546637b2c589f54b57.png" />
+</div>
+</div>
+<p>To show the difference with the 68-landmark model, we’ll run it again (this time with the ‘1k3d68’ model) and plot the detected landmarks on top of the previous image (106-lm model in red; 68-lm model in green):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lm_model</span> <span class="o">=</span> <span class="n">RetinafaceLandmarkModel</span><span class="p">(</span><span class="s1">&#39;1k3d68&#39;</span><span class="p">)</span>
+<span class="n">out_68</span> <span class="o">=</span> <span class="n">lm_model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_keypoints</span><span class="p">(</span><span class="n">draw</span><span class="p">,</span> <span class="n">out_68</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;lms106+68.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;lms106+68.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f8f29fa2d71423851e6dbdcdd345cf96bab26dbee87b3c204b74790890e0438f.png" src="../_images/f8f29fa2d71423851e6dbdcdd345cf96bab26dbee87b3c204b74790890e0438f.png" />
+</div>
+</div>
+<p>Like most functionality in Medusa, the landmark model can be run on batches of images, like series of video frames! We show this below and visualize it using the <code class="docutils literal notranslate"><span class="pre">BatchResults</span></code> class:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="kn">from</span> <span class="nn">medusa.containers</span> <span class="kn">import</span> <span class="n">BatchResults</span>
+
+<span class="n">lm_model</span> <span class="o">=</span> <span class="n">RetinafaceLandmarkModel</span><span class="p">(</span><span class="s1">&#39;2d106det&#39;</span><span class="p">)</span>
+<span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">(</span><span class="n">return_videoloader</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">vid</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">lm_model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">lm_model</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">BatchResults</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span>
+<span class="n">results</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="s1">&#39;./lms.mp4&#39;</span><span class="p">,</span> <span class="n">imgs</span><span class="o">=</span><span class="n">batch</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">Video</span><span class="p">(</span><span class="s1">&#39;./lms.mp4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><video src="./lms.mp4" controls  >
+      Your browser does not support the <code>video</code> element.
+    </video></div></div>
+</div>
+<p>Note that, in addition to the landmarks from the landmark model, <code class="docutils literal notranslate"><span class="pre">BatchResults</span></code> also shows the bounding box and confidence score returned by the detector.</p>
+</section>
+<section id="cropping">
+<h2>Cropping<a class="headerlink" href="#cropping" title="Permalink to this heading">#</a></h2>
+<p>In Medusa, there are two approaches for cropping: a bounding-box based method and an alignment-based method. We’ll discuss these in turn.</p>
+<section id="bounding-box-based-cropping">
+<h3>Bounding-box based cropping<a class="headerlink" href="#bounding-box-based-cropping" title="Permalink to this heading">#</a></h3>
+<p>In our bounding-box (bbox) based cropping method, we use a rectangular bounding box to “cut out” the face such that the face is roughly in the center of the image. You might think, ‘great, we can use the <code class="docutils literal notranslate"><span class="pre">bbox</span></code> from the face detection model outputs for this!’, but that isn’t as straightforward as it looks. First, this bbox is rectangular, while most reconstruction models (including DECA/EMOCA-based models in Medusa) expect square images (e.g., <span class="math notranslate nohighlight">\(224 \times 224\)</span>). Also, and this is more of a pragmatic issue, the cropping procedure should be <em>exactly the same</em> as the procedure used when training the reconstruction model. And it turns out that DECA and EMOCA, Medusa’s prime reconstruction models, used a very specific procedure.</p>
+<p>In short, these models would do the following:</p>
+<ol class="arabic simple">
+<li><p>use a 68-landmark model to estimate facial landmarks</p></li>
+<li><p>create a bbox based on the landmarks closest to the image borders</p></li>
+<li><p>slightly enlarge the bbox</p></li>
+<li><p>make the bbox square</p></li>
+<li><p>use the final bbox to crop the image</p></li>
+</ol>
+<p>In Medusa, we implemented this procedure in the <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> class, which is nearly identical to the original DECA implementation, except that we use a faster and more accurate landmark estimation model (i.e., the <code class="docutils literal notranslate"><span class="pre">1k3d68</span></code> version of the <code class="docutils literal notranslate"><span class="pre">RetinafaceLandmarkModel</span></code>).</p>
+<p>We’ll show you how this class is used below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.crop</span> <span class="kn">import</span> <span class="n">BboxCropModel</span>
+
+<span class="c1"># 224 x 224 is the expected cropped image size for the DECA/EMOCA models</span>
+<span class="n">crop_model</span> <span class="o">=</span> <span class="n">BboxCropModel</span><span class="p">(</span><span class="n">lms_model_name</span><span class="o">=</span><span class="s1">&#39;1k3d68&#39;</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">))</span>
+<span class="n">out_crop</span> <span class="o">=</span> <span class="n">crop_model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">out_crop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;conf&#39;, &#39;bbox&#39;, &#39;lms&#39;, &#39;img_idx&#39;, &#39;n_img&#39;, &#39;imgs_crop&#39;, &#39;crop_mat&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Like the landmark model, the crop model outputs both the outputs from the detection model (<code class="docutils literal notranslate"><span class="pre">conf</span></code>, <code class="docutils literal notranslate"><span class="pre">lms</span></code>, etc) as well as three new outputs: <code class="docutils literal notranslate"><span class="pre">bbox</span></code> (the <em>new</em> bbox, which replaced the one from the face detection model), <code class="docutils literal notranslate"><span class="pre">imgs_crop</span></code> and <code class="docutils literal notranslate"><span class="pre">crop_mat</span></code>.</p>
+<p>Below, we’ll run the detection model separately to compare the bbox returned by the detection model (in red) and the bbox created by the crop model (in green):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchvision.utils</span> <span class="kn">import</span> <span class="n">draw_bounding_boxes</span>
+<span class="kn">from</span> <span class="nn">medusa.detect</span> <span class="kn">import</span> <span class="n">SCRFDetector</span>
+
+<span class="n">det_model</span> <span class="o">=</span> <span class="n">SCRFDetector</span><span class="p">()</span>
+<span class="n">out_det</span> <span class="o">=</span> <span class="n">det_model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_bounding_boxes</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">byte</span><span class="p">(),</span> <span class="n">out_det</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_bounding_boxes</span><span class="p">(</span><span class="n">draw</span><span class="p">,</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;bbox_compare.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;bbox_compare.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5214cb6f835f88efee985571249a5f6dda9f02406fcc2c41e2095dfc3cd32385.png" src="../_images/5214cb6f835f88efee985571249a5f6dda9f02406fcc2c41e2095dfc3cd32385.png" />
+</div>
+</div>
+<p>Now, as the name suggests, <code class="docutils literal notranslate"><span class="pre">imgs_crop</span></code> contains the cropped images of each face detected in the original image. As expected, the image is now square and in the dimensions specified when initializing the crop model (i.e., <span class="math notranslate nohighlight">\(224 \times 224\)</span>):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># N (detections) x 3 (RGB) x H x W</span>
+<span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;imgs_crop&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 3, 224, 224])
+</pre></div>
+</div>
+</div>
+</div>
+<p>which looks like the following:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">save_image</span><span class="p">(</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;imgs_crop&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;crop.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;crop.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2c4a1d6cf0134de3cc4c056952de42540929f6067a9f886b780ffee3e2f369ee.png" src="../_images/2c4a1d6cf0134de3cc4c056952de42540929f6067a9f886b780ffee3e2f369ee.png" />
+</div>
+</div>
+<p>This leaves us with <code class="docutils literal notranslate"><span class="pre">crop_mat</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">crop_mat</span> <span class="o">=</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;crop_mat&#39;</span><span class="p">]</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">crop_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># N (detections) x 3 x 3</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1, 3, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The ‘crop_mat’ output represents (for each detection) a <span class="math notranslate nohighlight">\(3 \times 3\)</span> affine matrix that represents (slightly simplified) the cropping operation as a similarity transform of the corners of the image to the corners of the bounding box. This matrix can then be used to warp the pixels of the original image to create the cropped image. Although <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> does this for you (and returns the results as <code class="docutils literal notranslate"><span class="pre">imgs_crop</span></code>), we’ll show below how this is in fact done using the <code class="docutils literal notranslate"><span class="pre">crop_mat</span></code>. We’ll use <code class="docutils literal notranslate"><span class="pre">warp_affine</span></code> from the awesome <a class="reference external" href="https://kornia.readthedocs.io/">Kornia</a> package:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">kornia.geometry.transform</span> <span class="kn">import</span> <span class="n">warp_affine</span>
+
+<span class="c1"># warp_affine expects a N x 2 x 3 matrix, so we remove the last row</span>
+<span class="n">img_crop</span> <span class="o">=</span> <span class="n">warp_affine</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;crop_mat&#39;</span><span class="p">][:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:],</span> <span class="n">dsize</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">))</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">img_crop</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;crop_manual.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;crop_manual.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/255b72cfa679215ea213c87fc27a15b150cfc2b94aa499e32f99e12f68e550d9.png" src="../_images/255b72cfa679215ea213c87fc27a15b150cfc2b94aa499e32f99e12f68e550d9.png" />
+</div>
+</div>
+<p>So, in essence the <code class="docutils literal notranslate"><span class="pre">crop_mat</span></code> is a way to move between the original image space and the cropped image space. This means we can also project the cropped image back into the original image space using the <em>inverse</em> of the <code class="docutils literal notranslate"><span class="pre">crop_mat</span></code>!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">inv_crop_mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;crop_mat&#39;</span><span class="p">])</span>
+<span class="n">img_uncrop</span> <span class="o">=</span> <span class="n">warp_affine</span><span class="p">(</span><span class="n">img_crop</span><span class="p">,</span> <span class="n">inv_crop_mat</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:],</span> <span class="n">dsize</span><span class="o">=</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+
+<span class="n">save_image</span><span class="p">(</span><span class="n">img_uncrop</span><span class="p">,</span> <span class="s1">&#39;uncrop.png&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;uncrop.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6bbe58fd84376492669af9eb4a2b84e1d1d2b283b7e848b7bb1e53c9ff29f00c.png" src="../_images/6bbe58fd84376492669af9eb4a2b84e1d1d2b283b7e848b7bb1e53c9ff29f00c.png" />
+</div>
+</div>
+<p>Crucially, the <code class="docutils literal notranslate"><span class="pre">crop_mat</span></code> can also be used to move points (rather than pixels), like landmarks, between the original and cropped image space. For example, if we would like to plot the landmarks (which are defined in the original image space) on the cropped image, we can project them in cropped image space as follows (using the <code class="docutils literal notranslate"><span class="pre">transform_points</span></code> function from Kornia):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">kornia.geometry.linalg</span> <span class="kn">import</span> <span class="n">transform_points</span>
+<span class="n">lms_cropped</span> <span class="o">=</span> <span class="n">transform_points</span><span class="p">(</span><span class="n">crop_mat</span><span class="p">,</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">])</span>
+
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_keypoints</span><span class="p">(</span><span class="n">img_crop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">byte</span><span class="p">(),</span> <span class="n">lms_cropped</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;lms_crop.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;lms_crop.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d910a7a4342ea2196ffd2dab1f56f505e4b4aa63b6e159fe439a0c7ce9c9c425.png" src="../_images/d910a7a4342ea2196ffd2dab1f56f505e4b4aa63b6e159fe439a0c7ce9c9c425.png" />
+</div>
+</div>
+<p>This crop matrix is in fact also important for rendering 3D reconstruction results! We include the translation and scaling introduced by the cropping operation into the affine (world) matrix of the 3D object such that, when rendered, it is projected in the original image rather than the cropped image space!</p>
+</section>
+<section id="alignment-based-cropping">
+<h3>Alignment-based cropping<a class="headerlink" href="#alignment-based-cropping" title="Permalink to this heading">#</a></h3>
+<p>In addition to the bbox-based cropping model, Medusa also includes an alignment-based crop model: <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code>. This model will align the face landmarks in the image to a template set of landmarks. The template used by the model, by default, is the set of five landmarks we have seen before, defined in an image space of <span class="math notranslate nohighlight">\(112 \times 112\)</span> pixels:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.crop.align_crop</span> <span class="kn">import</span> <span class="n">TEMPLATE</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">TEMPLATE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[38.2946, 51.6963],
+        [73.5318, 51.5014],
+        [56.0252, 71.7366],
+        [41.5493, 92.3655],
+        [70.7299, 92.2041]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>which we can show as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">background</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">112</span><span class="p">))</span><span class="o">.</span><span class="n">byte</span><span class="p">()</span>
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_keypoints</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="n">TEMPLATE</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;lm_template.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;lm_template.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4d827ab277107874e902c56c06d84064f7cd9be8198ce62be496063623202c00.png" src="../_images/4d827ab277107874e902c56c06d84064f7cd9be8198ce62be496063623202c00.png" />
+</div>
+</div>
+<p>To align the face landmarks from the image (provided by the face detection model) to the template, the <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code> will estimate a similarity transform (giving us a crop matrix again!):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.crop</span> <span class="kn">import</span> <span class="n">AlignCropModel</span>
+
+<span class="n">crop_model</span> <span class="o">=</span> <span class="n">AlignCropModel</span><span class="p">(</span><span class="n">output_size</span><span class="o">=</span><span class="p">(</span><span class="mi">112</span><span class="p">,</span> <span class="mi">112</span><span class="p">))</span>
+<span class="n">out_crop</span> <span class="o">=</span> <span class="n">crop_model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="n">out_crop</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;imgs_crop&#39;, &#39;crop_mat&#39;, &#39;conf&#39;, &#39;bbox&#39;, &#39;lms&#39;, &#39;img_idx&#39;, &#39;n_img&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">lms</span></code> represents the aligned landmarks. Let’s see how well the model did by plotting both the template landmarks (in red) and the aligned landmarks (in green) on top of the cropped image:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">draw</span> <span class="o">=</span> <span class="n">draw_keypoints</span><span class="p">(</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;imgs_crop&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">byte</span><span class="p">(),</span> <span class="n">TEMPLATE</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Note that the aligned landmarks are (by default) in original image space, so </span>
+<span class="n">lms</span> <span class="o">=</span> <span class="n">transform_points</span><span class="p">(</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;crop_mat&#39;</span><span class="p">],</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">])</span>
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_keypoints</span><span class="p">(</span><span class="n">draw</span><span class="p">,</span> <span class="n">lms</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="s1">&#39;lm_aligned.png&#39;</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;lm_aligned.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/efbb86f960471e2b40b3f05dd0d70eea5af787315924e6a5d233e4f4c85a3ce8.png" src="../_images/efbb86f960471e2b40b3f05dd0d70eea5af787315924e6a5d233e4f4c85a3ce8.png" />
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code> (like the <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> for that matter) also work on batches of images, which can be visualized using <code class="docutils literal notranslate"><span class="pre">BatchResults</span></code>. Only issue is that <code class="docutils literal notranslate"><span class="pre">torchvision</span></code> does not support drawing rotated bounding boxes, so instead we visualize the aligned images in cropped image space:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">(</span><span class="n">return_videoloader</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">vid</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">lm_model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">crop_model</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">BatchResults</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span>
+<span class="n">results</span><span class="o">.</span><span class="n">sort_faces</span><span class="p">()</span>
+<span class="n">results</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="s1">&#39;./align_crop.mp4&#39;</span><span class="p">,</span> <span class="n">imgs</span><span class="o">=</span><span class="n">batch</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_cropped</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">crop_size</span><span class="o">=</span><span class="p">(</span><span class="mi">112</span><span class="p">,</span> <span class="mi">112</span><span class="p">),</span> <span class="n">template</span><span class="o">=</span><span class="n">TEMPLATE</span><span class="p">)</span>
+
+<span class="n">Video</span><span class="p">(</span><span class="s1">&#39;./align_crop.mp4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><video src="./align_crop.mp4" controls  >
+      Your browser does not support the <code>video</code> element.
+    </video></div></div>
+</div>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -553,6 +929,25 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#landmark-detection">Landmark detection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cropping">Cropping</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bounding-box-based-cropping">Bounding-box based cropping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alignment-based-cropping">Alignment-based cropping</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
