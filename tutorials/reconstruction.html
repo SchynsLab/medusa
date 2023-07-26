@@ -578,69 +578,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">vid_path</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># We&#39;ll also set the logging level to WARNING to avoid printing too much information</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># Set this to &#39;INFO&#39; (the default) to see more information</span>
-<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">data_recon</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid_path</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
-
-<span class="nn">File ~/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.10/lib/python3.10/site-packages/torch/utils/_contextlib.py:115,</span> in <span class="ni">context_decorator.&lt;locals&gt;.decorate_context</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">112</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">113</span> <span class="k">def</span> <span class="nf">decorate_context</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">114</span>     <span class="k">with</span> <span class="n">ctx_factory</span><span class="p">():</span>
-<span class="ne">--&gt; </span><span class="mi">115</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/work/medusa/medusa/medusa/recon/recon.py:68,</span> in <span class="ni">videorecon</span><span class="nt">(video_path, recon_model, device, n_frames, batch_size, loglevel, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="c1"># Initialize reconstruction model</span>
-<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="k">if</span> <span class="n">recon_model</span> <span class="ow">in</span> <span class="n">FLAME_MODELS</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">68</span>     <span class="n">crop_model</span> <span class="o">=</span> <span class="n">BboxCropModel</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># for face detection / cropping</span>
-<span class="g g-Whitespace">     </span><span class="mi">69</span>     <span class="n">reconstructor</span> <span class="o">=</span> <span class="n">DecaReconModel</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">70</span>         <span class="n">recon_model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">orig_img_size</span><span class="o">=</span><span class="n">video_metadata</span><span class="p">[</span><span class="s2">&quot;img_size&quot;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">     </span><span class="mi">71</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="k">elif</span> <span class="n">recon_model</span> <span class="o">==</span> <span class="s2">&quot;mediapipe&quot;</span><span class="p">:</span>
-
-<span class="nn">File ~/work/medusa/medusa/medusa/crop/bbox_crop.py:40,</span> in <span class="ni">BboxCropModel.__init__</span><span class="nt">(self, lms_model_name, output_size, detector, device)</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>  <span class="c1"># h, w</span>
-<span class="g g-Whitespace">     </span><span class="mi">39</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
-<span class="ne">---&gt; </span><span class="mi">40</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lms_model</span> <span class="o">=</span> <span class="n">RetinafaceLandmarkModel</span><span class="p">(</span><span class="n">lms_model_name</span><span class="p">,</span> <span class="n">detector</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-
-<span class="nn">File ~/work/medusa/medusa/medusa/landmark/retinaface.py:33,</span> in <span class="ni">RetinafaceLandmarkModel.__init__</span><span class="nt">(self, model_name, detector, device)</span>
-<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
-<span class="g g-Whitespace">     </span><span class="mi">32</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
-<span class="ne">---&gt; </span><span class="mi">33</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span> <span class="o">=</span> <span class="n">detector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_model</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-
-<span class="nn">File ~/work/medusa/medusa/medusa/detect/scrfd.py:55,</span> in <span class="ni">SCRFDetector.__init__</span><span class="nt">(self, det_size, det_threshold, nms_threshold, device)</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span> <span class="o">=</span> <span class="n">det_size</span>
-<span class="ne">---&gt; </span><span class="mi">55</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_det_model</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="bp">self</span><span class="o">.</span><span class="n">_postproc_model</span> <span class="o">=</span> <span class="n">SCRFDPostproc</span><span class="p">(</span><span class="n">det_size</span><span class="p">,</span> <span class="n">det_threshold</span><span class="p">,</span> <span class="n">nms_threshold</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
-
-<span class="nn">File ~/work/medusa/medusa/medusa/detect/scrfd.py:72,</span> in <span class="ni">SCRFDetector._init_det_model</span><span class="nt">(self, device)</span>
-<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Param ``det_size`` should indicate a square image, &quot;</span>
-<span class="g g-Whitespace">     </span><span class="mi">69</span>                      <span class="sa">f</span><span class="s2">&quot;e.g., (224, 224), but got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">det_size</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="ne">---&gt; </span><span class="mi">72</span> <span class="n">isf_path</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;insightface_path&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">73</span> <span class="k">if</span> <span class="n">isf_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s1">&#39;buffalo_l&#39;</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">74</span>     <span class="n">f_in</span> <span class="o">=</span> <span class="n">isf_path</span> <span class="o">/</span> <span class="s1">&#39;det_10g.onnx&#39;</span>
-
-<span class="nn">File ~/work/medusa/medusa/medusa/data/template_data.py:169,</span> in <span class="ni">get_external_data_config</span><span class="nt">(key)</span>
-<span class="g g-Whitespace">    </span><span class="mi">167</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">168</span>     <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">169</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not in config!&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">170</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">171</span>         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-
-<span class="ne">ValueError</span>: Key insightface_path not in config!
-</pre></div>
-</div>
-</div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function returns the reconstruction data as an object from the custom <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Data4D</span></code></span> class. In the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> tutorial, we’ll explain the way Medusa represents reconstruction data at length!</p>
 </section>
@@ -679,6 +616,20 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 1 with 32 frames ...
+Loading in batch 2 with 32 frames ...
+Loading in batch 3 with 32 frames ...
+Loading in batch 4 with 32 frames ...
+Loading in batch 5 with 32 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 6 with 32 frames ...
+Loading in batch 7 with 32 frames ...
+Loading in batch 8 with 8 frames ...
+</pre></div>
+</div>
+</div>
 </div>
 <p>As you can see, each iteration returns a batch of 32 frames, except the last batch which only contains the last 8 frames, after which the loader stops automatically.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">batch</span></code> variable returned each iteration contains video frame data as a <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code> object with unsigned integers (with values ranging from 0-255):</p>
@@ -688,11 +639,21 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;torch.Tensor&#39;&gt; torch.float32
+</pre></div>
+</div>
+</div>
 </div>
 <p>The tensor is organized as a four dimensional array with dimensions <span class="math notranslate nohighlight">\(N\)</span> (number of frames) <span class="math notranslate nohighlight">\(\times H\)</span> (height) <span class="math notranslate nohighlight">\(\times W\)</span> (width) <span class="math notranslate nohighlight">\(\times 3\)</span> (RGB), which is the format in which the Medusa pipeline expects the loaded video data to be.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 3, 384, 480)
 </pre></div>
 </div>
 </div>
@@ -739,12 +700,22 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;conf&#39;, &#39;bbox&#39;, &#39;lms&#39;, &#39;img_idx&#39;, &#39;n_img&#39;, &#39;imgs_crop&#39;, &#39;crop_mat&#39;]
+</pre></div>
+</div>
+</div>
 </div>
 <p>For now, the most important key is <code class="docutils literal notranslate"><span class="pre">'imgs_crop'</span></code>, which contain the cropped images:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_cropped</span> <span class="o">=</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;imgs_crop&#39;</span><span class="p">]</span>
 <span class="nb">tuple</span><span class="p">(</span><span class="n">batch_cropped</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 3, 224, 224)
 </pre></div>
 </div>
 </div>
@@ -794,6 +765,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;v&#39;, &#39;mat&#39;]
+</pre></div>
+</div>
+</div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">'v'</span></code> key represents the reconstructed vertices and are stored in a PyTorch tensor of shape <span class="math notranslate nohighlight">\(N\)</span> (cropped images) <span class="math notranslate nohighlight">\(\times V\)</span> (vertices) <span class="math notranslate nohighlight">\(\times 3\)</span> (XYZ):</p>
 <div class="cell docutils container">
@@ -802,11 +778,21 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 5023, 3)
+</pre></div>
+</div>
+</div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">'mat'</span></code> key represents the estimated “pose” relative to a standard (forward facing, non-rotated) reference face. It does so using a <span class="math notranslate nohighlight">\(4 \times 4\)</span> affine matrix per cropped image:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8, 4, 4)
 </pre></div>
 </div>
 </div>
@@ -833,6 +819,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0, 1, 2, 3, 4, 5, 6, 7])
+</pre></div>
+</div>
+</div>
 </div>
 <p>For this video, the detector actually detected one face for each frame (as expected).</p>
 <p>For the <code class="docutils literal notranslate"><span class="pre">lms</span></code> parameter, you can use the five landmarks returned by the crop model or the full set of reconstructed vertices (here: 5023 landmarks); the <code class="docutils literal notranslate"><span class="pre">sort_faces</span></code> function does not care whether the landmarks are 2D (such as the <code class="docutils literal notranslate"><span class="pre">lms</span></code> from the crop model) or 3D (such as the reconstructed vertices).</p>
@@ -841,6 +832,11 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">face_idx</span> <span class="o">=</span> <span class="n">sort_faces</span><span class="p">(</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">],</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;img_idx&#39;</span><span class="p">])</span>
 <span class="n">face_idx</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0, 0, 0, 0, 0, 0, 0, 0])
 </pre></div>
 </div>
 </div>

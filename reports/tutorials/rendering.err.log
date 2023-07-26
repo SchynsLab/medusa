@@ -15,80 +15,30 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-from medusa.data import get_example_data4d
-data_4d = get_example_data4d(load=True, model='emoca-coarse')
+N = data_4d.v.shape[0]
+vertex_colors = torch.rand(N, V, 3, device='cuda')
+renderer.render(f_out, data_4d, overlay=vertex_colors)
 
-# We'll slice the Data4D object this way (resulting in only 50 frames/meshes) so that the 
-# rendering is a bit faster for this tutorial
-data_4d = data_4d[:50]
+Video(f_out, embed=True)
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mValueError[0m                                Traceback (most recent call last)
-Cell [0;32mIn[3], line 2[0m
-[1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mmedusa[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata[39;00m [38;5;28;01mimport[39;00m get_example_data4d
-[0;32m----> 2[0m data_4d [38;5;241m=[39m [43mget_example_data4d[49m[43m([49m[43mload[49m[38;5;241;43m=[39;49m[38;5;28;43;01mTrue[39;49;00m[43m,[49m[43m [49m[43mmodel[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43memoca-coarse[39;49m[38;5;124;43m'[39;49m[43m)[49m
-[1;32m      4[0m [38;5;66;03m# We'll slice the Data4D object this way (resulting in only 50 frames/meshes) so that the [39;00m
-[1;32m      5[0m [38;5;66;03m# rendering is a bit faster for this tutorial[39;00m
-[1;32m      6[0m data_4d [38;5;241m=[39m data_4d[:[38;5;241m50[39m]
+[0;31mRuntimeError[0m                              Traceback (most recent call last)
+Cell [0;32mIn[11], line 2[0m
+[1;32m      1[0m N [38;5;241m=[39m data_4d[38;5;241m.[39mv[38;5;241m.[39mshape[[38;5;241m0[39m]
+[0;32m----> 2[0m vertex_colors [38;5;241m=[39m [43mtorch[49m[38;5;241;43m.[39;49m[43mrand[49m[43m([49m[43mN[49m[43m,[49m[43m [49m[43mV[49m[43m,[49m[43m [49m[38;5;241;43m3[39;49m[43m,[49m[43m [49m[43mdevice[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mcuda[39;49m[38;5;124;43m'[39;49m[43m)[49m
+[1;32m      3[0m renderer[38;5;241m.[39mrender(f_out, data_4d, overlay[38;5;241m=[39mvertex_colors)
+[1;32m      5[0m Video(f_out, embed[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
 
-File [0;32m~/work/medusa/medusa/medusa/data/example_data.py:201[0m, in [0;36mget_example_data4d[0;34m(n_faces, load, model, device)[0m
-[1;32m    199[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m recon[38;5;241m.[39mis_file():
-[1;32m    200[0m     vid [38;5;241m=[39m get_example_video(n_faces)
-[0;32m--> 201[0m     data_4d [38;5;241m=[39m [43mvideorecon[49m[43m([49m[43mvid[49m[43m,[49m[43m [49m[43mrecon_model[49m[38;5;241;43m=[39;49m[43mmodel[49m[43m,[49m[43m [49m[43mdevice[49m[38;5;241;43m=[39;49m[43mdevice[49m[43m,[49m[43m [49m[43mloglevel[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mERROR[39;49m[38;5;124;43m"[39;49m[43m)[49m
-[1;32m    202[0m     data_4d[38;5;241m.[39msave(recon)
-[1;32m    203[0m     [38;5;28;01mif[39;00m load:
+File [0;32m~/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.10/lib/python3.10/site-packages/torch/cuda/__init__.py:247[0m, in [0;36m_lazy_init[0;34m()[0m
+[1;32m    245[0m [38;5;28;01mif[39;00m [38;5;124m'[39m[38;5;124mCUDA_MODULE_LOADING[39m[38;5;124m'[39m [38;5;129;01mnot[39;00m [38;5;129;01min[39;00m os[38;5;241m.[39menviron:
+[1;32m    246[0m     os[38;5;241m.[39menviron[[38;5;124m'[39m[38;5;124mCUDA_MODULE_LOADING[39m[38;5;124m'[39m] [38;5;241m=[39m [38;5;124m'[39m[38;5;124mLAZY[39m[38;5;124m'[39m
+[0;32m--> 247[0m [43mtorch[49m[38;5;241;43m.[39;49m[43m_C[49m[38;5;241;43m.[39;49m[43m_cuda_init[49m[43m([49m[43m)[49m
+[1;32m    248[0m [38;5;66;03m# Some of the queued calls may reentrantly call _lazy_init();[39;00m
+[1;32m    249[0m [38;5;66;03m# we need to just return without initializing in that case.[39;00m
+[1;32m    250[0m [38;5;66;03m# However, we must not let any *other* threads in![39;00m
+[1;32m    251[0m _tls[38;5;241m.[39mis_initializing [38;5;241m=[39m [38;5;28;01mTrue[39;00m
 
-File [0;32m~/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.10/lib/python3.10/site-packages/torch/utils/_contextlib.py:115[0m, in [0;36mcontext_decorator.<locals>.decorate_context[0;34m(*args, **kwargs)[0m
-[1;32m    112[0m [38;5;129m@functools[39m[38;5;241m.[39mwraps(func)
-[1;32m    113[0m [38;5;28;01mdef[39;00m [38;5;21mdecorate_context[39m([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs):
-[1;32m    114[0m     [38;5;28;01mwith[39;00m ctx_factory():
-[0;32m--> 115[0m         [38;5;28;01mreturn[39;00m [43mfunc[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
-
-File [0;32m~/work/medusa/medusa/medusa/recon/recon.py:68[0m, in [0;36mvideorecon[0;34m(video_path, recon_model, device, n_frames, batch_size, loglevel, **kwargs)[0m
-[1;32m     66[0m [38;5;66;03m# Initialize reconstruction model[39;00m
-[1;32m     67[0m [38;5;28;01mif[39;00m recon_model [38;5;129;01min[39;00m FLAME_MODELS:
-[0;32m---> 68[0m     crop_model [38;5;241m=[39m [43mBboxCropModel[49m[43m([49m[43mdevice[49m[38;5;241;43m=[39;49m[43mdevice[49m[43m)[49m  [38;5;66;03m# for face detection / cropping[39;00m
-[1;32m     69[0m     reconstructor [38;5;241m=[39m DecaReconModel(
-[1;32m     70[0m         recon_model, device[38;5;241m=[39mdevice, orig_img_size[38;5;241m=[39mvideo_metadata[[38;5;124m"[39m[38;5;124mimg_size[39m[38;5;124m"[39m], [38;5;241m*[39m[38;5;241m*[39mkwargs
-[1;32m     71[0m     )
-[1;32m     72[0m [38;5;28;01melif[39;00m recon_model [38;5;241m==[39m [38;5;124m"[39m[38;5;124mmediapipe[39m[38;5;124m"[39m:
-
-File [0;32m~/work/medusa/medusa/medusa/crop/bbox_crop.py:40[0m, in [0;36mBboxCropModel.__init__[0;34m(self, lms_model_name, output_size, detector, device)[0m
-[1;32m     38[0m [38;5;28mself[39m[38;5;241m.[39moutput_size [38;5;241m=[39m output_size  [38;5;66;03m# h, w[39;00m
-[1;32m     39[0m [38;5;28mself[39m[38;5;241m.[39mdevice [38;5;241m=[39m device
-[0;32m---> 40[0m [38;5;28mself[39m[38;5;241m.[39m_lms_model [38;5;241m=[39m [43mRetinafaceLandmarkModel[49m[43m([49m[43mlms_model_name[49m[43m,[49m[43m [49m[43mdetector[49m[43m,[49m[43m [49m[43mdevice[49m[43m)[49m
-[1;32m     41[0m [38;5;28mself[39m[38;5;241m.[39mto(device)[38;5;241m.[39meval()
-
-File [0;32m~/work/medusa/medusa/medusa/landmark/retinaface.py:33[0m, in [0;36mRetinafaceLandmarkModel.__init__[0;34m(self, model_name, detector, device)[0m
-[1;32m     31[0m [38;5;28mself[39m[38;5;241m.[39mmodel_name [38;5;241m=[39m model_name
-[1;32m     32[0m [38;5;28mself[39m[38;5;241m.[39mdevice [38;5;241m=[39m device
-[0;32m---> 33[0m [38;5;28mself[39m[38;5;241m.[39m_det_model [38;5;241m=[39m [43mdetector[49m[43m([49m[43mdevice[49m[38;5;241;43m=[39;49m[43mdevice[49m[43m)[49m
-[1;32m     34[0m [38;5;28mself[39m[38;5;241m.[39m_model [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39m_init_model()
-[1;32m     35[0m [38;5;28mself[39m[38;5;241m.[39mto(device)[38;5;241m.[39meval()
-
-File [0;32m~/work/medusa/medusa/medusa/detect/scrfd.py:55[0m, in [0;36mSCRFDetector.__init__[0;34m(self, det_size, det_threshold, nms_threshold, device)[0m
-[1;32m     53[0m [38;5;28msuper[39m()[38;5;241m.[39m[38;5;21m__init__[39m()
-[1;32m     54[0m [38;5;28mself[39m[38;5;241m.[39mdet_size [38;5;241m=[39m det_size
-[0;32m---> 55[0m [38;5;28mself[39m[38;5;241m.[39m_det_model [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_init_det_model[49m[43m([49m[43mdevice[49m[43m)[49m
-[1;32m     56[0m [38;5;28mself[39m[38;5;241m.[39m_postproc_model [38;5;241m=[39m SCRFDPostproc(det_size, det_threshold, nms_threshold, device)
-[1;32m     57[0m [38;5;28mself[39m[38;5;241m.[39mdevice [38;5;241m=[39m device
-
-File [0;32m~/work/medusa/medusa/medusa/detect/scrfd.py:72[0m, in [0;36mSCRFDetector._init_det_model[0;34m(self, device)[0m
-[1;32m     68[0m     [38;5;28;01mreturn[39;00m [38;5;167;01mValueError[39;00m([38;5;124m"[39m[38;5;124mParam ``det_size`` should indicate a square image, [39m[38;5;124m"[39m
-[1;32m     69[0m                      [38;5;124mf[39m[38;5;124m"[39m[38;5;124me.g., (224, 224), but got [39m[38;5;132;01m{[39;00m[38;5;28mself[39m[38;5;241m.[39mdet_size[38;5;132;01m}[39;00m[38;5;124m![39m[38;5;124m"[39m)
-[1;32m     70[0m h [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mdet_size[[38;5;241m0[39m]
-[0;32m---> 72[0m isf_path [38;5;241m=[39m [43mget_external_data_config[49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43minsightface_path[39;49m[38;5;124;43m'[39;49m[43m)[49m
-[1;32m     73[0m [38;5;28;01mif[39;00m isf_path[38;5;241m.[39mparent[38;5;241m.[39mstem [38;5;241m==[39m [38;5;124m'[39m[38;5;124mbuffalo_l[39m[38;5;124m'[39m:
-[1;32m     74[0m     f_in [38;5;241m=[39m isf_path [38;5;241m/[39m [38;5;124m'[39m[38;5;124mdet_10g.onnx[39m[38;5;124m'[39m
-
-File [0;32m~/work/medusa/medusa/medusa/data/template_data.py:169[0m, in [0;36mget_external_data_config[0;34m(key)[0m
-[1;32m    167[0m [38;5;28;01melse[39;00m:
-[1;32m    168[0m     [38;5;28;01mif[39;00m key [38;5;129;01mnot[39;00m [38;5;129;01min[39;00m cfg:
-[0;32m--> 169[0m         [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mKey [39m[38;5;132;01m{[39;00mkey[38;5;132;01m}[39;00m[38;5;124m not in config![39m[38;5;124m"[39m)
-[1;32m    170[0m     [38;5;28;01melse[39;00m:
-[1;32m    171[0m         [38;5;28;01mreturn[39;00m Path(cfg[key])
-
-[0;31mValueError[0m: Key insightface_path not in config!
+[0;31mRuntimeError[0m: Found no NVIDIA driver on your system. Please check that you have an NVIDIA GPU and installed a driver from http://www.nvidia.com/Download/index.aspx
 
