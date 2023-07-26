@@ -30,7 +30,7 @@ class RetinafaceRecognitionModel(nn.Module):
         from ..data import get_external_data_config
 
         isf_path = get_external_data_config('insightface_path')
-        if isf_path.parent.stem == 'buffalo_l':
+        if isf_path.stem == 'buffalo_l':
             f_in = isf_path / 'w600k_r50.onnx'
         else:
             f_in = isf_path / 'glintr100.onnx'
