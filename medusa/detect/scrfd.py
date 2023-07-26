@@ -70,7 +70,7 @@ class SCRFDetector(BaseDetector):
         h = self.det_size[0]
 
         isf_path = get_external_data_config('insightface_path')
-        if isf_path.parent.stem == 'buffalo_l':
+        if isf_path.stem == 'buffalo_l':
             f_in = isf_path / 'det_10g.onnx'
         else:
             f_in = isf_path / 'scrfd_10g_bnkps.onnx'
