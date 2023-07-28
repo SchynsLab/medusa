@@ -16,6 +16,8 @@ isf_path = get_external_data_config('insightface_path').parent
 def test_retinaface_landmark_model(isf_model_name, lm_model_name, n_faces):
 
     model_path = isf_path / isf_model_name / f'{lm_model_name}.onnx'
+    if not model_path.is_file():
+        return
 
     imgs = get_example_image(n_faces)
     model = RetinafaceLandmarkModel(model_path=model_path)
