@@ -1,1 +1,1 @@
-from .retinaface import RetinafaceRecognitionModel
+from .retinaface import RetinafaceRecognitionModel, RetinafaceGenderAgeModel

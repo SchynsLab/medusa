@@ -26,20 +26,26 @@ class RetinafaceLandmarkModel(nn.Module):
     device : str
         Either 'cuda' (GPU) or 'cpu'
     """
-    def __init__(self, model_name="2d106det", detector=SCRFDetector, device=DEVICE):
+    def __init__(self, model_name="2d106det", model_path=None, detector=SCRFDetector,
+                 device=DEVICE):
         super().__init__()
         self.model_name = model_name
         self.device = device
         self._det_model = detector(device=device)
-        self._model = self._init_model()
+        self._model = self._init_model(model_path)
         self.to(device).eval()
 
-    def _init_model(self):
+    def _init_model(self, model_path):
         """Initializes the landmark model by loading the ONNX model from disk."""
-        from ..data import get_external_data_config
 
-        f_in = get_external_data_config('insightface_path') / f'{self.model_name}.onnx'
-        return OnnxModel(f_in, self.device)
+        if model_path is None:
+            from ..data import get_external_data_config
+            model_path = get_external_data_config('insightface_path') / f'{self.model_name}.onnx'
+        else:
+            # Set model_name to name of the actual supplied model path
+            self.model_name = model_path.stem.split('.')[0]
+
+        return OnnxModel(model_path, self.device)
 
     def forward(self, imgs):
         """Runs the landmark model on a set of images.
