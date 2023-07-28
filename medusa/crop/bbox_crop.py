@@ -12,12 +12,11 @@ from ..defaults import DEVICE
 from ..detect import SCRFDetector
 from ..transforms import estimate_similarity_transform
 from .base import BaseCropModel
-from ..landmark import RetinafaceLandmarkModel
 
 
 class BboxCropModel(BaseCropModel):
     """A model that crops an image by creating a bounding box based on a set of
-    face landmarks.
+    face landmarks; based on the implementation from DECA.
 
     Parameters
     -----------
@@ -31,13 +30,18 @@ class BboxCropModel(BaseCropModel):
     device : str
         Either 'cuda' (GPU) or 'cpu'
     """
-    def __init__(self, lms_model_name="2d106det", output_size=(224, 224), detector=SCRFDetector,
+
+    def __init__(self, lms_model_name="2d106det", output_size=(224, 224),
                  device=DEVICE):
+
+        # Avoids circular import
+        from ..landmark import RetinafaceLandmarkModel
+
         # alternative: 1k3d68, 2d106det
         super().__init__()
         self.output_size = output_size  # h, w
         self.device = device
-        self._lms_model = RetinafaceLandmarkModel(lms_model_name, detector, device)
+        self._lms_model = RetinafaceLandmarkModel(lms_model_name, device=device)
         self.to(device).eval()
 
     def __str__(self):
@@ -128,6 +132,71 @@ class BboxCropModel(BaseCropModel):
             "bbox": bbox,
             "imgs_crop": imgs_crop.to(dtype=torch.uint8),
             "crop_mat": crop_mat,
+        }
+
+        return out_crop
+
+
+class InsightfaceBboxCropModel(BaseCropModel):
+    """Crop model based on a (scaled and) square bounding box as implemented by
+    insightface.
+
+    Parameters
+    ----------
+    device : str
+        Either 'cuda' (GPU) or 'cpu'
+    """
+    def __init__(self, output_size=(192, 192), scale_factor=1.5, device=DEVICE):
+        super().__init__()
+        self.output_size = output_size
+        self.scale_factor = scale_factor
+        self.device = device
+        self._det_model = SCRFDetector(device=device)
+        self.to(device).eval()
+
+    def forward(self, imgs):
+        """Runs the crop model on a set of images.
+
+        Parameters
+        ----------
+        imgs : torch.tensor
+            A torch.tensor of shape N (batch) x C x H x W
+
+        Returns
+        -------
+        out_crop : dict
+            Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
+            images) and "crop_mat" (3x3 crop matrices)
+        """
+
+        out_det = self._det_model(imgs)
+
+        if out_det.get("conf", None) is None:
+            return {**out_det, "imgs_crop": None, "crop_mat": None}
+
+        n_det = out_det["bbox"].shape[0]
+        bbox = out_det["bbox"]
+        imgs_stack = imgs[out_det["img_idx"]]
+
+        bw, bh = (bbox[:, 2] - bbox[:, 0]), (bbox[:, 3] - bbox[:, 1])
+        center = torch.stack(
+            [(bbox[:, 2] + bbox[:, 0]) / 2, (bbox[:, 3] + bbox[:, 1]) / 2], dim=1
+        )
+
+        oh, ow = self.output_size
+        scale = oh / (torch.maximum(bw, bh) * self.scale_factor)
+
+        # Construct initial crop matrix based on rough bounding box,
+        # then crop images to size 192 x 192
+        M = torch.eye(3, device=self.device).repeat(n_det, 1, 1) * scale[:, None, None]
+        M[:, 2, 2] = 1  # should always be 1
+        M[:, :2, 2] = -1 * center * scale[:, None] + oh / 2
+        imgs_crop = warp_affine(imgs_stack, M[:, :2, :], dsize=self.output_size)
+
+        out_crop = {
+            **out_det,
+            "imgs_crop": imgs_crop.to(dtype=torch.uint8),
+            "crop_mat": M,
         }
 
         return out_crop

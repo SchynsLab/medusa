@@ -5,4 +5,4 @@
 """
 
 from .align_crop import AlignCropModel
-from .bbox_crop import BboxCropModel
+from .bbox_crop import BboxCropModel, InsightfaceBboxCropModel

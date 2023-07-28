@@ -6,8 +6,7 @@ from torch import nn
 from kornia.geometry.transform import warp_affine
 
 from ..onnx import OnnxModel
-from ..detect import SCRFDetector
-from ..crop import AlignCropModel
+from ..crop import AlignCropModel, InsightfaceBboxCropModel
 from ..defaults import DEVICE
 
 
@@ -86,7 +85,7 @@ class RetinafaceGenderAgeModel(nn.Module):
     def __init__(self, model_path=None, device=DEVICE):
         super().__init__()
         self.device = device
-        self._det_model = SCRFDetector(device=device)
+        self._crop_model = InsightfaceBboxCropModel(output_size=(96, 96), device=device)
         self._model = self._init_model(model_path)
         self.to(device).eval()
 
@@ -115,30 +114,13 @@ class RetinafaceGenderAgeModel(nn.Module):
             number of faces detected in the input images
         """
 
-        out_det = self._det_model(imgs)
+        out_crop = self._crop_model(imgs)
 
-        if out_det.get("conf", None) is None:
-            out_lms = {**out_det, "lms": None}
-            return out_lms
+        if out_crop.get("imgs_crop", None) is None:
+            return {**out_crop, "gender": None, "age": None}
 
-        n_det = out_det["lms"].shape[0]
-        bbox = out_det["bbox"]
-        imgs_stack = imgs[out_det["img_idx"]]
-
-        bw, bh = (bbox[:, 2] - bbox[:, 0]), (bbox[:, 3] - bbox[:, 1])
-        center = torch.stack(
-            [(bbox[:, 2] + bbox[:, 0]) / 2, (bbox[:, 3] + bbox[:, 1]) / 2], dim=1
-        )
-
-        onnx_input_shape = self._model._params["in_shapes"][0]
-        scale = onnx_input_shape[3] / (torch.maximum(bw, bh) * 1.5)
-
-        # Construct initial crop matrix based on rough bounding box,
-        # then crop images to size 192 x 192
-        M = torch.eye(3, device=self.device).repeat(n_det, 1, 1) * scale[:, None, None]
-        M[:, 2, 2] = 1
-        M[:, :2, 2] = -1 * center * scale[:, None] + onnx_input_shape[3] / 2
-        imgs_crop = warp_affine(imgs_stack, M[:, :2, :], dsize=onnx_input_shape[2:])
+        imgs_crop = out_crop["imgs_crop"].float()
+        n_det = imgs_crop.shape[0]
 
         # Need to set batch dimension in output shape
         self._model._params["out_shapes"][0][0] = n_det

@@ -27,13 +27,13 @@ def test_crop_model(Model, lm_name, n_faces, device):
         n_exp = sum(n_faces)
 
     if Model == BboxCropModel:
-        model = Model(lm_name, (224, 224), device=device)
+        model = Model(lm_name, output_size=(224, 224), device=device)
     else:
         if lm_name == "2d106det":
             # not necessary to test
             return
 
-        model = Model((112, 112), device=device)
+        model = Model(output_size=(112, 112), device=device)
 
     out_crop = model(imgs)
     out_crop = BatchResults(device=device, **out_crop)
