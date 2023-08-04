@@ -1,11 +1,11 @@
 # Medusa installation
 
-Medusa is a Python package which works with Python version 3.9 and on Linux and and Mac (x86_64 architectures only). Most of Medusa's functionality will in fact also work on Windows and M1/M2 Macs (arm64 architecture), with the exception of rendering (as [pytorch3d](https://pytorch3d.org/) cannot be automatically installed on Windows and Mac M1/M2).
+Medusa is a Python package which works with Python version 3.10 and on Linux and and Mac (x86_64 architectures only). Most of Medusa's functionality will in fact also work on Windows and M1/M2 Macs (arm64 architecture), with the exception of rendering (as [pytorch3d](https://pytorch3d.org/) cannot be automatically installed on Windows and Mac M1/M2).
 
-We strongly recommend to install the `medusa` package in a separate Python environment, using for example [conda](https://anaconda.org/anaconda/conda). If you'd use *conda*, you can create a new environment named "medusa" with Python 3.9 as follows:
+We strongly recommend to install the `medusa` package in a separate Python environment, using for example [conda](https://anaconda.org/anaconda/conda). If you'd use *conda*, you can create a new environment named "medusa" with Python 3.10 as follows:
 
 ```console
-conda create -n medusa python=3.9
+conda create -n medusa python=3.10
 ```
 
 Then, to activate the environment, run:
