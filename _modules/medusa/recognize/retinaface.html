@@ -174,6 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../api/cli.html">Command-line interface</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/python.html">Python interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/python/analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/python/benchmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.benchmark</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
@@ -401,11 +402,11 @@ document.write(`
 <span></span><span class="sd">&quot;&quot;&quot;A face recognition model based on Insightface&#39;s Retinaface model, but implemented</span>
 <span class="sd">in PyTorch (but parts of it run with ONNX model), so can be fully run on GPU (no numpy</span>
 <span class="sd">necessary).&quot;&quot;&quot;</span>
-
+<span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 
 <span class="kn">from</span> <span class="nn">..onnx</span> <span class="kn">import</span> <span class="n">OnnxModel</span>
-<span class="kn">from</span> <span class="nn">..crop</span> <span class="kn">import</span> <span class="n">AlignCropModel</span>
+<span class="kn">from</span> <span class="nn">..crop</span> <span class="kn">import</span> <span class="n">AlignCropModel</span><span class="p">,</span> <span class="n">InsightfaceBboxCropModel</span>
 <span class="kn">from</span> <span class="nn">..defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
 
 
@@ -415,27 +416,29 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    model_path : str, Path</span>
+<span class="sd">        Path to the ONNX model file; if None, will use the default model</span>
 <span class="sd">    device : str</span>
 <span class="sd">        Either &#39;cuda&#39; (GPU) or &#39;cpu&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_crop_model</span> <span class="o">=</span> <span class="n">AlignCropModel</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_model</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_model</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_init_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_init_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the landmark model by loading the ONNX model from disk.&quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
+        <span class="k">if</span> <span class="n">model_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
+            <span class="n">isf_path</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;insightface_path&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">isf_path</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s1">&#39;buffalo_l&#39;</span><span class="p">:</span>
+                <span class="n">model_path</span> <span class="o">=</span> <span class="n">isf_path</span> <span class="o">/</span> <span class="s1">&#39;w600k_r50.onnx&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">model_path</span> <span class="o">=</span> <span class="n">isf_path</span> <span class="o">/</span> <span class="s1">&#39;glintr100.onnx&#39;</span>
 
-        <span class="n">isf_path</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;insightface_path&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">isf_path</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s1">&#39;buffalo_l&#39;</span><span class="p">:</span>
-            <span class="n">f_in</span> <span class="o">=</span> <span class="n">isf_path</span> <span class="o">/</span> <span class="s1">&#39;w600k_r50.onnx&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">f_in</span> <span class="o">=</span> <span class="n">isf_path</span> <span class="o">/</span> <span class="s1">&#39;glintr100.onnx&#39;</span>
-
-        <span class="k">return</span> <span class="n">OnnxModel</span><span class="p">(</span><span class="n">f_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OnnxModel</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RetinafaceRecognitionModel.forward"><a class="viewcode-back" href="../../../api/python/recognize/retinaface/index.html#medusa.recognize.retinaface.RetinafaceRecognitionModel.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imgs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the recognition model on a set of images.</span>
@@ -464,9 +467,71 @@ document.write(`
         <span class="n">imgs_crop</span> <span class="o">=</span> <span class="p">(</span><span class="n">imgs_crop</span> <span class="o">-</span> <span class="mf">127.5</span><span class="p">)</span> <span class="o">/</span> <span class="mf">127.5</span>
 
         <span class="c1"># Run model on cropped+normalized images</span>
-        <span class="n">X_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">imgs_crop</span><span class="p">)[</span><span class="s1">&#39;1333&#39;</span><span class="p">]</span>
+        <span class="n">X_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">imgs_crop</span><span class="p">,</span> <span class="n">outputs_as_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">X_emb</span></div></div>
+
+
+<div class="viewcode-block" id="RetinafaceGenderAgeModel"><a class="viewcode-back" href="../../../api/python/recognize/retinaface/index.html#medusa.recognize.retinaface.RetinafaceGenderAgeModel">[docs]</a><span class="k">class</span> <span class="nc">RetinafaceGenderAgeModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gender and age prediction model based on Insightface&#39;s model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model_path : str, Path</span>
+<span class="sd">        Path to the ONNX model file; if None, will use the default model</span>
+<span class="sd">    device : str</span>
+<span class="sd">        Either &#39;cuda&#39; (GPU) or &#39;cpu&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_crop_model</span> <span class="o">=</span> <span class="n">InsightfaceBboxCropModel</span><span class="p">(</span><span class="n">output_size</span><span class="o">=</span><span class="p">(</span><span class="mi">96</span><span class="p">,</span> <span class="mi">96</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_model</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the model by loading the ONNX model from disk.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">model_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">get_external_data_config</span>
+            <span class="n">isf_path</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;insightface_path&#39;</span><span class="p">)</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">isf_path</span> <span class="o">/</span> <span class="s1">&#39;genderage.onnx&#39;</span>
+
+        <span class="k">return</span> <span class="n">OnnxModel</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RetinafaceGenderAgeModel.forward"><a class="viewcode-back" href="../../../api/python/recognize/retinaface/index.html#medusa.recognize.retinaface.RetinafaceGenderAgeModel.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the gender+age prediction model on a set of images.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        imgs : torch.tensor</span>
+<span class="sd">            A torch.tensor of shape N (batch) x C x H x W</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        attr : dict</span>
+<span class="sd">            Dictionary with the following keys: &#39;gender&#39; (0 = female, 1 = male),</span>
+<span class="sd">            &#39;age&#39; (age in years), both torch.tensors with the first dimension being the</span>
+<span class="sd">            number of faces detected in the input images</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">out_crop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_crop_model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">out_crop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;imgs_crop&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">out_crop</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+
+        <span class="n">imgs_crop</span> <span class="o">=</span> <span class="n">out_crop</span><span class="p">[</span><span class="s2">&quot;imgs_crop&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+        <span class="n">n_det</span> <span class="o">=</span> <span class="n">imgs_crop</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Need to set batch dimension in output shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;out_shapes&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_det</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">imgs_crop</span><span class="p">,</span> <span class="n">outputs_as_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">gender</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">out</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 0 = female, 1 = male</span>
+        <span class="n">age</span> <span class="o">=</span> <span class="p">(</span><span class="n">out</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">int</span><span class="p">()</span>
+
+        <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">gender</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="n">age</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">attr</span></div></div>
 </pre></div>
 
                 </article>

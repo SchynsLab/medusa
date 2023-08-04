@@ -174,6 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../api/cli.html">Command-line interface</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/python.html">Python interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/python/analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/python/benchmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.benchmark</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/python/containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/python/containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
@@ -412,12 +413,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..detect</span> <span class="kn">import</span> <span class="n">SCRFDetector</span>
 <span class="kn">from</span> <span class="nn">..transforms</span> <span class="kn">import</span> <span class="n">estimate_similarity_transform</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseCropModel</span>
-<span class="kn">from</span> <span class="nn">..landmark</span> <span class="kn">import</span> <span class="n">RetinafaceLandmarkModel</span>
 
 
 <div class="viewcode-block" id="BboxCropModel"><a class="viewcode-back" href="../../../api/python/crop/bbox_crop/index.html#medusa.crop.bbox_crop.BboxCropModel">[docs]</a><span class="k">class</span> <span class="nc">BboxCropModel</span><span class="p">(</span><span class="n">BaseCropModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A model that crops an image by creating a bounding box based on a set of</span>
-<span class="sd">    face landmarks.</span>
+<span class="sd">    face landmarks; based on the implementation from DECA.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    -----------</span>
@@ -431,13 +431,18 @@ document.write(`
 <span class="sd">    device : str</span>
 <span class="sd">        Either &#39;cuda&#39; (GPU) or &#39;cpu&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lms_model_name</span><span class="o">=</span><span class="s2">&quot;2d106det&quot;</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">),</span> <span class="n">detector</span><span class="o">=</span><span class="n">SCRFDetector</span><span class="p">,</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lms_model_name</span><span class="o">=</span><span class="s2">&quot;2d106det&quot;</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">),</span>
                  <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+
+        <span class="c1"># Avoids circular import</span>
+        <span class="kn">from</span> <span class="nn">..landmark</span> <span class="kn">import</span> <span class="n">RetinafaceLandmarkModel</span>
+
         <span class="c1"># alternative: 1k3d68, 2d106det</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>  <span class="c1"># h, w</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lms_model</span> <span class="o">=</span> <span class="n">RetinafaceLandmarkModel</span><span class="p">(</span><span class="n">lms_model_name</span><span class="p">,</span> <span class="n">detector</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lms_model</span> <span class="o">=</span> <span class="n">RetinafaceLandmarkModel</span><span class="p">(</span><span class="n">lms_model_name</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -528,6 +533,71 @@ document.write(`
             <span class="s2">&quot;bbox&quot;</span><span class="p">:</span> <span class="n">bbox</span><span class="p">,</span>
             <span class="s2">&quot;imgs_crop&quot;</span><span class="p">:</span> <span class="n">imgs_crop</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span>
             <span class="s2">&quot;crop_mat&quot;</span><span class="p">:</span> <span class="n">crop_mat</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">out_crop</span></div></div>
+
+
+<div class="viewcode-block" id="InsightfaceBboxCropModel"><a class="viewcode-back" href="../../../api/python/crop/bbox_crop/index.html#medusa.crop.bbox_crop.InsightfaceBboxCropModel">[docs]</a><span class="k">class</span> <span class="nc">InsightfaceBboxCropModel</span><span class="p">(</span><span class="n">BaseCropModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Crop model based on a (scaled and) square bounding box as implemented by</span>
+<span class="sd">    insightface.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    device : str</span>
+<span class="sd">        Either &#39;cuda&#39; (GPU) or &#39;cpu&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="p">(</span><span class="mi">192</span><span class="p">,</span> <span class="mi">192</span><span class="p">),</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="n">scale_factor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span> <span class="o">=</span> <span class="n">SCRFDetector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<div class="viewcode-block" id="InsightfaceBboxCropModel.forward"><a class="viewcode-back" href="../../../api/python/crop/bbox_crop/index.html#medusa.crop.bbox_crop.InsightfaceBboxCropModel.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the crop model on a set of images.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        imgs : torch.tensor</span>
+<span class="sd">            A torch.tensor of shape N (batch) x C x H x W</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out_crop : dict</span>
+<span class="sd">            Dictionary with cropping outputs; includes the keys &quot;imgs_crop&quot; (cropped</span>
+<span class="sd">            images) and &quot;crop_mat&quot; (3x3 crop matrices)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">out_det</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">out_det</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conf&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">out_det</span><span class="p">,</span> <span class="s2">&quot;imgs_crop&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;crop_mat&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+
+        <span class="n">n_det</span> <span class="o">=</span> <span class="n">out_det</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">bbox</span> <span class="o">=</span> <span class="n">out_det</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">]</span>
+        <span class="n">imgs_stack</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[</span><span class="n">out_det</span><span class="p">[</span><span class="s2">&quot;img_idx&quot;</span><span class="p">]]</span>
+
+        <span class="n">bw</span><span class="p">,</span> <span class="n">bh</span> <span class="o">=</span> <span class="p">(</span><span class="n">bbox</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">bbox</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="n">bbox</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">bbox</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">[(</span><span class="n">bbox</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">bbox</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">bbox</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">bbox</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="n">oh</span><span class="p">,</span> <span class="n">ow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">oh</span> <span class="o">/</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">bh</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_factor</span><span class="p">)</span>
+
+        <span class="c1"># Construct initial crop matrix based on rough bounding box,</span>
+        <span class="c1"># then crop images to size 192 x 192</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_det</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">M</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># should always be 1</span>
+        <span class="n">M</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">center</span> <span class="o">*</span> <span class="n">scale</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">oh</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">imgs_crop</span> <span class="o">=</span> <span class="n">warp_affine</span><span class="p">(</span><span class="n">imgs_stack</span><span class="p">,</span> <span class="n">M</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:],</span> <span class="n">dsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span>
+
+        <span class="n">out_crop</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="o">**</span><span class="n">out_det</span><span class="p">,</span>
+            <span class="s2">&quot;imgs_crop&quot;</span><span class="p">:</span> <span class="n">imgs_crop</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span>
+            <span class="s2">&quot;crop_mat&quot;</span><span class="p">:</span> <span class="n">M</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">out_crop</span></div></div>

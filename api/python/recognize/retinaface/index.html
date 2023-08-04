@@ -177,6 +177,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../cli.html">Command-line interface</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../python.html">Python interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../benchmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.benchmark</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
@@ -468,6 +469,10 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recognize.retinaface.RetinafaceRecognitionModel.forward">forward</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recognize.retinaface.RetinafaceGenderAgeModel">RetinafaceGenderAgeModel</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recognize.retinaface.RetinafaceGenderAgeModel.forward">forward</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -490,12 +495,15 @@ necessary).</p>
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.recognize.retinaface.RetinafaceRecognitionModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recognize.retinaface.</span></span><span class="sig-name descname"><span class="pre">RetinafaceRecognitionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/recognize/retinaface.html#RetinafaceRecognitionModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recognize.retinaface.RetinafaceRecognitionModel" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recognize.retinaface.</span></span><span class="sig-name descname"><span class="pre">RetinafaceRecognitionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/recognize/retinaface.html#RetinafaceRecognitionModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recognize.retinaface.RetinafaceRecognitionModel" title="Permalink to this definition">#</a></dt>
 <dd><p>Face recognition model based on Insightface’s Retinaface model (trained using
 partial FC).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ (GPU) or ‘cpu’</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_path</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to the ONNX model file; if None, will use the default model</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ (GPU) or ‘cpu’</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
@@ -513,6 +521,39 @@ necessarily the number of input images)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>torch.tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="medusa.recognize.retinaface.RetinafaceGenderAgeModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.recognize.retinaface.</span></span><span class="sig-name descname"><span class="pre">RetinafaceGenderAgeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/recognize/retinaface.html#RetinafaceGenderAgeModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recognize.retinaface.RetinafaceGenderAgeModel" title="Permalink to this definition">#</a></dt>
+<dd><p>Gender and age prediction model based on Insightface’s model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_path</strong> (<em>str</em><em>, </em><em>Path</em>) – Path to the ONNX model file; if None, will use the default model</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ (GPU) or ‘cpu’</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="medusa.recognize.retinaface.RetinafaceGenderAgeModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/recognize/retinaface.html#RetinafaceGenderAgeModel.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.recognize.retinaface.RetinafaceGenderAgeModel.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs the gender+age prediction model on a set of images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>imgs</strong> (<em>torch.tensor</em>) – A torch.tensor of shape N (batch) x C x H x W</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>attr</strong> – Dictionary with the following keys: ‘gender’ (0 = female, 1 = male),
+‘age’ (age in years), both torch.tensors with the first dimension being the
+number of faces detected in the input images</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -592,6 +633,10 @@ necessarily the number of input images)</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recognize.retinaface.RetinafaceRecognitionModel">RetinafaceRecognitionModel</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recognize.retinaface.RetinafaceRecognitionModel.forward">forward</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recognize.retinaface.RetinafaceGenderAgeModel">RetinafaceGenderAgeModel</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.recognize.retinaface.RetinafaceGenderAgeModel.forward">forward</a></li>
 </ul>
 </li>
 </ul>

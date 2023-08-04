@@ -22,7 +22,7 @@ the default 'device' to 'cpu' so PyTorch will work as expected.
 Medusa can be installed using `pip` as follows:
 
 ```console
-pip install https://github.com/medusa-4D/medusa/releases/download/v0.0.6/medusa-0.0.6-py3-none-any.whl
+pip install https://github.com/SchynsLab/medusa/releases/download/v0.0.6/medusa-0.0.6-py3-none-any.whl
 ```
 
 ```{note}

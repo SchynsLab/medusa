@@ -14,7 +14,7 @@
 Module Contents
 ---------------
 
-.. py:class:: RetinafaceLandmarkModel(model_name='2d106det', detector=SCRFDetector, device=DEVICE)
+.. py:class:: RetinafaceLandmarkModel(model_name='2d106det', model_path=None, device=DEVICE)
 
 
 

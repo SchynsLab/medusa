@@ -177,6 +177,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../cli.html">Command-line interface</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../python.html">Python interface</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../benchmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.benchmark</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
@@ -468,6 +469,10 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.crop.bbox_crop.BboxCropModel.forward">forward</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.crop.bbox_crop.InsightfaceBboxCropModel">InsightfaceBboxCropModel</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.crop.bbox_crop.InsightfaceBboxCropModel.forward">forward</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -491,9 +496,9 @@ based on a set of existing (2D) landmarks.</p>
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.crop.bbox_crop.BboxCropModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.crop.bbox_crop.</span></span><span class="sig-name descname"><span class="pre">BboxCropModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lms_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d106det'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(224,</span> <span class="pre">224)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">SCRFDetector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/crop/bbox_crop.html#BboxCropModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.crop.bbox_crop.BboxCropModel" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.crop.bbox_crop.</span></span><span class="sig-name descname"><span class="pre">BboxCropModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lms_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d106det'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(224,</span> <span class="pre">224)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/crop/bbox_crop.html#BboxCropModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.crop.bbox_crop.BboxCropModel" title="Permalink to this definition">#</a></dt>
 <dd><p>A model that crops an image by creating a bounding box based on a set of
-face landmarks.</p>
+face landmarks; based on the implementation from DECA.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -513,6 +518,36 @@ face landmarks.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>imgs</strong> (<em>str</em><em>, </em><em>Path</em><em>, </em><em>tuple</em><em>, </em><em>list</em><em>, </em><em>array_like</em><em>, </em><em>torch.tensor</em>) – A path to an image, or a tuple/list of them, or already loaded images
 as a torch.tensor or numpy array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>out_crop</strong> – Dictionary with cropping outputs; includes the keys “imgs_crop” (cropped
+images) and “crop_mat” (3x3 crop matrices)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="medusa.crop.bbox_crop.InsightfaceBboxCropModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.crop.bbox_crop.</span></span><span class="sig-name descname"><span class="pre">InsightfaceBboxCropModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(192,</span> <span class="pre">192)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/crop/bbox_crop.html#InsightfaceBboxCropModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.crop.bbox_crop.InsightfaceBboxCropModel" title="Permalink to this definition">#</a></dt>
+<dd><p>Crop model based on a (scaled and) square bounding box as implemented by
+insightface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>device</strong> (<em>str</em>) – Either ‘cuda’ (GPU) or ‘cpu’</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="medusa.crop.bbox_crop.InsightfaceBboxCropModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/medusa/crop/bbox_crop.html#InsightfaceBboxCropModel.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.crop.bbox_crop.InsightfaceBboxCropModel.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs the crop model on a set of images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>imgs</strong> (<em>torch.tensor</em>) – A torch.tensor of shape N (batch) x C x H x W</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out_crop</strong> – Dictionary with cropping outputs; includes the keys “imgs_crop” (cropped
@@ -599,6 +634,10 @@ images) and “crop_mat” (3x3 crop matrices)</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.crop.bbox_crop.BboxCropModel">BboxCropModel</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.crop.bbox_crop.BboxCropModel.forward">forward</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.crop.bbox_crop.InsightfaceBboxCropModel">InsightfaceBboxCropModel</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#medusa.crop.bbox_crop.InsightfaceBboxCropModel.forward">forward</a></li>
 </ul>
 </li>
 </ul>

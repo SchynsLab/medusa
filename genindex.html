@@ -174,6 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="api/cli.html">Command-line interface</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/python.html">Python interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/python/analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/python/benchmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.benchmark</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/python/containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/python/containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/python/containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
@@ -604,6 +605,8 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/benchmark/index.html#medusa.benchmark.FancyTimer">FancyTimer (class in medusa.benchmark)</a>
+</li>
       <li><a href="api/python/recon/flame/mica/encoders/index.html#medusa.recon.flame.mica.encoders.IResNet.fc_scale">fc_scale (medusa.recon.flame.mica.encoders.IResNet attribute)</a>
 </li>
       <li><a href="api/python/tracking/index.html#medusa.tracking.filter_faces">filter_faces() (in module medusa.tracking)</a>
@@ -639,6 +642,8 @@ document.write(`
       <ul>
         <li><a href="api/python/crop/bbox_crop/index.html#medusa.crop.bbox_crop.BboxCropModel.forward">(medusa.crop.bbox_crop.BboxCropModel method)</a>
 </li>
+        <li><a href="api/python/crop/bbox_crop/index.html#medusa.crop.bbox_crop.InsightfaceBboxCropModel.forward">(medusa.crop.bbox_crop.InsightfaceBboxCropModel method)</a>
+</li>
         <li><a href="api/python/detect/scrfd/index.html#medusa.detect.scrfd.SCRFDetector.forward">(medusa.detect.scrfd.SCRFDetector method)</a>
 </li>
         <li><a href="api/python/detect/scrfd/index.html#medusa.detect.scrfd.SCRFDPostproc.forward">(medusa.detect.scrfd.SCRFDPostproc method)</a>
@@ -646,6 +651,8 @@ document.write(`
         <li><a href="api/python/detect/yunet/index.html#medusa.detect.yunet.YunetDetector.forward">(medusa.detect.yunet.YunetDetector method)</a>
 </li>
         <li><a href="api/python/landmark/retinaface/index.html#medusa.landmark.retinaface.RetinafaceLandmarkModel.forward">(medusa.landmark.retinaface.RetinafaceLandmarkModel method)</a>
+</li>
+        <li><a href="api/python/recognize/retinaface/index.html#medusa.recognize.retinaface.RetinafaceGenderAgeModel.forward">(medusa.recognize.retinaface.RetinafaceGenderAgeModel method)</a>
 </li>
         <li><a href="api/python/recognize/retinaface/index.html#medusa.recognize.retinaface.RetinafaceRecognitionModel.forward">(medusa.recognize.retinaface.RetinafaceRecognitionModel method)</a>
 </li>
@@ -756,6 +763,8 @@ document.write(`
 </li>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.image2world">image2world() (in module medusa.recon.mpipe._transforms)</a>
 </li>
+      <li><a href="api/python/crop/bbox_crop/index.html#medusa.crop.bbox_crop.InsightfaceBboxCropModel">InsightfaceBboxCropModel (class in medusa.crop.bbox_crop)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/recon/mpipe/_transforms/index.html#medusa.recon.mpipe._transforms.internal_solve_weighted_orthogonal_problem">internal_solve_weighted_orthogonal_problem() (in module medusa.recon.mpipe._transforms)</a>
@@ -763,6 +772,8 @@ document.write(`
       <li><a href="api/python/recon/flame/mica/encoders/index.html#medusa.recon.flame.mica.encoders.IResNet">IResNet (class in medusa.recon.flame.mica.encoders)</a>
 </li>
       <li><a href="api/python/recon/flame/base/index.html#medusa.recon.flame.base.FlameReconModel.is_dense">is_dense() (medusa.recon.flame.base.FlameReconModel method)</a>
+</li>
+      <li><a href="api/python/benchmark/index.html#medusa.benchmark.FancyTimer.iter">iter() (medusa.benchmark.FancyTimer static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -813,6 +824,13 @@ document.write(`
 
       <ul>
         <li><a href="api/python/analysis/index.html#module-medusa.analysis">module</a>
+</li>
+      </ul></li>
+      <li>
+    medusa.benchmark
+
+      <ul>
+        <li><a href="api/python/benchmark/index.html#module-medusa.benchmark">module</a>
 </li>
       </ul></li>
       <li>
@@ -1193,6 +1211,8 @@ document.write(`
       <ul>
         <li><a href="api/python/analysis/index.html#module-medusa.analysis">medusa.analysis</a>
 </li>
+        <li><a href="api/python/benchmark/index.html#module-medusa.benchmark">medusa.benchmark</a>
+</li>
         <li><a href="api/python/containers/index.html#module-medusa.containers">medusa.containers</a>
 </li>
         <li><a href="api/python/containers/fourD/index.html#module-medusa.containers.fourD">medusa.containers.fourD</a>
@@ -1358,6 +1378,8 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/recon/flame/deca/encoders/index.html#medusa.recon.flame.deca.encoders.ResnetEncoder">ResnetEncoder (class in medusa.recon.flame.deca.encoders)</a>
 </li>
+      <li><a href="api/python/recognize/retinaface/index.html#medusa.recognize.retinaface.RetinafaceGenderAgeModel">RetinafaceGenderAgeModel (class in medusa.recognize.retinaface)</a>
+</li>
       <li><a href="api/python/landmark/retinaface/index.html#medusa.landmark.retinaface.RetinafaceLandmarkModel">RetinafaceLandmarkModel (class in medusa.landmark.retinaface)</a>
 </li>
       <li><a href="api/python/recognize/retinaface/index.html#medusa.recognize.retinaface.RetinafaceRecognitionModel">RetinafaceRecognitionModel (class in medusa.recognize.retinaface)</a>
@@ -1410,14 +1432,18 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/crop/align_crop/index.html#medusa.crop.align_crop.TEMPLATE">TEMPLATE (in module medusa.crop.align_crop)</a>
 </li>
+      <li><a href="api/python/benchmark/index.html#medusa.benchmark.FancyTimer.time">time() (medusa.benchmark.FancyTimer method)</a>
+</li>
       <li><a href="api/python/epoch/index.html#medusa.epoch.EpochsArray.to_4D">to_4D() (medusa.epoch.EpochsArray method)</a>
+</li>
+      <li><a href="api/python/benchmark/index.html#medusa.benchmark.FancyTimer.to_df">to_df() (medusa.benchmark.FancyTimer method)</a>
 </li>
       <li><a href="api/python/containers/results/index.html#medusa.containers.results.BatchResults.to_dict">to_dict() (medusa.containers.results.BatchResults method)</a>
 </li>
-      <li><a href="api/python/containers/fourD/index.html#medusa.containers.fourD.Data4D.to_local">to_local() (medusa.containers.fourD.Data4D method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/containers/fourD/index.html#medusa.containers.fourD.Data4D.to_local">to_local() (medusa.containers.fourD.Data4D method)</a>
+</li>
       <li><a href="api/python/epoch/index.html#medusa.epoch.EpochsArray.to_mne">to_mne() (medusa.epoch.EpochsArray method)</a>
 </li>
       <li><a href="api/python/render/overlay/index.html#medusa.render.overlay.Overlay.to_rgb">to_rgb() (medusa.render.overlay.Overlay method)</a>
