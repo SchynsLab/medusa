@@ -26,6 +26,7 @@ parts:
     - glob: api/python/*/*
 - caption: Misc
   chapters:
+  - file: misc/speed_benchmarks
   - file: misc/bibliography
   - file: misc/contributing
   - file: misc/for_developers

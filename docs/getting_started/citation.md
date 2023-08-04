@@ -21,6 +21,13 @@ Snoek, L., Jack, R., & Schyns, P. (2023, January 7). Dynamic face imaging: a nov
 ````
 `````
 
+As Medusa relies on models from [Insightface]() for face detection, alignment, and
+cropping, please cite the following two papers as well:
+
+> Deng, J., Guo, J., Ververas, E., Kotsia, I., & Zafeiriou, S. (2020). Retinaface: Single-shot multi-level face localisation in the wild. In *Proceedings of the IEEE/CVF conference on computer vision and pattern recognition* (pp. 5203-5212).
+
+> Guo, J., Deng, J., Lattas, A., & Zafeiriou, S. (2021). Sample and computation redistribution for efficient face detection. *arXiv preprint arXiv:2105.04714*.
+
 ## Citing reconstruction models
 
 Please also cite the following, depending on the reconstruction model you use.
