@@ -155,8 +155,8 @@ docs/autoapi/_build
 docs/getting_started/*.mp4
 docs/api/python/**/*.rst.txt
 docs/api/python/**/*.rst
-docs/tutorials/*.mp4
-docs/tutorials/*.png
+docs/tutorials/viz/*.mp4
+docs/tutorials/viz/*.png
 
 # Data
 medusa/data/example_data/recons/*.h5

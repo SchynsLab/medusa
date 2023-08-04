@@ -29,6 +29,9 @@ jobs:
           passwd_flame: ${{ secrets.PASSWD_FLAME }}
         if: steps.cache-downloads.outputs.cache-hit != 'true'
         run: poetry run ./ci/download_data
+      - name: Test docs
+        shell: bash
+        run: poetry run ./docs/test_docs
       - name: Build docs
         shell: bash
         run: poetry run ./docs/build_docs
