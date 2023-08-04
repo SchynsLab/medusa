@@ -3,7 +3,6 @@ in PyTorch (but parts of it run with ONNX model), so can be fully run on GPU (no
 necessary)."""
 import torch
 from torch import nn
-from kornia.geometry.transform import warp_affine
 
 from ..onnx import OnnxModel
 from ..crop import AlignCropModel, InsightfaceBboxCropModel
