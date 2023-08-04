@@ -1,1 +1,2 @@
+#!/usr/bin/env bash
 pytest --nbval --ignore=docs/_build/ --ignore=docs/misc/speed_benchmarks.ipynb docs/
