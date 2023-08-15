@@ -497,6 +497,9 @@ document.write(`
             <span class="k">if</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
+        <span class="c1">#if reader is not None:</span>
+        <span class="c1">#    reader = iter(reader)</span>
+
         <span class="n">fps</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fps&quot;</span><span class="p">,</span> <span class="n">data4d</span><span class="o">.</span><span class="n">video_metadata</span><span class="p">[</span><span class="s2">&quot;fps&quot;</span><span class="p">])</span>
         <span class="n">n_frames</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_frames&quot;</span><span class="p">,</span> <span class="n">data4d</span><span class="o">.</span><span class="n">video_metadata</span><span class="p">[</span><span class="s2">&quot;n_img&quot;</span><span class="p">])</span>
         <span class="n">writer</span> <span class="o">=</span> <span class="n">VideoWriter</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">f_out</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>  <span class="c1"># writes out images to video stream</span>
@@ -505,15 +508,19 @@ document.write(`
         <span class="n">iter_</span> <span class="o">=</span> <span class="n">tqdm_log</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_frames</span><span class="p">),</span> <span class="n">LOGGER</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Render mesh&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i_img</span> <span class="ow">in</span> <span class="n">iter_</span><span class="p">:</span>
 
+            <span class="c1"># Which meshes belong to this frame?</span>
+            <span class="n">img_idx</span> <span class="o">=</span> <span class="n">data4d</span><span class="o">.</span><span class="n">img_idx</span> <span class="o">==</span> <span class="n">i_img</span>
+
             <span class="k">if</span> <span class="n">reader</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Get background from video</span>
-                <span class="n">background</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">reader</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">data4d</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">background</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">reader</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">data4d</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                    <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Video is shorter than expected; breaking after </span><span class="si">{</span><span class="n">i_img</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> images!&quot;</span><span class="p">)</span>
+                    <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">viewport</span>
                 <span class="n">background</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span>
-
-            <span class="c1"># Which meshes belong to this frame?</span>
-            <span class="n">img_idx</span> <span class="o">=</span> <span class="n">data4d</span><span class="o">.</span><span class="n">img_idx</span> <span class="o">==</span> <span class="n">i_img</span>
 
             <span class="k">if</span> <span class="n">img_idx</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># No faces in this frame! Just render background</span>

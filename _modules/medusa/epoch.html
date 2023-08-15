@@ -407,10 +407,22 @@ document.write(`
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 
 <span class="kn">from</span> <span class="nn">.transforms</span> <span class="kn">import</span> <span class="n">compose_matrix</span>
+<span class="kn">from</span> <span class="nn">.log</span> <span class="kn">import</span> <span class="n">tqdm_log</span>
+<span class="kn">from</span> <span class="nn">.defaults</span> <span class="kn">import</span> <span class="n">LOGGER</span><span class="p">,</span> <span class="n">DEVICE</span>
 
 
 <div class="viewcode-block" id="EpochsArray"><a class="viewcode-back" href="../../api/python/epoch/index.html#medusa.epoch.EpochsArray">[docs]</a><span class="k">class</span> <span class="nc">EpochsArray</span><span class="p">:</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Experimental class for epoching and storing epoched data.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v_epochs : np.ndarray</span>
+<span class="sd">        Array with epoched vertices</span>
+<span class="sd">    params_epochs : np.ndarray</span>
+<span class="sd">        Array with epoched global movement parameters</span>
+<span class="sd">    frame_t : np.ndarray</span>
+<span class="sd">        Array with frame times</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_epochs</span><span class="p">,</span> <span class="n">params_epochs</span><span class="p">,</span> <span class="n">frame_t</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v_epochs</span> <span class="o">=</span> <span class="n">v_epochs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params_epochs</span> <span class="o">=</span> <span class="n">params_epochs</span>
@@ -423,7 +435,34 @@ document.write(`
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="EpochsArray.from_4D"><a class="viewcode-back" href="../../api/python/epoch/index.html#medusa.epoch.EpochsArray.from_4D">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_4D</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">start</span><span class="o">=-</span><span class="mf">.5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s1">&#39;onset&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">from_4D</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">start</span><span class="o">=-</span><span class="mf">.5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s1">&#39;onset&#39;</span><span class="p">,</span>
+                <span class="n">anchor_units</span><span class="o">=</span><span class="s1">&#39;frames&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A classmethod to create an ``EpochsArray`` object from a single `Data4D` object</span>
+<span class="sd">        (with multiple events) or a list of `Data4D` objects (with one event each).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : Data4D, list[Data4D]</span>
+<span class="sd">            A single `Data4D` object or a list of `Data4D` objects</span>
+<span class="sd">        events : str, Path, pd.DataFrame</span>
+<span class="sd">            Path to a TSV file with events or a pandas DataFrame with events; should have</span>
+<span class="sd">            one of the columns [&#39;onset&#39;, &#39;offset&#39;] and optionally [&#39;duration&#39;], which</span>
+<span class="sd">            depends on your choice of `anchor` (see below)</span>
+<span class="sd">        start : float</span>
+<span class="sd">            Start time of the epoch relative to the anchor (in seconds)</span>
+<span class="sd">        end : float</span>
+<span class="sd">            End time of the epoch relative to the anchor (in seconds)</span>
+<span class="sd">        period : float</span>
+<span class="sd">            Sampling period of the epoch (in seconds)</span>
+<span class="sd">        T : int</span>
+<span class="sd">            Number of time points in the epoch (only relevant when `anchor` is not</span>
+<span class="sd">            &#39;duration&#39; or &#39;span&#39;)</span>
+<span class="sd">        anchor : str</span>
+<span class="sd">            Anchor point of the epoch; one of [&#39;onset&#39;, &#39;offset&#39;, &#39;duration&#39;, &#39;span&#39;]</span>
+<span class="sd">            (where &#39;span&#39; represents the entire period between &#39;onset&#39; and &#39;offset&#39;)</span>
+<span class="sd">        anchor_units : str</span>
+<span class="sd">            Units of the anchor point; one of [&#39;frames&#39;, &#39;seconds&#39;]        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Read in pandas DataFrame if `events` is a string/Path</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
@@ -440,12 +479,14 @@ document.write(`
             <span class="c1"># Multiple Data4D objects with one event file</span>
             <span class="n">events</span> <span class="o">=</span> <span class="p">[</span><span class="n">events</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
 
-        <span class="k">if</span> <span class="n">anchor</span> <span class="o">!=</span> <span class="s1">&#39;duration&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">anchor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="s1">&#39;span&#39;</span><span class="p">):</span>
             <span class="n">T</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="n">period</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="n">v_epochs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">params_epochs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">ev</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">):</span>
+        <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm_log</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">),</span> <span class="n">logger</span><span class="o">=</span><span class="n">LOGGER</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Epoching files&#39;</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">ev</span> <span class="ow">in</span> <span class="n">pbar</span><span class="p">:</span>
 
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
                 <span class="n">d</span> <span class="o">=</span> <span class="n">Data4D</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
@@ -454,10 +495,10 @@ document.write(`
                 <span class="n">d</span><span class="o">.</span><span class="n">to_local</span><span class="p">()</span>
 
             <span class="k">assert</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">face_idx</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-
+            
+            <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_face</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">face_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pad_missing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">fps</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">video_metadata</span><span class="p">[</span><span class="s1">&#39;fps&#39;</span><span class="p">]</span>
-            <span class="n">n_frames</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">video_metadata</span><span class="p">[</span><span class="s1">&#39;n_img&#39;</span><span class="p">]</span>
-            <span class="n">frame_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_frames</span> <span class="o">/</span> <span class="n">fps</span><span class="p">,</span> <span class="n">n_frames</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">frame_t</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">img_idx</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="o">/</span> <span class="n">fps</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">decompose_mats</span><span class="p">(</span><span class="n">to_df</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -466,17 +507,21 @@ document.write(`
             <span class="n">ipl_p</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">frame_t</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-
-                <span class="n">row</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ev</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">,</span> <span class="s1">&#39;duration&#39;</span><span class="p">]]</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)):</span>
-                    <span class="n">row</span> <span class="o">/=</span> <span class="n">fps</span>
-
+                
+                <span class="n">row</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ev</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">anchor_units</span> <span class="o">==</span> <span class="s1">&#39;frames&#39;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">,</span> <span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="s1">&#39;duration&#39;</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+                            <span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">/=</span> <span class="n">fps</span>
+    
                 <span class="k">if</span> <span class="n">anchor</span> <span class="o">==</span> <span class="s1">&#39;onset&#39;</span><span class="p">:</span>
-                    <span class="n">anchor_</span> <span class="o">=</span>  <span class="n">row</span><span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">]</span>
+                    <span class="n">anchor_</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">]</span>
                     <span class="n">range_</span> <span class="o">=</span> <span class="p">(</span><span class="n">anchor_</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span> <span class="n">anchor_</span> <span class="o">+</span> <span class="n">end</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">anchor</span> <span class="o">==</span> <span class="s1">&#39;offset&#39;</span><span class="p">:</span>
                     <span class="n">anchor_</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span>
                     <span class="n">range_</span> <span class="o">=</span> <span class="p">(</span><span class="n">anchor_</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span> <span class="n">anchor_</span> <span class="o">+</span> <span class="n">end</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">anchor</span> <span class="o">==</span> <span class="s1">&#39;span&#39;</span><span class="p">:</span>
+                    <span class="n">range_</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">])</span>
                 <span class="k">elif</span> <span class="n">anchor</span> <span class="o">==</span> <span class="s1">&#39;duration&#39;</span><span class="p">:</span>
                     <span class="n">onset</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">]</span>
                     <span class="n">range_</span> <span class="o">=</span> <span class="p">(</span><span class="n">onset</span><span class="p">,</span> <span class="n">onset</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">])</span>
@@ -496,8 +541,26 @@ document.write(`
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">v_epochs</span><span class="p">,</span> <span class="n">params_epochs</span><span class="p">,</span> <span class="n">frame_t</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EpochsArray.to_4D"><a class="viewcode-back" href="../../api/python/epoch/index.html#medusa.epoch.EpochsArray.to_4D">[docs]</a>    <span class="k">def</span> <span class="nf">to_4D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="EpochsArray.to_4D"><a class="viewcode-back" href="../../api/python/epoch/index.html#medusa.epoch.EpochsArray.to_4D">[docs]</a>    <span class="k">def</span> <span class="nf">to_4D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">cam_mat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the `EpochsArray` object to a `Data4D` object by aggregating</span>
+<span class="sd">        (e.g., averaging) the epochs.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        agg : str</span>
+<span class="sd">            Aggregation method; one of [&#39;mean&#39;, &#39;median&#39;]</span>
+<span class="sd">        cam_mat : np.ndarray</span>
+<span class="sd">            Camera matrix (e.g., take one from the inputs `Data4D` objects)</span>
+<span class="sd">        device : str</span>
+<span class="sd">            Either &#39;cpu&#39; or &#39;cuda&#39; (GPU)</span>
+<span class="sd">        kwargs : dict</span>
+<span class="sd">            Additional keyword arguments to pass to the `Data4D` constructor</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data : Data4D</span>
+<span class="sd">            A `Data4D` object with the aggregated epochs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">agg</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span>
             <span class="n">agg_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span>
         <span class="k">elif</span> <span class="n">agg</span> <span class="o">==</span> <span class="s1">&#39;median&#39;</span><span class="p">:</span>
@@ -508,15 +571,7 @@ document.write(`
         <span class="n">v_av</span> <span class="o">=</span> <span class="n">agg_f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v_epochs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">params_av</span> <span class="o">=</span> <span class="n">agg_f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params_epochs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">params_av</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">params_av</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">params_av</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">trans</span><span class="p">,</span> <span class="n">rots</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">shear</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">9</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">9</span><span class="p">:]</span>
-        <span class="n">rots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">rots</span><span class="p">)</span>
-        <span class="n">mat0</span> <span class="o">=</span> <span class="n">compose_matrix</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">shear</span><span class="p">,</span> <span class="n">rots</span><span class="p">,</span> <span class="n">trans</span><span class="p">)</span>
-        <span class="n">cam_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">cam_mat</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">cam_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">mat0</span><span class="p">)</span> <span class="o">@</span> <span class="n">cam_mat</span>
-        <span class="n">cam_mat</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">Data4D</span><span class="p">(</span><span class="n">v_av</span><span class="p">,</span> <span class="n">params_av</span><span class="p">,</span> <span class="n">cam_mat</span><span class="o">=</span><span class="n">cam_mat</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Data4D</span><span class="p">(</span><span class="n">v_av</span><span class="p">,</span> <span class="n">params_av</span><span class="p">,</span> <span class="n">cam_mat</span><span class="o">=</span><span class="n">cam_mat</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">data</span></div></div>
 </pre></div>

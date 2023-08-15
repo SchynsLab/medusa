@@ -522,7 +522,9 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_template_flame</span>
-<span class="n">template</span> <span class="o">=</span> <span class="n">get_template_flame</span><span class="p">(</span><span class="n">topo</span><span class="o">=</span><span class="s1">&#39;coarse&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">medusa.defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>  <span class="c1"># &#39;cuda&#39; if available, otherwise &#39;cpu&#39;</span>
+
+<span class="n">template</span> <span class="o">=</span> <span class="n">get_template_flame</span><span class="p">(</span><span class="n">topo</span><span class="o">=</span><span class="s1">&#39;coarse&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">)</span>
 <span class="n">v</span> <span class="o">=</span> <span class="n">template</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
 
 <span class="c1"># Show shape of vertices</span>
@@ -545,7 +547,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([ 0.0620,  1.4935, -0.0272])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([ 0.0620,  1.4935, -0.0272], device=&#39;cuda:0&#39;)
 </pre></div>
 </div>
 </div>
@@ -586,7 +588,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([3, 1, 0])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([3, 1, 0], device=&#39;cuda:0&#39;)
 </pre></div>
 </div>
 </div>
@@ -646,7 +648,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Movement (meter)&#39;)
 </pre></div>
 </div>
-<img alt="../_images/cdd6a7b066bd0b687e1b94c56cadd3d34a5f788277f3b431517b235ae057c383.png" src="../_images/cdd6a7b066bd0b687e1b94c56cadd3d34a5f788277f3b431517b235ae057c383.png" />
+<img alt="../_images/4b0adf8b17f4bd6f7351b2052d4fb22a67596eb27ba76f6b12c9ea1e1bc06ecf.png" src="../_images/4b0adf8b17f4bd6f7351b2052d4fb22a67596eb27ba76f6b12c9ea1e1bc06ecf.png" />
 </div>
 </div>
 <p>It is these “signals” or “time series” that you can use as measurments of facial movement and analyze as such. In the <a class="reference internal" href="analysis.html"><span class="doc std std-doc">analysis tutorial</span></a>, we discuss some ways in which one can go about doing this.</p>

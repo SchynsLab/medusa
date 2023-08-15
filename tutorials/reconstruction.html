@@ -610,10 +610,13 @@ document.write(`
 </div>
 </div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">loader</span></code> is, like PyTorch <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects, an iterable, which means that you can loop over it! In each iteration of the loop, it will yield a batch of data with <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> number of frames:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">loader</span></code> is, like PyTorch <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects, an iterable, which means that you can loop over it! In each iteration of the loop, it will yield a batch of data with <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> number of frames. Note that it puts the batch by default on CPU; if you want to put it on the GPU, you need to explicitly call <code class="docutils literal notranslate"><span class="pre">.to('cuda')</span></code>. Below, we cast it to the default device (which is ‘cuda’ if an NVIDIA GPU is available, and ‘cpu’ otherwise):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">loader</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.defaults</span> <span class="kn">import</span> <span class="n">DEVICE</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">loader</span><span class="p">):</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading in batch </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> frames ...&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -622,13 +625,15 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 1 with 32 frames ...
 Loading in batch 2 with 32 frames ...
 Loading in batch 3 with 32 frames ...
-Loading in batch 4 with 32 frames ...
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 5 with 32 frames ...
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 4 with 32 frames ...
+Loading in batch 5 with 32 frames ...
 Loading in batch 6 with 32 frames ...
 Loading in batch 7 with 32 frames ...
-Loading in batch 8 with 8 frames ...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading in batch 8 with 8 frames ...
 </pre></div>
 </div>
 </div>
@@ -822,7 +827,7 @@ Loading in batch 8 with 8 frames ...
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0, 1, 2, 3, 4, 5, 6, 7])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0, 1, 2, 3, 4, 5, 6, 7], device=&#39;cuda:0&#39;)
 </pre></div>
 </div>
 </div>
@@ -838,7 +843,7 @@ Loading in batch 8 with 8 frames ...
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0, 0, 0, 0, 0, 0, 0, 0])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0, 0, 0, 0, 0, 0, 0, 0], device=&#39;cuda:0&#39;)
 </pre></div>
 </div>
 </div>
