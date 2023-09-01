@@ -467,6 +467,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-external-data">Downloading external data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-from-source">Installation from source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-pytorch3d-on-mac-m1">Install <code class="docutils literal notranslate"><span class="pre">pytorch3d</span></code> on Mac M1</a></li>
 </ul>
             </nav>
         </div>
@@ -530,6 +531,15 @@ with the account you created on the FLAME website. After all data has been downl
 <section id="installation-from-source">
 <h2>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this heading">#</a></h2>
 <p>If you want to install Medusa from source, check out the <a class="reference internal" href="../misc/for_developers.html"><span class="doc std std-doc">for developers</span></a> page.</p>
+</section>
+<section id="install-pytorch3d-on-mac-m1">
+<h2>Install <code class="docutils literal notranslate"><span class="pre">pytorch3d</span></code> on Mac M1<a class="headerlink" href="#install-pytorch3d-on-mac-m1" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>clone <code class="docutils literal notranslate"><span class="pre">pytorch3d</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">pytorch3d</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">build/</span> <span class="pre">**/*.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MACOSX_DEPLOYMENT_TARGET=10.14</span> <span class="pre">CC=clang</span> <span class="pre">CXX=clang++</span> <span class="pre">ARCHFLAGS=&quot;-arch</span> <span class="pre">arm64&quot;</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></p></li>
+</ul>
 </section>
 </section>
 
@@ -602,6 +612,7 @@ with the account you created on the FLAME website. After all data has been downl
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-external-data">Downloading external data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-from-source">Installation from source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-pytorch3d-on-mac-m1">Install <code class="docutils literal notranslate"><span class="pre">pytorch3d</span></code> on Mac M1</a></li>
 </ul>
   </nav></div>
 

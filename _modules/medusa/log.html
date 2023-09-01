@@ -441,7 +441,7 @@ document.write(`
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="tqdm_log"><a class="viewcode-back" href="../../api/python/log/index.html#medusa.log.tqdm_log">[docs]</a><span class="k">def</span> <span class="nf">tqdm_log</span><span class="p">(</span><span class="n">iter_</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Render shape&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm_log"><a class="viewcode-back" href="../../api/python/log/index.html#medusa.log.tqdm_log">[docs]</a><span class="k">def</span> <span class="nf">tqdm_log</span><span class="p">(</span><span class="n">iter_</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Render shape&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates an iterator with optional tqdm progressbar that plays nicely</span>
 <span class="sd">    with an existing Medusa logger.</span>
 
@@ -462,7 +462,7 @@ document.write(`
 
     <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">:</span>
         <span class="n">pre</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M [INFO   ] &quot;</span><span class="p">)</span>
-        <span class="n">iter_</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">iter_</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pre</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">iter_</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">iter_</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pre</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">iter_</span></div>
 </pre></div>

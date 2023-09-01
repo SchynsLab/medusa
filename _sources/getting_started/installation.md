@@ -62,3 +62,10 @@ with the account you created on the FLAME website. After all data has been downl
 ## Installation from source
 
 If you want to install Medusa from source, check out the [for developers](../misc/for_developers) page.
+
+## Install `pytorch3d` on Mac M1
+
+- clone `pytorch3d`
+- `cd pytorch3d`
+- `rm -rf build/ **/*.so`
+- `MACOSX_DEPLOYMENT_TARGET=10.14 CC=clang CXX=clang++ ARCHFLAGS="-arch arm64" pip install -e .`

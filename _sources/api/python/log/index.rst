@@ -28,7 +28,7 @@ Module Contents
    >>> logger.info("Hello!")
 
 
-.. py:function:: tqdm_log(iter_, logger, desc='Render shape', **kwargs)
+.. py:function:: tqdm_log(iter_, logger, desc='Render shape')
 
    Creates an iterator with optional tqdm progressbar that plays nicely
    with an existing Medusa logger.

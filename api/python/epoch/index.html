@@ -493,17 +493,7 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="medusa.epoch.EpochsArray">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">medusa.epoch.</span></span><span class="sig-name descname"><span class="pre">EpochsArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params_epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/epoch.html#EpochsArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.epoch.EpochsArray" title="Permalink to this definition">#</a></dt>
-<dd><p>Experimental class for epoching and storing epoched data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>v_epochs</strong> (<em>np.ndarray</em>) – Array with epoched vertices</p></li>
-<li><p><strong>params_epochs</strong> (<em>np.ndarray</em>) – Array with epoched global movement parameters</p></li>
-<li><p><strong>frame_t</strong> (<em>np.ndarray</em>) – Array with frame times</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
+<dd><dl class="py method">
 <dt class="sig sig-object py" id="medusa.epoch.EpochsArray.baseline_normalize">
 <span class="sig-name descname"><span class="pre">baseline_normalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/epoch.html#EpochsArray.baseline_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.epoch.EpochsArray.baseline_normalize" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -515,51 +505,13 @@ document.write(`
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.epoch.EpochsArray.from_4D">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'onset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'frames'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/epoch.html#EpochsArray.from_4D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.epoch.EpochsArray.from_4D" title="Permalink to this definition">#</a></dt>
-<dd><p>A classmethod to create an <code class="docutils literal notranslate"><span class="pre">EpochsArray</span></code> object from a single <cite>Data4D</cite> object
-(with multiple events) or a list of <cite>Data4D</cite> objects (with one event each).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="../containers/fourD/index.html#medusa.containers.fourD.Data4D" title="medusa.containers.fourD.Data4D"><em>Data4D</em></a><em>, </em><em>list</em><em>[</em><a class="reference internal" href="../containers/fourD/index.html#medusa.containers.fourD.Data4D" title="medusa.containers.fourD.Data4D"><em>Data4D</em></a><em>]</em>) – A single <cite>Data4D</cite> object or a list of <cite>Data4D</cite> objects</p></li>
-<li><p><strong>events</strong> (<em>str</em><em>, </em><em>Path</em><em>, </em><em>pd.DataFrame</em>) – Path to a TSV file with events or a pandas DataFrame with events; should have
-one of the columns [‘onset’, ‘offset’] and optionally [‘duration’], which
-depends on your choice of <cite>anchor</cite> (see below)</p></li>
-<li><p><strong>start</strong> (<em>float</em>) – Start time of the epoch relative to the anchor (in seconds)</p></li>
-<li><p><strong>end</strong> (<em>float</em>) – End time of the epoch relative to the anchor (in seconds)</p></li>
-<li><p><strong>period</strong> (<em>float</em>) – Sampling period of the epoch (in seconds)</p></li>
-<li><p><strong>T</strong> (<em>int</em>) – Number of time points in the epoch (only relevant when <cite>anchor</cite> is not
-‘duration’ or ‘span’)</p></li>
-<li><p><strong>anchor</strong> (<em>str</em>) – Anchor point of the epoch; one of [‘onset’, ‘offset’, ‘duration’, ‘span’]
-(where ‘span’ represents the entire period between ‘onset’ and ‘offset’)</p></li>
-<li><p><strong>anchor_units</strong> (<em>str</em>) – Units of the anchor point; one of [‘frames’, ‘seconds’]</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'onset'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/epoch.html#EpochsArray.from_4D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.epoch.EpochsArray.from_4D" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="medusa.epoch.EpochsArray.to_4D">
-<span class="sig-name descname"><span class="pre">to_4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cam_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DEVICE</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/epoch.html#EpochsArray.to_4D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.epoch.EpochsArray.to_4D" title="Permalink to this definition">#</a></dt>
-<dd><p>Converts the <cite>EpochsArray</cite> object to a <cite>Data4D</cite> object by aggregating
-(e.g., averaging) the epochs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>agg</strong> (<em>str</em>) – Aggregation method; one of [‘mean’, ‘median’]</p></li>
-<li><p><strong>cam_mat</strong> (<em>np.ndarray</em>) – Camera matrix (e.g., take one from the inputs <cite>Data4D</cite> objects)</p></li>
-<li><p><strong>device</strong> (<em>str</em>) – Either ‘cpu’ or ‘cuda’ (GPU)</p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments to pass to the <cite>Data4D</cite> constructor</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>data</strong> – A <cite>Data4D</cite> object with the aggregated epochs</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../containers/fourD/index.html#medusa.containers.fourD.Data4D" title="medusa.containers.fourD.Data4D">Data4D</a></p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">to_4D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/medusa/epoch.html#EpochsArray.to_4D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#medusa.epoch.EpochsArray.to_4D" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

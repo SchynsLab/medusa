@@ -487,24 +487,17 @@ to the package.</p>
 <p>After cloning or downloading the source code from <a class="reference external" href="https://github.com/medusa-4D/medusa">Github</a> and
 assuming you have a working Python distribution (version==3.9), you need to install a couple
 of dependencies before installing Medusa:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install toml click poetry</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install poetry</span>
 </pre></div>
 </div>
-<p>Then, to determine whether the installer will install the CPU or GPU version of Medusa,
-run the following command in the root of the Medusa repository:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python set_package_version.py {cpu,gpu}</span>
-</pre></div>
-</div>
-<p>where you choose either “cpu” or “gpu”. This will create a customized <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file
-with the correct PyTorch version.</p>
 <p>Finally, install Medusa by running:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">poetry install</span>
 </pre></div>
 </div>
-<p>This may take a while (especially for the GPU version) as it will resolve and download
-all dependencies. After the command has finished running, Medusa has been installed in
-editable mode. This means that you can edit the code and changes will be effective
-immediately without having to reinstall the package.</p>
+<p>This may take a while as it will resolve and download all dependencies. After the command
+has finished running, Medusa has been installed in editable mode. This means that you
+can edit the code and changes will be effective immediately without having to reinstall
+the package.</p>
 </section>
 <section id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">#</a></h2>

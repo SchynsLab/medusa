@@ -14,9 +14,9 @@ Module Contents
 ---------------
 
 .. py:data:: DEVICE
+   :value: 'cuda'
 
-   Default device ('cuda' or 'cpu') used across Medusa, which depends on whether
-   *cuda* is available ('cuda') or not ('cpu').
+   
 
 .. py:data:: FONT
 
