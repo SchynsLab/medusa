@@ -10,18 +10,8 @@ assuming you have a working Python distribution (version==3.9), you need to inst
 of dependencies before installing Medusa:
 
 ```console
-pip install toml click poetry
+pip install poetry
 ```
-
-Then, to determine whether the installer will install the CPU or GPU version of Medusa,
-run the following command in the root of the Medusa repository:
-
-```console
-python set_package_version.py {cpu,gpu}
-```
-
-where you choose either "cpu" or "gpu". This will create a customized `pyproject.toml` file
-with the correct PyTorch version.
 
 Finally, install Medusa by running:
 
@@ -29,10 +19,10 @@ Finally, install Medusa by running:
 poetry install
 ```
 
-This may take a while (especially for the GPU version) as it will resolve and download
-all dependencies. After the command has finished running, Medusa has been installed in
-editable mode. This means that you can edit the code and changes will be effective
-immediately without having to reinstall the package.
+This may take a while as it will resolve and download all dependencies. After the command
+has finished running, Medusa has been installed in editable mode. This means that you 
+can edit the code and changes will be effective immediately without having to reinstall
+the package.
 
 ## Testing
 

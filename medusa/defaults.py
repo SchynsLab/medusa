@@ -8,7 +8,12 @@ import torch
 from .log import get_logger
 
 # Set default device
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+if torch.cuda.is_available():
+    DEVICE = 'cuda'
+#elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
+#    DEVICE = 'mps'
+else:
+    DEVICE = "cpu"
 """Default device ('cuda' or 'cpu') used across Medusa, which depends on whether
 *cuda* is available ('cuda') or not ('cpu')."""
 
