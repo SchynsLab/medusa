@@ -13,8 +13,11 @@ from medusa.defaults import LOGGER
 LOGGER.setLevel('WARNING')
 
 
-def _is_gha_compatible(device):
-    if device == "cuda" and "GITHUB_ACTIONS" in os.environ:
+def _is_device_compatible(device):
+    
+    if device == 'cuda' and not torch.cuda.is_available():
+        return False
+    elif device == "cuda" and "GITHUB_ACTIONS" in os.environ:
         return False
     else:
         return True

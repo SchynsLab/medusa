@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from conftest import _is_gha_compatible
+from conftest import _is_device_compatible
 
 from medusa.render import PytorchRenderer
 from medusa.crop import AlignCropModel
@@ -13,7 +13,7 @@ from medusa.recon.flame import MicaReconModel
 def test_mica_recon(device):
     """Tests the MICA recon model."""
 
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     img = get_example_image(device=device)

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import torch
 import pytest
-from conftest import _is_gha_compatible
+from conftest import _is_device_compatible
 
 from medusa.containers.results import BatchResults
 from medusa.crop import AlignCropModel, BboxCropModel
@@ -16,7 +16,7 @@ from medusa.data import get_example_image, get_example_video
 @pytest.mark.parametrize("device", ["cuda", "cpu"])
 def test_crop_model(Model, lm_name, n_faces, device):
     """Generic tests for crop models."""
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     imgs = get_example_image(n_faces, device=device)

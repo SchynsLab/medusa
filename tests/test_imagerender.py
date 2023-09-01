@@ -3,7 +3,7 @@ from pathlib import Path
 import torch
 import numpy as np
 import pytest
-from conftest import _is_gha_compatible
+from conftest import _is_device_compatible
 
 from medusa.defaults import DEVICE
 from medusa.crop import BboxCropModel
@@ -15,7 +15,7 @@ from medusa.render import PytorchRenderer
 @pytest.mark.parametrize("shading", ["flat", "smooth"])
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_shading(shading, device):
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     data = get_example_data4d(load=True, model="mediapipe", device=device)

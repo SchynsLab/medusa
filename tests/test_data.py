@@ -6,7 +6,7 @@ from medusa.data import get_example_image, get_example_video, get_example_data4d
 from medusa.data import get_template_flame, get_template_mediapipe
 from medusa.io import VideoLoader
 from medusa.containers import Data4D
-from conftest import _is_gha_compatible
+from conftest import _is_device_compatible
 
 
 @pytest.mark.parametrize('n_faces', [None, 0, 1, 2, 3, 4, [1, 3], (2, 4)])
@@ -14,7 +14,7 @@ from conftest import _is_gha_compatible
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_get_example_image(n_faces, load, device):
 
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     img = get_example_image(n_faces, load=load, device=device)
@@ -49,7 +49,7 @@ def test_get_example_video(n_faces, return_videoloader, kwargs):
 @pytest.mark.parametrize('device', ['cpu', 'cuda'])
 def test_get_example_data4d(n_faces, load, model, device):
 
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     out = get_example_data4d(n_faces, load, model, device)
@@ -72,7 +72,7 @@ def test_get_example_data4d(n_faces, load, model, device):
 @pytest.mark.parametrize('device', [None, 'cpu', 'cuda'])
 def test_get_template_flame(topo, device):
 
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     out = get_template_flame(topo, device=device)

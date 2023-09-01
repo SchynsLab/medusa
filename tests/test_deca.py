@@ -3,7 +3,7 @@ from pathlib import Path
 
 import torch
 import pytest
-from conftest import _is_gha_compatible
+from conftest import _is_device_compatible
 from torchvision.utils import save_image
 
 from medusa.render import VideoRenderer
@@ -45,7 +45,7 @@ def test_deca_recon_img(n_faces):
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_deca_recon(name, type_, already_cropped, device):
     """Generic test of DECA-based recon models."""
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     vid = get_example_video(return_videoloader=True, device=device)

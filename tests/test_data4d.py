@@ -4,7 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pytest
 import torch
-from conftest import _is_gha_compatible
+from conftest import _is_device_compatible
 
 from medusa.defaults import DEVICE
 from medusa.containers import Data4D
@@ -15,7 +15,7 @@ from medusa.data import get_example_data4d, get_example_video
 def test_init(device):
     """Simple initialization test."""
 
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     v = torch.randn((100, 5023, 3), device=device)
@@ -48,7 +48,7 @@ def test_apply_mask():
 def test_load_and_save(model, device):
     """Tests loading from disk and saving a Data4D object."""
 
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     h5 = get_example_data4d(load=False, model=model)

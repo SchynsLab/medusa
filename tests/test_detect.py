@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 import torch
-from conftest import _is_gha_compatible
+from conftest import _is_device_compatible
 
 from medusa.containers.results import BatchResults
 from medusa.detect import SCRFDetector, YunetDetector
@@ -16,7 +16,7 @@ from medusa.defaults import DEVICE
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_detector_device(Detector, device):
 
-    if not _is_gha_compatible(device):
+    if not _is_device_compatible(device):
         return
 
     img = get_example_image(device=device)
