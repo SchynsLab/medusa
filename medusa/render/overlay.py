@@ -3,8 +3,6 @@ from matplotlib import cm
 from matplotlib.colors import TwoSlopeNorm
 
 from ..geometry import compute_vertex_normals
-from ..data import get_tris
-from ..defaults import DEVICE
 
 
 class Overlay:

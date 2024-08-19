@@ -10,7 +10,6 @@ from ..crop import InsightfaceBboxCropModel
 from ..defaults import DEVICE
 
 from kornia.geometry.linalg import transform_points
-from kornia.geometry.transform import warp_affine
 
 
 class RetinafaceLandmarkModel(nn.Module):
@@ -71,8 +70,15 @@ class RetinafaceLandmarkModel(nn.Module):
         input_shape = (192, 192)
 
         # Need to set batch dimension in output shape
-        self._model._params["out_shapes"][0][0] = n_det
-        lms = self._model.run(imgs_crop)["fc1"]  # fc1 = output (layer) name
+        #self._model._params["out_shapes"][0][0] = n_det
+        # august 2024: this cannot be run in batches for some reason
+        #lms = self._model.run(imgs_crop[[0], :, :, :])["fc1"]  # fc1 = output (layer) name
+        lms = []
+        for i in range(n_det):
+            lms.append(self._model.run(imgs_crop[[i], :, :, :])["fc1"])
+
+        lms = torch.cat(lms, dim=0)
+
         if lms.shape[1] == 3309:  # 3D data!
             # Reshape to n_det x n_lms x 3
             lms = lms.reshape((n_det, -1, 3))

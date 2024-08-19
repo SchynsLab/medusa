@@ -60,14 +60,18 @@ class RetinafaceRecognitionModel(nn.Module):
 
         # By default, the ONNX model expects to return a single embedding of shape
         # (1, 512), so adjust the output shape to match the number of faces detected
-        self._model._params['out_shapes'][0][0] = imgs_crop.shape[0]
+        #self._model._params['out_shapes'][0][0] = imgs_crop.shape[0]
 
         # Normalize images
         imgs_crop = (imgs_crop - 127.5) / 127.5
 
         # Run model on cropped+normalized images
-        X_emb = self._model.run(imgs_crop, outputs_as_list=True)[0]
+        X_emb = []
+        for i in range(imgs_crop.shape[0]):
+            inp_ = imgs_crop[[i], ...]
+            X_emb.append(self._model.run(inp_, outputs_as_list=True)[0])
 
+        X_emb = torch.cat(X_emb, dim=0)
         return X_emb
 
 
@@ -122,9 +126,12 @@ class RetinafaceGenderAgeModel(nn.Module):
         n_det = imgs_crop.shape[0]
 
         # Need to set batch dimension in output shape
-        self._model._params["out_shapes"][0][0] = n_det
-        out = self._model.run(imgs_crop, outputs_as_list=True)[0]
+        #self._model._params["out_shapes"][0][0] = n_det
+        out = []
+        for i in range(n_det):
+            out.append(self._model.run(imgs_crop[[i], ...], outputs_as_list=True)[0])
 
+        out = torch.cat(out, dim=0)
         gender = torch.argmax(out[:, :2], dim=1)  # 0 = female, 1 = male
         age = (out[:, 2] * 100).round().int()
 

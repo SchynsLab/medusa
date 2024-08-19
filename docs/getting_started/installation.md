@@ -1,6 +1,6 @@
 # Medusa installation
 
-Medusa is a Python package which works with Python version 3.10 and on Linux and and Mac (x86_64 architectures only). Most of Medusa's functionality will in fact also work on Windows and M1/M2 Macs (arm64 architecture), with the exception of rendering (as [pytorch3d](https://pytorch3d.org/) cannot be automatically installed on Windows and Mac M1/M2).
+Medusa is a Python package which works with Python version 3.10 and on Linux and and Mac (x86_64 architectures only). Most of Medusa's functionality will in fact also work on Windows and M1/M2 Macs (arm64 architecture), with the exception of rendering (as [pytorch3d](https://pytorch3d.org/) cannot be automatically installed on Windows and Mac M1/M2; for manual installation, see bottom of page).
 
 We strongly recommend to install the `medusa` package in a separate Python environment, using for example [conda](https://anaconda.org/anaconda/conda). If you'd use *conda*, you can create a new environment named "medusa" with Python 3.10 as follows:
 
@@ -63,9 +63,12 @@ with the account you created on the FLAME website. After all data has been downl
 
 If you want to install Medusa from source, check out the [for developers](../misc/for_developers) page.
 
-## Install `pytorch3d` on Mac M1
+## Install `pytorch3d` on Mac M1/M2
 
-- clone `pytorch3d`
+To install `pytorch3d` on Mac M1/M2, run the following commands in your terminal (with
+the `medusa` environment activated):
+
+- `git clone https://github.com/facebookresearch/pytorch3d.git`
 - `cd pytorch3d`
 - `rm -rf build/ **/*.so`
-- `MACOSX_DEPLOYMENT_TARGET=10.14 CC=clang CXX=clang++ ARCHFLAGS="-arch arm64" pip install -e .`
+- `MACOSX_DEPLOYMENT_TARGET=10.14 CC=clang CXX=clang++ ARCHFLAGS="-arch arm64" pip install .`

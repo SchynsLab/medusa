@@ -27,7 +27,7 @@ class SCRFDetector(BaseDetector):
         Size to which the input image(s) will be resized before passing it to the
         detection model; should be a tuple with two of the same integers (indicating
         a square image); higher values are more accurate but slower; default is
-        (224, 224)
+        (640, 640)
     det_threshold : float
         Detection threshold (higher = more conservative); detections with confidence
         values lower than ``det_threshold`` are discarded
@@ -48,7 +48,7 @@ class SCRFDetector(BaseDetector):
     ['img_idx', 'conf', 'lms', 'bbox', 'n_img']
     """
 
-    def __init__(self, det_size=(224, 224), det_threshold=0.3, nms_threshold=0.3,
+    def __init__(self, det_size=(640, 640), det_threshold=0.3, nms_threshold=0.3,
                  device=DEVICE):
         super().__init__()
         self.det_size = det_size
@@ -66,7 +66,7 @@ class SCRFDetector(BaseDetector):
 
         if self.det_size[0] != self.det_size[1]:
             return ValueError("Param ``det_size`` should indicate a square image, "
-                             f"e.g., (224, 224), but got {self.det_size}!")
+                             f"e.g., (640, 640), but got {self.det_size}!")
         h = self.det_size[0]
 
         isf_path = get_external_data_config('insightface_path')

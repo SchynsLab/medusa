@@ -62,15 +62,17 @@ def videorecon_cmd(video_path, out, recon_model, device, n_frames, batch_size):
 @click.argument("data_file")
 @click.option("-o", "--out", default=None, type=click.Path(), help="File to save output to (shouldn't have an extension)")
 @click.option("-v", "--video", type=click.Path(exists=True, dir_okay=False), help="Path to video file, when rendering on top of original video")
-@click.option('-r', '--renderer', default='pytorch3d', type=click.Choice(['pytorch3d']))
+@click.option('-m', '--mask', type=click.Choice(['face']))
 @click.option("-s", "--shading", default='flat', type=click.Choice(['flat', 'smooth']), help="Type of shading")
 @click.option("--device", default=DEVICE, type=click.Choice(["cpu", "cuda"]),
               help="Device to run the rendering on")
-def videorender_cmd(data_file, out, video, renderer, shading, device):
+def videorender_cmd(data_file, out, video, mask, shading, device):
     """Renders the reconstructed mesh time series as a video (gif or mp4)."""
 
     data = Data4D.load(data_file, device=device)
-
+    if mask is not None:
+        data.apply_vertex_mask(mask)
+    
     if out is None:
         out = data_file.replace('.h5', '.mp4')
 

@@ -62,7 +62,7 @@ class OnnxModel:
                     raise ValueError(f"Attribute {key} should have length {exp_len}!")
 
                 params[key] = value
-
+        
         return params
 
     def run(self, inputs, outputs_as_list=False):

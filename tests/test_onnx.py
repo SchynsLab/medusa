@@ -6,28 +6,30 @@ from conftest import _is_device_compatible
 
 import medusa.data
 from medusa.onnx import OnnxModel
+from medusa.data import get_external_data_config
 
 
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
-@pytest.mark.parametrize("set_param", [False, True])
-def test_onnx(device, set_param):
+@pytest.mark.parametrize("model", ['2d106det', '1k3d68', 'genderage', 'glintr100', 'scrfd_10g_bnkps', 'yunet'])
+def test_onnx(device, model):
     if not _is_device_compatible(device):
         return
 
-    onnx_file = Path(medusa.data.__file__).parent / "models/yunet.onnx"
-
-    if set_param:
-        model = OnnxModel(
-            onnx_file,
-            device=device,
-            input_names=["input"],
-            input_shapes=[1, 3, 120, 160],
-        )
+    if model == 'yunet':
+        onnx_file = Path(medusa.data.__file__).parent / "models/yunet.onnx"
     else:
-        model = OnnxModel(onnx_file, device=device)
+        # isf
+        onnx_file = get_external_data_config('insightface_path') / f'{model}.onnx'
 
-    inp = torch.randn(model._params["in_shapes"][0], device=device)
+    model = OnnxModel(onnx_file, device=device)
+    inp_shape = model._params["in_shapes"][0]
+    if inp_shape[0] == 'None':
+        inp_shape[0] = 1
 
+    if inp_shape == [1, 3, '?', '?']:
+        inp_shape = [1, 3, 640, 640]
+
+    inp = torch.randn(inp_shape, device=device)
     outputs = model.run(inp)
     assert len(outputs) == len(model._params["out_names"])
 
