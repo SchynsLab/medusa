@@ -114,13 +114,13 @@ class MicaReconModel(FlameReconModel):
         """
 
         out = {}
-
-        if imgs.shape[2:] != (112, 122):
+        
+        if imgs.shape[2:] != (112, 112):
             # Align & crop images (arcface style) if necessary
             crop_results = self._crop_model(imgs)
             imgs = crop_results["imgs_crop"]
             out["crop_mat"] = crop_results["crop_mat"]
-
+        
         imgs = self._preprocess(imgs)
         shape_code = self._encode(imgs)
         v = self._decode(shape_code)

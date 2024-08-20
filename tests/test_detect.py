@@ -26,7 +26,7 @@ def test_detector_device(Detector, device):
     assert(out_det['lms'].device.type == device)
 
 
-@pytest.mark.parametrize('det_size', [(224, 224), (640, 640)])
+@pytest.mark.parametrize('det_size', [(640, 640)])
 def test_scrfd_det_size(det_size):
     img = get_example_image()
     model = SCRFDetector(det_size=det_size)

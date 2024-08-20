@@ -6,9 +6,21 @@ import pytest
 from conftest import _is_device_compatible
 
 from medusa.containers.results import BatchResults
-from medusa.crop import AlignCropModel, BboxCropModel
+from medusa.crop import AlignCropModel, BboxCropModel, RandomSquareCropModel
 from medusa.data import get_example_image, get_example_video
 
+
+@pytest.mark.parametrize("n_faces", [[0], [0, 1], [0, 1, 2]])
+@pytest.mark.parametrize("device", ["cuda", "cpu"])
+def test_random_square_crop(n_faces, device):
+
+    if not _is_device_compatible(device):
+        return
+
+    imgs = get_example_image(n_faces, device=device)
+    model = RandomSquareCropModel(output_size=(224, 224), device=device)
+    imgs_crop = model(imgs)
+    assert(imgs_crop.shape == (len(n_faces), 3, 224, 224))
 
 @pytest.mark.parametrize("Model", [AlignCropModel, BboxCropModel])
 @pytest.mark.parametrize("lm_name", ["2d106det", "1k3d68"])

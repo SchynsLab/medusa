@@ -19,7 +19,7 @@ def test_mica_recon(device):
     img = get_example_image(device=device)
     crop_model = AlignCropModel(device=device)
     out_crop = crop_model(img)
-
+    
     # Check single image recon
     model = MicaReconModel(device=device)
     out = model(out_crop["imgs_crop"])
