@@ -6,3 +6,4 @@
 
 from .align_crop import AlignCropModel
 from .bbox_crop import BboxCropModel, InsightfaceBboxCropModel
+from .square_crop import RandomSquareCropModel
