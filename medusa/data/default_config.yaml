@@ -4,3 +4,7 @@ emoca_path: ~/.medusa_ext_data/emoca.ckpt
 flame_masks_path: ~/.medusa_ext_data/FLAME/FLAME_masks.pkl
 flame_path: ~/.medusa_ext_data/FLAME/generic_model.pkl
 mica_path: ~/.medusa_ext_data/mica.tar
+trust_albedo_encoder_path: ~/.medusa_ext_data/E_albedo_BalanceAlb.tar
+trust_face_light_encoder_path: ~/.medusa_ext_data/E_face_light_BalanceAlb.tar
+trust_scene_light_encoder_path: ~/.medusa_ext_data/E_scene_light_BalanceAlb.tar
+trust_albedo_decoder_path: ~/.medusa_ext_data/BalanceAlb_model.npz

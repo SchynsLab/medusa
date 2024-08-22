@@ -279,11 +279,28 @@ class FlameTex(nn.Module):
         return np.load(tex_model_path)
 
     def _register_buffers(self, tex_space):
-        texture_mean = tex_space["MU"].reshape(1, -1)
-        texture_basis = tex_space["PC"][:, :self.n_tex]  # 199 comp
+        
+        if 'mean' in tex_space:
+            # For BalanceAlb
+            mean_key = 'mean'
+        else:
+            # For BFM
+            mean_key = 'MU'
 
-        texture_mean = torch.from_numpy(texture_mean).float()[None, ...]
-        texture_basis = torch.from_numpy(texture_basis).float()[None, ...]
+        if 'tex_dir' in tex_space:
+            basis_key = 'tex_dir'
+        else:
+            basis_key = 'PC'
+
+        texture_mean = tex_space[mean_key]
+        texture_basis = tex_space[basis_key][..., :self.n_tex]
+
+        if 'tex_dir' in tex_space:
+            texture_mean /= 255.
+            texture_basis /= 255.
+
+        texture_mean = torch.from_numpy(texture_mean).float()
+        texture_basis = torch.from_numpy(texture_basis).float()
         self.register_buffer("texture_mean", texture_mean)
         self.register_buffer("texture_basis", texture_basis)
 
@@ -292,9 +309,14 @@ class FlameTex(nn.Module):
         texcode: [batchsize, n_tex]
         texture: [bz, 3, 256, 256], range: 0-1
         """
-        texture = self.texture_mean + (self.texture_basis * texcode[:, None, :]).sum(-1)
-        texture = texture.reshape(texcode.shape[0], 512, 512, 3).permute(0, 3, 1, 2)
+        # mean: 1, 512, 512, 3
+        # basis: 1, 512, 512, 3, 54
+        # texcode: 3, 54
+        to_add = torch.einsum('hwcp,bp->bhwc', self.texture_basis, texcode)
+        texture = self.texture_mean[None, ...] + to_add
+        texture = texture.permute(0, 3, 1, 2)
         texture = F.interpolate(texture, [256, 256])
+        
         texture = texture[:, [2, 1, 0], :, :]
         return texture
 

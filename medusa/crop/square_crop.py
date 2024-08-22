@@ -36,25 +36,25 @@ class RandomSquareCropModel(BaseCropModel):
             Dictionary with cropping outputs; includes the keys "imgs_crop" (cropped
             images) and "crop_mat" (3x3 crop matrices)
         """
-        # Load images here instead of in detector to avoid loading them twice
         
         out = []
         for i in range(imgs.shape[0]):
-            image = imgs[i, ...]
-            scene_h, scene_w = image.shape[:2]
+            img = imgs[i, ...]
+            scene_h, scene_w = img.shape[1:]
+
             if scene_w > scene_h:
                 sq_size = scene_h
                 random_left = np.random.randint(scene_w - sq_size)
-                square_scene = image[0:sq_size, random_left:random_left + sq_size]
+                scene = img[..., :sq_size, random_left:random_left + sq_size]
             elif scene_h > scene_w:
                 sq_size = scene_w
                 random_top = np.random.randint(scene_h - sq_size)
-                square_scene = image[random_top: random_top+sq_size, 0:sq_size]
+                scene = img[..., random_top: random_top+sq_size, :sq_size]
             else:
-                square_scene = image.clone()
+                scene = img.clone()
 
-            square_scene = self.resizer(square_scene)
-            out.append(square_scene)
+            scene = self.resizer(scene)
+            out.append(scene)
 
-        square_scene = torch.stack(out, dim=0)
-        return square_scene
+        scene = torch.stack(out, dim=0)
+        return {'imgs_crop': scene}

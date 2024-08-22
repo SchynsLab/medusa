@@ -49,11 +49,8 @@ class MicaReconModel(FlameReconModel):
         - `D_flame`: outputs a ("coarse") mesh given shape FLAME parameters
         """
         self.E_arcface = Arcface().to(self.device)
-        self.E_arcface.eval()
         self.E_flame = MappingNetwork(512, 300, 300).to(self.device)
-        self.E_flame.eval()
         self.D_flame = FlameShape(n_shape=300, n_expr=0).to(self.device)
-        self.D_flame.eval()
 
     def _load_submodels(self):
         """Loads the weights for the Arcface submodel as well as the

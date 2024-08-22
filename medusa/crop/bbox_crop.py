@@ -25,14 +25,17 @@ class BboxCropModel(BaseCropModel):
         '2d106det' (106 landmarks) or '1k3d68' (68 landmarks)
     output_size : tuple[int]
         Desired size of the cropped image
-    detector : BaseDetector
-        A Medusa-based detector
+    scale : float
+        How much to scale the original bounding box (based on LMs) with
+        (for DECA: use 1.25, for TRUST: use 1.6)
+    scale_orig : float
+        How much to scale the original size with (for DECA: use 1.1, for TRUST: use 1)
     device : str
         Either 'cuda' (GPU) or 'cpu'
     """
 
     def __init__(self, lms_model_name="2d106det", output_size=(224, 224),
-                 device=DEVICE):
+                 scale=1.25, scale_orig=1.1, device=DEVICE):
 
         # Avoids circular import
         from ..landmark import RetinafaceLandmarkModel
@@ -40,6 +43,8 @@ class BboxCropModel(BaseCropModel):
         # alternative: 1k3d68, 2d106det
         super().__init__()
         self.output_size = output_size  # h, w
+        self.scale = scale
+        self.scale_orig = scale_orig
         self.device = device
         self._lms_model = RetinafaceLandmarkModel(lms_model_name, device=device)
         self.to(device).eval()
@@ -47,7 +52,7 @@ class BboxCropModel(BaseCropModel):
     def __str__(self):
         return "bboxcrop"
 
-    def _create_bbox(self, lm, scale=1.25):
+    def _create_bbox(self, lm):
         """Creates a bounding box (bbox) based on the landmarks by creating a
         box around the outermost landmarks (+10%), as done in the original DECA
         model.
@@ -56,8 +61,6 @@ class BboxCropModel(BaseCropModel):
         ----------
         lm : torch.tensor
             Float tensor with landmarks of shape L (landmarks) x 2
-        scale : float
-            Factor to scale the bounding box with
         """
         left = torch.min(lm[:, :, 0], dim=1)[0]
         right = torch.max(lm[:, :, 0], dim=1)[0]
@@ -65,8 +68,8 @@ class BboxCropModel(BaseCropModel):
         bottom = torch.max(lm[:, :, 1], dim=1)[0]
 
         # scale and 1.1 are DECA constants
-        orig_size = (right - left + bottom - top) / 2 * 1.1
-        size = orig_size * scale  # to int?
+        orig_size = (right - left + bottom - top) / 2 * self.scale_orig
+        size = (orig_size * self.scale).to(torch.int)  # to int?
 
         # b x 2 (center coords)
         center = torch.stack(
@@ -200,3 +203,5 @@ class InsightfaceBboxCropModel(BaseCropModel):
         }
 
         return out_crop
+
+

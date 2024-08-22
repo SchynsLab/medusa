@@ -3,16 +3,20 @@
 For the associated license, see license.md.
 """
 
+import torch
+import torchvision
 import numpy as np
 from torch import nn
+from torch.nn.parameter import Parameter
 
 
 class ResNet(nn.Module):
     """ResNet-based encoder for DECA/EMOCA."""
 
     def __init__(self, block, layers):
+        super().__init__()
         self.inplanes = 64
-        super(ResNet, self).__init__()
+        
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
@@ -165,3 +169,65 @@ class ResnetEncoder(nn.Module):
         if self.last_op:
             parameters = self.last_op(parameters)
         return parameters
+
+
+class Resnet50Encoder(nn.Module):
+
+    def __init__(self, outsize, last_op=None, version='v1'):
+        """As used in TRUST."""
+        super().__init__()
+        feature_size = 2048
+        if version == 'v1':
+            self.encoder = load_ResNet50Model()
+        else:
+            self.encoder = load_ResNet50Model_v2()
+
+        ### regressor
+        self.layers = nn.Sequential(
+            nn.Linear(feature_size, 1024),
+            nn.ReLU(),
+            nn.Linear(1024, outsize)
+        )
+        self.last_op = last_op
+
+    def forward(self, inputs):
+        features = self.encoder(inputs)
+        parameters = self.layers(features)
+        if self.last_op:
+            parameters = self.last_op(parameters)
+        return parameters
+    
+
+def copy_parameter_from_resnet(model, resnet_dict):
+    cur_state_dict = model.state_dict()
+    # import ipdb; ipdb.set_trace()
+    for name, param in list(resnet_dict.items())[0:None]:
+        if name not in cur_state_dict:
+            print(name, ' not available in reconstructed resnet')
+            continue
+        if isinstance(param, Parameter):
+            param = param.data
+        try:
+            cur_state_dict[name].copy_(param)
+        except:
+            print(name, ' is inconsistent!')
+            continue
+
+
+def load_ResNet50Model():
+    model = ResNet(Bottleneck, [3, 4, 6, 3])
+    copy_parameter_from_resnet(model, torchvision.models.resnet50(weights=True).state_dict())
+    return model
+
+
+def load_ResNet50Model_v2():
+    """ modified resnet50 with first layer channel: 6 """
+    model = ResNet(Bottleneck, [3, 4, 6, 3])
+    copy_parameter_from_resnet(model, torchvision.models.resnet50(weights=True).state_dict())
+    w = model.conv1.weight.clone()
+    model.conv1 = nn.Conv2d(6, 64, kernel_size=7, stride=2, padding=3, bias=False)
+    with torch.no_grad():
+        first_layer_weight = torch.cat((w,w), dim=1)
+    model.conv1.weight = nn.Parameter(first_layer_weight)
+    
+    return model
