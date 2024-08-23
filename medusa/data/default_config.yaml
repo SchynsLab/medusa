@@ -1,4 +1,4 @@
-insightface_path: ~/.medusa_ext_data/antelopev2
+insightface_path: ~/.medusa_ext_data/buffalo_l
 deca_path: ~/.medusa_ext_data/deca_model.tar
 emoca_path: ~/.medusa_ext_data/emoca.ckpt
 flame_masks_path: ~/.medusa_ext_data/FLAME/FLAME_masks.pkl

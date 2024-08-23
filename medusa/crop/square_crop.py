@@ -39,7 +39,7 @@ class RandomSquareCropModel(BaseCropModel):
         
         out = []
         for i in range(imgs.shape[0]):
-            img = imgs[i, ...]
+            img = imgs[i, ...]  # 3 x h x w
             scene_h, scene_w = img.shape[1:]
 
             if scene_w > scene_h:
@@ -53,6 +53,7 @@ class RandomSquareCropModel(BaseCropModel):
             else:
                 scene = img.clone()
 
+            #scene = img[:, :224, :224]
             scene = self.resizer(scene)
             out.append(scene)
 

@@ -4,7 +4,8 @@ from pathlib import Path
 import torch
 import pytest
 from conftest import _is_device_compatible
-
+from torchvision.utils import save_image
+        
 from medusa.containers.results import BatchResults
 from medusa.crop import AlignCropModel, BboxCropModel, RandomSquareCropModel
 from medusa.data import get_example_image, get_example_video
@@ -19,12 +20,13 @@ def test_random_square_crop(n_faces, device):
 
     imgs = get_example_image(n_faces, device=device)
     model = RandomSquareCropModel(output_size=(224, 224), device=device)
-    imgs_crop = model(imgs)
-    assert(imgs_crop.shape == (len(n_faces), 3, 224, 224))
+    out = model(imgs)
+    assert(out['imgs_crop'].shape == (len(n_faces), 3, 224, 224))
+
 
 @pytest.mark.parametrize("Model", [AlignCropModel, BboxCropModel])
 @pytest.mark.parametrize("lm_name", ["2d106det", "1k3d68"])
-@pytest.mark.parametrize("n_faces", [0, 1, 2, 3, 4, [0, 1], [0, 1, 2], [0, 1, 2, 3, 4]])
+@pytest.mark.parametrize("n_faces", [2, 3, 4, [0, 1], [0, 1, 2], [0, 1, 2, 3, 4]])
 @pytest.mark.parametrize("device", ["cuda", "cpu"])
 def test_crop_model(Model, lm_name, n_faces, device):
     """Generic tests for crop models."""
@@ -65,44 +67,43 @@ def test_crop_model(Model, lm_name, n_faces, device):
 
     out_crop.visualize(str(f_out) + '_uncropped.jpg', imgs, template=template)
     if out_crop.imgs_crop is not None:
-        from torchvision.utils import save_image
         save_image(out_crop.imgs_crop.float(), str(f_out) + '_cropped.jpg', nrow=1, normalize=True)
 
-# @torch.inference_mode()
-# @pytest.mark.parametrize("Model", [AlignCropModel, BboxCropModel])
-# @pytest.mark.parametrize("n_faces", [0, 1, 2, 3, 4])
-# def test_crop_model_vid(Model, n_faces):
-#     """Test of crop model applied to videos and the visualization thereof."""
+@torch.inference_mode()
+@pytest.mark.parametrize("Model", [AlignCropModel, BboxCropModel])
+@pytest.mark.parametrize("n_faces", [0, 1, 2, 3, 4])
+def test_crop_model_vid(Model, n_faces):
+    """Test of crop model applied to videos and the visualization thereof."""
 
-#     video_test = get_example_video(n_faces)
+    video_test = get_example_video(n_faces)
 
-#     if Model == BboxCropModel:
-#         crop_size = (224, 224)
-#         model = Model("2d106det", crop_size)
-#     else:
-#         crop_size = (448, 448)
-#         model = Model(crop_size)
+    if Model == BboxCropModel:
+        crop_size = (224, 224)
+        model = Model("2d106det", crop_size)
+    else:
+        crop_size = (448, 448)
+        model = Model(crop_size)
 
-#     results = model.crop_faces_video(video_test, save_imgs=True)
+    results = model.crop_faces_video(video_test, save_imgs=True)
 
-#     if getattr(results, "lms", None) is None:
-#         return
+    if getattr(results, "lms", None) is None:
+        return
 
-#     results.sort_faces(attr="lms")
+    results.sort_faces(attr="lms")
 
-#     if 'GITHUB_ACTIONS' in os.environ:
-#         # Too slow for Github Actions
-#         return
+    if 'GITHUB_ACTIONS' in os.environ:
+        # Too slow for Github Actions
+        return
 
-#     f_out = Path(__file__).parent / f"test_viz/crop/{str(model)}_{video_test.stem}.mp4"
-#     template = getattr(model, "template", None)
-#     results.visualize(
-#         f_out,
-#         results.imgs,
-#         template=template,
-#         video=True,
-#         crop_size=crop_size,
-#         show_cropped=True,
-#     )
+    f_out = Path(__file__).parent / f"test_viz/crop/{str(model)}_{video_test.stem}.mp4"
+    template = getattr(model, "template", None)
+    results.visualize(
+        f_out,
+        results.imgs,
+        template=template,
+        video=True,
+        crop_size=crop_size,
+        show_cropped=True,
+    )
 
-#     torch.cuda.empty_cache()
+    torch.cuda.empty_cache()
