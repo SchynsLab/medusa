@@ -8,9 +8,11 @@ import medusa.data
 from medusa.onnx import OnnxModel
 from medusa.data import get_external_data_config
 
+MODELS = get_external_data_config('insightface_path').glob('*.onnx')
+
 
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
-@pytest.mark.parametrize("model", ['2d106det', '1k3d68', 'genderage', 'glintr100', 'scrfd_10g_bnkps', 'yunet'])
+@pytest.mark.parametrize("model", list(MODELS) + ['yunet'])
 def test_onnx(device, model):
     if not _is_device_compatible(device):
         return
@@ -19,7 +21,7 @@ def test_onnx(device, model):
         onnx_file = Path(medusa.data.__file__).parent / "models/yunet.onnx"
     else:
         # isf
-        onnx_file = get_external_data_config('insightface_path') / f'{model}.onnx'
+        onnx_file = get_external_data_config('insightface_path') / model
 
     model = OnnxModel(onnx_file, device=device)
     inp_shape = model._params["in_shapes"][0]
